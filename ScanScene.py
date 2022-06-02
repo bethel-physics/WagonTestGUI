@@ -3,22 +3,9 @@ import tkinter as tk
 
 # creating the login frame
 class ScanScene(tk.Frame):
-    def __init__(self):
+    def __init__(self, parent, master_window):
+        super().__init__(master_window)
     
         # Creating the title for the window
-        lbl_title = tk.Label(text="THIS IS DIFFERENT")
+        lbl_title = tk.Label(self, text="THIS IS DIFFERENT")
         lbl_title.pack()
-
-        # Creating a list of users for dropdown menu
-        User_List = [
-            "User 1",
-            "User 2",
-            "User 3"
-        ]
-
-        # # Creating intial value in dropdown menu
-        # user_selected = tk.StringVar(master)
-        # user_selected.set("") # default value is empty
-
-        # opt_user_dropdown = tk.OptionMenu(master, user_selected, *User_List)
-        # opt_user_dropdown.pack()

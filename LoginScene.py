@@ -3,8 +3,8 @@ import tkinter as tk
 
 # creating the login frame
 class LoginScene(tk.Frame):
-    def __init__(self, parent, container):
-        super().__init__(container)
+    def __init__(self, parent, master_window):
+        super().__init__(master_window)
 
         
 
