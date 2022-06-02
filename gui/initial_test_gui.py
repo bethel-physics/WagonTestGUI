@@ -6,6 +6,7 @@ from board_requests import add_board_info, add_initial_tests, add_general_test, 
 import os
 
 # Need to make inspection its own test
+# Bethel University Interns
 
 class TestEntryGUI(Frame):
     def __init__(self, master=None):
