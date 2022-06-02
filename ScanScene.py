@@ -1,11 +1,42 @@
 # importing necessary modules
 import tkinter as tk
+from tkinter import *
+from PIL import ImageTk as iTK
+from PIL import Image
+import os
+ 
 
 # creating the login frame
 class ScanScene(tk.Frame):
     def __init__(self, parent, master_window):
         super().__init__(master_window)
     
-        # Creating the title for the window
-        lbl_title = tk.Label(self, text="THIS IS DIFFERENT")
-        lbl_title.pack()
+
+        # Create a photoimage object of the QR Code
+        QR_image = Image.open("./QRimage.png")
+        QR_PhotoImage = iTK.PhotoImage(QR_image)
+        QR_label = tk.Label(self, image=QR_PhotoImage)
+        QR_label.image = QR_PhotoImage
+
+        # the place() method adds it to the Frame
+        QR_label.grid(column=0, row=1)
+
+        Scan_Board_Prompt_Frame = Frame(self, padx=10, pady=10)
+        # creates a Label Variable, different customization options
+        scan_prompt_label = tk.Label(
+            master= Scan_Board_Prompt_Frame,
+            text = "Scan the QR Code on the board...",
+            foreground= "white",
+            background= "#0a0a0a"
+        )
+        scan_text_field = tk.Entry(Scan_Board_Prompt_Frame)
+        submit_button = tk.Button(Scan_Board_Prompt_Frame, text="Submit")
+
+        # the pack() method adds it to the window
+        scan_prompt_label.pack()
+        scan_text_field.pack()
+        submit_button.pack()
+        Scan_Board_Prompt_Frame.grid(row=1,column=1)
+
+
+        

@@ -19,8 +19,8 @@ class GUIWindow():
         master_window.title("Bethel Interns' Window")
         master_window.geometry("700x500")
 
-        login_frame = LoginScene(self, master_window)
-        login_frame.pack()
+        # login_frame = LoginScene(self, master_window)
+        # login_frame.pack()
         # scan_frame = ScanScene(self, master_window)
         # list_of_frames = [login_frame, scan_frame]
         # self.clear_window(master_window)
