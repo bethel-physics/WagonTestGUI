@@ -7,6 +7,7 @@ import os
 
 # Need to make inspection its own test
 # Bethel University Interns
+# Andrew Kirzeder
 
 class TestEntryGUI(Frame):
     def __init__(self, master=None):
