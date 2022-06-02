@@ -1,6 +1,4 @@
-import GUIWindow
-import LoginScene
-import ScanScene
+from GUIWindow import GUIWindow
 
 
 
