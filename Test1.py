@@ -31,6 +31,7 @@ class Test1Scene(tk.Frame):
         ent_test1.config(state = "disabled")
 
         # Create a label for confirming test
+        # Need to add command function
         lbl_confirm = tk.Label(frm_window, text = "Are you ready to begin the test?")
         lbl_confirm.pack(side = 'top', anchor = 'ne')
 
