@@ -7,7 +7,6 @@ class LoginScene(tk.Frame):
     def __init__(self, parent, master_window):
         super().__init__(master_window, width=700, height=500, background='red')
 
-        self.parent = parent
 
         # Creating a list of users for dropdown menu
         # Eventually need to add a way for a database to have control over this array

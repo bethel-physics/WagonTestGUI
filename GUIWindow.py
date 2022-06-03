@@ -4,6 +4,10 @@ import tkinter as tk
 from turtle import bgcolor
 from LoginScene import LoginScene
 from ScanScene import ScanScene
+from Test1 import Test1Scene
+from Test2 import Test2Scene
+from Test3 import Test3Scene
+from Test4 import Test4Scene
 
 
 
@@ -16,17 +20,28 @@ class GUIWindow():
         self.master_window.title("Bethel Interns' Window")
         self.master_window.geometry("700x500")
         self.master_frame = tk.Frame(self.master_window, width=700, height= 500)
-        # self.master_frame.config(background='red')
         self.master_frame.pack()
         
 
         self.login_frame = LoginScene(self, self.master_frame)
         self.login_frame.grid(row=0, column=0)
-        # scan_frame = ScanScene(self, master_window)
-        # list_of_frames = [login_frame, scan_frame]
-        # self.clear_window(master_window)
+    
         self.scan_frame = ScanScene(self, self.master_frame)
         self.scan_frame.grid(row=0, column=0)
+
+        self.test1_frame= Test1Scene(self, self.master_frame)
+        self.scan_frame.grid(row=0, column=0)
+
+        self.test2_frame= Test2Scene(self, self.master_frame)
+        self.scan_frame.grid(row=0, column=0)
+
+        self.test3_frame= Test3Scene(self, self.master_frame)
+        self.scan_frame.grid(row=0, column=0)
+
+        self.test4_frame= Test4Scene(self, self.master_frame)
+        self.scan_frame.grid(row=0, column=0)
+
+        # self.set_frame(self.login_frame)
 
         self.master_window.mainloop()
     
