@@ -1,6 +1,7 @@
 # importing necessary modules
 import tkinter as tk
 from tkinter import *
+from turtle import back
 from PIL import ImageTk as iTK
 from PIL import Image
 import os
@@ -15,7 +16,8 @@ class ScanScene(tk.Frame):
         
         super().__init__(self.master_window)
 
-        self.config(height=500, width=700)
+        self.config(height=500, width=700, background='blue')
+        
 
         # Create a photoimage object of the QR Code
         QR_image = Image.open("./QRimage.png")
@@ -42,6 +44,7 @@ class ScanScene(tk.Frame):
         scan_text_field.pack()
         submit_button.pack()
         Scan_Board_Prompt_Frame.grid(row=1,column=1)
+        self.grid_propagate(0)
 
 
         

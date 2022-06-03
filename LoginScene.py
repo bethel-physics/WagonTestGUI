@@ -5,7 +5,7 @@ from tkinter import ttk
 # creating the login frame
 class LoginScene(tk.Frame):
     def __init__(self, parent, master_window):
-        super().__init__(master_window)
+        super().__init__(master_window, width=700, height=500, background='red')
 
         # Creating a list of users for dropdown menu
         # Eventually need to add a way for a database to have control over this array
@@ -30,9 +30,13 @@ class LoginScene(tk.Frame):
 
         # Creating the submit button
         # Need to add shift frame functionality later
-        btn_submit = tk.Button(self, text="Submit", relief=tk.RAISED)
+        btn_submit = tk.Button(self, text="Submit", relief=tk.RAISED, command= lambda:  parent.set_frame(parent.scan_frame))
         btn_submit.pack()
 
         # # Creating logout button in grid
         # btn_logout = tk.Button(self, text = "Logout")
         # btn_logout.grid(column=1, row=1, sticky='se')
+
+        self.pack_propagate(0)
+
+        
