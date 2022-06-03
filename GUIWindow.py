@@ -16,6 +16,7 @@ class GUIWindow():
         self.master_window.title("Bethel Interns' Window")
         self.master_window.geometry("700x500")
         self.master_frame = tk.Frame(self.master_window, width=700, height= 500)
+        # self.master_frame.config(background='red')
         self.master_frame.pack()
         
 
