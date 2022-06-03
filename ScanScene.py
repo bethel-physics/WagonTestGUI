@@ -37,7 +37,7 @@ class ScanScene(tk.Frame):
             background= "#0a0a0a"
         )
         scan_text_field = tk.Entry(Scan_Board_Prompt_Frame)
-        submit_button = tk.Button(Scan_Board_Prompt_Frame, text="Submit", command=lambda:  parent.set_frame(parent.login_frame))
+        submit_button = tk.Button(Scan_Board_Prompt_Frame, text="Submit", command= lambda:  self.submit_button_action(parent))
 
         # the pack() method adds it to the window
         scan_prompt_label.pack()
@@ -45,6 +45,10 @@ class ScanScene(tk.Frame):
         submit_button.pack()
         Scan_Board_Prompt_Frame.grid(row=1,column=1)
         self.grid_propagate(0)
+
+
+    def submit_button_action(self, _parent):
+        _parent.set_frame(_parent.login_frame)
 
 
         

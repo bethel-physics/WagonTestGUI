@@ -7,6 +7,8 @@ class LoginScene(tk.Frame):
     def __init__(self, parent, master_window):
         super().__init__(master_window, width=700, height=500, background='red')
 
+        self.parent = parent
+
         # Creating a list of users for dropdown menu
         # Eventually need to add a way for a database to have control over this array
         User_List = [
@@ -30,7 +32,7 @@ class LoginScene(tk.Frame):
 
         # Creating the submit button
         # Need to add shift frame functionality later
-        btn_submit = tk.Button(self, text="Submit", relief=tk.RAISED, command= lambda:  parent.set_frame(parent.scan_frame))
+        btn_submit = tk.Button(self, text="Submit", relief=tk.RAISED, command= lambda:  self.submit_button_action(parent))
         btn_submit.pack()
 
         # # Creating logout button in grid
@@ -38,5 +40,9 @@ class LoginScene(tk.Frame):
         # btn_logout.grid(column=1, row=1, sticky='se')
 
         self.pack_propagate(0)
+
+    def submit_button_action(self, _parent):
+        _parent.set_frame(_parent.scan_frame)
+
 
         
