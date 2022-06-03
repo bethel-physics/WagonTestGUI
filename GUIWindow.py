@@ -1,30 +1,40 @@
 # Importing all Modules
+from pickle import NONE
 import tkinter as tk
+from turtle import bgcolor
 from LoginScene import LoginScene
 from ScanScene import ScanScene
+
+
 
 # Create a class for creating the basic GUI Window
 class GUIWindow():
 
-    # Used for destroying windows
-    # Use self.clear_window(window_name)
-    def clear_window(self, window):
-        for widget in window.winfo_children():
-            widget.destroy()
-
-    def __init__(self) -> None:       
-               
+    def __init__(self):                     
         # Create the window named "master_window"
-        master_window = tk.Tk()
-        master_window.title("Bethel Interns' Window")
-        master_window.geometry("700x500")
+        self.master_window = tk.Tk()
+        self.master_window.title("Bethel Interns' Window")
+        self.master_window.geometry("700x500")
+        self.master_frame = tk.Frame(self.master_window, width=700, height= 500)
+        self.master_frame.pack()
+        
 
-        # login_frame = LoginScene(self, master_window)
-        # login_frame.pack()
+        self.login_frame = LoginScene(self, self.master_frame)
+        self.login_frame.grid(row=0, column=0)
         # scan_frame = ScanScene(self, master_window)
         # list_of_frames = [login_frame, scan_frame]
         # self.clear_window(master_window)
-        scan_frame = ScanScene(self, master_window)
-        scan_frame.pack()
+        self.scan_frame = ScanScene(self, self.master_frame)
+        self.scan_frame.grid(row=0, column=0)
 
-        master_window.mainloop()
+        self.master_window.mainloop()
+    
+
+    def set_frame(self, _frame):
+        _frame.tkraise()
+
+
+        
+
+        
+        

@@ -8,9 +8,14 @@ import os
 
 # creating the login frame
 class ScanScene(tk.Frame):
-    def __init__(self, parent, master_window):
-        super().__init__(master_window)
     
+    def __init__(self, parent, master_window):
+
+        self.master_window = master_window
+        
+        super().__init__(self.master_window)
+
+        self.config(height=500, width=700)
 
         # Create a photoimage object of the QR Code
         QR_image = Image.open("./QRimage.png")
@@ -30,7 +35,7 @@ class ScanScene(tk.Frame):
             background= "#0a0a0a"
         )
         scan_text_field = tk.Entry(Scan_Board_Prompt_Frame)
-        submit_button = tk.Button(Scan_Board_Prompt_Frame, text="Submit")
+        submit_button = tk.Button(Scan_Board_Prompt_Frame, text="Submit", command=lambda:  parent.set_frame(parent.login_frame))
 
         # the pack() method adds it to the window
         scan_prompt_label.pack()
