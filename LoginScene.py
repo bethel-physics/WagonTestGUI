@@ -16,21 +16,21 @@ class LoginScene(tk.Frame):
         ]
 
         # Creating the title for the window
-        lbl_title = tk.Label(master_window, text="Please Select Your Name", font=('Times', '20'))
+        lbl_title = tk.Label(self, text="Please Select Your Name", font=('Times', '20'))
         lbl_title.pack(pady=25)
 
         # Creating intial value in dropdown menu
-        user_selected = tk.StringVar(master_window)
+        user_selected = tk.StringVar(self)
         user_selected.set("") # default value is empty
 
         # Creating the dropdown menu itself
-        opt_user_dropdown = tk.OptionMenu(master_window, user_selected, *User_List)
+        opt_user_dropdown = tk.OptionMenu(self, user_selected, *User_List)
         opt_user_dropdown.pack(pady=10)
         opt_user_dropdown.config(width = 20)
 
         # Creating the submit button
         # Need to add shift frame functionality later
-        btn_submit = tk.Button(master_window, text="Submit", relief=tk.RAISED)
+        btn_submit = tk.Button(self, text="Submit", relief=tk.RAISED)
         btn_submit.pack()
 
         # # Creating logout button in grid
