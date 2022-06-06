@@ -25,6 +25,9 @@ class GUIWindow():
         self.master_frame.pack()
         
 
+        self.test_summary_frame = TestSummary(self, self.master_frame)
+        self.test_summary_frame.grid(row=0, column=0)
+
         self.login_frame = LoginScene(self, self.master_frame)
         self.login_frame.grid(row=0, column=0)
     
@@ -43,11 +46,19 @@ class GUIWindow():
         self.test4_frame= Test4Scene(self, self.master_frame)
         self.test4_frame.grid(row=0, column=0)
 
-        self.in_progress_frame = TestInProgressScene(self, self.master_frame)
-        self.in_progress_frame.grid(row=0, column=0)
+        self.test1_in_progress = TestInProgressScene(self, self.master_frame, self.test2_frame)
+        self.test1_in_progress.grid(row=0, column=0)
 
-        self.test_summary_frame = TestSummary(self, self.master_frame)
-        self.test_summary_frame.grid(row=0, column=0)
+        self.test2_in_progress = TestInProgressScene(self, self.master_frame, self.test3_frame)
+        self.test2_in_progress.grid(row=0, column=0)
+
+        self.test3_in_progress = TestInProgressScene(self, self.master_frame, self.test4_frame)
+        self.test3_in_progress.grid(row=0, column=0)
+
+        self.test4_in_progress = TestInProgressScene(self, self.master_frame, self.test_summary_frame)
+        self.test4_in_progress.grid(row=0, column=0)
+
+        
 
         self.set_frame(self.login_frame)
 

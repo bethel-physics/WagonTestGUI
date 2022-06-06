@@ -6,8 +6,9 @@ from xml.dom.expatbuilder import parseFragmentString
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
 
-    def __init__(self, parent, master_window):
-        super().__init__(master_window, width=master_window.winfo_width(), height=master_window.winfo_height(), background='purple')
+    def __init__(self, parent, master_window, next_frame):
+        self.next_frame = next_frame
+        super().__init__(master_window, width=700, height=500, background='purple')
 
         # Creating grid frame to lay widgets onto
         frm_main = tk.Frame(self, width = 200, height = 200)
@@ -23,10 +24,14 @@ class TestInProgressScene(tk.Frame):
         prgbar_progress.start()
 
         # A Button To Stop the Progress Bar and Progress Forward (Temporary until we link to actual progress)
-        btn_stop = ttk.Button(frm_main, text='Stop', command= lambda: self.stop_button_action(parent))
+        btn_stop = ttk.Button(frm_main, text='Stop', command= lambda: self.stop_button_action(parent, self.next_frame))
         btn_stop.pack()
 
         self.grid_propagate(0)
 
-    def stop_button_action(self, _parent):
-        _parent.set_frame(_parent.test2_frame)
+    def stop_button_action(self, _parent, _next_frame):
+        self.go_to_next_frame(_parent)
+
+
+    def go_to_next_frame(self, _parent):
+        _parent.set_frame(self.next_frame)

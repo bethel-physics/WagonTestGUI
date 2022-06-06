@@ -69,7 +69,7 @@ class Test1Scene(tk.Frame):
         
     # Confirm button action takes the user to the test in progress scene
     def confirm_button_action(self, _parent):
-        _parent.set_frame(_parent.in_progress_frame)
+        _parent.set_frame(_parent.test1_in_progress)
 
     def logout_button_action(self, _parent):
         _parent.set_frame(_parent.login_frame)
