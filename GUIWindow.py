@@ -54,6 +54,7 @@ class GUIWindow():
         self.master_window.mainloop()
     
 
+    # Changes which frame is currently shown
     def set_frame(self, _frame):
         _frame.tkraise()
 
