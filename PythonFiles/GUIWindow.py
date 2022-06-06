@@ -20,8 +20,9 @@ class GUIWindow():
         # Create the window named "master_window"
         self.master_window = tk.Tk()
         self.master_window.title("Bethel Interns' Window")
-        self.master_window.geometry("700x500")
-        self.master_frame = tk.Frame(self.master_window, width=700, height= 500)
+        self.master_window.geometry("850x500")
+        self.master_frame = tk.Frame(self.master_window, width=850, height= 500)
+        self.master_window.resizable(0,0)
         self.master_frame.pack()
         
 
