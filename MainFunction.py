@@ -1,4 +1,4 @@
-from GUIWindow import GUIWindow
+from PythonFiles.GUIWindow import GUIWindow
 
 
 

@@ -2,14 +2,14 @@
 from pickle import NONE
 import tkinter as tk
 from turtle import bgcolor
-from LoginScene import LoginScene
-from ScanScene import ScanScene
-from Test1 import Test1Scene
-from Test2 import Test2Scene
-from Test3 import Test3Scene
-from Test4 import Test4Scene
-from TestInProgressScene import TestInProgressScene
-from TestSummary import TestSummary
+from PythonFiles.LoginScene import LoginScene
+from PythonFiles.ScanScene import ScanScene
+from PythonFiles.TestFrames.Test1 import Test1Scene
+from PythonFiles.TestFrames.Test2 import Test2Scene
+from PythonFiles.TestFrames.Test3 import Test3Scene
+from PythonFiles.TestFrames.Test4 import Test4Scene
+from PythonFiles.TestInProgressScene import TestInProgressScene
+from PythonFiles.TestSummary import TestSummary
 
 
 

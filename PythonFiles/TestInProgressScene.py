@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from GUIWindow import *
+from PythonFiles.GUIWindow import *
 from xml.dom.expatbuilder import parseFragmentString
 
 # Creating the frame itself

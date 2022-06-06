@@ -1,13 +1,12 @@
 import tkinter as tk
-import ScanScene
 
 # Creating class for the window
-class Test2Scene(tk.Frame):
+class Test4Scene(tk.Frame):
     def __init__(self, parent, master_window):
-
+        
         super().__init__(master_window)
 
-        self.config(height=500, width=700, background='blue')
+        self.config(height=500, width=700, background='purple')
 
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 300, height = 300)
@@ -24,14 +23,14 @@ class Test2Scene(tk.Frame):
         ent_snum.config(state = "disabled")
 
         # Create a label for the test about to be run
-        lbl_test2 = tk.Label(frm_window, text = "Current Test:")
-        lbl_test2.pack(side = 'top', anchor = 'nw')
+        lbl_test4 = tk.Label(frm_window, text = "Current Test:")
+        lbl_test4.pack(side = 'top', anchor = 'nw')
 
         # Create a entry for the test type
-        ent_test2 = tk.Entry(frm_window)
-        ent_test2.insert(0, "TEST #2")
-        ent_test2.pack(side = 'top', anchor = 'nw')
-        ent_test2.config(state = "disabled")
+        ent_test4 = tk.Entry(frm_window)
+        ent_test4.insert(0, "TEST #4")
+        ent_test4.pack(side = 'top', anchor = 'nw')
+        ent_test4.config(state = "disabled")
 
         # Create a label for confirming test
         # Need to add command function
@@ -63,17 +62,19 @@ class Test2Scene(tk.Frame):
         btn_back.pack()
         btn_logout.config(relief = tk.RAISED)
 
+
         self.grid_propagate(0)
+
 
 
     # Back button action takes the user back to the scanning device
     def back_button_action(self, _parent):
-        _parent.set_frame(_parent.test1_frame)
+        _parent.set_frame(_parent.test3_frame)
 
         
     # Confirm button action takes the user to the test in progress scene
     def confirm_button_action(self, _parent):
-        _parent.set_frame(_parent.test2_in_progress)
+        _parent.set_frame(_parent.test4_in_progress)
 
     # Logout button that takes the user back to the login scene
     def logout_button_action(self, _parent):

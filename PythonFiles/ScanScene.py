@@ -20,7 +20,7 @@ class ScanScene(tk.Frame):
         
 
         # Create a photoimage object of the QR Code
-        QR_image = Image.open("./QRimage.png")
+        QR_image = Image.open("./PythonFiles/QRimage.png")
         QR_PhotoImage = iTK.PhotoImage(QR_image)
         QR_label = tk.Label(self, image=QR_PhotoImage)
         QR_label.image = QR_PhotoImage

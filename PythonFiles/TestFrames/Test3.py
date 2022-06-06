@@ -1,5 +1,5 @@
 import tkinter as tk
-import ScanScene
+
 
 # Creating class for the window
 class Test3Scene(tk.Frame):
