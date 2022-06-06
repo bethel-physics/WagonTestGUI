@@ -5,6 +5,7 @@ from turtle import back
 from PIL import ImageTk as iTK
 from PIL import Image
 import os
+import tkinter.font as font
  
 
 # creating the login frame
@@ -14,10 +15,7 @@ class ScanScene(tk.Frame):
 
         self.master_window = master_window
         
-        super().__init__(self.master_window)
-
-        self.config(height=500, width=700, background='blue')
-        
+        super().__init__(self.master_window, width = 850, height = 500)
 
         # Create a photoimage object of the QR Code
         QR_image = Image.open("./PythonFiles/QRimage.png")
@@ -26,29 +24,54 @@ class ScanScene(tk.Frame):
         QR_label.image = QR_PhotoImage
 
         # the place() method adds it to the Frame
-        QR_label.grid(column=0, row=1)
+        QR_label.grid(column=1, row = 0)
 
-        Scan_Board_Prompt_Frame = Frame(self, padx=10, pady=10)
+        Scan_Board_Prompt_Frame = Frame(self,)
+        Scan_Board_Prompt_Frame.grid(column=0, row = 0)
+
         # creates a Label Variable, different customization options
-        scan_prompt_label = tk.Label(
+        lbl_scan = tk.Label(
             master= Scan_Board_Prompt_Frame,
-            text = "Scan the QR Code on the board...",
-            foreground= "white",
-            background= "#0a0a0a"
+            text = "Scan the QR Code on the Board",
+            font = ('Arial', 18)
         )
-        scan_text_field = tk.Entry(Scan_Board_Prompt_Frame)
-        submit_button = tk.Button(Scan_Board_Prompt_Frame, text="Submit", command= lambda:  self.submit_button_action(parent))
+        lbl_scan.pack(padx = 50)
 
-        # the pack() method adds it to the window
-        scan_prompt_label.pack()
-        scan_text_field.pack()
-        submit_button.pack()
-        Scan_Board_Prompt_Frame.grid(row=1,column=1)
+        # Entry for the serial number to be displayed. Upon Scan, update and disable?
+        ent_serial = tk.Entry(
+            Scan_Board_Prompt_Frame,
+            font = ('Arial', 16)
+            )
+        ent_serial.pack(padx = 50, pady = 50)
+
+        # Submit button
+        btn_submit = tk.Button(
+            Scan_Board_Prompt_Frame,
+            text="Submit",
+            relief = tk.RAISED,
+            command= lambda:  self.submit_button_action(parent)
+            )
+        btn_submit.pack()
+
+        # Creating frame for logout button
+        frm_logout = tk.Frame(self)
+        frm_logout.grid(column = 1, row = 1, sticky= 'se')
+
+        # Creating the logout button
+        btn_logout = tk.Button(
+            frm_logout,
+            relief = tk.RAISED,
+            text = "Logout",
+            command = lambda: self.logout_button_action(parent)
+        )
+        btn_logout.pack(anchor = 'se', padx = 230, pady = 180)
+
+
         self.grid_propagate(0)
 
 
     def submit_button_action(self, _parent):
         _parent.set_frame(_parent.test1_frame)
-
-
-        
+    
+    def logout_button_action(self, _parent):
+        _parent.set_frame(_parent.login_frame)     

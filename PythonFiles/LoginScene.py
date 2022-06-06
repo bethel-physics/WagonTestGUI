@@ -5,7 +5,7 @@ from tkinter import ttk
 # creating the login frame
 class LoginScene(tk.Frame):
     def __init__(self, parent, master_window):
-        super().__init__(master_window, width=700, height=500, background='red')
+        super().__init__(master_window, width=850, height=500)
 
 
         # Creating a list of users for dropdown menu
@@ -17,8 +17,8 @@ class LoginScene(tk.Frame):
         ]
 
         # Creating the title for the window
-        lbl_title = tk.Label(self, text="Please Select Your Name", font=('Times', '20'))
-        lbl_title.pack(pady=25)
+        lbl_title = tk.Label(self, text="Please Select Your Name", font=('Times', '24'))
+        lbl_title.pack(pady=75)
 
         # Creating intial value in dropdown menu
         user_selected = tk.StringVar(self)

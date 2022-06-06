@@ -11,7 +11,7 @@ class Test2Scene(tk.Frame):
         frm_window.grid(column=1, row=1, padx = 235, pady = 125)
 
         # Create a label for the serial number box
-        lbl_snum = tk.Label(frm_window, text = "  Serial Number:  ", font = ('Arial', 15))
+        lbl_snum = tk.Label(frm_window, text = "Serial Number:  ", font = ('Arial', 15))
         lbl_snum.pack(side = 'top')
 
         # Create a entry for the serial number box
