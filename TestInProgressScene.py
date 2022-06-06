@@ -32,6 +32,6 @@ class TestInProgressScene(tk.Frame):
     def stop_button_action(self, _parent, _next_frame):
         self.go_to_next_frame(_parent)
 
-
+    # Goes to the next scene after the progress scene is complete
     def go_to_next_frame(self, _parent):
         _parent.set_frame(self.next_frame)
