@@ -17,9 +17,8 @@ class TestFinishedSummary(tk.Frame):
 
 
         # Adds the title to the TestSummary Frame
-        self.title = tk.Entry(self,  width=13, fg='#0d0d0d',
+        self.title = tk.Label(self, fg='#0d0d0d', text = "Testing Finished!",
                                font=('Arial',18,'bold'), justify='center')
-        self.title.insert(tk.END, "Testing Finished!")
         self.title.grid(row= 0, column= 1)
         
         
