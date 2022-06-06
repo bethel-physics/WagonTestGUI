@@ -41,6 +41,9 @@ class GUIWindow():
         self.test4_frame= Test4Scene(self, self.master_frame)
         self.test4_frame.grid(row=0, column=0)
 
+        self.in_progress_frame = TestInProgressScene(self, self.master_frame)
+        self.in_progress_frame.grid(row=0, column=0)
+
         self.set_frame(self.login_frame)
 
         self.master_window.mainloop()

@@ -39,9 +39,7 @@ class Test1Scene(tk.Frame):
         btn_confirm = tk.Button(frm_window, text = "Confirm", relief = tk.RAISED, command = lambda:self.confirm_button_action(parent))
         btn_confirm.pack(side = 'top', anchor = 'ne')
 
-        # Confirm button action takes the user to the test in progress scene
-        def confirm_button_action(self, _parent):
-            _parent.set_frame(_parent.in_progress_frame)
+    
 
         # Create frame for logout button
         frm_logout = tk.Frame(self)
@@ -63,9 +61,18 @@ class Test1Scene(tk.Frame):
         btn_back = tk.Button(frm_back, text = "Back", relief = tk.RAISED, command = lambda: self.back_button_action(parent))
         btn_back.pack()
 
-        # Back button action takes the user back to the scanning device
-        def back_button_action(self, _parent):
-            _parent.set_frame(_parent.scan_frame)
-
-
         self.grid_propagate(0)
+
+    # Back button action takes the user back to the scanning device
+    def back_button_action(self, _parent):
+        _parent.set_frame(_parent.scan_frame)
+
+        
+    # Confirm button action takes the user to the test in progress scene
+    def confirm_button_action(self, _parent):
+        _parent.set_frame(_parent.in_progress_frame)
+
+    def logout_button_action(self, _parent):
+        _parent.set_frame(_parent.login_frame)
+
+        
