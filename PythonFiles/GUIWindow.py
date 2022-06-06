@@ -4,6 +4,7 @@ import tkinter as tk
 from turtle import bgcolor
 from PythonFiles.LoginScene import LoginScene
 from PythonFiles.ScanScene import ScanScene
+from PythonFiles.TestFinishedSummary import TestFinishedSummary
 from PythonFiles.TestFrames.Test1 import Test1Scene
 from PythonFiles.TestFrames.Test2 import Test2Scene
 from PythonFiles.TestFrames.Test3 import Test3Scene
@@ -26,8 +27,9 @@ class GUIWindow():
         self.master_frame.pack()
         
 
-        self.test_summary_frame = TestSummary(self, self.master_frame)
-        self.test_summary_frame.grid(row=0, column=0)
+
+        self.testing_finished_frame = TestFinishedSummary(self, self.master_frame)
+        self.testing_finished_frame.grid(row=0, column=0)
 
         self.login_frame = LoginScene(self, self.master_frame)
         self.login_frame.grid(row=0, column=0)
@@ -56,7 +58,7 @@ class GUIWindow():
         self.test3_in_progress = TestInProgressScene(self, self.master_frame, self.test4_frame)
         self.test3_in_progress.grid(row=0, column=0)
 
-        self.test4_in_progress = TestInProgressScene(self, self.master_frame, self.test_summary_frame)
+        self.test4_in_progress = TestInProgressScene(self, self.master_frame, self.testing_finished_frame)
         self.test4_in_progress.grid(row=0, column=0)
 
         
