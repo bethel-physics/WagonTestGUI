@@ -9,6 +9,7 @@ from Test2 import Test2Scene
 from Test3 import Test3Scene
 from Test4 import Test4Scene
 from TestInProgressScene import TestInProgressScene
+from TestSummary import TestSummary
 
 
 
@@ -44,6 +45,9 @@ class GUIWindow():
 
         self.in_progress_frame = TestInProgressScene(self, self.master_frame)
         self.in_progress_frame.grid(row=0, column=0)
+
+        self.test_summary_frame = TestSummary(self, self.master_frame)
+        self.test_summary_frame.grid(row=0, column=0)
 
         self.set_frame(self.login_frame)
 

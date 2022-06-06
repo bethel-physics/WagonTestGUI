@@ -4,7 +4,6 @@ import ScanScene
 # Creating class for the window
 class Test1Scene(tk.Frame):
     def __init__(self, parent, master_window):
-        self.master_window = master_window
         super().__init__(master_window, width=700, height=500, background='green')
 
         # Create a centralized window for information
