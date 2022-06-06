@@ -30,18 +30,18 @@ class GUIWindow():
         self.scan_frame.grid(row=0, column=0)
 
         self.test1_frame= Test1Scene(self, self.master_frame)
-        self.scan_frame.grid(row=0, column=0)
+        self.test1_frame.grid(row=0, column=0)
 
         self.test2_frame= Test2Scene(self, self.master_frame)
-        self.scan_frame.grid(row=0, column=0)
+        self.test2_frame.grid(row=0, column=0)
 
         self.test3_frame= Test3Scene(self, self.master_frame)
-        self.scan_frame.grid(row=0, column=0)
+        self.test3_frame.grid(row=2, column=0)
 
         self.test4_frame= Test4Scene(self, self.master_frame)
-        self.scan_frame.grid(row=0, column=0)
+        self.test4_frame.grid(row=0, column=0)
 
-        # self.set_frame(self.login_frame)
+        self.set_frame(self.login_frame)
 
         self.master_window.mainloop()
     

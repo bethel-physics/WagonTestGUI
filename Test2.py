@@ -4,7 +4,12 @@ import ScanScene
 # Creating class for the window
 class Test2Scene(tk.Frame):
     def __init__(self, parent, master_window):
-        super().__init__(master_window)
+
+        self.master_window = master_window
+        
+        super().__init__(self.master_window)
+
+        self.config(height=500, width=700, background='blue')
 
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 300, height = 300)
@@ -59,3 +64,5 @@ class Test2Scene(tk.Frame):
         btn_back = tk.Button(frm_back, text = "Back")
         btn_back.pack()
         btn_logout.config(relief = tk.RAISED)
+
+        self.grid_propagate(0)
