@@ -5,8 +5,6 @@ import ScanScene
 class Test2Scene(tk.Frame):
     def __init__(self, parent, master_window):
 
-        self.master_window = master_window
-        
         super().__init__(master_window)
 
         self.config(height=500, width=700, background='blue')

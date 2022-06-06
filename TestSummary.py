@@ -30,7 +30,7 @@ class TestSummary(tk.Frame):
             self._entry.insert(tk.END, self.x_labels[index])
 
 
-        self.add_entry_to_table("Garrett's Value", 100, 200, "30 Ohms")
+        self.add_entry_to_table("Garrett's Entry", 100, 200, "30 Ohms")
         self.add_entry_to_table("Andrew's Entry", 150, 200, "764 Ohms")
 
         self.table.grid()
