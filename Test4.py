@@ -4,7 +4,11 @@ import ScanScene
 # Creating class for the window
 class Test4Scene(tk.Frame):
     def __init__(self, parent, master_window):
+        self.master_window = master_window
+        
         super().__init__(master_window)
+
+        self.config(height=500, width=700, background='purple')
 
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 300, height = 300)
@@ -36,7 +40,7 @@ class Test4Scene(tk.Frame):
         lbl_confirm.pack(side = 'top', anchor = 'ne')
 
         # Create a button for confirming test
-        btn_confirm = tk.Button(frm_window, text = "Confirm")
+        btn_confirm = tk.Button(frm_window, text = "Confirm", command= lambda: self.confirm_button_action(parent))
         btn_confirm.pack(side = 'top', anchor = 'ne')
         btn_confirm.config(relief = tk.RAISED)
 
@@ -46,7 +50,7 @@ class Test4Scene(tk.Frame):
 
         # Create a logout button
         # Need to add command function
-        btn_logout = tk.Button(frm_logout, text = "Logout")
+        btn_logout = tk.Button(frm_logout, text = "Logout", command= lambda: self.logout_button_action(parent))
         btn_logout.pack()
         btn_logout.config(relief = tk.RAISED)
 
@@ -56,6 +60,24 @@ class Test4Scene(tk.Frame):
 
         # Create a back button
         # Need to add command function
-        btn_back = tk.Button(frm_back, text = "Back")
+        btn_back = tk.Button(frm_back, text = "Back", command= lambda: self.back_button_action(parent))
         btn_back.pack()
         btn_logout.config(relief = tk.RAISED)
+
+
+        self.grid_propagate(0)
+
+
+
+    # Back button action takes the user back to the scanning device
+    def back_button_action(self, _parent):
+        _parent.set_frame(_parent.test3_frame)
+
+        
+    # Confirm button action takes the user to the test in progress scene
+    def confirm_button_action(self, _parent):
+        _parent.set_frame(_parent.login_frame)
+
+    # Logout button that takes the user back to the login scene
+    def logout_button_action(self, _parent):
+        _parent.set_frame(_parent.login_frame)

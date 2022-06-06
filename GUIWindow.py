@@ -8,6 +8,7 @@ from Test1 import Test1Scene
 from Test2 import Test2Scene
 from Test3 import Test3Scene
 from Test4 import Test4Scene
+from TestInProgressScene import TestInProgressScene
 
 
 
@@ -36,7 +37,7 @@ class GUIWindow():
         self.test2_frame.grid(row=0, column=0)
 
         self.test3_frame= Test3Scene(self, self.master_frame)
-        self.test3_frame.grid(row=2, column=0)
+        self.test3_frame.grid(row=0, column=0)
 
         self.test4_frame= Test4Scene(self, self.master_frame)
         self.test4_frame.grid(row=0, column=0)

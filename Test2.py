@@ -7,7 +7,7 @@ class Test2Scene(tk.Frame):
 
         self.master_window = master_window
         
-        super().__init__(self.master_window)
+        super().__init__(master_window)
 
         self.config(height=500, width=700, background='blue')
 
@@ -41,7 +41,7 @@ class Test2Scene(tk.Frame):
         lbl_confirm.pack(side = 'top', anchor = 'ne')
 
         # Create a button for confirming test
-        btn_confirm = tk.Button(frm_window, text = "Confirm")
+        btn_confirm = tk.Button(frm_window, text = "Confirm", command= lambda: self.confirm_button_action(parent))
         btn_confirm.pack(side = 'top', anchor = 'ne')
         btn_confirm.config(relief = tk.RAISED)
 
@@ -51,7 +51,7 @@ class Test2Scene(tk.Frame):
 
         # Create a logout button
         # Need to add command function
-        btn_logout = tk.Button(frm_logout, text = "Logout")
+        btn_logout = tk.Button(frm_logout, text = "Logout", command= lambda: self.logout_button_action(parent))
         btn_logout.pack()
         btn_logout.config(relief = tk.RAISED)
 
@@ -61,8 +61,22 @@ class Test2Scene(tk.Frame):
 
         # Create a back button
         # Need to add command function
-        btn_back = tk.Button(frm_back, text = "Back")
+        btn_back = tk.Button(frm_back, text = "Back", command= lambda: self.back_button_action(parent))
         btn_back.pack()
         btn_logout.config(relief = tk.RAISED)
 
         self.grid_propagate(0)
+
+
+    # Back button action takes the user back to the scanning device
+    def back_button_action(self, _parent):
+        _parent.set_frame(_parent.test1_frame)
+
+        
+    # Confirm button action takes the user to the test in progress scene
+    def confirm_button_action(self, _parent):
+        _parent.set_frame(_parent.test3_frame)
+
+    # Logout button that takes the user back to the login scene
+    def logout_button_action(self, _parent):
+        _parent.set_frame(_parent.login_frame)

@@ -5,7 +5,7 @@ import ScanScene
 class Test1Scene(tk.Frame):
     def __init__(self, parent, master_window):
         self.master_window = master_window
-        super().__init__(self.master_window, width=700, height=500, background='green')
+        super().__init__(master_window, width=700, height=500, background='green')
 
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 300, height = 300)
@@ -70,7 +70,7 @@ class Test1Scene(tk.Frame):
         
     # Confirm button action takes the user to the test in progress scene
     def confirm_button_action(self, _parent):
-        _parent.set_frame(_parent.in_progress_frame)
+        _parent.set_frame(_parent.test2_frame)
 
     def logout_button_action(self, _parent):
         _parent.set_frame(_parent.login_frame)
