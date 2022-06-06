@@ -32,33 +32,40 @@ class Test1Scene(tk.Frame):
         ent_test1.config(state = "disabled")
 
         # Create a label for confirming test
-        # Need to add command function
         lbl_confirm = tk.Label(frm_window, text = "Are you ready to begin the test?")
         lbl_confirm.pack(side = 'top', anchor = 'ne')
 
         # Create a button for confirming test
-        btn_confirm = tk.Button(frm_window, text = "Confirm")
+        btn_confirm = tk.Button(frm_window, text = "Confirm", relief = tk.RAISED, command = lambda:self.confirm_button_action(parent))
         btn_confirm.pack(side = 'top', anchor = 'ne')
-        btn_confirm.config(relief = tk.RAISED)
+
+        # Confirm button action takes the user to the test in progress scene
+        def confirm_button_action(self, _parent):
+            _parent.set_frame(_parent.in_progress_frame)
 
         # Create frame for logout button
         frm_logout = tk.Frame(self)
         frm_logout.grid(column = 2, row = 2)
 
         # Create a logout button
-        # Need to add command function
-        btn_logout = tk.Button(frm_logout, text = "Logout")
+        btn_logout = tk.Button(frm_logout, text = "Logout", relief = tk.RAISED, command = lambda: self.logout_button_action(parent))
         btn_logout.pack()
-        btn_logout.config(relief = tk.RAISED)
+
+        # Logout button action takes the user back to the login screen
+        def logout_button_action(self, _parent):
+            _parent.set_frame(_parent.login_frame)
 
         # Create a frame for the back button
         frm_back = tk.Frame(self)
         frm_back.grid(column = 2, row = 0)
 
         # Create a back button
-        # Need to add command function
-        btn_back = tk.Button(frm_back, text = "Back")
+        btn_back = tk.Button(frm_back, text = "Back", relief = tk.RAISED, command = lambda: self.back_button_action(parent))
         btn_back.pack()
-        btn_logout.config(relief = tk.RAISED)
+
+        # Back button action takes the user back to the scanning device
+        def back_button_action(self, _parent):
+            _parent.set_frame(_parent.scan_frame)
+
 
         self.grid_propagate(0)
