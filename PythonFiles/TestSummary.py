@@ -43,8 +43,6 @@ class TestSummary(tk.Frame):
             self._entry.insert(tk.END, self.x_labels[index])
 
 
-        # Adding dummy values to the DataBase
-
         self.table.grid(row = 1, column= 1)
 
 
