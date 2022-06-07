@@ -1,4 +1,6 @@
 # importing necessary modules
+import threading
+import time
 import tkinter as tk
 from tkinter import *
 from turtle import back
@@ -8,14 +10,35 @@ import os
 import tkinter.font as font
  
 # Creating variable for testing QR Code entry
-# QRcode = "1090201033667425"
+QRcode = "1090201033667425"
 
 
 # creating the login frame
 class ScanScene(tk.Frame):
     
     def __init__(self, parent, master_window):
+        self.GUI_thread = threading.Thread(target=self.initialize_GUI(parent, master_window), args=(10,))
+        
 
+
+    def start_QR_thread(self):
+        self.QR_thread.start()
+
+    def scan_QR_code(self):
+        print("Begin to scan")
+        self.QR_thread = threading.Thread(target=self.scan_QR_code(), args=(10,))
+        time.sleep(5)
+        self.insert_QR_ID()
+        print("Scan Complete")
+
+    # Updates the QR ID in the task 
+    def insert_QR_ID(self):
+        ent_serial.delete(0, END)
+        ent_serial.insert(0, QRcode)
+        ent_serial.config(state = 'disabled')
+
+    def initialize_GUI(self, parent, master_window):
+        
         self.master_window = master_window
         
         super().__init__(self.master_window, width = 850, height = 500)
@@ -82,6 +105,4 @@ class ScanScene(tk.Frame):
         _parent.set_frame(_parent.login_frame)     
         
         
-        # ent_serial.delete(0, END)
-        # ent_serial.insert(0, QRcode)
-        # ent_serial.config(state = 'disabled')
+        

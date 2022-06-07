@@ -27,8 +27,7 @@ class TestFinishedSummary(tk.Frame):
         self.table.grid(row = 1, column= 1)
 
 
-        # Ensures the frame is the correct size
-        self.grid_propagate(0)
+        
 
     
         # Adds the labels to the top of the table
@@ -95,6 +94,10 @@ class TestFinishedSummary(tk.Frame):
         for index in range(len(self.list_of_tests)):
             retest_button = tk.Button(self.table, text="RETEST")
             retest_button.grid(row=index + 1, column=3)
+
+
+        # Ensures the frame is the correct size
+        self.grid_propagate(0)
 
 
 
