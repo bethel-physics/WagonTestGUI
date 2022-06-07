@@ -69,9 +69,9 @@ class TestFinishedSummary(tk.Frame):
             _label = tk.Label(self.table, relief = 'ridge', width=25, height=5, font=('Arial',11))
 
             if (self.list_of_completed_tests[index]):
-                _label = tk.Label(self.table, text = "COMPLETED", width=25, height=5, font=('Arial',11))
+                _label = tk.Label(self.table, relief = 'ridge', text = "COMPLETED", width=25, height=5, font=('Arial',11))
             else:
-                _label = tk.Label(self.table, text = "UNFINISHED", width=25, height=5, font=('Arial',11))
+                _label = tk.Label(self.table, relief = 'ridge', text = "UNFINISHED", width=25, height=5, font=('Arial',11))
             # _entry.tag_configure("center", justify='center')
             # _entry.tag_add("center", 1.0, "end")
             _label.grid(row=index + 1, column=1)

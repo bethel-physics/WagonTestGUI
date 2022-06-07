@@ -8,7 +8,17 @@ class Test3Scene(tk.Frame):
 
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 850, height = 500)
-        frm_window.grid(column=1, row=1, padx = 235, pady = 125)
+        frm_window.grid(column=1, row=1, padx = 235, pady = 97)
+
+        # Create a label for the tester's name
+        lbl_tester = tk.Label(frm_window, text = "Tester: ", font = ('Arial', 15))
+        lbl_tester.pack(side = 'top')
+
+        # Create an entry for the tester's name
+        ent_tester = tk.Entry(frm_window, font = ('Arial', 15))
+        ent_tester.insert(0, "Amanda Holmes") # Need a way to fetch the tester name
+        ent_tester.pack(side = 'top')
+        ent_tester.config(state = "disabled")
 
         # Create a label for the serial number box
         lbl_snum = tk.Label(frm_window, text = "Serial Number:  ", font = ('Arial', 15))
@@ -16,7 +26,7 @@ class Test3Scene(tk.Frame):
 
         # Create a entry for the serial number box
         ent_snum = tk.Entry(frm_window, font = ('Arial', 15))
-        ent_snum.insert(0, "0000111122223333") # Need a way to fetch the serial number, make this uneditable?
+        ent_snum.insert(0, "0000111122223333") # Need a way to fetch the serial number
         ent_snum.pack(side = 'top')
         ent_snum.config(state = "disabled")
 
