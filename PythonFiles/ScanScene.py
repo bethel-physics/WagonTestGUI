@@ -6,7 +6,6 @@ from tkinter import *
 from turtle import back
 from PIL import ImageTk as iTK
 from PIL import Image
-import os
 import tkinter.font as font
  
 # Creating variable for testing QR Code entry
@@ -17,25 +16,30 @@ QRcode = "1090201033667425"
 class ScanScene(tk.Frame):
     
     def __init__(self, parent, master_window):
-        self.GUI_thread = threading.Thread(target=self.initialize_GUI(parent, master_window), args=(10,))
-        
-
-
-    def start_QR_thread(self):
-        self.QR_thread.start()
+        self.is_current_scene = False
+        self.initialize_GUI(parent, master_window)
 
     def scan_QR_code(self):
         print("Begin to scan")
-        self.QR_thread = threading.Thread(target=self.scan_QR_code(), args=(10,))
-        time.sleep(5)
-        self.insert_QR_ID()
-        print("Scan Complete")
+        ent_serial.config(state = 'normal')
+        ent_serial.delete(0, END)
+        self.QR_thread = threading.Thread(target=self.insert_QR_ID)
+        self.QR_thread.daemon = True
+        self.QR_thread.start()
 
     # Updates the QR ID in the task 
     def insert_QR_ID(self):
         ent_serial.delete(0, END)
+        self.scanned_QR_value = 000
+        time.sleep(5)
+        print("Finished thread")
         ent_serial.insert(0, QRcode)
-        ent_serial.config(state = 'disabled')
+        ent_serial.config(state = 'readonly')
+
+        if (self.is_current_scene):
+            self.scanned_QR_value = QRcode
+
+        print("Current QR Code Value:", self.scanned_QR_value)
 
     def initialize_GUI(self, parent, master_window):
         
@@ -72,13 +76,30 @@ class ScanScene(tk.Frame):
         ent_serial.pack(padx = 50, pady = 50)
 
         # Submit button
+        rescan_button = tk.Button(
+            Scan_Board_Prompt_Frame,
+            text="Rescan",
+            padx = 50,
+            pady =10,
+            relief = tk.RAISED,
+            command = lambda:  self.scan_QR_code()
+            )
+        rescan_button.pack(padx=10, pady=10)
+
+        # Submit button
         btn_submit = tk.Button(
             Scan_Board_Prompt_Frame,
             text="Submit",
+            padx = 50,
+            pady = 10,
             relief = tk.RAISED,
             command= lambda:  self.submit_button_action(parent)
             )
-        btn_submit.pack()
+        btn_submit.pack(padx=10, pady=10)
+
+
+        
+
 
         # Creating frame for logout button
         frm_logout = tk.Frame(self)

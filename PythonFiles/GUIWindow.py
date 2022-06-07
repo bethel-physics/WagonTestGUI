@@ -73,7 +73,18 @@ class GUIWindow():
 
     # Changes which frame is currently shown
     def set_frame(self, _frame):
+        if (_frame is self.scan_frame):
+            self.scan_frame.is_current_scene = True
+            self.scan_frame.scan_QR_code()
+
+        if (_frame is not self.scan_frame):
+            self.scan_frame.is_current_scene = False
         _frame.tkraise()
+
+
+
+
+
 
     def exit_function(self):
         # Creates a popup to confirm whether or not to exit out of the window
@@ -111,4 +122,7 @@ class GUIWindow():
     # Called when the yes button is pressed to destroy both windows
     def destroy_function(self):
         popup.destroy()
-        master_window.destroy()      
+        master_window.destroy()
+
+    def get_scan_frame(self):
+        return self.scan_frame
