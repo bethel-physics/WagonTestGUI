@@ -1,6 +1,5 @@
 # importing necessary modules
 import tkinter as tk
-from tkinter import ttk
 
 # creating the login frame
 class LoginScene(tk.Frame):
@@ -41,6 +40,7 @@ class LoginScene(tk.Frame):
         self.pack_propagate(0)
 
     def submit_button_action(self, _parent):
-        _parent.set_frame(_parent.scan_frame)
+        current_scan_frame = _parent.get_scan_frame()
+        _parent.set_frame(current_scan_frame)
 
         

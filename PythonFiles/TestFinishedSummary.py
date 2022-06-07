@@ -41,8 +41,7 @@ class TestFinishedSummary(tk.Frame):
         self.table.grid(row = 0, column= 0, columnspan = 4, rowspan = 4)
 
 
-        # Ensures the frame is the correct size
-        self.grid_propagate(0)
+        
 
     
         # Adds the labels to the top of the table
