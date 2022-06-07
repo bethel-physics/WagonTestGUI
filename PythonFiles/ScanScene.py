@@ -15,7 +15,8 @@ QRcode = "1090201033667425"
 # creating the login frame
 class ScanScene(tk.Frame):
     
-    def __init__(self, parent, master_window):
+    def __init__(self, parent, master_window, data_holder):
+        self.data_holder = data_holder
         self.is_current_scene = False
         self.initialize_GUI(parent, master_window)
 
@@ -34,7 +35,8 @@ class ScanScene(tk.Frame):
         for i in range(5):
             time.sleep(1)
             print(i + 1)
-        print("Finished thread")
+        time.sleep(0.5)
+        print("Finished Scan")
         ent_serial.delete(0, END)
         ent_serial.insert(0, QRcode)
         ent_serial.config(state = 'readonly')
@@ -43,8 +45,10 @@ class ScanScene(tk.Frame):
             self.scanned_QR_value = 0
         else:
             self.scanned_QR_value = QRcode
+            self.data_holder.current_serial_ID = self.scanned_QR_value
 
-        print("Current QR Code Value:", self.scanned_QR_value)
+        self.data_holder.print()
+
 
     def initialize_GUI(self, parent, master_window):
         

@@ -4,20 +4,20 @@ from PIL import Image
 from matplotlib.pyplot import table
 from pyparsing import col
 
+from PythonFiles.DataHolder import DataHolder
+
 # Exists until serial number and tester name are accessible through normal means
 SERIALNUMBERVARIABLE = "000011112222"
 TESTERNAMEVARIABLE = "Amanda Holmes"
 
 class TestFinishedSummary(tk.Frame):
-    def __init__(self, parent, master_window):
+    def __init__(self, parent, master_window, data_holder):
         super().__init__(master_window, width=850, height=500)
 
+        self.data_holder = data_holder
 
-        self.list_of_tests = ["General Resistance Test", "ID Resistor Test", "I2C Comm. Test", "Bit Rate Test"]
-        self.list_of_table_labels = ["Test Name", "Test Status", "Pass/Fail", "Retest?"]
-        self.list_of_completed_tests = [True, True, True, False]
-        self.list_of_pass_fail = [True, False, True, False]
 
+        self.create_updated_table()
 
 
         # Adds the title to the TestSummary Frame
@@ -25,13 +25,26 @@ class TestFinishedSummary(tk.Frame):
                                font=('Arial',18,'bold'))
         self.title.grid(row= 0, column= 1, pady = 20)
 
+        self.grid_propagate(0)
+
+
+
+    def create_updated_table(self):
+                
+        
+        self.list_of_tests = ["General Resistance Test", "ID Resistor Test", "I2C Comm. Test", "Bit Rate Test"]
+        self.list_of_table_labels = ["Test Name", "Test Status", "Pass/Fail", "Retest?"]
+        self.list_of_completed_tests = [self.data_holder.test1_completed, self.data_holder.test2_completed, self.data_holder.test3_completed, self.data_holder.test4_completed]
+        self.list_of_pass_fail = [self.data_holder.test1_pass, self.data_holder.test2_pass, self.data_holder.test3_pass, self.data_holder.test4_pass]
+
+
         # Adds Board Serial Number to the TestSummaryFrame
-        self.lbl_serial = tk.Label(self, text = "Serial Number: " + SERIALNUMBERVARIABLE,
+        self.lbl_serial = tk.Label(self, text = "Serial Number: " + str(self.data_holder.current_serial_ID),
                                font=('Arial', 15))
         self.lbl_serial.grid(column = 2, row = 0, pady = 20)
 
         # Adds Tester Name to the TestSummary Frame
-        self.lbl_tester = tk.Label(self, text = "Tester: " + TESTERNAMEVARIABLE,
+        self.lbl_tester = tk.Label(self, text = "Tester: " + self.data_holder.user_ID,
                                font=('Arial', 15))
         self.lbl_tester.grid(column = 0, row = 0, pady = 20)
         
@@ -76,10 +89,6 @@ class TestFinishedSummary(tk.Frame):
             # _entry.tag_add("center", 1.0, "end")
             _label.grid(row=index + 1, column=1)
 
-            
-
-
-
 
         # Adds the Image as to whether the test was completed or not
         for index in range(len(self.list_of_pass_fail)):
@@ -121,7 +130,16 @@ class TestFinishedSummary(tk.Frame):
 
         self.grid_propagate(0)
 
-        
+
+
+
+
+
+
+
+
+
+
 
     def retest1_btn_action(self, _parent):
         _parent.set_frame(_parent.test1_frame)

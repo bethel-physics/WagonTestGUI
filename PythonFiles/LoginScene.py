@@ -1,13 +1,13 @@
 # importing necessary modules
 import tkinter as tk
 
-from PythonFiles.GUIWindow import GUIWindow
 
 # creating the login frame
 class LoginScene(tk.Frame):
-    def __init__(self, parent, master_window):
+    def __init__(self, parent, master_window, data_holder):
         super().__init__(master_window, width=850, height=500)
 
+        self.data_holder = data_holder
 
         # Creating a list of users for dropdown menu
         # Eventually need to add a way for a database to have control over this array
@@ -22,13 +22,13 @@ class LoginScene(tk.Frame):
         lbl_title.pack(pady=75)
 
         # Creating intial value in dropdown menu
-        user_selected = tk.StringVar(self)
-        user_selected.set("") # default value is empty
+        self.user_selected = tk.StringVar(self)
+        self.user_selected.set("") # default value is empty
 
         # Creating the dropdown menu itself
-        opt_user_dropdown = tk.OptionMenu(self, user_selected, *User_List)
-        opt_user_dropdown.pack(pady=10)
-        opt_user_dropdown.config(width = 20)
+        self.opt_user_dropdown = tk.OptionMenu(self, self.user_selected, *User_List)
+        self.opt_user_dropdown.pack(pady=10)
+        self.opt_user_dropdown.config(width = 20)
 
         # Creating the submit button
         # Need to add shift frame functionality later
@@ -42,7 +42,8 @@ class LoginScene(tk.Frame):
         self.pack_propagate(0)
 
     def submit_button_action(self, _parent):
-        current_scan_frame = GUIWindow(_parent).get_scan_frame()
-        GUIWindow(_parent).set_frame(current_scan_frame)
+        self.data_holder.user_ID = self.user_selected.get()
+        current_scan_frame = _parent.get_scan_frame()
+        _parent.set_frame(current_scan_frame)
 
         
