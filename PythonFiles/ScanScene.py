@@ -23,7 +23,6 @@ class ScanScene(tk.Frame):
     def scan_QR_code(self):
         print("Begin to scan")
         ent_serial.config(state = 'normal')
-        ent_serial.delete(0, END)
         self.QR_thread = threading.Thread(target=self.insert_QR_ID)
         self.QR_thread.daemon = True
         self.QR_thread.start()
@@ -31,13 +30,13 @@ class ScanScene(tk.Frame):
     # Updates the QR ID in the task 
     def insert_QR_ID(self):
         ent_serial.delete(0, END)
+        self.hide_submit_button()
         self.scanned_QR_value = 000
         for i in range(5):
             time.sleep(1)
             print(i + 1)
         time.sleep(0.5)
         print("Finished Scan")
-        ent_serial.delete(0, END)
         ent_serial.insert(0, QRcode)
         ent_serial.config(state = 'readonly')
 
@@ -115,10 +114,6 @@ class ScanScene(tk.Frame):
             )
         
 
-
-        
-
-
         # Creating frame for logout button
         frm_logout = tk.Frame(self)
         frm_logout.grid(column = 1, row = 1, sticky= 'se')
@@ -144,8 +139,14 @@ class ScanScene(tk.Frame):
         _parent.set_frame(_parent.login_frame)    
 
     def show_submit_button(self):
-        print("SHowing SumBIt ButtON")
+        print("IN THE SHOWER")
         self.btn_submit.pack(padx=10, pady=10)
+
+    def hide_submit_button(self):
+        print("IN THE HIDER")
+        ent_serial.delete(0, END)
+        self.btn_submit.pack_forget()
+        self.btn_submit.grid_forget()
         
         
         
