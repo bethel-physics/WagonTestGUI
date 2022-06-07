@@ -17,7 +17,7 @@ class TestFinishedSummary(tk.Frame):
         self.data_holder = data_holder
 
 
-        self.create_updated_table()
+        self.create_updated_table(parent)
 
 
         # Adds the title to the TestSummary Frame
@@ -29,7 +29,7 @@ class TestFinishedSummary(tk.Frame):
 
 
 
-    def create_updated_table(self):
+    def create_updated_table(self, parent):
                 
         
         self.list_of_tests = ["General Resistance Test", "ID Resistor Test", "I2C Comm. Test", "Bit Rate Test"]

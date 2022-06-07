@@ -11,6 +11,8 @@ from PythonFiles.TestFrames.Test3 import Test3Scene
 from PythonFiles.TestFrames.Test4 import Test4Scene
 from PythonFiles.TestInProgressScene import TestInProgressScene
 from PythonFiles.DataHolder import DataHolder
+import PythonFiles.TestInProgressScene
+from PythonFiles.TestInProgressScene import *
 
 
 # Create a class for creating the basic GUI Window
@@ -53,16 +55,16 @@ class GUIWindow():
         self.test4_frame= Test4Scene(self, master_frame, self.data_holder)
         self.test4_frame.grid(row=0, column=0)
 
-        self.test1_in_progress = TestInProgressScene(self, master_frame, self.test2_frame)
+        self.test1_in_progress = TestInProgressScene(self, master_frame, self.test2_frame, self.data_holder)
         self.test1_in_progress.grid(row=0, column=0)
 
-        self.test2_in_progress = TestInProgressScene(self, master_frame, self.test3_frame)
+        self.test2_in_progress = TestInProgressScene(self, master_frame, self.test3_frame, self.data_holder)
         self.test2_in_progress.grid(row=0, column=0)
 
-        self.test3_in_progress = TestInProgressScene(self, master_frame, self.test4_frame)
+        self.test3_in_progress = TestInProgressScene(self, master_frame, self.test4_frame, self.data_holder)
         self.test3_in_progress.grid(row=0, column=0)
 
-        self.test4_in_progress = TestInProgressScene(self, master_frame, self.testing_finished_frame)
+        self.test4_in_progress = TestInProgressScene(self, master_frame, self.testing_finished_frame, self.data_holder)
         self.test4_in_progress.grid(row=0, column=0)
 
         # Used to tell the master window that its exit window button is being given a new function
@@ -82,18 +84,21 @@ class GUIWindow():
 
         if (_frame is not self.scan_frame):
             self.scan_frame.is_current_scene = False
+            self.scan_frame.hide_submit_button()
 
         if(_frame is self.testing_finished_frame):
-            self.testing_finished_frame.create_updated_table()
+            self.testing_finished_frame.create_updated_table(self)
+
+        if(_frame is self.test1_in_progress):
+            self.test1_in_progress.initialize_console()
         
         _frame.tkraise()
 
 
 
-
-
-
+    # New function for clicking on the exit button
     def exit_function(self):
+
         # Creates a popup to confirm whether or not to exit out of the window
         global popup
         popup = tk.Tk()
@@ -101,12 +106,15 @@ class GUIWindow():
         popup.geometry("300x150")
         popup.eval("tk::PlaceWindow . center")
 
+        # Creates frame in the new window
         frm_popup = tk.Frame(popup)
         frm_popup.pack()
 
+        # Creates label in the frame
         lbl_popup = tk.Label(frm_popup, text = "Are you sure you would like to exit?")
         lbl_popup.grid(column = 0, row = 0, columnspan = 2, pady = 25)
 
+        # Creates yes and no buttons for exiting
         btn_yes = tk.Button(
              frm_popup,
              text = "Yes", 
