@@ -43,5 +43,4 @@ class LoginScene(tk.Frame):
     def submit_button_action(self, _parent):
         _parent.set_frame(_parent.scan_frame)
 
-
         
