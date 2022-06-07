@@ -7,6 +7,9 @@ from PIL import Image
 import os
 import tkinter.font as font
  
+# Creating variable for testing QR Code entry
+# QRcode = "1090201033667425"
+
 
 # creating the login frame
 class ScanScene(tk.Frame):
@@ -38,6 +41,7 @@ class ScanScene(tk.Frame):
         lbl_scan.pack(padx = 50)
 
         # Entry for the serial number to be displayed. Upon Scan, update and disable?
+        global ent_serial
         ent_serial = tk.Entry(
             Scan_Board_Prompt_Frame,
             font = ('Arial', 16)
@@ -72,6 +76,12 @@ class ScanScene(tk.Frame):
 
     def submit_button_action(self, _parent):
         _parent.set_frame(_parent.test1_frame)
+
     
     def logout_button_action(self, _parent):
         _parent.set_frame(_parent.login_frame)     
+        
+        
+        # ent_serial.delete(0, END)
+        # ent_serial.insert(0, QRcode)
+        # ent_serial.config(state = 'disabled')
