@@ -1,10 +1,14 @@
 import tkinter as tk
 import tkinter.font as font
 
+
+
 # Creating class for the window
 class Test4Scene(tk.Frame):
-    def __init__(self, parent, master_window):      
+    def __init__(self, parent, master_window, data_holder):      
         super().__init__(master_window, width=850, height = 500)
+
+        self.data_holder = data_holder
 
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 850, height = 500)
@@ -100,6 +104,11 @@ class Test4Scene(tk.Frame):
     # Confirm button action takes the user to the test in progress scene
     def confirm_button_action(self, _parent):
         _parent.set_frame(_parent.test4_in_progress)
+
+        #TODO EDIT THIS WITH ACTUAL TEST DATA
+        self.data_holder.test4_completed = True
+        self.data_holder.test4_pass = True
+        self.data_holder.print()
 
     # Logout button that takes the user back to the login scene
     def logout_button_action(self, _parent):

@@ -1,11 +1,15 @@
 import tkinter as tk
 import tkinter.font as font
 
+
+
 # Creating class for the window
 class Test1Scene(tk.Frame):
-    def __init__(self, parent, master_window):
+    def __init__(self, parent, master_window, data_holder):
         super().__init__(master_window, width=850, height=500)
 
+        self.data_holder = data_holder
+        
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 850, height = 500)
         frm_window.grid(column=1, row=1, padx = 235, pady = 97)
@@ -85,6 +89,9 @@ class Test1Scene(tk.Frame):
             command = lambda: self.rescan_button_action(parent))
         btn_rescan.pack(anchor = 'ne')
 
+
+        
+
         self.grid_propagate(0)
     
     # Rescan button takes the user back to scanning in a new board
@@ -99,6 +106,11 @@ class Test1Scene(tk.Frame):
     # Confirm button action takes the user to the test in progress scene
     def confirm_button_action(self, _parent):
         _parent.set_frame(_parent.test1_in_progress)
+        
+        #TODO EDIT THIS WITH ACTUAL TEST DATA
+        self.data_holder.test1_completed = True
+        self.data_holder.test1_pass = True
+        self.data_holder.print()
 
     def logout_button_action(self, _parent):
         _parent.set_frame(_parent.login_frame)
