@@ -9,6 +9,11 @@ class LoginScene(tk.Frame):
 
         self.data_holder = data_holder
 
+
+        # Creating the submit button
+        # Need to add shift frame functionality later
+        self.btn_submit = tk.Button(self, text="Submit", relief=tk.RAISED, command= lambda:  self.submit_button_action(parent))
+
         # Creating a list of users for dropdown menu
         # Eventually need to add a way for a database to have control over this array
         User_List = [
@@ -30,10 +35,8 @@ class LoginScene(tk.Frame):
         self.opt_user_dropdown.pack(pady=10)
         self.opt_user_dropdown.config(width = 20)
 
-        # Creating the submit button
-        # Need to add shift frame functionality later
-        btn_submit = tk.Button(self, text="Submit", relief=tk.RAISED, command= lambda:  self.submit_button_action(parent))
-        btn_submit.pack()
+        
+        self.user_selected.trace('w', lambda *args: self.show_submit_button())
 
         # # Creating logout button in grid
         # btn_logout = tk.Button(self, text = "Logout")
@@ -45,5 +48,8 @@ class LoginScene(tk.Frame):
         self.data_holder.user_ID = self.user_selected.get()
         current_scan_frame = _parent.get_scan_frame()
         _parent.set_frame(current_scan_frame)
+
+    def show_submit_button(self):
+        self.btn_submit.pack()
 
         
