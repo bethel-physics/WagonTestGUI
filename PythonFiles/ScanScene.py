@@ -41,6 +41,8 @@ class ScanScene(tk.Frame):
         ent_serial.insert(0, QRcode)
         ent_serial.config(state = 'readonly')
 
+        
+
         if (not self.is_current_scene):
             self.scanned_QR_value = 0
         else:
@@ -78,11 +80,18 @@ class ScanScene(tk.Frame):
 
         # Entry for the serial number to be displayed. Upon Scan, update and disable?
         global ent_serial
+        
+        # Creating intial value in dropdown menu
+        user_text = tk.StringVar(self)
+        
         ent_serial = tk.Entry(
             Scan_Board_Prompt_Frame,
-            font = ('Arial', 16)
+            font = ('Arial', 16),
+            textvariable= user_text, 
             )
         ent_serial.pack(padx = 50, pady = 50)
+
+        user_text.trace("w", lambda name, index, mode, sv=user_text: self.show_submit_button())
 
         # Submit button
         rescan_button = tk.Button(
@@ -96,7 +105,7 @@ class ScanScene(tk.Frame):
         rescan_button.pack(padx=10, pady=10)
 
         # Submit button
-        btn_submit = tk.Button(
+        self.btn_submit = tk.Button(
             Scan_Board_Prompt_Frame,
             text="Submit",
             padx = 50,
@@ -104,7 +113,7 @@ class ScanScene(tk.Frame):
             relief = tk.RAISED,
             command= lambda:  self.submit_button_action(parent)
             )
-        btn_submit.pack(padx=10, pady=10)
+        
 
 
         
@@ -132,7 +141,11 @@ class ScanScene(tk.Frame):
 
     
     def logout_button_action(self, _parent):
-        _parent.set_frame(_parent.login_frame)     
+        _parent.set_frame(_parent.login_frame)    
+
+    def show_submit_button(self):
+        print("SHowing SumBIt ButtON")
+        self.btn_submit.pack(padx=10, pady=10)
         
         
         

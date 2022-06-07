@@ -35,7 +35,6 @@ class LoginScene(tk.Frame):
         self.opt_user_dropdown.pack(pady=10)
         self.opt_user_dropdown.config(width = 20)
 
-        
         self.user_selected.trace('w', lambda *args: self.show_submit_button())
 
         # # Creating logout button in grid
@@ -48,6 +47,9 @@ class LoginScene(tk.Frame):
         self.data_holder.user_ID = self.user_selected.get()
         current_scan_frame = _parent.get_scan_frame()
         _parent.set_frame(current_scan_frame)
+
+
+        self.data_holder.print()
 
     def show_submit_button(self):
         self.btn_submit.pack()
