@@ -31,12 +31,17 @@ class ScanScene(tk.Frame):
     def insert_QR_ID(self):
         ent_serial.delete(0, END)
         self.scanned_QR_value = 000
-        time.sleep(5)
+        for i in range(5):
+            time.sleep(1)
+            print(i + 1)
         print("Finished thread")
+        ent_serial.delete(0, END)
         ent_serial.insert(0, QRcode)
         ent_serial.config(state = 'readonly')
 
-        if (self.is_current_scene):
+        if (not self.is_current_scene):
+            self.scanned_QR_value = 0
+        else:
             self.scanned_QR_value = QRcode
 
         print("Current QR Code Value:", self.scanned_QR_value)

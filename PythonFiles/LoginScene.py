@@ -1,6 +1,8 @@
 # importing necessary modules
 import tkinter as tk
 
+from PythonFiles.GUIWindow import GUIWindow
+
 # creating the login frame
 class LoginScene(tk.Frame):
     def __init__(self, parent, master_window):
@@ -40,7 +42,7 @@ class LoginScene(tk.Frame):
         self.pack_propagate(0)
 
     def submit_button_action(self, _parent):
-        current_scan_frame = _parent.get_scan_frame()
-        _parent.set_frame(current_scan_frame)
+        current_scan_frame = GUIWindow(_parent).get_scan_frame()
+        GUIWindow(_parent).set_frame(current_scan_frame)
 
         

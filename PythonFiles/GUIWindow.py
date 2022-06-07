@@ -10,7 +10,6 @@ from PythonFiles.TestFrames.Test2 import Test2Scene
 from PythonFiles.TestFrames.Test3 import Test3Scene
 from PythonFiles.TestFrames.Test4 import Test4Scene
 from PythonFiles.TestInProgressScene import TestInProgressScene
-from PythonFiles.TestSummary import TestSummary
 
 
 
