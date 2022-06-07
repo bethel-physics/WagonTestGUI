@@ -22,23 +22,23 @@ class TestFinishedSummary(tk.Frame):
 
         # Adds the title to the TestSummary Frame
         self.title = tk.Label(self, fg='#0d0d0d', text = "Testing Finished!",
-                               font=('Arial',11,'bold'))
-        self.title.grid(row= 0, column= 1, pady = 50)
+                               font=('Arial',18,'bold'))
+        self.title.grid(row= 0, column= 1, pady = 20)
 
         # Adds Board Serial Number to the TestSummaryFrame
         self.lbl_serial = tk.Label(self, text = "Serial Number: " + SERIALNUMBERVARIABLE,
-                               font=('Arial', 11))
-        self.lbl_serial.grid(column = 2, row = 0, pady = 50)
+                               font=('Arial', 15))
+        self.lbl_serial.grid(column = 2, row = 0, pady = 20)
 
         # Adds Tester Name to the TestSummary Frame
         self.lbl_tester = tk.Label(self, text = "Tester: " + TESTERNAMEVARIABLE,
-                               font=('Arial', 11))
-        self.lbl_tester.grid(column = 0, row = 0, pady = 50)
+                               font=('Arial', 15))
+        self.lbl_tester.grid(column = 0, row = 0, pady = 20)
         
         
         # Creates the "table" as a frame object
         self.table = tk.Frame(self)
-        self.table.grid(row = 0, column= 0, columnspan = 4, rowspan = 4)
+        self.table.grid(row = 1, column= 0, columnspan = 4, rowspan = 4)
 
 
         
@@ -46,7 +46,7 @@ class TestFinishedSummary(tk.Frame):
     
         # Adds the labels to the top of the table
         for index in range(len(self.list_of_table_labels)):
-            _label = tk.Label(self.table, text = self.list_of_table_labels[index], width=25, height=1, font=('Arial', 11, "bold"))
+            _label = tk.Label(self.table, text = self.list_of_table_labels[index], relief = 'ridge', width=25, height=1, font=('Arial', 11, "bold"))
             # _entry.insert(tk.END, self.list_of_table_labels[index])
             # _entry.tag_configure("center", justify='center')
             # _entry.tag_add("center", 1.0, "end")
@@ -57,7 +57,7 @@ class TestFinishedSummary(tk.Frame):
 
         # Adds the test names to the first column
         for index in range(len(self.list_of_tests)):
-            _label= tk.Label(self.table, text = self.list_of_tests[index], width=25, height=5, font=('Arial', 11))
+            _label= tk.Label(self.table, text = self.list_of_tests[index], relief = 'ridge', width=25, height=5, font=('Arial', 11))
             # _label.insert(tk.END, self.list_of_tests[index])
             # _label.tag_configure("center", justify='center')
             # _label.tag_add("center", 1.0, "end")
@@ -66,7 +66,7 @@ class TestFinishedSummary(tk.Frame):
 
 
         for index in range(len(self.list_of_completed_tests)):
-            _label = tk.Label(self.table, width=25, height=5, font=('Arial',11))
+            _label = tk.Label(self.table, relief = 'ridge', width=25, height=5, font=('Arial',11))
 
             if (self.list_of_completed_tests[index]):
                 _label = tk.Label(self.table, text = "COMPLETED", width=25, height=5, font=('Arial',11))
@@ -118,6 +118,8 @@ class TestFinishedSummary(tk.Frame):
 
         btn_retest4 = tk.Button(self.table, text = "RETEST", command = lambda: self.retest4_btn_action(parent))
         btn_retest4.grid(column = 3, row = 4)
+
+        self.grid_propagate(0)
 
         
 
