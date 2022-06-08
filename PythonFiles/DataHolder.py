@@ -36,7 +36,7 @@ class DataHolder():
         print("self.test3_pass: ", self.test3_pass)
         print("self.test4_pass: ", self.test4_pass)
 
-    # Set of commands for getting all the variables from data_holder
+    # Gets all the variables from data_holder
     def get(self):
         return (self.user_ID + 
                 str(self.current_serial_ID) +

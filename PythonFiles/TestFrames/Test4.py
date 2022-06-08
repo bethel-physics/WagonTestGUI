@@ -14,42 +14,73 @@ class Test4Scene(tk.Frame):
 
     def update_frame(self, parent):
 
+        # Creates a font to be more easily referenced later in the code
+        font_scene = ('Arial', 15)
+
         # Create a centralized window for information
-        frm_window = tk.Frame(self, width = 850, height = 500)
+        frm_window = tk.Frame(
+            self, 
+            width = 850, 
+            height = 500
+            )
         frm_window.grid(column=1, row=1, padx = 235, pady = 97)
 
         # Create a label for the tester's name
-        lbl_tester = tk.Label(frm_window, text = "Tester: ", font = ('Arial', 15))
+        lbl_tester = tk.Label(
+            frm_window, 
+            text = "Tester: ", 
+            font = font_scene
+            )
         lbl_tester.pack(side = 'top')
 
         # Create an entry for the tester's name
-        ent_tester = tk.Entry(frm_window, font = ('Arial', 15))
+        ent_tester = tk.Entry(
+            frm_window, 
+            font = font_scene
+            )
         ent_tester.insert(0, self.data_holder.user_ID) # Need a way to fetch the tester name
         ent_tester.pack(side = 'top')
         ent_tester.config(state = "disabled")
 
         # Create a label for the serial number box
-        lbl_snum = tk.Label(frm_window, text = "Serial Number:  ", font = ('Arial', 15))
+        lbl_snum = tk.Label(
+            frm_window, 
+            text = "Serial Number:  ", 
+            font = font_scene
+            )
         lbl_snum.pack(side = 'top')
 
         # Create a entry for the serial number box
-        ent_snum = tk.Entry(frm_window, font = ('Arial', 15))
+        ent_snum = tk.Entry(
+            frm_window, 
+            font = font_scene
+            )
         ent_snum.insert(0, self.data_holder.current_serial_ID) # Need a way to fetch the serial number
         ent_snum.pack(side = 'top')
         ent_snum.config(state = "disabled")
 
         # Create a label for the test about to be run
-        lbl_test4 = tk.Label(frm_window, text = "Current Test:", font = ('Arial', 15))
+        lbl_test4 = tk.Label(
+            frm_window, 
+            text = "Current Test:", 
+            font = font_scene
+            )
         lbl_test4.pack(side = 'top')
 
         # Create a entry for the test type
-        ent_test4 = tk.Entry(frm_window, font = ('Arial', 15))
+        ent_test4 = tk.Entry(
+            frm_window, 
+            font = font_scene
+            )
         ent_test4.insert(0, "Bit Rate Test")
         ent_test4.pack(side = 'top')
         ent_test4.config(state = "disabled")
 
         # Create a label for confirming test
-        lbl_confirm = tk.Label(frm_window, text = "Are you ready to begin the test?", font = ('Arial', 15))
+        lbl_confirm = tk.Label(
+            frm_window, 
+            text = "Are you ready to begin the test?", 
+            font = font_scene)
         lbl_confirm.pack(side = 'top')
 
         # Create a button for confirming test

@@ -15,7 +15,7 @@ class Test1Scene(tk.Frame):
     def update_frame(self, parent):
 
         # Creates a font to be more easily referenced later in the code
-        scene_font = ('Arial', 15)
+        font_scene = ('Arial', 15)
 
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 850, height = 500)
@@ -25,14 +25,14 @@ class Test1Scene(tk.Frame):
         lbl_tester = tk.Label(
             frm_window, 
             text = "Tester: ", 
-            font = scene_font
+            font = font_scene
             )
         lbl_tester.pack(side = 'top')
 
         # Create an entry for the tester's name
         ent_tester = tk.Entry(
             frm_window, 
-            font = scene_font
+            font = font_scene
             )
         ent_tester.insert(0, self.data_holder.user_ID) # Need a way to fetch the tester name
         ent_tester.pack(side = 'top')
@@ -42,14 +42,14 @@ class Test1Scene(tk.Frame):
         lbl_snum = tk.Label(
             frm_window, 
             text = "Serial Number: ", 
-            font = scene_font
+            font = font_scene
             )
         lbl_snum.pack(side = 'top')
 
         # Create a entry for the serial number box
         ent_snum = tk.Entry(
             frm_window, 
-            font = scene_font
+            font = font_scene
             )
         ent_snum.insert(0, self.data_holder.current_serial_ID) # Need a way to fetch the serial number
         ent_snum.pack(side = 'top')
@@ -59,14 +59,14 @@ class Test1Scene(tk.Frame):
         lbl_test1 = tk.Label(
             frm_window, 
             text = "Current Test: ", 
-            font = scene_font
+            font = font_scene
             )
         lbl_test1.pack(side = 'top')
 
         # Create a entry for the test type
         ent_test1 = tk.Entry(
             frm_window, 
-            font = scene_font
+            font = font_scene
             )
         ent_test1.insert(0, "General Resistance Test")
         ent_test1.pack(side = 'top')
@@ -76,7 +76,7 @@ class Test1Scene(tk.Frame):
         lbl_confirm = tk.Label(
             frm_window, 
             text = "Are you ready to begin the test?", 
-            font = scene_font
+            font = font_scene
             )
         lbl_confirm.pack(side = 'top')
 

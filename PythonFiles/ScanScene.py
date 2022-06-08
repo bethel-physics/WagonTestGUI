@@ -133,7 +133,7 @@ class ScanScene(tk.Frame):
             )
 
         # Rescan button creation
-        self.rescan_button = tk.Button(
+        self.btn_rescan = tk.Button(
             Scan_Board_Prompt_Frame,
             text="Rescan",
             padx = 50,
@@ -141,7 +141,7 @@ class ScanScene(tk.Frame):
             relief = tk.RAISED,
             command = lambda:  self.scan_QR_code()
             )
-        self.rescan_button.pack(padx=10, pady=30)
+        self.btn_rescan.pack(padx=10, pady=30)
 
         # Submit button creation
         self.btn_submit = tk.Button(
@@ -192,11 +192,11 @@ class ScanScene(tk.Frame):
 
     # Function to activate the rescan button
     def show_rescan_button(self):
-        self.rescan_button["state"] = "active"
+        self.btn_rescan["state"] = "active"
 
     # Function to disable to the rescan button
     def hide_rescan_button(self):
-        self.rescan_button["state"] = "disabled"
+        self.btn_rescan["state"] = "disabled"
 
         
         

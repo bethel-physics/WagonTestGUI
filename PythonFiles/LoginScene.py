@@ -81,8 +81,4 @@ class LoginScene(tk.Frame):
 
     # A function to pack the submit button
     def show_submit_button(self):
-        self.btn_submit.pack()
-
-    
-
-        
+        self.btn_submit.pack()   
