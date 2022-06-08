@@ -39,7 +39,7 @@ class TestFinishedSummary(tk.Frame):
 
     '''
     Creates the table with the updated information from the data_holder
-    @param parent -> 
+    @param parent -> References the GUIWindow object that creates the class
     '''
     def create_updated_table(self, parent):
                 

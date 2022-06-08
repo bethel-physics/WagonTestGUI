@@ -7,21 +7,26 @@ import time
 import PythonFiles.ConsoleOutput
 from PythonFiles.ConsoleOutput import *
 
-# Creating the frame itself
+'''
+Frame that is shown to the user while a test is in progress
+"loading scene"
+@param parent -> References a GUIWindow object
+@param master_window -> Tkinter object that the frame is going to be placed on
+@param next_frame -> Which frame is to be displayed after the TestInProgressScene frame
+@param data_holder -> DataHolder object that stores all relevant data
+'''
 class TestInProgressScene(tk.Frame):
 
+    # Constructor
     def __init__(self, parent, master_window, next_frame, data_holder):
         self.data_holder = data_holder
         self.is_current_scene = False
         self.initialize_scene(parent, master_window, next_frame)
 
-    # def create_console_thread(self):
-    #     print("I work!")
-    #     self.console_thread = threading.Thread(target= lambda: self.initialize_console())
-    #     self.console_thread.daemon = True
-    #     self.console_thread.start()
-    #     print("thread finished")
-
+    '''
+    Initializes the console window for the console output to be displayed
+    Creates a new Tkinter Window
+    '''
     def initialize_console(self):
         
         # Creating a popup window for the console output
@@ -30,7 +35,8 @@ class TestInProgressScene(tk.Frame):
         console_popup.geometry("500x500")
         console_popup.title("Console Output Window")
         console_popup.wm_attributes('-toolwindow', 'True')
-        # Used to tell the master window that its exit window button is being given a new function
+        
+        # Tells the master window that its exit window button is being given a new function
         console_popup.protocol('WM_DELETE_WINDOW', self.fake_destroy)
 
         print("I should have created a console window now")
@@ -53,13 +59,17 @@ class TestInProgressScene(tk.Frame):
 
         print("Hello World!")
     
+    # Method call that shouldn't really destroy anything
     def fake_destroy(self):
         pass
 
+    # Destroys the console
     def console_destroy(self):
         console_popup.destroy()
         sys.stdout = sys.__stdout__
 
+    # Function to initialize the scene
+    # Called in the constructor
     def initialize_scene(self, parent, master_window, next_frame):
         self.next_frame = next_frame
         super().__init__(master_window, width = 850, height = 500)
@@ -83,10 +93,11 @@ class TestInProgressScene(tk.Frame):
 
 
 
-
+        # Frame doesn't pack down to the widgets, stays true size
         self.pack_propagate(0)
 
-    def stop_button_action(self, _parent, _next_frame):
+    # Function that runs when the stop button is clicked
+    def stop_button_action(self, _parent):
         self.go_to_next_frame(_parent)
         self.console_destroy()
 
