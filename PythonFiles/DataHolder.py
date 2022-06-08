@@ -2,6 +2,7 @@
 
 class DataHolder():
 
+    # List of the variables being held by data holder
     def __init__(self):
         self.user_ID = ""
         self.current_serial_ID = 0
@@ -14,13 +15,15 @@ class DataHolder():
         self.test3_pass = False
         self.test4_pass = False
 
+    # Clears the data by reseting all the values to the initial state
     def clear_DataHolder(self):
         self.__init__()
 
-    
+    # Future method to send data to the database
     def send_to_DB(self):
         pass
 
+    # Prints all the variable values inside data_holder
     def print(self):
         print("self.user_ID: ", self.user_ID)
         print("self.current_serial_ID: ", self.current_serial_ID)
@@ -33,6 +36,7 @@ class DataHolder():
         print("self.test3_pass: ", self.test3_pass)
         print("self.test4_pass: ", self.test4_pass)
 
+    # Set of commands for getting all the variables from data_holder
     def get(self):
         return (self.user_ID + 
                 str(self.current_serial_ID) +

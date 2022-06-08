@@ -59,7 +59,7 @@ class ScanScene(tk.Frame):
         ent_serial.config(state = 'disabled')
 
         
-        # sets the scanned_QR_value to 0 when the function is not in use
+        # Sets the scanned_QR_value to 0 when the function is not in use
         if (not self.is_current_scene):
             self.scanned_QR_value = 0
         else:
@@ -98,9 +98,10 @@ class ScanScene(tk.Frame):
         # Entry for the serial number to be displayed. Upon Scan, update and disable?
         global ent_serial
         
-        # Creating intial value in dropdown menu
+        # Creating intial value in entry box
         user_text = tk.StringVar(self)
         
+        # Creates an entry box
         ent_serial = tk.Entry(
             Scan_Board_Prompt_Frame,
             font = ('Arial', 16),
@@ -108,9 +109,16 @@ class ScanScene(tk.Frame):
             )
         ent_serial.pack(padx = 50, pady = 50)
 
-        user_text.trace("w", lambda name, index, mode, sv=user_text: self.show_submit_button())
+        # Traces an input to show the submit button once text is inside the entry box
+        user_text.trace(
+            "w", 
+            lambda name, 
+            index, 
+            mode, 
+            sv=user_text: self.show_submit_button()
+            )
 
-        # Submit button
+        # Rescan button creation
         rescan_button = tk.Button(
             Scan_Board_Prompt_Frame,
             text="Rescan",
@@ -121,7 +129,7 @@ class ScanScene(tk.Frame):
             )
         rescan_button.pack(padx=10, pady=10)
 
-        # Submit button
+        # Submit button creation
         self.btn_submit = tk.Button(
             Scan_Board_Prompt_Frame,
             text="Submit",
@@ -145,20 +153,26 @@ class ScanScene(tk.Frame):
         )
         btn_logout.pack(anchor = 'se', padx = 230, pady = 180)
 
-
+        # Locks frame size to the master_window size
         self.grid_propagate(0)
 
-
+    # Function for the submit button
     def submit_button_action(self, _parent):
+
+        # Progresses to next frame
         _parent.set_frame(_parent.test1_frame)
 
-    
+    # Function for the log out button
     def logout_button_action(self, _parent):
+
+         # Send user back to login frame
         _parent.set_frame(_parent.login_frame)    
 
+    # Function to activate the submit button
     def show_submit_button(self):
         self.btn_submit["state"] = "active"
 
+    # Function to disable to the submit button
     def hide_submit_button(self):
         self.btn_submit["state"] = "disabled"
 
