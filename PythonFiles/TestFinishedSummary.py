@@ -77,6 +77,7 @@ class TestFinishedSummary(tk.Frame):
         self.frm_table = tk.Frame(self)
         self.frm_table.grid(row = 1, column= 0, columnspan = 4, rowspan = 4)
         
+        # Setting weights of columns so the column 4 is half the size of columns 0-3
         self.frm_table.columnconfigure(0, weight = 2)
         self.frm_table.columnconfigure(1, weight = 2)
         self.frm_table.columnconfigure(2, weight = 2)
@@ -146,7 +147,7 @@ class TestFinishedSummary(tk.Frame):
                 Green_Check_Image = Image.open("./PythonFiles/GreenCheckMark.png")
                 Green_Check_Image = Green_Check_Image.resize((75,75), Image.ANTIALIAS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
-                GreenCheck_Label = tk.Label(self.table, image=Green_Check_PhotoImage, width=75, height=75)
+                GreenCheck_Label = tk.Label(self.frm_table, image=Green_Check_PhotoImage, width=75, height=75)
                 GreenCheck_Label.image = Green_Check_PhotoImage
 
                 GreenCheck_Label.grid(row=index + 1, column=2)
@@ -156,7 +157,7 @@ class TestFinishedSummary(tk.Frame):
                 Red_X_Image = Image.open("./PythonFiles/RedX.png")
                 Red_X_Image = Red_X_Image.resize((75,75), Image.ANTIALIAS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
-                RedX_Label = tk.Label(self.table, image=Red_X_PhotoImage, width=75, height=75)
+                RedX_Label = tk.Label(self.frm_table, image=Red_X_PhotoImage, width=75, height=75)
                 RedX_Label.image = Red_X_PhotoImage
 
                 RedX_Label.grid(row=index + 1, column=2)

@@ -105,4 +105,13 @@ class TestInProgressScene(tk.Frame):
 
     # Goes to the next scene after the progress scene is complete
     def go_to_next_frame(self, _parent):
-        _parent.set_frame(self.next_frame)
+        if (self.data_holder.test1_completed == True and 
+            self.data_holder.test2_completed == True and 
+            self.data_holder.test3_completed == True and 
+            self.data_holder.test4_completed == True):
+
+            _parent.set_frame(_parent.testing_finished_frame)
+
+
+        else:
+            _parent.set_frame(self.next_frame)
