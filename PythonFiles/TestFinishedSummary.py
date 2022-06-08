@@ -21,7 +21,7 @@ class TestFinishedSummary(tk.Frame):
         self.data_holder = data_holder
 
         # Instantiates an updated table with the current data
-        self.create_updated_table(parent)
+    
 
         # Adds the title to the TestSummary Frame
         self.title = tk.Label(
@@ -32,6 +32,8 @@ class TestFinishedSummary(tk.Frame):
                 )
         self.title.grid(row= 0, column= 1, pady = 20)
 
+        self.create_updated_table(parent)
+
         # Fits the frame to set size rather than interior widgets
         self.grid_propagate(0)
 
@@ -39,7 +41,7 @@ class TestFinishedSummary(tk.Frame):
 
     '''
     Creates the table with the updated information from the data_holder
-    @param parent -> 
+    @param parent -> GUIWindow
     '''
     def create_updated_table(self, parent):
                 

@@ -11,7 +11,7 @@ class ConsoleOutput():
     def write(self, string):
 
         # Inserts text into the console entry box
-        self.entry.insert(tk.END, )
+        self.entry.insert(tk.END, string)
         self.entry.see('end') # Scrolls to the bottom of the text in the entry box
 
     # Necessary for use

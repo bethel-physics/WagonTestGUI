@@ -4,16 +4,16 @@ class DataHolder():
 
     # List of the variables being held by data holder
     def __init__(self):
-        self.user_ID = ""
-        self.current_serial_ID = 0
-        self.test1_completed = False
-        self.test2_completed = False
-        self.test3_completed = False
-        self.test4_completed = False
-        self.test1_pass = False
-        self.test2_pass = False
-        self.test3_pass = False
-        self.test4_pass = False
+        self.user_ID = ""                 # Tester's Name
+        self.current_serial_ID = 0        # Unit Serial Number
+        self.test1_completed = False      # Whether the test has been completed
+        self.test2_completed = False      # Whether the test has been completed
+        self.test3_completed = False      # Whether the test has been completed
+        self.test4_completed = False      # Whether the test has been completed
+        self.test1_pass = False           # Whether the test has been passed
+        self.test2_pass = False           # Whether the test has been passed
+        self.test3_pass = False           # Whether the test has been passed
+        self.test4_pass = False           # Whether the test has been passed
 
     # Clears the data by reseting all the values to the initial state
     def clear_DataHolder(self):

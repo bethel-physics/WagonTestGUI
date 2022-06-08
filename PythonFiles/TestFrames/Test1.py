@@ -14,46 +14,79 @@ class Test1Scene(tk.Frame):
 
     def update_frame(self, parent):
 
+        # Creates a font to be more easily referenced later in the code
+        scene_font = ('Arial', 15)
+
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 850, height = 500)
         frm_window.grid(column=1, row=1, padx = 235, pady = 97)
 
         # Create a label for the tester's name
-        lbl_tester = tk.Label(frm_window, text = "Tester: ", font = ('Arial', 15))
+        lbl_tester = tk.Label(
+            frm_window, 
+            text = "Tester: ", 
+            font = scene_font
+            )
         lbl_tester.pack(side = 'top')
 
         # Create an entry for the tester's name
-        ent_tester = tk.Entry(frm_window, font = ('Arial', 15))
+        ent_tester = tk.Entry(
+            frm_window, 
+            font = scene_font
+            )
         ent_tester.insert(0, self.data_holder.user_ID) # Need a way to fetch the tester name
         ent_tester.pack(side = 'top')
         ent_tester.config(state = "disabled")
 
         # Create a label for the serial number box
-        lbl_snum = tk.Label(frm_window, text = "Serial Number: ", font = ('Arial', 15))
+        lbl_snum = tk.Label(
+            frm_window, 
+            text = "Serial Number: ", 
+            font = scene_font
+            )
         lbl_snum.pack(side = 'top')
 
         # Create a entry for the serial number box
-        ent_snum = tk.Entry(frm_window, font = ('Arial', 15))
+        ent_snum = tk.Entry(
+            frm_window, 
+            font = scene_font
+            )
         ent_snum.insert(0, self.data_holder.current_serial_ID) # Need a way to fetch the serial number
         ent_snum.pack(side = 'top')
         ent_snum.config(state = "disabled")
 
         # Create a label for the test about to be run
-        lbl_test1 = tk.Label(frm_window, text = "Current Test: ", font = ('Arial', 15))
+        lbl_test1 = tk.Label(
+            frm_window, 
+            text = "Current Test: ", 
+            font = scene_font
+            )
         lbl_test1.pack(side = 'top')
 
         # Create a entry for the test type
-        ent_test1 = tk.Entry(frm_window, font = ('Arial', 15))
+        ent_test1 = tk.Entry(
+            frm_window, 
+            font = scene_font
+            )
         ent_test1.insert(0, "General Resistance Test")
         ent_test1.pack(side = 'top')
         ent_test1.config(state = "disabled")
 
         # Create a label for confirming test
-        lbl_confirm = tk.Label(frm_window, text = "Are you ready to begin the test?", font = ('Arial', 15))
+        lbl_confirm = tk.Label(
+            frm_window, 
+            text = "Are you ready to begin the test?", 
+            font = scene_font
+            )
         lbl_confirm.pack(side = 'top')
 
         # Create a button for confirming test
-        btn_confirm = tk.Button(frm_window, text = "Confirm", relief = tk.RAISED, command = lambda:self.confirm_button_action(parent))
+        btn_confirm = tk.Button(
+            frm_window, 
+            text = "Confirm", 
+            relief = tk.RAISED, 
+            command = lambda:self.confirm_button_action(parent)
+            )
         btn_confirm.pack(side = 'top')
         btn_confirm['font'] = font.Font(family = 'Arial', size = 13)
 
@@ -109,15 +142,14 @@ class Test1Scene(tk.Frame):
         
     # Confirm button action takes the user to the test in progress scene
     def confirm_button_action(self, _parent):
-        #TODO EDIT THIS WITH ACTUAL TEST DATA
+
+        _parent.set_frame(_parent.test1_in_progress)
+
+         #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test1_completed = True
         self.data_holder.test1_pass = True
         self.data_holder.print()
 
-        _parent.set_frame(_parent.test1_in_progress)
-        
 
     def logout_button_action(self, _parent):
-        _parent.set_frame(_parent.login_frame)
-
-        
+        _parent.set_frame(_parent.login_frame)    

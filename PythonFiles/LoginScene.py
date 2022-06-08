@@ -66,11 +66,11 @@ class LoginScene(tk.Frame):
     # Creates the function for the submit button command
     # @params "_parent" is also a parent like "parent", but it is a different "parent",
     # passes in GUIWindow
-    # Sets the user_ID in the data_holder to the selected user
-    # Changes frame to scan_frame
     def submit_button_action(self, _parent):
+            # Sets the user_ID in the data_holder to the selected user
         self.data_holder.user_ID = self.user_selected.get()
         current_scan_frame = _parent.get_scan_frame()
+        # Changes frame to scan_frame
         _parent.set_frame(current_scan_frame)
 
 
