@@ -74,21 +74,21 @@ class TestFinishedSummary(tk.Frame):
        
         
         # Creates the "table" as a frame object
-        self.table = tk.Frame(self)
-        self.table.grid(row = 1, column= 0, columnspan = 4, rowspan = 4)
+        self.frm_table = tk.Frame(self)
+        self.frm_table.grid(row = 1, column= 0, columnspan = 4, rowspan = 4)
         
-        self.table.columnconfigure(0, weight = 2)
-        self.table.columnconfigure(1, weight = 2)
-        self.table.columnconfigure(2, weight = 2)
-        self.table.columnconfigure(3, weight = 1)
-        self.table.columnconfigure(4, weight = 1)
+        self.frm_table.columnconfigure(0, weight = 2)
+        self.frm_table.columnconfigure(1, weight = 2)
+        self.frm_table.columnconfigure(2, weight = 2)
+        self.frm_table.columnconfigure(3, weight = 1)
+        self.frm_table.columnconfigure(4, weight = 1)
         
 
         
         # Adds the labels to the top of the table
         for index in range(len(self.list_of_table_labels)):
             _label = tk.Label(
-                    self.table, 
+                    self.frm_table, 
                     text = self.list_of_table_labels[index], 
                     relief = 'ridge', 
                     width=25, 
@@ -101,7 +101,7 @@ class TestFinishedSummary(tk.Frame):
         # Adds the test names to the first column
         for index in range(len(self.list_of_tests)):
             _label= tk.Label(
-                    self.table, 
+                    self.frm_table, 
                     text = self.list_of_tests[index], 
                     relief = 'ridge', 
                     width=25, 
@@ -117,7 +117,7 @@ class TestFinishedSummary(tk.Frame):
             
             # Instantiates a Label
             _label = tk.Label(
-                        self.table,
+                        self.frm_table,
                         relief = 'ridge', 
                         width=25, 
                         height=5, 
@@ -177,35 +177,35 @@ class TestFinishedSummary(tk.Frame):
     # Creates all of the retest button
     def create_retest_btns(self, parent):
         btn_retest1 = tk.Button(
-                self.table, 
+                self.frm_table, 
                 text = "RETEST", 
                 command = lambda: self.retest1_btn_action(parent)
                 )
         btn_retest1.grid(column = 3, row = 1)
     
         btn_retest2 = tk.Button(
-                self.table, 
+                self.frm_table, 
                 text = "RETEST", 
                 command = lambda: self.retest2_btn_action(parent)
                 )
         btn_retest2.grid(column = 3, row = 2)
 
         btn_retest3 = tk.Button(
-                self.table, 
+                self.frm_table, 
                 text = "RETEST", 
                 command = lambda: self.retest3_btn_action(parent)
                 )
         btn_retest3.grid(column = 3, row = 3)
 
         btn_retest4 = tk.Button(
-                self.table, 
+                self.frm_table, 
                 text = "RETEST", 
                 command = lambda: self.retest4_btn_action(parent)
                 )
         btn_retest4.grid(column = 3, row = 4)
 
         btn_next_test = tk.Button(
-                self.table, 
+                self.frm_table, 
                 text = "NEXT TEST",
                 font = ('Arial', 15), 
                 command = lambda: self.next_test_btn_action(parent)
