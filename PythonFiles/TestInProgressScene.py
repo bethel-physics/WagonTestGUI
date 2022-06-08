@@ -64,6 +64,7 @@ class TestInProgressScene(tk.Frame):
         sys.stdout = sys.__stdout__
 
     # Used to initialize the frame that is on the main window
+    # next_frame is used to progress to the next scene and is passed in from GUIWindow
     def initialize_scene(self, parent, master_window, next_frame):
         self.next_frame = next_frame
         super().__init__(master_window, width = 850, height = 500)
@@ -105,13 +106,15 @@ class TestInProgressScene(tk.Frame):
 
     # Goes to the next scene after the progress scene is complete
     def go_to_next_frame(self, _parent):
+        # Tests if all the tests have been completed
+        # if true, brings user to Test Summary Frame rather than the next test
         if (self.data_holder.test1_completed == True and 
             self.data_holder.test2_completed == True and 
             self.data_holder.test3_completed == True and 
             self.data_holder.test4_completed == True):
 
             _parent.set_frame(_parent.testing_finished_frame)
-
-
+            
+        # Otherwise takes the user to the next test
         else:
             _parent.set_frame(self.next_frame)
