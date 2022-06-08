@@ -139,11 +139,9 @@ class ScanScene(tk.Frame):
         _parent.set_frame(_parent.login_frame)    
 
     def show_submit_button(self):
-        print("IN THE SHOWER")
         self.btn_submit.pack(padx=10, pady=10)
 
     def hide_submit_button(self):
-        print("IN THE HIDER")
         ent_serial.delete(0, END)
         self.btn_submit.pack_forget()
         self.btn_submit.grid_forget()
