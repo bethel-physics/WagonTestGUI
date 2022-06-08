@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 from xml.dom.expatbuilder import parseFragmentString
 import sys
+import threading
+import time
 import PythonFiles.ConsoleOutput
 from PythonFiles.ConsoleOutput import *
 
@@ -13,12 +15,25 @@ class TestInProgressScene(tk.Frame):
         self.is_current_scene = False
         self.initialize_scene(parent, master_window, next_frame)
 
+    # def create_console_thread(self):
+    #     print("I work!")
+    #     self.console_thread = threading.Thread(target= lambda: self.initialize_console())
+    #     self.console_thread.daemon = True
+    #     self.console_thread.start()
+    #     print("thread finished")
+
     def initialize_console(self):
+        
         # Creating a popup window for the console output
         global console_popup
         console_popup = tk.Tk()
         console_popup.geometry("500x500")
         console_popup.title("Console Output Window")
+        console_popup.wm_attributes('-toolwindow', 'True')
+        # Used to tell the master window that its exit window button is being given a new function
+        console_popup.protocol('WM_DELETE_WINDOW', self.fake_destroy)
+
+        print("I should have created a console window now")
 
         # Creating a Frame For Console Output
         frm_console = tk.Frame(console_popup, width = 500, height = 500, bg = 'black')
@@ -37,6 +52,9 @@ class TestInProgressScene(tk.Frame):
         sys.stdout = console
 
         print("Hello World!")
+    
+    def fake_destroy(self):
+        pass
 
     def console_destroy(self):
         console_popup.destroy()

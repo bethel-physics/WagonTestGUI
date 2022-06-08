@@ -26,6 +26,7 @@ class GUIWindow():
         master_window.geometry("850x500")
         master_frame = tk.Frame(master_window, width=850, height= 500)
         master_window.resizable(0,0)
+        master_window.wm_attributes('-toolwindow', 'True')
         master_frame.pack()
 
 
@@ -93,10 +94,7 @@ class GUIWindow():
 
         if(_frame is self.test1_frame):
             self.test1_frame.update_frame(self)
-
-        if(_frame is self.test1_in_progress):
-            self.test1_in_progress.initialize_console()
-        
+     
         if(_frame is self.test2_frame):
             self.test2_frame.update_frame(self)
 
@@ -105,7 +103,21 @@ class GUIWindow():
 
         if(_frame is self.test4_frame):
             self.test4_frame.update_frame(self)
+
+        # These create the console windows in a multithread when their respective frame is brought to the foreground
+        if(_frame is self.test1_in_progress):
+            self.test1_in_progress.initialize_console()
         
+        if(_frame is self.test2_in_progress):
+            self.test2_in_progress.initialize_console()
+ 
+        if(_frame is self.test3_in_progress):
+            self.test3_in_progress.initialize_console()
+  
+        if(_frame is self.test4_in_progress):
+            self.test4_in_progress.initialize_console()
+        
+        # Raises the passed in frame to be the current frame
         _frame.tkraise()
 
 
@@ -151,8 +163,20 @@ class GUIWindow():
 
     # Called when the yes button is pressed to destroy both windows
     def destroy_function(self):
+        if(self.test1_in_progress.is_current_scene):
+            self.test1_in_progress.console_destroy()
+        
+        if(self.test2_in_progress.is_current_scene):
+            self.test2_in_progress.console_destroy()
+ 
+        if(self.test3_in_progress.is_current_scene):
+            self.test3_in_progress.console_destroy()
+  
+        if(self.test4_in_progress.is_current_scene):
+            self.test4_in_progress.console_destroy() 
         popup.destroy()
         master_window.destroy()
+        exit()
 
     def get_scan_frame(self):
         return self.scan_frame

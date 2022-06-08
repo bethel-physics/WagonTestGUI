@@ -32,7 +32,7 @@ class ScanScene(tk.Frame):
         ent_serial.delete(0, END)
         self.hide_submit_button()
         self.scanned_QR_value = 000
-        for i in range(5):
+        for i in range(3):
             time.sleep(1)
             print(i + 1)
         time.sleep(0.5)
