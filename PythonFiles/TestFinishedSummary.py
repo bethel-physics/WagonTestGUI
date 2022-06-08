@@ -124,6 +124,9 @@ class TestFinishedSummary(tk.Frame):
         btn_retest4 = tk.Button(self.table, text = "RETEST", command = lambda: self.retest4_btn_action(parent))
         btn_retest4.grid(column = 3, row = 4)
 
+        btn_next_test = tk.Button(self.table, text = "NEXT TEST", command = lambda: self.next_test_btn_action(parent))
+        btn_next_test.grid(column = 3, row = 5, columnspan = 2)
+
         self.grid_propagate(0)
 
 
@@ -148,6 +151,9 @@ class TestFinishedSummary(tk.Frame):
 
     def retest4_btn_action(self, _parent):
         _parent.set_frame(_parent.test4_frame)
+
+    def next_test_btn_action(self, _parent):
+        _parent.set_frame(_parent.scan_frame)
         
 
 
