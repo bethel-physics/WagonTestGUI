@@ -116,12 +116,12 @@ class TestFinishedSummary(tk.Frame):
 
             # if the test is completed, set the label to "Complete"
             if (self.list_of_completed_tests[index]):
-                _label = tk.Label(
+                _label.config(
                         text = "COMPLETED"
                         )
             # else, set the label to "Unfinished"
             else:
-                _label = tk.Label(
+                _label.config(
                         text = "UNFINISHED"
                         )
 

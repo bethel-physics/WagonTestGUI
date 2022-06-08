@@ -29,7 +29,7 @@ class GUIWindow():
         master_window.title("Bethel Interns' Window")
 
         # Creates the size of the window and disables resizing
-        master_window.geometry("850x500")
+        master_window.geometry("850x500+300+100")
         master_window.resizable(0,0)
 
         # Removes the tkinter logo from the window
