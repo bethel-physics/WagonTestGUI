@@ -45,6 +45,9 @@ class ScanScene(tk.Frame):
         # Clears the textbox of anything possibly in the box
         ent_serial.delete(0, END)
 
+        # Disables the rescan button until after the scanning is complete
+        self.hide_rescan_button()
+
         # Runs the hide_submit_button function and sets a default value to the QR_value
         self.hide_submit_button()
         self.scanned_QR_value = 000
@@ -57,6 +60,9 @@ class ScanScene(tk.Frame):
         print("Finished Scan")
         ent_serial.insert(0, QRcode)
         ent_serial.config(state = 'disabled')
+
+        # Restores access to the rescan button
+        self.show_rescan_button()
 
         
         # Sets the scanned_QR_value to 0 when the function is not in use
@@ -93,7 +99,15 @@ class ScanScene(tk.Frame):
             text = "Scan the QR Code on the Board",
             font = ('Arial', 18)
         )
-        lbl_scan.pack(padx = 50)
+        lbl_scan.pack(padx = 50, pady = 50)
+
+        # Create a label to label the entry box
+        lbl_serial = tk.Label(
+            Scan_Board_Prompt_Frame,
+            text = "Serial Number:",
+            font = ('Arial', 16)
+        )
+        lbl_serial.pack()
 
         # Entry for the serial number to be displayed. Upon Scan, update and disable?
         global ent_serial
@@ -107,7 +121,7 @@ class ScanScene(tk.Frame):
             font = ('Arial', 16),
             textvariable= user_text, 
             )
-        ent_serial.pack(padx = 50, pady = 50)
+        ent_serial.pack(padx = 50)
 
         # Traces an input to show the submit button once text is inside the entry box
         user_text.trace(
@@ -119,7 +133,7 @@ class ScanScene(tk.Frame):
             )
 
         # Rescan button creation
-        rescan_button = tk.Button(
+        self.rescan_button = tk.Button(
             Scan_Board_Prompt_Frame,
             text="Rescan",
             padx = 50,
@@ -127,7 +141,7 @@ class ScanScene(tk.Frame):
             relief = tk.RAISED,
             command = lambda:  self.scan_QR_code()
             )
-        rescan_button.pack(padx=10, pady=10)
+        self.rescan_button.pack(padx=10, pady=30)
 
         # Submit button creation
         self.btn_submit = tk.Button(
@@ -138,7 +152,7 @@ class ScanScene(tk.Frame):
             relief = tk.RAISED,
             command= lambda:  self.submit_button_action(parent)
             )
-        self.btn_submit.pack(padx=10, pady=10)
+        self.btn_submit.pack(padx=10)
 
         # Creating frame for logout button
         frm_logout = tk.Frame(self)
@@ -175,6 +189,14 @@ class ScanScene(tk.Frame):
     # Function to disable to the submit button
     def hide_submit_button(self):
         self.btn_submit["state"] = "disabled"
+
+    # Function to activate the rescan button
+    def show_rescan_button(self):
+        self.rescan_button["state"] = "active"
+
+    # Function to disable to the rescan button
+    def hide_rescan_button(self):
+        self.rescan_button["state"] = "disabled"
 
         
         

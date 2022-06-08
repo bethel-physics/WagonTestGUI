@@ -18,7 +18,9 @@ class LoginScene(tk.Frame):
         # Creating the submit button
         # It does not get packed until the user selects an option menu option
         self.btn_submit = tk.Button(
-            self, text="Submit", 
+            self, text="Submit",
+            padx = 50,
+            pady = 10, 
             relief=tk.RAISED, 
             command= lambda:  self.submit_button_action(parent)
             )
@@ -50,7 +52,8 @@ class LoginScene(tk.Frame):
             *User_List # Tells the dropdown menu to use every index in the User_List list
             ) 
         self.opt_user_dropdown.pack(pady=10)
-        self.opt_user_dropdown.config(width = 20)
+        self.opt_user_dropdown.config(width = 20, font = ('Arial', 13))
+        self.opt_user_dropdown['menu'].configure(font = ('Arial', 12))
 
         # Traces when the user selects an option in the dropdown menu
         # When an option is selected, it calls the show_submit_button function

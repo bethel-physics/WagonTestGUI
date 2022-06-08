@@ -3,11 +3,8 @@ import tkinter as tk
 from tkinter import ttk
 from xml.dom.expatbuilder import parseFragmentString
 import sys
-import threading
-import time
 
 # Imports the ConsoleOutput class and its functions
-import PythonFiles.ConsoleOutput
 from PythonFiles.ConsoleOutput import *
 
 # Creating the frame itself

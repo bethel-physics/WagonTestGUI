@@ -13,13 +13,19 @@ Frame that shows all of the final test results
 '''
 class TestFinishedSummary(tk.Frame):
     def __init__(self, parent, master_window, data_holder):
-        
+    
         # Call to the super class's constructor
         # Super class is the tk.Frame class
         super().__init__(master_window, width=850, height=500)
 
         self.data_holder = data_holder
 
+        # Setting weights of columns so the column 4 is half the size of columns 0-3
+        self.columnconfigure(0, weight = 2)
+        self.columnconfigure(1, weight = 2)
+        self.columnconfigure(2, weight = 2)
+        self.columnconfigure(3, weight = 2)
+        self.columnconfigure(4, weight = 1)
         # Instantiates an updated table with the current data
         self.create_updated_table(parent)
 
@@ -54,7 +60,7 @@ class TestFinishedSummary(tk.Frame):
         self.lbl_serial = tk.Label(
                 self, 
                 text = "Serial Number: " + str(self.data_holder.current_serial_ID),
-                font=('Arial', 15)
+                font=('Arial', 14)
                 )
         self.lbl_serial.grid(column = 2, row = 0, pady = 20)
 
@@ -62,15 +68,21 @@ class TestFinishedSummary(tk.Frame):
         self.lbl_tester = tk.Label(
                 self, 
                 text = "Tester: " + self.data_holder.user_ID,
-                font=('Arial', 15)
+                font=('Arial', 14)
                 )
         self.lbl_tester.grid(column = 0, row = 0, pady = 20)
-        
+       
         
         # Creates the "table" as a frame object
         self.table = tk.Frame(self)
         self.table.grid(row = 1, column= 0, columnspan = 4, rowspan = 4)
-
+        
+        self.table.columnconfigure(0, weight = 2)
+        self.table.columnconfigure(1, weight = 2)
+        self.table.columnconfigure(2, weight = 2)
+        self.table.columnconfigure(3, weight = 1)
+        self.table.columnconfigure(4, weight = 1)
+        
 
         
         # Adds the labels to the top of the table
@@ -194,10 +206,11 @@ class TestFinishedSummary(tk.Frame):
 
         btn_next_test = tk.Button(
                 self.table, 
-                text = "NEXT TEST", 
+                text = "NEXT TEST",
+                font = ('Arial', 15), 
                 command = lambda: self.next_test_btn_action(parent)
                 )
-        btn_next_test.grid(column = 3, row = 5, columnspan = 2)
+        btn_next_test.grid(column = 3, row = 5)
 
 
 
