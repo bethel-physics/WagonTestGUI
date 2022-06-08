@@ -40,6 +40,7 @@ class TestInProgressScene(tk.Frame):
 
     def console_destroy(self):
         console_popup.destroy()
+        sys.stdout = sys.__stdout__
 
     def initialize_scene(self, parent, master_window, next_frame):
         self.next_frame = next_frame
