@@ -112,7 +112,7 @@ class ScanScene(tk.Frame):
             relief = tk.RAISED,
             command= lambda:  self.submit_button_action(parent)
             )
-        
+        self.btn_submit.pack(padx=10, pady=10)
 
         # Creating frame for logout button
         frm_logout = tk.Frame(self)
@@ -139,12 +139,11 @@ class ScanScene(tk.Frame):
         _parent.set_frame(_parent.login_frame)    
 
     def show_submit_button(self):
-        self.btn_submit.pack(padx=10, pady=10)
+        self.btn_submit["state"] = "active"
 
     def hide_submit_button(self):
-        ent_serial.delete(0, END)
-        self.btn_submit.pack_forget()
-        self.btn_submit.grid_forget()
+        self.btn_submit["state"] = "disabled"
+
         
         
         
