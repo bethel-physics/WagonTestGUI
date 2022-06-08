@@ -4,11 +4,7 @@ from PIL import Image
 from matplotlib.pyplot import table
 from pyparsing import col
 
-from PythonFiles.DataHolder import DataHolder
 
-# Exists until serial number and tester name are accessible through normal means
-SERIALNUMBERVARIABLE = "000011112222"
-TESTERNAMEVARIABLE = "Amanda Holmes"
 
 class TestFinishedSummary(tk.Frame):
     def __init__(self, parent, master_window, data_holder):

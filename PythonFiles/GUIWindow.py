@@ -82,15 +82,29 @@ class GUIWindow():
             self.scan_frame.is_current_scene = True
             self.scan_frame.scan_QR_code()
 
+        # Hides the submit button on scan frame until an entry is given to the computer
         if (_frame is not self.scan_frame):
             self.scan_frame.is_current_scene = False
             self.scan_frame.hide_submit_button()
 
+        # The below if statements update frames when they are brought to top so they display current information
         if(_frame is self.testing_finished_frame):
             self.testing_finished_frame.create_updated_table(self)
 
+        if(_frame is self.test1_frame):
+            self.test1_frame.update_frame(self)
+
         if(_frame is self.test1_in_progress):
             self.test1_in_progress.initialize_console()
+        
+        if(_frame is self.test2_frame):
+            self.test2_frame.update_frame(self)
+
+        if(_frame is self.test3_frame):
+            self.test3_frame.update_frame(self)
+
+        if(_frame is self.test4_frame):
+            self.test4_frame.update_frame(self)
         
         _frame.tkraise()
 

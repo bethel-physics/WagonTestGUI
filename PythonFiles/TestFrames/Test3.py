@@ -10,6 +10,10 @@ class Test3Scene(tk.Frame):
         
         self.data_holder = data_holder
 
+        self.update_frame(parent)
+
+    def update_frame(self, parent):
+
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 850, height = 500)
         frm_window.grid(column=1, row=1, padx = 235, pady = 97)
@@ -20,7 +24,7 @@ class Test3Scene(tk.Frame):
 
         # Create an entry for the tester's name
         ent_tester = tk.Entry(frm_window, font = ('Arial', 15))
-        ent_tester.insert(0, "Amanda Holmes") # Need a way to fetch the tester name
+        ent_tester.insert(0, self.data_holder.user_ID) # Need a way to fetch the tester name
         ent_tester.pack(side = 'top')
         ent_tester.config(state = "disabled")
 
@@ -30,7 +34,7 @@ class Test3Scene(tk.Frame):
 
         # Create a entry for the serial number box
         ent_snum = tk.Entry(frm_window, font = ('Arial', 15))
-        ent_snum.insert(0, "0000111122223333") # Need a way to fetch the serial number
+        ent_snum.insert(0, self.data_holder.current_serial_ID) # Need a way to fetch the serial number
         ent_snum.pack(side = 'top')
         ent_snum.config(state = "disabled")
 
@@ -40,7 +44,7 @@ class Test3Scene(tk.Frame):
 
         # Create a entry for the test type
         ent_test3 = tk.Entry(frm_window, font = ('Arial', 15))
-        ent_test3.insert(0, "TEST #3")
+        ent_test3.insert(0, "I2C Comm. Test")
         ent_test3.pack(side = 'top')
         ent_test3.config(state = "disabled")
 
