@@ -12,14 +12,25 @@ import tkinter.font as font
 QRcode = "1090201033667425"
 
 
-# creating the login frame
+# creating the Scan Frame's class (called ScanScene) to be instantiated in the GUIWindow
+# instantiated as scan_frame by GUIWindow
+# @param parent -> passes in GUIWindow as the parent.
+# @param master_window -> passes master_window as the container for everything in the class.
+# @param data_holder -> passes data_holder into the class so the data_holder functions can
+#       be accessed within the class.
 class ScanScene(tk.Frame):
     
+    # Runs upon creation
     def __init__(self, parent, master_window, data_holder):
         self.data_holder = data_holder
         self.is_current_scene = False
+        
+        # Runs the initilize_GUI function, which actually creates the frame
+        # params are the same as defined above
         self.initialize_GUI(parent, master_window)
 
+    # Creates a thread for the scanning of a barcode
+    # Needs to be updated to run the read_barcode function in the original GUI
     def scan_QR_code(self):
         print("Begin to scan")
         ent_serial.config(state = 'normal')
@@ -27,21 +38,28 @@ class ScanScene(tk.Frame):
         self.QR_thread.daemon = True
         self.QR_thread.start()
 
-    # Updates the QR ID in the task 
+    # Updates the QR ID in the task
+    # Place holder function to insert the QRcode into the textbox 
     def insert_QR_ID(self):
+
+        # Clears the textbox of anything possibly in the box
         ent_serial.delete(0, END)
+
+        # Runs the hide_submit_button function and sets a default value to the QR_value
         self.hide_submit_button()
         self.scanned_QR_value = 000
+
+        # Delay to simulate scanning a QRcode
         for i in range(3):
             time.sleep(1)
             print(i + 1)
         time.sleep(0.5)
         print("Finished Scan")
         ent_serial.insert(0, QRcode)
-        ent_serial.config(state = 'readonly')
+        ent_serial.config(state = 'disabled')
 
         
-
+        # sets the scanned_QR_value to 0 when the function is not in use
         if (not self.is_current_scene):
             self.scanned_QR_value = 0
         else:
@@ -50,7 +68,7 @@ class ScanScene(tk.Frame):
 
         self.data_holder.print()
 
-
+    # Creates the GUI itself
     def initialize_GUI(self, parent, master_window):
         
         self.master_window = master_window
@@ -63,7 +81,7 @@ class ScanScene(tk.Frame):
         QR_label = tk.Label(self, image=QR_PhotoImage)
         QR_label.image = QR_PhotoImage
 
-        # the place() method adds it to the Frame
+        # the .grid() adds it to the Frame
         QR_label.grid(column=1, row = 0)
 
         Scan_Board_Prompt_Frame = Frame(self,)
