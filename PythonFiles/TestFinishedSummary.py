@@ -47,7 +47,7 @@ class TestFinishedSummary(tk.Frame):
 
     # A function to be called within GUIWindow to create the console output
     # when the frame is being brought to the top
-    def create_JSON_popup(self):
+    def create_JSON_popup(self, JSON_String):
         
         # Creating a popup window for the JSON Details
         self.JSON_popup = tk.Tk()
@@ -67,15 +67,21 @@ class TestFinishedSummary(tk.Frame):
             JSON_frame, 
             bg = '#6e5e5d', 
             fg = 'white', 
-            font = ('Arial', 12)
+            font = ('Arial', 14)
             )
         self.JSON_entry_box.pack(anchor = 'center', fill=tk.BOTH, expand=1)
 
-        current_JSON_file = open(".\PythonFiles\DummyJSONTest.JSON")
+        current_JSON_file = open(JSON_String)
         current_JSON_data = json.load(current_JSON_file)
 
+
+        temp = ""
+        for key, value in current_JSON_data.items():
+            temp = temp + "{} : {}".format(key, value) + "\n"
+
+
         self.JSON_entry_box.delete(1.0,"end")
-        self.JSON_entry_box.insert(1.0, current_JSON_data)
+        self.JSON_entry_box.insert(1.0, temp)
 
 
     '''
@@ -330,16 +336,16 @@ class TestFinishedSummary(tk.Frame):
 
 
     def btn_more_info1_action(self, _parent):
-        self.create_JSON_popup()
+        self.create_JSON_popup(".\PythonFiles\DummyJSONTest.JSON")
 
     def btn_more_info2_action(self, _parent):
-        self.create_JSON_popup()
+        self.create_JSON_popup(".\PythonFiles\GarrettJSONTest.JSON")
 
     def btn_more_info3_action(self, _parent):
-        self.create_JSON_popup()
+        self.create_JSON_popup(".\PythonFiles\DummyJSONTest.JSON")
     
     def btn_more_info4_action(self, _parent):
-        self.create_JSON_popup()
+        self.create_JSON_popup(".\PythonFiles\GarrettJSONTest.JSON")
 
 
 
