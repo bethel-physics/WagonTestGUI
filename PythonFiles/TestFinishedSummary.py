@@ -336,16 +336,16 @@ class TestFinishedSummary(tk.Frame):
 
 
     def btn_more_info1_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\DummyJSONTest.JSON")
+        self.create_JSON_popup(".\PythonFiles\JSONFiles\DummyJSONTest.JSON")
 
     def btn_more_info2_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\GarrettJSONTest.JSON")
+        self.create_JSON_popup(".\PythonFiles\JSONFiles\GarrettJSONTest.JSON")
 
     def btn_more_info3_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\DummyJSONTest.JSON")
+        self.create_JSON_popup(".\PythonFiles\JSONFiles\DummyJSONTest.JSON")
     
     def btn_more_info4_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\GarrettJSONTest.JSON")
+        self.create_JSON_popup(".\PythonFiles\JSONFiles\GarrettJSONTest.JSON")
 
 
 
