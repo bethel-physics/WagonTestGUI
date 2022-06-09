@@ -112,6 +112,9 @@ class GUIWindow():
             self.scan_frame.is_current_scene = True
             self.scan_frame.scan_QR_code()
 
+            # Disables the sidebar buttons except LOGIN and SCAN when on scan_frame
+            self.sidebar.disable_all_but_log_scan()
+
         # Hides the submit button on scan frame until an entry is given to the computer
         if (_frame is not self.scan_frame):
             self.scan_frame.is_current_scene = False
