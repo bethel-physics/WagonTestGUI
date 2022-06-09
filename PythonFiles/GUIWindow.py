@@ -104,7 +104,7 @@ class GUIWindow():
         # The below if statements update frames when they are brought to
         # the top so they display current information
         if(_frame is self.testing_finished_frame):
-            self.testing_finished_frame.create_updated_table(self)
+            self.testing_finished_frame.update_frame()
 
         if(_frame is self.test1_frame):
             self.test1_frame.update_frame(self)
