@@ -153,6 +153,14 @@ class SidebarScene(tk.Frame):
         self.btn_test4.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 
+    def disable_all_but_log_scan(self):
+        self.btn_test1.config(state = 'disabled')
+        self.btn_test2.config(state = 'disabled')
+        self.btn_test3.config(state = 'disabled')
+        self.btn_test4.config(state = 'disabled')
+        self.btn_summary.config(state = 'disabled')
+
+
     def disable_login_button(self):
         self.btn_login.config(state = 'disabled')
 

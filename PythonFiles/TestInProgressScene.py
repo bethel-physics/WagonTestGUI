@@ -22,7 +22,7 @@ class TestInProgressScene(tk.Frame):
         # Creating a popup window for the console output
         global console_popup
         console_popup = tk.Tk()
-        console_popup.geometry("500x500+300+100")
+        console_popup.geometry("300x300+900+100")
         console_popup.title("Console Output Window")
         console_popup.wm_attributes('-toolwindow', 'True')
 
@@ -31,7 +31,7 @@ class TestInProgressScene(tk.Frame):
         console_popup.protocol('WM_DELETE_WINDOW', self.fake_destroy)
 
         # Creating a Frame For Console Output
-        frm_console = tk.Frame(console_popup, width = 500, height = 500, bg = 'black')
+        frm_console = tk.Frame(console_popup, width = 300, height = 300, bg = 'black')
         frm_console.pack_propagate(0)
         frm_console.pack()
 
