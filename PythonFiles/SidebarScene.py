@@ -26,7 +26,7 @@ class SidebarScene(tk.Frame):
         for index in range(len(self.list_of_pass_fail)):
             if(self.list_of_pass_fail[index] == True):
                 # Create a photoimage object of the QR Code
-                Green_Check_Image = Image.open("./PythonFiles/GreenCheckMark.png")
+                Green_Check_Image = Image.open("./PythonFiles/Images/GreenCheckMark.png")
                 Green_Check_Image = Green_Check_Image.resize((50,50), Image.ANTIALIAS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
                 GreenCheck_Label = tk.Label(self, image=Green_Check_PhotoImage, width=50, height=50, bg = '#808080')
