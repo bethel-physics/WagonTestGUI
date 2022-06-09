@@ -29,7 +29,7 @@ class GUIWindow():
         master_window.title("Bethel Interns' Window")
 
         # Creates the size of the window and disables resizing
-        master_window.geometry("850x500+300+100")
+        master_window.geometry("1063x500+300+100")
         master_window.resizable(0,0)
 
         # Removes the tkinter logo from the window
@@ -37,7 +37,10 @@ class GUIWindow():
 
         # Creates and packs a frame that exists on top of the master_window
         master_frame = tk.Frame(master_window, width=850, height= 500)
-        master_frame.pack()
+        master_frame.grid(column = 1, row = 0, columnspan = 4)
+
+        sidebar_frame = tk.Frame(master_window, width = 213, height = 500, bg = 'blue')
+        sidebar_frame.grid(column = 0 , row = 0)
 
 
         # Creates the "Storage System" for the data during testing
