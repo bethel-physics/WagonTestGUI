@@ -43,7 +43,7 @@ class TestInProgressScene(tk.Frame):
             fg = 'white', 
             font = ('Arial', 8)
             )
-        ent_console.pack(anchor = 'center')
+        ent_console.pack(anchor = 'center', fill = tk.BOTH, expand = 1)
 
         # Instantiates the console writing class
         console = ConsoleOutput(ent_console)
@@ -98,11 +98,13 @@ class TestInProgressScene(tk.Frame):
     # A function for the stop button
     def stop_button_action(self, _parent, _next_frame):
 
+        # Destroys the console window
+        self.console_destroy()
+
         # Progresses to the next frame
         self.go_to_next_frame(_parent)
 
-        # Destroys the console window
-        self.console_destroy()
+
 
     # Goes to the next scene after the progress scene is complete
     def go_to_next_frame(self, _parent):

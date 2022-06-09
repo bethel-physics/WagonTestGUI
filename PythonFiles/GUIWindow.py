@@ -4,6 +4,7 @@ import tkinter as tk
 from turtle import bgcolor
 
 # Importing all the neccessary files and classes from them
+from PythonFiles.SidebarScene import SidebarScene
 from PythonFiles.LoginScene import LoginScene
 from PythonFiles.ScanScene import ScanScene
 from PythonFiles.TestFinishedSummary import TestFinishedSummary
@@ -39,13 +40,16 @@ class GUIWindow():
         master_frame = tk.Frame(master_window, width=850, height= 500)
         master_frame.grid(column = 1, row = 0, columnspan = 4)
 
+        # Creates a frame to house the sidebar on master_window
         sidebar_frame = tk.Frame(master_window, width = 213, height = 500, bg = 'blue')
         sidebar_frame.grid(column = 0 , row = 0)
 
-
         # Creates the "Storage System" for the data during testing
         self.data_holder = DataHolder()
-        
+
+        # Creates all the widgets on the sidebar
+        self.sidebar = SidebarScene(self, sidebar_frame, self.data_holder)
+        self.sidebar.pack()
 
         # Creates all the different frames in layers
         self.testing_finished_frame = TestFinishedSummary(self, master_frame, self.data_holder)
@@ -92,6 +96,9 @@ class GUIWindow():
 
     # Changes which frame is currently shown
     def set_frame(self, _frame):
+
+        self.sidebar.update_sidebar(self)
+
         if (_frame is self.scan_frame):
             self.scan_frame.is_current_scene = True
             self.scan_frame.scan_QR_code()
@@ -191,7 +198,7 @@ class GUIWindow():
   
         if(self.test4_in_progress.is_current_scene):
             self.test4_in_progress.console_destroy() 
-        
+
         # Destroys the popup and master window
         popup.destroy()
         master_window.destroy()
