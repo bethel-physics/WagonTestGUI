@@ -146,6 +146,7 @@ class GUIWindow():
         if(_frame is self.test1_in_progress):
             self.test1_in_progress.initialize_console()
             self.sidebar.disable_all_buttons()
+            self.test1_in_progress.run_script()
         
         if(_frame is self.test2_in_progress):
             self.test2_in_progress.initialize_console()

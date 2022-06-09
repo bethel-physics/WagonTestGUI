@@ -35,15 +35,24 @@ class TestInProgressScene(tk.Frame):
         frm_console.pack_propagate(0)
         frm_console.pack()
 
+        # Giving the console output a scroll bar
+        scrollbar = tk.Scrollbar(frm_console)
+        scrollbar.pack(side = "right", fill = 'y')
+
+
         # Placing an entry box in the frm_console
         global ent_console
         ent_console = tk.Text(
             frm_console, 
             bg = 'black', 
             fg = 'white', 
-            font = ('Arial', 8)
+            font = ('Arial', 8),
+            yscrollcommand = scrollbar.set
             )
         ent_console.pack(anchor = 'center', fill = tk.BOTH, expand = 1)
+
+        # Adding scrollbar functionality
+        scrollbar.config(command = ent_console.yview)
 
         # Instantiates the console writing class
         console = ConsoleOutput(ent_console)
@@ -148,3 +157,7 @@ class TestInProgressScene(tk.Frame):
         # Otherwise takes the user to the next test
         # else:
         #     _parent.set_frame(self.next_frame)
+
+    def run_script(self):
+        for index in range(100):
+            print(str(index) + "\n")
