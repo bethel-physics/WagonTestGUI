@@ -49,15 +49,13 @@ class TestFinishedSummary(tk.Frame):
     # when the frame is being brought to the top
     def create_JSON_popup(self):
         
-        # Creating a popup window for the console output
+        # Creating a popup window for the JSON Details
         self.JSON_popup = tk.Tk()
         self.JSON_popup.geometry("500x500+0+100")
-        self.JSON_popup.title("Console Output Window")
+        self.JSON_popup.title("JSON Details")
         self.JSON_popup.wm_attributes('-toolwindow', 'True')
 
-        # Used to tell the console window that its 
-        # exit window button is being given a new function
-        self.JSON_popup.protocol('WM_DELETE_WINDOW', self.fake_destroy)
+    
 
         # Creating a Frame For Console Output
         JSON_frame = tk.Frame(self.JSON_popup, width = 500, height = 500, bg = 'green')
@@ -67,11 +65,11 @@ class TestFinishedSummary(tk.Frame):
         # Placing an entry box in the frm_console
         self.JSON_entry_box = tk.Text(
             JSON_frame, 
-            bg = 'black', 
+            bg = '#6e5e5d', 
             fg = 'white', 
-            font = ('Arial', 8)
+            font = ('Arial', 12)
             )
-        self.JSON_entry_box.pack(anchor = 'center')
+        self.JSON_entry_box.pack(anchor = 'center', fill=tk.BOTH, expand=1)
 
         current_JSON_file = open(".\PythonFiles\DummyJSONTest.JSON")
         current_JSON_data = json.load(current_JSON_file)
@@ -79,12 +77,6 @@ class TestFinishedSummary(tk.Frame):
         self.JSON_entry_box.delete(1.0,"end")
         self.JSON_entry_box.insert(1.0, current_JSON_data)
 
-
-
-    # A pass function that the console window is being redirected to so its exit button
-    # does not function
-    def fake_destroy(self):
-        pass
 
     '''
     Creates the table with the updated information from the data_holder
@@ -94,7 +86,7 @@ class TestFinishedSummary(tk.Frame):
                 
         
         self.list_of_tests = ["General Resistance Test", "ID Resistor Test", "I2C Comm. Test", "Bit Rate Test"]
-        self.list_of_table_labels = ["Test Name", "Test Status", "Pass/Fail", "Retest?"]
+        self.list_of_table_labels = ["Test Name", "Test Status", "Pass/Fail"]
         self.list_of_completed_tests = [self.data_holder.test1_completed, self.data_holder.test2_completed, self.data_holder.test3_completed, self.data_holder.test4_completed]
         self.list_of_pass_fail = [self.data_holder.test1_pass, self.data_holder.test2_pass, self.data_holder.test3_pass, self.data_holder.test4_pass]
 
@@ -206,41 +198,112 @@ class TestFinishedSummary(tk.Frame):
                 RedX_Label.grid(row=index + 1, column=2)
 
 
-        self.create_retest_btns(parent)
+        self.create_retest_more_info_btns(parent)
        
         self.grid_propagate(0)
 
 
 
     # Creates all of the retest button
-    def create_retest_btns(self, parent):
+    def create_retest_more_info_btns(self, parent):
+        
+        row1 = tk.Frame(self.frm_table)
+        row1.grid(column = 3, row = 1)
+        
         btn_retest1 = tk.Button(
-                self.frm_table, 
-                text = "RETEST", 
+                row1, 
+                text = "RETEST",
+                padx= 5,
+                pady=5,  
                 command = lambda: self.retest1_btn_action(parent)
                 )
-        btn_retest1.grid(column = 3, row = 1)
+        btn_retest1.grid(column = 1, row = 0, padx=5, pady=5)
+
+        btn_more_info1 = tk.Button(
+                row1, 
+                text = "MORE INFO", 
+                padx= 5,
+                pady=5, 
+                command = lambda: self.btn_more_info1_action(parent)
+                )
+        btn_more_info1.grid(column=0, row = 0)
     
+
+
+
+        row2 = tk.Frame(self.frm_table)
+        row2.grid(column = 3, row = 2)
+        
         btn_retest2 = tk.Button(
-                self.frm_table, 
-                text = "RETEST", 
+                row2, 
+                text = "RETEST",
+                padx= 5,
+                pady=5,  
                 command = lambda: self.retest2_btn_action(parent)
                 )
-        btn_retest2.grid(column = 3, row = 2)
+        btn_retest2.grid(column = 1, row = 0, padx=5, pady=5)
 
+        btn_more_info2 = tk.Button(
+                row2, 
+                text = "MORE INFO", 
+                padx= 5,
+                pady=5, 
+                command = lambda: self.btn_more_info2_action(parent)
+                )
+        btn_more_info2.grid(column=0, row = 0)
+
+
+
+
+        row3 = tk.Frame(self.frm_table)
+        row3.grid(column = 3, row = 3)
+        
         btn_retest3 = tk.Button(
-                self.frm_table, 
-                text = "RETEST", 
+                row3, 
+                text = "RETEST",
+                padx= 5,
+                pady=5,  
                 command = lambda: self.retest3_btn_action(parent)
                 )
-        btn_retest3.grid(column = 3, row = 3)
+        btn_retest3.grid(column = 1, row = 0, padx=5, pady=5)
 
+        btn_more_info3 = tk.Button(
+                row3, 
+                text = "MORE INFO", 
+                padx= 5,
+                pady=5, 
+                command = lambda: self.btn_more_info3_action(parent)
+                )
+        btn_more_info3.grid(column=0, row = 0)
+
+        
+        
+        
+    
+        
+        row4 = tk.Frame(self.frm_table)
+        row4.grid(column = 3, row = 4)
+        
         btn_retest4 = tk.Button(
-                self.frm_table, 
-                text = "RETEST", 
+                row4, 
+                text = "RETEST",
+                padx= 5,
+                pady=5, 
                 command = lambda: self.retest4_btn_action(parent)
                 )
-        btn_retest4.grid(column = 3, row = 4)
+        btn_retest4.grid(column = 1, row = 0, padx=5, pady=5)
+
+        btn_more_info4 = tk.Button(
+                row4, 
+                text = "MORE INFO", 
+                padx= 5,
+                pady=5, 
+                command = lambda: self.btn_more_info4_action(parent)
+                )
+        btn_more_info4.grid(column=0, row = 0)
+
+
+
 
         btn_next_test = tk.Button(
                 self.frm_table, 
@@ -266,6 +329,19 @@ class TestFinishedSummary(tk.Frame):
         _parent.set_frame(_parent.test4_frame)
 
 
+    def btn_more_info1_action(self, _parent):
+        self.create_JSON_popup()
+
+    def btn_more_info2_action(self, _parent):
+        self.create_JSON_popup()
+
+    def btn_more_info3_action(self, _parent):
+        self.create_JSON_popup()
+    
+    def btn_more_info4_action(self, _parent):
+        self.create_JSON_popup()
+
+
 
     # Next test button action
     def next_test_btn_action(self, _parent):
@@ -275,7 +351,6 @@ class TestFinishedSummary(tk.Frame):
     # Updates the frame to show current data
     def update_frame(self):
         self.create_updated_table(self.parent)
-        self.create_JSON_popup()
 
 
 
