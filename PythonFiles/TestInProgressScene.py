@@ -22,7 +22,7 @@ class TestInProgressScene(tk.Frame):
         # Creating a popup window for the console output
         global console_popup
         console_popup = tk.Tk()
-        console_popup.geometry("500x500+0+100")
+        console_popup.geometry("500x500+300+100")
         console_popup.title("Console Output Window")
         console_popup.wm_attributes('-toolwindow', 'True')
 

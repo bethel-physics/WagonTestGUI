@@ -30,7 +30,7 @@ class GUIWindow():
         master_window.title("Bethel Interns' Window")
 
         # Creates the size of the window and disables resizing
-        master_window.geometry("1063x500+300+100")
+        master_window.geometry("1063x500+25+100")
         master_window.resizable(0,0)
 
         # Removes the tkinter logo from the window
@@ -96,8 +96,17 @@ class GUIWindow():
 
     # Changes which frame is currently shown
     def set_frame(self, _frame):
-
+        
+        # Updates the sidebar every time the frame is set
         self.sidebar.update_sidebar(self)
+
+        # Disables all buttons when the login frame is the only frame
+        if (_frame is self.login_frame):
+            self.sidebar.disable_all_buttons()
+
+        # Disables the sidebar login button when the login frame is not the current frame
+        if (_frame is not self.login_frame):
+            self.sidebar.disable_login_button()
 
         if (_frame is self.scan_frame):
             self.scan_frame.is_current_scene = True
@@ -107,6 +116,9 @@ class GUIWindow():
         if (_frame is not self.scan_frame):
             self.scan_frame.is_current_scene = False
             self.scan_frame.hide_submit_button()
+            
+            # Disables the sidebar scan button when the scan frame is not the current frame
+            self.sidebar.disable_scan_button()
 
         # The below if statements update frames when they are brought to
         # the top so they display current information
@@ -127,17 +139,22 @@ class GUIWindow():
 
         # These create the console windows when their 
         # respective frame is brought to the foreground
+        # Also disables sidebar buttons during in_progress frames
         if(_frame is self.test1_in_progress):
             self.test1_in_progress.initialize_console()
+            self.sidebar.disable_all_buttons()
         
         if(_frame is self.test2_in_progress):
             self.test2_in_progress.initialize_console()
+            self.sidebar.disable_all_buttons()
  
         if(_frame is self.test3_in_progress):
             self.test3_in_progress.initialize_console()
+            self.sidebar.disable_all_buttons()
   
         if(_frame is self.test4_in_progress):
             self.test4_in_progress.initialize_console()
+            self.sidebar.disable_all_buttons()
         
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
