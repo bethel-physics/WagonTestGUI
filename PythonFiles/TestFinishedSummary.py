@@ -1,3 +1,4 @@
+import json
 import tkinter as tk
 from PIL import ImageTk as iTK
 from PIL import Image
@@ -14,6 +15,8 @@ Frame that shows all of the final test results
 class TestFinishedSummary(tk.Frame):
     def __init__(self, parent, master_window, data_holder):
     
+        self.parent = parent
+        
         # Call to the super class's constructor
         # Super class is the tk.Frame class
         super().__init__(master_window, width=850, height=500)
@@ -42,6 +45,46 @@ class TestFinishedSummary(tk.Frame):
         self.grid_propagate(0)
 
 
+    # A function to be called within GUIWindow to create the console output
+    # when the frame is being brought to the top
+    def create_JSON_popup(self):
+        
+        # Creating a popup window for the console output
+        self.JSON_popup = tk.Tk()
+        self.JSON_popup.geometry("500x500+0+100")
+        self.JSON_popup.title("Console Output Window")
+        self.JSON_popup.wm_attributes('-toolwindow', 'True')
+
+        # Used to tell the console window that its 
+        # exit window button is being given a new function
+        self.JSON_popup.protocol('WM_DELETE_WINDOW', self.fake_destroy)
+
+        # Creating a Frame For Console Output
+        JSON_frame = tk.Frame(self.JSON_popup, width = 500, height = 500, bg = 'green')
+        JSON_frame.pack_propagate(0)
+        JSON_frame.pack()
+
+        # Placing an entry box in the frm_console
+        self.JSON_entry_box = tk.Text(
+            JSON_frame, 
+            bg = 'black', 
+            fg = 'white', 
+            font = ('Arial', 8)
+            )
+        self.JSON_entry_box.pack(anchor = 'center')
+
+        current_JSON_file = open(".\PythonFiles\DummyJSONTest.JSON")
+        current_JSON_data = json.load(current_JSON_file)
+
+        self.JSON_entry_box.delete(1.0,"end")
+        self.JSON_entry_box.insert(1.0, current_JSON_data)
+
+
+
+    # A pass function that the console window is being redirected to so its exit button
+    # does not function
+    def fake_destroy(self):
+        pass
 
     '''
     Creates the table with the updated information from the data_holder
@@ -165,13 +208,7 @@ class TestFinishedSummary(tk.Frame):
 
         self.create_retest_btns(parent)
        
-
         self.grid_propagate(0)
-
-
-
-
-
 
 
 
@@ -234,6 +271,11 @@ class TestFinishedSummary(tk.Frame):
     def next_test_btn_action(self, _parent):
         _parent.set_frame(_parent.scan_frame)
         
+
+    # Updates the frame to show current data
+    def update_frame(self):
+        self.create_updated_table(self.parent)
+        self.create_JSON_popup()
 
 
 
