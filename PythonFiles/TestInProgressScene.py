@@ -106,6 +106,34 @@ class TestInProgressScene(tk.Frame):
 
     # Goes to the next scene after the progress scene is complete
     def go_to_next_frame(self, _parent):
+        # Testing to see which frame you currently are in
+        if self == _parent.test1_in_progress:
+            current = 1
+        if self == _parent.test2_in_progress:
+            current = 2
+        if self == _parent.test3_in_progress:
+            current = 3
+        if self == _parent.test4_in_progress:
+            current = 4
+        # Array of potentially uncompleted tests
+        test_list = [
+            self.data_holder.test2_completed,
+            self.data_holder.test3_completed,
+            self.data_holder.test4_completed
+        ]
+        for index, test in enumerate(test_list):
+            if test == True:
+                pass
+            else:
+                if index == 0 and current == 1:
+                    _parent.set_frame(_parent.test2_frame)
+                    break
+                elif index == 1 and current < 3:
+                    _parent.set_frame(_parent.test3_frame)
+                    break
+                else:
+                    _parent.set_frame(_parent.test4_frame)
+
         # Tests if all the tests have been completed
         # if true, brings user to Test Summary Frame rather than the next test
         if (self.data_holder.test1_completed == True and 
@@ -116,5 +144,5 @@ class TestInProgressScene(tk.Frame):
             _parent.set_frame(_parent.testing_finished_frame)
             
         # Otherwise takes the user to the next test
-        else:
-            _parent.set_frame(self.next_frame)
+        # else:
+        #     _parent.set_frame(self.next_frame)
