@@ -102,7 +102,7 @@ class GUIWindow():
 
         # Disables all buttons when the login frame is the only frame
         if (_frame is self.login_frame):
-            self.sidebar.disable_all_buttons()
+            self.sidebar.disable_all_btns_but_login()
 
         # Disables the sidebar login button when the login frame is not the current frame
         if (_frame is not self.login_frame):

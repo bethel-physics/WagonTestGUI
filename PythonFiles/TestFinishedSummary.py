@@ -51,14 +51,14 @@ class TestFinishedSummary(tk.Frame):
         
         # Creating a popup window for the JSON Details
         self.JSON_popup = tk.Tk()
-        self.JSON_popup.geometry("500x500+0+100")
+        self.JSON_popup.geometry("500x300+750+100")
         self.JSON_popup.title("JSON Details")
         self.JSON_popup.wm_attributes('-toolwindow', 'True')
 
     
 
         # Creating a Frame For Console Output
-        JSON_frame = tk.Frame(self.JSON_popup, width = 500, height = 500, bg = 'green')
+        JSON_frame = tk.Frame(self.JSON_popup, width = 500, height = 300, bg = 'green')
         JSON_frame.pack_propagate(0)
         JSON_frame.pack()
 
