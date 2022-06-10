@@ -10,10 +10,10 @@ from PythonFiles.ConsoleOutput import *
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
 
-    def __init__(self, parent, master_window, next_frame, data_holder):
+    def __init__(self, parent, master_window, next_frame, previous_frame, data_holder):
         self.data_holder = data_holder
         self.is_current_scene = False
-        self.initialize_scene(parent, master_window, next_frame)
+        self.initialize_scene(parent, master_window, next_frame, previous_frame)
 
     # A function to be called within GUIWindow to create the console output
     # when the frame is being brought to the top
@@ -74,8 +74,9 @@ class TestInProgressScene(tk.Frame):
 
     # Used to initialize the frame that is on the main window
     # next_frame is used to progress to the next scene and is passed in from GUIWindow
-    def initialize_scene(self, parent, master_window, next_frame):
+    def initialize_scene(self, parent, master_window, next_frame, previous_frame):
         self.next_frame = next_frame
+        self.previous_frame = previous_frame
         super().__init__(master_window, width = 850, height = 500)
 
 
@@ -98,48 +99,74 @@ class TestInProgressScene(tk.Frame):
         btn_stop = ttk.Button(
             self, 
             text='Stop', 
-            command= lambda: self.stop_button_action(parent, self.next_frame))
+            command= lambda: self.stop_button_action(parent))
         btn_stop.pack(padx = 0, pady = 100)
 
         # Forces the frame to stay the size of the master_window
         self.pack_propagate(0)
 
     # A function for the stop button
-    def stop_button_action(self, _parent, _next_frame):
+    def stop_button_action(self, _parent):
 
         # Destroys the console window
         self.console_destroy()
+        
+        # Brings up the test_failed popup if the test is false, continues on if not
+        if self == _parent.test1_in_progress:
+            if self.data_holder.test1_pass == False:
+                self.test_failed_popup(_parent)
+            else:
+                self.go_to_next_frame(_parent)
 
-        # Progresses to the next frame
-        self.go_to_next_frame(_parent)
+        if self == _parent.test2_in_progress:
+            if self.data_holder.test2_pass == False:
+                self.test_failed_popup(_parent)
+            else:
+                self.go_to_next_frame(_parent)
+
+        if self == _parent.test3_in_progress:
+            if self.data_holder.test3_pass == False:
+                self.test_failed_popup(_parent)
+            else:
+                self.go_to_next_frame(_parent)
+
+        if self == _parent.test4_in_progress:
+            if self.data_holder.test4_pass == False:
+                self.test_failed_popup(_parent)
+            else:
+                self.go_to_next_frame(_parent)
 
 
 
     # Goes to the next scene after the progress scene is complete
     def go_to_next_frame(self, _parent):
+
+
         # Testing to see which frame you currently are in
         if self == _parent.test1_in_progress:
-            current = 1
+            self.current = 1
         if self == _parent.test2_in_progress:
-            current = 2
+            self.current = 2
         if self == _parent.test3_in_progress:
-            current = 3
+            self.current = 3
         if self == _parent.test4_in_progress:
-            current = 4
+            self.current = 4
         # Array of potentially uncompleted tests
         test_list = [
             self.data_holder.test2_completed,
             self.data_holder.test3_completed,
             self.data_holder.test4_completed
         ]
+
+        # Checks tells the function which frame to set based on what frame is currently up
         for index, test in enumerate(test_list):
             if test == True:
                 pass
             else:
-                if index == 0 and current == 1:
+                if index == 0 and self.current == 1:
                     _parent.set_frame(_parent.test2_frame)
                     break
-                elif index == 1 and current < 3:
+                elif index == 1 and self.current < 3:
                     _parent.set_frame(_parent.test3_frame)
                     break
                 else:
@@ -153,10 +180,55 @@ class TestInProgressScene(tk.Frame):
             self.data_holder.test4_completed == True):
 
             _parent.set_frame(_parent.testing_finished_frame)
-            
-        # Otherwise takes the user to the next test
-        # else:
-        #     _parent.set_frame(self.next_frame)
+
+    # Used to bring the user back to the test that just failed
+    def go_to_previous_frame(self, _parent, previous_frame):
+        self.previous_frame = previous_frame
+        _parent.set_frame(previous_frame)
+
+    # Function to make retry or continue window if the test fails
+    def test_failed_popup(self, parent):
+
+        # Creates a popup to ask whether or not to retry the test
+        self.popup = tk.Tk()
+        self.popup.title("Test Failed") 
+        self.popup.geometry("300x150")
+        self.popup.eval("tk::PlaceWindow . center")
+
+        # Creates frame in the new window
+        frm_popup = tk.Frame(self.popup)
+        frm_popup.pack()
+
+        # Creates label in the frame
+        lbl_popup = tk.Label(frm_popup, text = "The board failed the test. Would you like to retry?")
+        lbl_popup.grid(column = 0, row = 0, columnspan = 2, pady = 25)
+
+        # Creates retry and continue buttons
+        btn_retry = tk.Button(
+             frm_popup,
+             text = "Retry", 
+             relief = tk.RAISED, 
+             command = lambda: self.retry_function(parent, self.previous_frame)
+             ) 
+        btn_retry.grid(column = 0, row = 1)
+
+        btn_continue = tk.Button(
+            frm_popup,
+            text = "Continue",
+            relief = tk.RAISED,
+            command = lambda: self.continue_function(parent)
+        )
+        btn_continue.grid(column = 1, row = 1)
+
+    # Called when the no button is pressed to destroy popup and return you to the main window
+    def retry_function(self, parent, previous_frame):
+        self.popup.destroy()
+        self.go_to_previous_frame(parent, previous_frame)
+
+    # Called to continue on in the testing procedure
+    def continue_function(self, _parent):
+        self.popup.destroy()
+        self.go_to_next_frame(_parent)    
 
     # Dummy Script Function
     def run_test_gen_resist(self):

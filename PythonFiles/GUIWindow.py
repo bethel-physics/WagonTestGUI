@@ -76,16 +76,16 @@ class GUIWindow():
         self.test4_frame= Test4Scene(self, master_frame, self.data_holder)
         self.test4_frame.grid(row=0, column=0)
 
-        self.test1_in_progress = TestInProgressScene(self, master_frame, self.test2_frame, self.data_holder)
+        self.test1_in_progress = TestInProgressScene(self, master_frame, self.test2_frame, self.test1_frame, self.data_holder)
         self.test1_in_progress.grid(row=0, column=0)
 
-        self.test2_in_progress = TestInProgressScene(self, master_frame, self.test3_frame, self.data_holder)
+        self.test2_in_progress = TestInProgressScene(self, master_frame, self.test3_frame, self.test2_frame, self.data_holder)
         self.test2_in_progress.grid(row=0, column=0)
 
-        self.test3_in_progress = TestInProgressScene(self, master_frame, self.test4_frame, self.data_holder)
+        self.test3_in_progress = TestInProgressScene(self, master_frame, self.test4_frame, self.test3_frame, self.data_holder)
         self.test3_in_progress.grid(row=0, column=0)
 
-        self.test4_in_progress = TestInProgressScene(self, master_frame, self.testing_finished_frame, self.data_holder)
+        self.test4_in_progress = TestInProgressScene(self, master_frame, self.testing_finished_frame, self.test4_frame, self.data_holder)
         self.test4_in_progress.grid(row=0, column=0)
 
         # Near bottom so it can reference other frames with its code
