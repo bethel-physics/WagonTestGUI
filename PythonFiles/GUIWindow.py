@@ -42,7 +42,7 @@ class GUIWindow():
         master_frame.grid(column = 1, row = 0, columnspan = 4)
 
         # Creates a frame to house the sidebar on master_window
-        sidebar_frame = tk.Frame(master_window, width = 213, height = 500, bg = 'blue')
+        sidebar_frame = tk.Frame(master_window, width = 213, height = 500)
         sidebar_frame.grid(column = 0 , row = 0)
 
         # Creates the "Storage System" for the data during testing
