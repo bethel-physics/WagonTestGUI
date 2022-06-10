@@ -36,7 +36,7 @@ class SplashScene(tk.Frame):
         # Creating label for names
         lbl_names = tk.Label(
             self,
-            text = ' Created by:\n \n Andrew Kirzeder \n & \n Garrett Schindler',
+            text = ' Created by:\n \n Bryan Crosman, \n Andrew Kirzeder, \n & \n Garrett Schindler',
             font = ('Arial', 15)
         )
         lbl_names.grid(row = 1, column = 1)
