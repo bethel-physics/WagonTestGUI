@@ -2,6 +2,7 @@
 from pickle import NONE
 import tkinter as tk
 from turtle import bgcolor
+import time
 
 # Importing all the neccessary files and classes from them
 from PythonFiles.SidebarScene import SidebarScene
@@ -14,7 +15,7 @@ from PythonFiles.TestFrames.Test3 import Test3Scene
 from PythonFiles.TestFrames.Test4 import Test4Scene
 from PythonFiles.TestInProgressScene import TestInProgressScene
 from PythonFiles.DataHolder import DataHolder
-import PythonFiles.TestInProgressScene
+from PythonFiles.SplashScene import SplashScene
 from PythonFiles.TestInProgressScene import *
 
 
@@ -52,6 +53,8 @@ class GUIWindow():
         self.sidebar.pack()
 
         # Creates all the different frames in layers
+
+        # At top so it can be referenced by other frames' code
         self.testing_finished_frame = TestFinishedSummary(self, master_frame, self.data_holder)
         self.testing_finished_frame.grid(row=0, column=0)
 
@@ -85,16 +88,20 @@ class GUIWindow():
         self.test4_in_progress = TestInProgressScene(self, master_frame, self.testing_finished_frame, self.data_holder)
         self.test4_in_progress.grid(row=0, column=0)
 
+        # Near bottom so it can reference other frames with its code
+        self.splash_frame = SplashScene(self, master_frame)
+        self.splash_frame.grid(row=0, column=0)
+
         # Tells the master window that its exit window button is being given a new function
         master_window.protocol('WM_DELETE_WINDOW', self.exit_function)
 
-        # Sets the current frame to the login frame
+        # Sets the current frame to the splash frame
         self.set_frame(self.login_frame)
 
         master_window.mainloop()
     
 
-    # Changes which frame is currently shown
+    # Called to change the frame to the argument _frame
     def set_frame(self, _frame):
         
         # Updates the sidebar every time the frame is set
@@ -105,7 +112,8 @@ class GUIWindow():
             self.sidebar.disable_all_btns_but_login()
 
         # Disables the sidebar login button when the login frame is not the current frame
-        if (_frame is not self.login_frame):
+        # or when scan_frame is not the current frame
+        if (_frame is not self.login_frame or _frame is not self.scan_frame):
             self.sidebar.disable_login_button()
 
         if (_frame is self.scan_frame):
@@ -146,19 +154,26 @@ class GUIWindow():
         if(_frame is self.test1_in_progress):
             self.test1_in_progress.initialize_console()
             self.sidebar.disable_all_buttons()
-            self.test1_in_progress.run_script()
+            # Calls test script to run
+            self.test1_in_progress.run_test_gen_resist()
         
         if(_frame is self.test2_in_progress):
             self.test2_in_progress.initialize_console()
             self.sidebar.disable_all_buttons()
+            # Calls test script to run
+            self.test1_in_progress.run_test_id_resistor()
  
         if(_frame is self.test3_in_progress):
             self.test3_in_progress.initialize_console()
             self.sidebar.disable_all_buttons()
+            # Calls test script to run
+            self.test1_in_progress.run_test_i2c_comm()
   
         if(_frame is self.test4_in_progress):
             self.test4_in_progress.initialize_console()
             self.sidebar.disable_all_buttons()
+            # Calls test script to run
+            self.test1_in_progress.run_test_bit_rate()
         
         # Raises the passed in frame to be the current frame
         _frame.tkraise()

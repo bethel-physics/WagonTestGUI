@@ -158,6 +158,22 @@ class TestInProgressScene(tk.Frame):
         # else:
         #     _parent.set_frame(self.next_frame)
 
-    def run_script(self):
+    # Dummy Script Function
+    def run_test_gen_resist(self):
         for index in range(100):
-            print(str(index) + "\n")
+            print(str(index) + "\n") 
+
+    # Dummy Script Function
+    def run_test_id_resistor(self):
+        for index in range(100):
+            print(str(index) + "\n") 
+
+    # Dummy Script Function
+    def run_test_i2c_comm(self):
+        for index in range(100):
+            print(str(index) + "\n") 
+
+    # Dummy Script Function
+    def run_test_bit_rate(self):
+        for index in range(100):
+            print(str(index) + "\n") 

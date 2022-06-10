@@ -150,6 +150,6 @@ class Test1Scene(tk.Frame):
         self.data_holder.test1_pass = True
         self.data_holder.print()
 
-
+    # functionality for the logout button
     def logout_button_action(self, _parent):
-        _parent.set_frame(_parent.login_frame)    
+        _parent.set_frame(_parent.login_frame)  
