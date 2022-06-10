@@ -15,15 +15,7 @@ class LoginScene(tk.Frame):
         self.data_holder = data_holder
 
 
-        # Creating the submit button
-        # It does not get packed until the user selects an option menu option
-        self.btn_submit = tk.Button(
-            self, text="Submit",
-            padx = 50,
-            pady = 10, 
-            relief=tk.RAISED, 
-            command= lambda:  self.submit_button_action(parent)
-            )
+        
 
         # Creating a list of users for dropdown menu
         # Eventually need to add a way for a database to have control over this list
@@ -51,7 +43,7 @@ class LoginScene(tk.Frame):
             self.user_selected, # Tells option menu to use the created initial value
             *User_List # Tells the dropdown menu to use every index in the User_List list
             ) 
-        self.opt_user_dropdown.pack(pady=10)
+        self.opt_user_dropdown.pack(pady=15)
         self.opt_user_dropdown.config(width = 20, font = ('Arial', 13))
         self.opt_user_dropdown['menu'].configure(font = ('Arial', 12))
 
@@ -61,6 +53,31 @@ class LoginScene(tk.Frame):
             'w', 
             lambda *args: self.show_submit_button()
             )
+
+        # Creating the submit button
+        # It does not get enabled until the user selects an option menu option
+        self.btn_submit = tk.Button(
+            self, 
+            text="Submit",
+            padx = 50,
+            pady = 10, 
+            relief=tk.RAISED, 
+            command= lambda:  self.submit_button_action(parent)
+            )
+        self.btn_submit.pack()
+        self.btn_submit.config(state = 'disabled')
+
+
+        # Creating the add user button
+        self.add_user_button = tk.Button(
+            self, 
+            text="Add User",
+            padx = 20,
+            pady = 5, 
+            relief=tk.RAISED, 
+            command= lambda:  self.add_user_button_action(parent)
+            )
+        self.add_user_button.pack(pady=70)
 
         # Forces frame to stay the size of the main_window
         # rather than adjusting to the size of the widgets
@@ -79,6 +96,9 @@ class LoginScene(tk.Frame):
 
         self.data_holder.print()
 
+    def add_user_button_action(self, _parent):
+        pass
+
     # A function to pack the submit button
     def show_submit_button(self):
-        self.btn_submit.pack()   
+        self.btn_submit.config(state = 'active')
