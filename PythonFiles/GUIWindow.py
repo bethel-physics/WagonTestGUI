@@ -96,7 +96,9 @@ class GUIWindow():
         master_window.protocol('WM_DELETE_WINDOW', self.exit_function)
 
         # Sets the current frame to the splash frame
-        self.set_frame(self.login_frame)
+        self.set_frame(self.splash_frame)
+
+        master_frame.after(2000, self.set_frame, self.login_frame)
 
         master_window.mainloop()
     
@@ -110,6 +112,12 @@ class GUIWindow():
         # Disables all buttons when the login frame is the only frame
         if (_frame is self.login_frame):
             self.sidebar.disable_all_btns_but_login()
+
+        # Disables all buttons when the login frame is the only frame
+        if (_frame is self.splash_frame):
+            self.sidebar.disable_all_btns_but_login()
+
+        
 
         # Disables the sidebar login button when the login frame is not the current frame
         # or when scan_frame is not the current frame
@@ -180,6 +188,7 @@ class GUIWindow():
 
 
 
+
     # New function for clicking on the exit button
     def exit_function(self):
 
@@ -245,3 +254,4 @@ class GUIWindow():
     # Function to return scan_frame
     def get_scan_frame(self):
         return self.scan_frame
+

@@ -43,16 +43,3 @@ class SplashScene(tk.Frame):
 
         self.grid_propagate(0)
 
-
-        # Automatically passing on to login screen
-    def thread_auto_set_frame(self, _parent):
-        self.thread_auto_set = threading.Thread(target=self.auto_set_frame(_parent))
-        self.thread_auto_set.daemon = True
-        self.thread_auto_set.start()
-    
-    def auto_set_frame(self, __parent):
-        for i in range(3):
-            time.sleep(1)
-            print(i + 1)
-        time.sleep(0.5)
-        __parent.set_frame(__parent.login_frame)
