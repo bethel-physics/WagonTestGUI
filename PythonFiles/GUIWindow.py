@@ -169,19 +169,19 @@ class GUIWindow():
             self.test2_in_progress.initialize_console()
             self.sidebar.disable_all_buttons()
             # Calls test script to run
-            self.test1_in_progress.run_test_id_resistor()
+            self.test2_in_progress.run_test_id_resistor()
  
         if(_frame is self.test3_in_progress):
             self.test3_in_progress.initialize_console()
             self.sidebar.disable_all_buttons()
             # Calls test script to run
-            self.test1_in_progress.run_test_i2c_comm()
+            self.test3_in_progress.run_test_i2c_comm()
   
         if(_frame is self.test4_in_progress):
             self.test4_in_progress.initialize_console()
             self.sidebar.disable_all_buttons()
             # Calls test script to run
-            self.test1_in_progress.run_test_bit_rate()
+            self.test4_in_progress.run_test_bit_rate()
         
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
