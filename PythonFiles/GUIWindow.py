@@ -8,11 +8,11 @@ import time
 from PythonFiles.SidebarScene import SidebarScene
 from PythonFiles.LoginScene import LoginScene
 from PythonFiles.ScanScene import ScanScene
-from PythonFiles.TestFinishedSummary import TestFinishedSummary
-from PythonFiles.TestFrames.Test1 import Test1Scene
-from PythonFiles.TestFrames.Test2 import Test2Scene
-from PythonFiles.TestFrames.Test3 import Test3Scene
-from PythonFiles.TestFrames.Test4 import Test4Scene
+from PythonFiles.TestSummary import TestSummaryScene
+from PythonFiles.TestFrames.Test1Scene import Test1Scene
+from PythonFiles.TestFrames.Test2Scene import Test2Scene
+from PythonFiles.TestFrames.Test3Scene import Test3Scene
+from PythonFiles.TestFrames.Test4Scene import Test4Scene
 from PythonFiles.TestInProgressScene import TestInProgressScene
 from PythonFiles.DataHolder import DataHolder
 from PythonFiles.SplashScene import SplashScene
@@ -55,7 +55,7 @@ class GUIWindow():
         # Creates all the different frames in layers
 
         # At top so it can be referenced by other frames' code
-        self.test_summary_frame = TestFinishedSummary(self, master_frame, self.data_holder)
+        self.test_summary_frame = TestSummaryScene(self, master_frame, self.data_holder)
         self.test_summary_frame.grid(row=0, column=0)
 
         self.login_frame = LoginScene(self, master_frame, self.data_holder)

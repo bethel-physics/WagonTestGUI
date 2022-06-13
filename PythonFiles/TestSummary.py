@@ -12,7 +12,7 @@ Frame that shows all of the final test results
 @param master_frame -> Tkinter object that the frame is going to be placed on
 @param data_holder -> DataHolder object that stores all relevant data
 '''
-class TestFinishedSummary(tk.Frame):
+class TestSummaryScene(tk.Frame):
     def __init__(self, parent, master_frame, data_holder):
     
         self.parent = parent
@@ -58,13 +58,13 @@ class TestFinishedSummary(tk.Frame):
     
 
         # Creating a Frame For Console Output
-        JSON_frame = tk.Frame(self.JSON_popup, width = 500, height = 300, bg = 'green')
-        JSON_frame.pack_propagate(0)
-        JSON_frame.pack()
+        frm_JSON = tk.Frame(self.JSON_popup, width = 500, height = 300, bg = 'green')
+        frm_JSON.pack_propagate(0)
+        frm_JSON.pack()
 
         # Placing an entry box in the frm_console
         self.JSON_entry_box = tk.Text(
-            JSON_frame, 
+            frm_JSON, 
             bg = '#6e5e5d', 
             fg = 'white', 
             font = ('Arial', 14)
