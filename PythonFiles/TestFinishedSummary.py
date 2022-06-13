@@ -9,17 +9,17 @@ from pyparsing import col
 '''
 Frame that shows all of the final test results
 @param parent -> References a GUIWindow object
-@param master_window -> Tkinter object that the frame is going to be placed on
+@param master_frame -> Tkinter object that the frame is going to be placed on
 @param data_holder -> DataHolder object that stores all relevant data
 '''
 class TestFinishedSummary(tk.Frame):
-    def __init__(self, parent, master_window, data_holder):
+    def __init__(self, parent, master_frame, data_holder):
     
         self.parent = parent
         
         # Call to the super class's constructor
         # Super class is the tk.Frame class
-        super().__init__(master_window, width=850, height=500)
+        super().__init__(master_frame, width=850, height=500)
 
         self.data_holder = data_holder
 

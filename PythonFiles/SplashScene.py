@@ -9,11 +9,11 @@ import threading
 
 
 class SplashScene(tk.Frame):
-    def __init__(self, parent, master_window):
-        self.initialize_GUI(parent, master_window)
+    def __init__(self, parent, master_frame):
+        self.initialize_GUI(parent, master_frame)
 
-    def initialize_GUI(self, parent, master_window):
-        super().__init__(master_window, width = 850, height = 500)
+    def initialize_GUI(self, parent, master_frame):
+        super().__init__(master_frame, width = 850, height = 500)
 
         # Creating Bethel Logo
         img_bethel_logo = Image.open("./PythonFiles/Images/Bethel_Logo.png")

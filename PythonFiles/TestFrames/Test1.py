@@ -5,8 +5,8 @@ import tkinter.font as font
 
 # Creating class for the window
 class Test1Scene(tk.Frame):
-    def __init__(self, parent, master_window, data_holder):
-        super().__init__(master_window, width=850, height=500)
+    def __init__(self, parent, master_frame, data_holder):
+        super().__init__(master_frame, width=850, height=500)
 
         self.data_holder = data_holder
         

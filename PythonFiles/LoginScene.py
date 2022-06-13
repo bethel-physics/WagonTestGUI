@@ -5,12 +5,12 @@ import tkinter as tk
 # Creates a class that is called by the GUIWindow. 
 # GUIWindow instantiates an object called login_frame.
 # @param parent -> passes in GUIWindow as the parent.
-# @param master_window -> passes master_window as the container for everything in the class.
+# @param master_frame -> passes master_frame as the container for everything in the class.
 # @param data_holder -> passes data_holder into the class so the data_holder functions can
 #       be accessed within the class.
 class LoginScene(tk.Frame):
-    def __init__(self, parent, master_window, data_holder):
-        super().__init__(master_window, width=850, height=500)
+    def __init__(self, parent, master_frame, data_holder):
+        super().__init__(master_frame, width=850, height=500)
 
         self.data_holder = data_holder
 

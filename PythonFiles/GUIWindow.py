@@ -37,7 +37,7 @@ class GUIWindow():
         # Removes the tkinter logo from the window
         master_window.wm_attributes('-toolwindow', 'True')
 
-        # Creates and packs a frame that exists on top of the master_window
+        # Creates and packs a frame that exists on top of the master_frame
         master_frame = tk.Frame(master_window, width=850, height= 500)
         master_frame.grid(column = 1, row = 0, columnspan = 4)
 

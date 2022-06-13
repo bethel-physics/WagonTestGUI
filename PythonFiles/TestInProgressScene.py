@@ -10,10 +10,10 @@ from PythonFiles.ConsoleOutput import *
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
 
-    def __init__(self, parent, master_window, next_frame, previous_frame, data_holder):
+    def __init__(self, parent, master_frame, next_frame, previous_frame, data_holder):
         self.data_holder = data_holder
         self.is_current_scene = False
-        self.initialize_scene(parent, master_window, next_frame, previous_frame)
+        self.initialize_scene(parent, master_frame, next_frame, previous_frame)
 
     # A function to be called within GUIWindow to create the console output
     # when the frame is being brought to the top
@@ -74,10 +74,10 @@ class TestInProgressScene(tk.Frame):
 
     # Used to initialize the frame that is on the main window
     # next_frame is used to progress to the next scene and is passed in from GUIWindow
-    def initialize_scene(self, parent, master_window, next_frame, previous_frame):
+    def initialize_scene(self, parent, master_frame, next_frame, previous_frame):
         self.next_frame = next_frame
         self.previous_frame = previous_frame
-        super().__init__(master_window, width = 850, height = 500)
+        super().__init__(master_frame, width = 850, height = 500)
 
 
         # Creating the main title in the frame
@@ -102,7 +102,7 @@ class TestInProgressScene(tk.Frame):
             command= lambda: self.stop_button_action(parent))
         btn_stop.pack(padx = 0, pady = 100)
 
-        # Forces the frame to stay the size of the master_window
+        # Forces the frame to stay the size of the master_frame
         self.pack_propagate(0)
 
     # A function for the stop button

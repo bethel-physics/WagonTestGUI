@@ -15,19 +15,19 @@ QRcode = "1090201033667425"
 # creating the Scan Frame's class (called ScanScene) to be instantiated in the GUIWindow
 # instantiated as scan_frame by GUIWindow
 # @param parent -> passes in GUIWindow as the parent.
-# @param master_window -> passes master_window as the container for everything in the class.
+# @param master_frame -> passes master_frame as the container for everything in the class.
 # @param data_holder -> passes data_holder into the class so the data_holder functions can
 #       be accessed within the class.
 class ScanScene(tk.Frame):
     
     # Runs upon creation
-    def __init__(self, parent, master_window, data_holder):
+    def __init__(self, parent, master_frame, data_holder):
         self.data_holder = data_holder
         self.is_current_scene = False
         
         # Runs the initilize_GUI function, which actually creates the frame
         # params are the same as defined above
-        self.initialize_GUI(parent, master_window)
+        self.initialize_GUI(parent, master_frame)
 
     # Creates a thread for the scanning of a barcode
     # Needs to be updated to run the read_barcode function in the original GUI
@@ -75,11 +75,11 @@ class ScanScene(tk.Frame):
         self.data_holder.print()
 
     # Creates the GUI itself
-    def initialize_GUI(self, parent, master_window):
+    def initialize_GUI(self, parent, master_frame):
         
-        self.master_window = master_window
+        self.master_frame = master_frame
         
-        super().__init__(self.master_window, width = 850, height = 500)
+        super().__init__(self.master_frame, width = 850, height = 500)
 
         # Create a photoimage object of the QR Code
         QR_image = Image.open("./PythonFiles/Images/QRimage.png")
@@ -167,7 +167,7 @@ class ScanScene(tk.Frame):
         )
         btn_logout.pack(anchor = 'se', padx = 230, pady = 180)
 
-        # Locks frame size to the master_window size
+        # Locks frame size to the master_frame size
         self.grid_propagate(0)
 
     # Function for the submit button
