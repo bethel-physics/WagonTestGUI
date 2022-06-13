@@ -38,7 +38,7 @@ class Test2Scene(tk.Frame):
             frm_window, 
             font = font_scene
             )
-        ent_tester.insert(0, self.data_holder.user_ID) # Need a way to fetch the tester name
+        ent_tester.insert(0, self.data_holder.user_ID) 
         ent_tester.pack(side = 'top')
         ent_tester.config(state = "disabled")
 
@@ -56,7 +56,7 @@ class Test2Scene(tk.Frame):
             frm_window, 
             font = font_scene
             )
-        ent_snum.insert(0, self.data_holder.current_serial_ID) # Need a way to fetch the serial number
+        ent_snum.insert(0, self.data_holder.current_serial_ID)
         ent_snum.pack(side = 'top')
         ent_snum.config(state = "disabled")
 
