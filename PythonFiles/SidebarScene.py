@@ -144,7 +144,7 @@ class SidebarScene(tk.Frame):
     def btn_summary_action(self, _parent):
         _parent.set_frame(_parent.test_summary_frame)
 
-    def disable_all_buttons(self):
+    def disable_all_btns(self):
         self.btn_login.config(state = 'disabled')
         self.btn_scan.config(state = 'disabled')
         self.btn_test1.config(state = 'disabled')
@@ -160,7 +160,16 @@ class SidebarScene(tk.Frame):
         self.btn_test4.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 
+    def disable_all_btns_but_scan(self):
+        self.btn_login.config(state = 'disabled')
+        self.btn_test1.config(state = 'disabled')
+        self.btn_test2.config(state = 'disabled')
+        self.btn_test3.config(state = 'disabled')
+        self.btn_test4.config(state = 'disabled')
+        self.btn_summary.config(state = 'disabled')
+
     def disable_all_btns_but_login(self):
+        self.btn_login.config(state = 'normal')
         self.btn_scan.config(state = 'disabled')
         self.btn_test1.config(state = 'disabled')
         self.btn_test2.config(state = 'disabled')

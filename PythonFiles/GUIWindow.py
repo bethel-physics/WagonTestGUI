@@ -109,19 +109,23 @@ class GUIWindow():
         # Updates the sidebar every time the frame is set
         self.sidebar.update_sidebar(self)
 
-        # Disables all buttons when the login frame is the only frame
+        # Disables all buttons except login when the login frame is the only frame
         if (_frame is self.login_frame):
             self.sidebar.disable_all_btns_but_login()
 
-        # Disables all buttons when the login frame is the only frame
+        # Disables all buttons except scan when the scan frame is the only frame
+        if (_frame is self.scan_frame):
+            self.sidebar.disable_all_btns_but_scan()
+
+        # Disables all buttons when the splash frame is the only frame
         if (_frame is self.splash_frame):
-            self.sidebar.disable_all_btns_but_login()
+            self.sidebar.disable_all_btns()
 
         
 
         # Disables the sidebar login button when the login frame is not the current frame
         # or when scan_frame is not the current frame
-        if (_frame is not self.login_frame or _frame is not self.scan_frame):
+        if (_frame is not self.login_frame):
             self.sidebar.disable_login_button()
 
         if (_frame is self.scan_frame):
@@ -161,25 +165,25 @@ class GUIWindow():
         # Also disables sidebar buttons during in_progress frames
         if(_frame is self.test1_in_progress):
             self.test1_in_progress.initialize_console()
-            self.sidebar.disable_all_buttons()
+            self.sidebar.disable_all_btns()
             # Calls test script to run
             self.test1_in_progress.run_test_gen_resist()
         
         if(_frame is self.test2_in_progress):
             self.test2_in_progress.initialize_console()
-            self.sidebar.disable_all_buttons()
+            self.sidebar.disable_all_btns()
             # Calls test script to run
             self.test2_in_progress.run_test_id_resistor()
  
         if(_frame is self.test3_in_progress):
             self.test3_in_progress.initialize_console()
-            self.sidebar.disable_all_buttons()
+            self.sidebar.disable_all_btns()
             # Calls test script to run
             self.test3_in_progress.run_test_i2c_comm()
   
         if(_frame is self.test4_in_progress):
             self.test4_in_progress.initialize_console()
-            self.sidebar.disable_all_buttons()
+            self.sidebar.disable_all_btns()
             # Calls test script to run
             self.test4_in_progress.run_test_bit_rate()
         
