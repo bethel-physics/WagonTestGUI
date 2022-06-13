@@ -169,8 +169,10 @@ class TestInProgressScene(tk.Frame):
                 elif index == 1 and self.current < 3:
                     _parent.set_frame(_parent.test3_frame)
                     break
-                else:
+                elif index == 2 and self.current < 4:
                     _parent.set_frame(_parent.test4_frame)
+                else:
+                    _parent.set_frame(_parent.testing_finished_frame)
 
         # Tests if all the tests have been completed
         # if true, brings user to Test Summary Frame rather than the next test
