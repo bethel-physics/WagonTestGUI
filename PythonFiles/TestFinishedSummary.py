@@ -221,7 +221,7 @@ class TestFinishedSummary(tk.Frame):
                 text = "RETEST",
                 padx= 5,
                 pady=5,  
-                command = lambda: self.retest1_btn_action(parent)
+                command = lambda: self.btn_retest1_action(parent)
                 )
         btn_retest1.grid(column = 1, row = 0, padx=5, pady=5)
 
@@ -245,7 +245,7 @@ class TestFinishedSummary(tk.Frame):
                 text = "RETEST",
                 padx= 5,
                 pady=5,  
-                command = lambda: self.retest2_btn_action(parent)
+                command = lambda: self.btn_retest2_action(parent)
                 )
         btn_retest2.grid(column = 1, row = 0, padx=5, pady=5)
 
@@ -269,7 +269,7 @@ class TestFinishedSummary(tk.Frame):
                 text = "RETEST",
                 padx= 5,
                 pady=5,  
-                command = lambda: self.retest3_btn_action(parent)
+                command = lambda: self.btn_retest3_action(parent)
                 )
         btn_retest3.grid(column = 1, row = 0, padx=5, pady=5)
 
@@ -295,7 +295,7 @@ class TestFinishedSummary(tk.Frame):
                 text = "RETEST",
                 padx= 5,
                 pady=5, 
-                command = lambda: self.retest4_btn_action(parent)
+                command = lambda: self.btn_retest4_action(parent)
                 )
         btn_retest4.grid(column = 1, row = 0, padx=5, pady=5)
 
@@ -315,23 +315,23 @@ class TestFinishedSummary(tk.Frame):
                 self.frm_table, 
                 text = "NEXT TEST",
                 font = ('Arial', 15), 
-                command = lambda: self.next_test_btn_action(parent)
+                command = lambda: self.btn_next_test_action(parent)
                 )
         btn_next_test.grid(column = 3, row = 5)
 
 
 
     # All of the different methods for what the retest buttons should do
-    def retest1_btn_action(self, _parent):
+    def btn_retest1_action(self, _parent):
         _parent.set_frame(_parent.test1_frame)
     
-    def retest2_btn_action(self, _parent):
+    def btn_retest2_action(self, _parent):
         _parent.set_frame(_parent.test2_frame)
 
-    def retest3_btn_action(self, _parent):
+    def btn_retest3_action(self, _parent):
         _parent.set_frame(_parent.test3_frame)
 
-    def retest4_btn_action(self, _parent):
+    def btn_retest4_action(self, _parent):
         _parent.set_frame(_parent.test4_frame)
 
 
@@ -350,7 +350,7 @@ class TestFinishedSummary(tk.Frame):
 
 
     # Next test button action
-    def next_test_btn_action(self, _parent):
+    def btn_next_test_action(self, _parent):
         _parent.set_frame(_parent.scan_frame)
         
 

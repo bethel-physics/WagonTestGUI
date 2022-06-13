@@ -99,14 +99,14 @@ class TestInProgressScene(tk.Frame):
         btn_stop = ttk.Button(
             self, 
             text='Stop', 
-            command= lambda: self.stop_button_action(parent))
+            command= lambda: self.btn_stop_action(parent))
         btn_stop.pack(padx = 0, pady = 100)
 
         # Forces the frame to stay the size of the master_frame
         self.pack_propagate(0)
 
     # A function for the stop button
-    def stop_button_action(self, _parent):
+    def btn_stop_action(self, _parent):
 
         # Destroys the console window
         self.console_destroy()

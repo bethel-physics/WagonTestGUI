@@ -67,7 +67,7 @@ class SidebarScene(tk.Frame):
             height = btn_height,
             width = btn_width,
             font = btn_font,
-            command = lambda: self.test1_btn_action(parent)
+            command = lambda: self.btn_test1_action(parent)
             )
         self.btn_test1.grid(column = 0, row = 2)
 
@@ -82,7 +82,7 @@ class SidebarScene(tk.Frame):
             height = btn_height,
             width = btn_width,
             font = btn_font,
-            command = lambda: self.test2_btn_action(parent)
+            command = lambda: self.btn_test2_action(parent)
             )
         self.btn_test2.grid(column = 0, row = 3)
 
@@ -96,7 +96,7 @@ class SidebarScene(tk.Frame):
             height = btn_height,
             width = btn_width,
             font = btn_font,
-            command = lambda: self.test3_btn_action(parent)
+            command = lambda: self.btn_test3_action(parent)
             )
         self.btn_test3.grid(column = 0, row = 4)
 
@@ -110,7 +110,7 @@ class SidebarScene(tk.Frame):
             height = btn_height,
             width = btn_width,
             font = btn_font,
-            command = lambda: self.test4_btn_action(parent)
+            command = lambda: self.btn_test4_action(parent)
             )
         self.btn_test4.grid(column = 0, row = 5)
         if self.data_holder.test4_pass == True:
@@ -123,25 +123,25 @@ class SidebarScene(tk.Frame):
             height = btn_height,
             width = btn_width,
             font = btn_font,
-            command = lambda: self.summary_btn_action(parent)
+            command = lambda: self.btn_summary_action(parent)
             )
         self.btn_summary.grid(column = 0, row = 6)
 
         self.grid_propagate(0)
 
-    def test1_btn_action(self, _parent):
+    def btn_test1_action(self, _parent):
         _parent.set_frame(_parent.test1_frame)
 
-    def test2_btn_action(self, _parent):
+    def btn_test2_action(self, _parent):
         _parent.set_frame(_parent.test2_frame)
 
-    def test3_btn_action(self, _parent):
+    def btn_test3_action(self, _parent):
         _parent.set_frame(_parent.test3_frame)
 
-    def test4_btn_action(self, _parent):
+    def btn_test4_action(self, _parent):
         _parent.set_frame(_parent.test4_frame)
 
-    def summary_btn_action(self, _parent):
+    def btn_summary_action(self, _parent):
         _parent.set_frame(_parent.test_summary_frame)
 
     def disable_all_buttons(self):

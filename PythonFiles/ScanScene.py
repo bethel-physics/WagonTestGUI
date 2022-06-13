@@ -150,7 +150,7 @@ class ScanScene(tk.Frame):
             padx = 50,
             pady = 10,
             relief = tk.RAISED,
-            command= lambda:  self.submit_button_action(parent)
+            command= lambda:  self.btn_submit_action(parent)
             )
         self.btn_submit.pack(padx=10)
 
@@ -163,7 +163,7 @@ class ScanScene(tk.Frame):
             frm_logout,
             relief = tk.RAISED,
             text = "Logout",
-            command = lambda: self.logout_button_action(parent)
+            command = lambda: self.btn_logout_action(parent)
         )
         btn_logout.pack(anchor = 'se', padx = 230, pady = 180)
 
@@ -171,7 +171,7 @@ class ScanScene(tk.Frame):
         self.grid_propagate(0)
 
     # Function for the submit button
-    def submit_button_action(self, _parent):
+    def btn_submit_action(self, _parent):
         # Tests for what tests have been completed and takes the user to the appropriate test
         if self.data_holder.test1_completed == True:
             if self.data_holder.test2_completed == True:
@@ -188,7 +188,7 @@ class ScanScene(tk.Frame):
             _parent.set_frame(_parent.test1_frame)
 
     # Function for the log out button
-    def logout_button_action(self, _parent):
+    def btn_logout_action(self, _parent):
 
          # Send user back to login frame
         _parent.set_frame(_parent.login_frame)    

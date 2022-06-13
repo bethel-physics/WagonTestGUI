@@ -88,7 +88,7 @@ class Test2Scene(tk.Frame):
             frm_window, 
             text = "Confirm",
             relief = tk.RAISED, 
-            command= lambda: self.confirm_button_action(parent))
+            command= lambda: self.btn_confirm_action(parent))
         btn_confirm.pack(side = 'top')
         btn_confirm['font'] = font.Font(family = 'Arial', size = 13)
 
@@ -101,7 +101,7 @@ class Test2Scene(tk.Frame):
             frm_logout, 
             relief = tk.RAISED, 
             text = "Logout", 
-            command= lambda: self.logout_button_action(parent))
+            command= lambda: self.btn_logout_action(parent))
         btn_logout.pack(anchor = 'se')
 
         # Create a frame for the top right of the frame
@@ -113,7 +113,7 @@ class Test2Scene(tk.Frame):
             frm_back,
             text = "Back",
             relief = tk.RAISED,
-            command= lambda: self.back_button_action(parent))
+            command= lambda: self.btn_back_action(parent))
         btn_back.pack(anchor = 'ne')
 
         # Creat a button to go back to scanning
@@ -121,22 +121,22 @@ class Test2Scene(tk.Frame):
             frm_back,
             text = "Change Boards", 
             relief = tk.RAISED, 
-            command = lambda: self.rescan_button_action(parent))
+            command = lambda: self.btn_rescan_action(parent))
         btn_rescan.pack(anchor = 'ne')
 
         self.grid_propagate(0)
 
     # Rescan button takes the user back to scanning in a new board
-    def rescan_button_action(self, _parent):
+    def btn_rescan_action(self, _parent):
         _parent.set_frame(_parent.scan_frame)
 
     # Back button action takes the user back to the scanning device
-    def back_button_action(self, _parent):
+    def btn_back_action(self, _parent):
         _parent.set_frame(_parent.test1_frame)
 
         
     # Confirm button action takes the user to the test in progress scene
-    def confirm_button_action(self, _parent):
+    def btn_confirm_action(self, _parent):
         _parent.set_frame(_parent.test2_in_progress)
 
         #TODO EDIT THIS WITH ACTUAL TEST DATA
@@ -145,5 +145,5 @@ class Test2Scene(tk.Frame):
         self.data_holder.print()
 
     # Logout button that takes the user back to the login scene
-    def logout_button_action(self, _parent):
+    def btn_logout_action(self, _parent):
         _parent.set_frame(_parent.login_frame)

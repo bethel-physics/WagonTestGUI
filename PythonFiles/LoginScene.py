@@ -62,22 +62,22 @@ class LoginScene(tk.Frame):
             padx = 50,
             pady = 10, 
             relief=tk.RAISED, 
-            command= lambda:  self.submit_button_action(parent)
+            command= lambda:  self.btn_submit_action(parent)
             )
         self.btn_submit.pack()
         self.btn_submit.config(state = 'disabled')
 
 
         # Creating the add user button
-        self.add_user_button = tk.Button(
+        self.btn_add_user = tk.Button(
             self, 
             text="Add User",
             padx = 20,
             pady = 5, 
             relief=tk.RAISED, 
-            command= lambda:  self.add_user_button_action(parent)
+            command= lambda:  self.btn_add_user_action(parent)
             )
-        self.add_user_button.pack(pady=70)
+        self.btn_add_user.pack(pady=70)
 
         # Forces frame to stay the size of the main_window
         # rather than adjusting to the size of the widgets
@@ -86,7 +86,7 @@ class LoginScene(tk.Frame):
     # Creates the function for the submit button command
     # @params "_parent" is also a parent like "parent", but it is a different "parent",
     # passes in GUIWindow
-    def submit_button_action(self, _parent):
+    def btn_submit_action(self, _parent):
             # Sets the user_ID in the data_holder to the selected user
         self.data_holder.user_ID = self.user_selected.get()
         current_scan_frame = _parent.get_scan_frame()
@@ -96,7 +96,7 @@ class LoginScene(tk.Frame):
 
         self.data_holder.print()
 
-    def add_user_button_action(self, _parent):
+    def btn_add_user_action(self, _parent):
         pass
 
     # A function to pack the submit button
