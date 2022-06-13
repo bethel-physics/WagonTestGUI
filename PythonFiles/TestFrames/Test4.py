@@ -60,28 +60,28 @@ class Test4Scene(tk.Frame):
         ent_snum.config(state = "disabled")
 
         # Create a label for the test about to be run
-        lbl_test4 = tk.Label(
+        lbl_test = tk.Label(
             frm_window, 
             text = "Current Test:", 
             font = font_scene
             )
-        lbl_test4.pack(side = 'top')
+        lbl_test.pack(side = 'top')
 
         # Create a entry for the test type
-        ent_test4 = tk.Entry(
+        ent_test = tk.Entry(
             frm_window, 
             font = font_scene
             )
-        ent_test4.insert(0, "Bit Rate Test")
-        ent_test4.pack(side = 'top')
-        ent_test4.config(state = "disabled")
+        ent_test.insert(0, "Bit Rate Test")
+        ent_test.pack(side = 'top')
+        ent_test.config(state = "disabled")
 
         # Create a label for confirming test
-        lbl_confirm = tk.Label(
+        lbl_text = tk.Label(
             frm_window, 
             text = "Are you ready to begin the test?", 
             font = font_scene)
-        lbl_confirm.pack(side = 'top')
+        lbl_text.pack(side = 'top')
 
         # Create a button for confirming test
         btn_confirm = tk.Button(

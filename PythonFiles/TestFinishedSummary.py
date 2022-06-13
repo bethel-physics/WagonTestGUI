@@ -98,12 +98,12 @@ class TestFinishedSummary(tk.Frame):
 
 
         # Adds Board Serial Number to the TestSummaryFrame
-        self.lbl_serial = tk.Label(
+        self.lbl_snum = tk.Label(
                 self, 
                 text = "Serial Number: " + str(self.data_holder.current_serial_ID),
                 font=('Arial', 14)
                 )
-        self.lbl_serial.grid(column = 2, row = 0, pady = 20)
+        self.lbl_snum.grid(column = 2, row = 0, pady = 20)
 
         # Adds Tester Name to the TestSummary Frame
         self.lbl_tester = tk.Label(

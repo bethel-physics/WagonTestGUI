@@ -61,20 +61,20 @@ class Test2Scene(tk.Frame):
         ent_snum.config(state = "disabled")
 
         # Create a label for the test about to be run
-        lbl_test2 = tk.Label(
+        lbl_test = tk.Label(
             frm_window, 
             text = "Current Test:", 
             font = font_scene)
-        lbl_test2.pack(side = 'top')
+        lbl_test.pack(side = 'top')
 
         # Create a entry for the test type
-        ent_test2 = tk.Entry(
+        ent_test = tk.Entry(
             frm_window, 
             font = font_scene
             )
-        ent_test2.insert(0, "ID Resistor Test")
-        ent_test2.pack(side = 'top')
-        ent_test2.config(state = "disabled")
+        ent_test.insert(0, "ID Resistor Test")
+        ent_test.pack(side = 'top')
+        ent_test.config(state = "disabled")
 
         # Create a label for confirming test
         lbl_confirm = tk.Label(

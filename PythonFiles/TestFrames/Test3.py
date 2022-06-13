@@ -59,21 +59,21 @@ class Test3Scene(tk.Frame):
         ent_snum.config(state = "disabled")
 
         # Create a label for the test about to be run
-        lbl_test3 = tk.Label(
+        lbl_test = tk.Label(
             frm_window, 
             text = "Current Test:", 
             font = font_scene
             )
-        lbl_test3.pack(side = 'top')
+        lbl_test.pack(side = 'top')
 
         # Create a entry for the test type
-        ent_test3 = tk.Entry(
+        ent_test = tk.Entry(
             frm_window, 
             font = font_scene
             )
-        ent_test3.insert(0, "I2C Comm. Test")
-        ent_test3.pack(side = 'top')
-        ent_test3.config(state = "disabled")
+        ent_test.insert(0, "I2C Comm. Test")
+        ent_test.pack(side = 'top')
+        ent_test.config(state = "disabled")
 
         # Create a label for confirming test
         # Need to add command function

@@ -33,7 +33,7 @@ class ScanScene(tk.Frame):
     # Needs to be updated to run the read_barcode function in the original GUI
     def scan_QR_code(self):
         print("Begin to scan")
-        ent_serial.config(state = 'normal')
+        ent_snum.config(state = 'normal')
         self.QR_thread = threading.Thread(target=self.insert_QR_ID)
         self.QR_thread.daemon = True
         self.QR_thread.start()
@@ -43,7 +43,7 @@ class ScanScene(tk.Frame):
     def insert_QR_ID(self):
 
         # Clears the textbox of anything possibly in the box
-        ent_serial.delete(0, END)
+        ent_snum.delete(0, END)
 
         # Disables the rescan button until after the scanning is complete
         self.hide_rescan_button()
@@ -58,8 +58,8 @@ class ScanScene(tk.Frame):
             print(i + 1)
         time.sleep(0.5)
         print("Finished Scan")
-        ent_serial.insert(0, QRcode)
-        ent_serial.config(state = 'disabled')
+        ent_snum.insert(0, QRcode)
+        ent_snum.config(state = 'disabled')
 
         # Restores access to the rescan button
         self.show_rescan_button()
@@ -102,26 +102,26 @@ class ScanScene(tk.Frame):
         lbl_scan.pack(padx = 50, pady = 50)
 
         # Create a label to label the entry box
-        lbl_serial = tk.Label(
+        lbl_snum = tk.Label(
             Scan_Board_Prompt_Frame,
             text = "Serial Number:",
             font = ('Arial', 16)
         )
-        lbl_serial.pack()
+        lbl_snum.pack()
 
         # Entry for the serial number to be displayed. Upon Scan, update and disable?
-        global ent_serial
+        global ent_snum
         
         # Creating intial value in entry box
         user_text = tk.StringVar(self)
         
         # Creates an entry box
-        ent_serial = tk.Entry(
+        ent_snum = tk.Entry(
             Scan_Board_Prompt_Frame,
             font = ('Arial', 16),
             textvariable= user_text, 
             )
-        ent_serial.pack(padx = 50)
+        ent_snum.pack(padx = 50)
 
         # Traces an input to show the submit button once text is inside the entry box
         user_text.trace(
