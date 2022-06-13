@@ -55,8 +55,8 @@ class GUIWindow():
         # Creates all the different frames in layers
 
         # At top so it can be referenced by other frames' code
-        self.testing_finished_frame = TestFinishedSummary(self, master_frame, self.data_holder)
-        self.testing_finished_frame.grid(row=0, column=0)
+        self.test_summary_frame = TestFinishedSummary(self, master_frame, self.data_holder)
+        self.test_summary_frame.grid(row=0, column=0)
 
         self.login_frame = LoginScene(self, master_frame, self.data_holder)
         self.login_frame.grid(row=0, column=0)
@@ -85,7 +85,7 @@ class GUIWindow():
         self.test3_in_progress = TestInProgressScene(self, master_frame, self.test4_frame, self.test3_frame, self.data_holder)
         self.test3_in_progress.grid(row=0, column=0)
 
-        self.test4_in_progress = TestInProgressScene(self, master_frame, self.testing_finished_frame, self.test4_frame, self.data_holder)
+        self.test4_in_progress = TestInProgressScene(self, master_frame, self.test_summary_frame, self.test4_frame, self.data_holder)
         self.test4_in_progress.grid(row=0, column=0)
 
         # Near bottom so it can reference other frames with its code
@@ -141,8 +141,8 @@ class GUIWindow():
 
         # The below if statements update frames when they are brought to
         # the top so they display current information
-        if(_frame is self.testing_finished_frame):
-            self.testing_finished_frame.update_frame()
+        if(_frame is self.test_summary_frame):
+            self.test_summary_frame.update_frame()
 
         if(_frame is self.test1_frame):
             self.test1_frame.update_frame(self)

@@ -142,7 +142,7 @@ class SidebarScene(tk.Frame):
         _parent.set_frame(_parent.test4_frame)
 
     def summary_btn_action(self, _parent):
-        _parent.set_frame(_parent.testing_finished_frame)
+        _parent.set_frame(_parent.test_summary_frame)
 
     def disable_all_buttons(self):
         self.btn_login.config(state = 'disabled')

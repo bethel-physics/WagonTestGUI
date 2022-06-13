@@ -172,7 +172,7 @@ class TestInProgressScene(tk.Frame):
                 elif index == 2 and self.current < 4:
                     _parent.set_frame(_parent.test4_frame)
                 else:
-                    _parent.set_frame(_parent.testing_finished_frame)
+                    _parent.set_frame(_parent.test_summary_frame)
 
         # Tests if all the tests have been completed
         # if true, brings user to Test Summary Frame rather than the next test
@@ -181,7 +181,7 @@ class TestInProgressScene(tk.Frame):
             self.data_holder.test3_completed == True and 
             self.data_holder.test4_completed == True):
 
-            _parent.set_frame(_parent.testing_finished_frame)
+            _parent.set_frame(_parent.test_summary_frame)
 
     # Used to bring the user back to the test that just failed
     def go_to_previous_frame(self, _parent, previous_frame):

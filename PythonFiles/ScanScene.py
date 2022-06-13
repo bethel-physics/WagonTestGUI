@@ -177,7 +177,7 @@ class ScanScene(tk.Frame):
             if self.data_holder.test2_completed == True:
                 if self.data_holder.test3_completed == True:
                     if self.data_holder.test4_completed == True:
-                        _parent.set_frame(_parent.testing_finished_frame)
+                        _parent.set_frame(_parent.test_summary_frame)
                     else:
                         _parent.set_frame(_parent.test4_frame)
                 else:
