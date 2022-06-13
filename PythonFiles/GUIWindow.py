@@ -199,9 +199,11 @@ class GUIWindow():
         # Creates a popup to confirm whether or not to exit out of the window
         global popup
         popup = tk.Tk()
+        popup.wm_attributes('-toolwindow', 'True')
         popup.title("Exit Confirmation Window") 
         popup.geometry("300x150")
         popup.eval("tk::PlaceWindow . center")
+       
 
         # Creates frame in the new window
         frm_popup = tk.Frame(popup)
