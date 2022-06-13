@@ -34,6 +34,16 @@ class SidebarScene(tk.Frame):
 
                 GreenCheck_Label.grid(row=index + 2, column=1)
 
+            else:
+                # Create a photoimage object of the QR Code
+                Red_X_Image = Image.open("./PythonFiles/Images/RedX.png")
+                Red_X_Image = Red_X_Image.resize((50,50), Image.ANTIALIAS)
+                Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
+                RedX_Label = tk.Label(self.frm_table, image=Red_X_PhotoImage, width=50, height=50)
+                RedX_Label.image = Red_X_PhotoImage
+
+                RedX_Label.grid(row=index + 2, column=1)
+
         # Variables for easy button editing
         btn_height = 3
         btn_width = 18

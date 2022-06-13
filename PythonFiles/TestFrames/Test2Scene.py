@@ -141,7 +141,7 @@ class Test2Scene(tk.Frame):
 
         #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test2_completed = True
-        self.data_holder.test2_pass = True
+       # self.data_holder.test2_pass = True
         self.data_holder.print()
 
     # Logout button that takes the user back to the login scene
