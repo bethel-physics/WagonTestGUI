@@ -23,7 +23,7 @@ You can then open a pull request (PR) by going to the Github repo and then we ca
 
 To run the program:
 
-Open the program in VS Code (or any application that runs Python) and run the following commands in the terminal:
+Open files in VS Code (or any application that runs Python) and run the following commands in the terminal:
 
 ``` 
 python -m venv virtenv 
