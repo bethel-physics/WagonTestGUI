@@ -54,7 +54,7 @@ class GUIWindow():
 
         # Creates all the different frames in layers
 
-        # At top so it can be referenced by other frames' code
+        # At top so it can be referenced by other frames' code... Order of creation matters
         self.test_summary_frame = TestSummaryScene(self, master_frame, self.data_holder)
         self.test_summary_frame.grid(row=0, column=0)
 
