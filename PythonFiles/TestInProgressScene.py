@@ -19,8 +19,6 @@ class TestInProgressScene(tk.Frame):
     # A function to be called within GUIWindow to create the console output
     # when the frame is being brought to the top
     def initialize_console(self):
-        
-        print("\n\n\n INITALIAZED \n\n\n")
 
         global console_popup
 
@@ -114,6 +112,7 @@ class TestInProgressScene(tk.Frame):
     def btn_stop_action(self, _parent):
 
         _parent.go_to_next_test()
+
         
         # Destroys the console window
         self.console_destroy()
