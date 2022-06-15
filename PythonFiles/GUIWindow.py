@@ -10,7 +10,7 @@ from PythonFiles.LoginScene import LoginScene
 from PythonFiles.ScanScene import ScanScene
 from PythonFiles.TestFailedPopup import TestFailedPopup
 from PythonFiles.TestSummary import TestSummaryScene
-from PythonFiles.TestScene import TestScene
+from PythonFiles.TestScene import *
 from PythonFiles.TestInProgressScene import TestInProgressScene
 from PythonFiles.DataHolder import DataHolder
 from PythonFiles.SplashScene import SplashScene
@@ -62,16 +62,16 @@ class GUIWindow():
         self.scan_frame = ScanScene(self, master_frame, self.data_holder)
         self.scan_frame.grid(row=0, column=0)
 
-        self.test1_frame= TestScene(self, master_frame, self.data_holder, "General Resistance Test")
+        self.test1_frame= Test1Scene(self, master_frame, self.data_holder, "General Resistance Test")
         self.test1_frame.grid(row=0, column=0)
 
-        self.test2_frame= TestScene(self, master_frame, self.data_holder,  "ID Resistor Test")
+        self.test2_frame= Test2Scene(self, master_frame, self.data_holder,  "ID Resistor Test")
         self.test2_frame.grid(row=0, column=0)
 
-        self.test3_frame= TestScene(self, master_frame, self.data_holder, "I2C Comm. Test")
+        self.test3_frame= Test3Scene(self, master_frame, self.data_holder, "I2C Comm. Test")
         self.test3_frame.grid(row=0, column=0)
 
-        self.test4_frame= TestScene(self, master_frame, self.data_holder, "Bit Rate Test")
+        self.test4_frame= Test4Scene(self, master_frame, self.data_holder, "Bit Rate Test")
         self.test4_frame.grid(row=0, column=0)
 
         self.test_in_progress_frame = TestInProgressScene(self, master_frame, self.data_holder)

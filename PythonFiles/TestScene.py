@@ -135,62 +135,52 @@ class TestScene(tk.Frame):
     def btn_rescan_action(self, _parent):
         _parent.set_frame_scan_frame()
 
-    # # # # # # # # # 
     # Back button action takes the user back to the scanning device
     def btn_back_action(self, _parent):
         pass
-    # # # # # # # # # 
    
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
-
+        # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        #   ++ GOAL CODE ++                                 #
+        # def confirm():                                    #
+        #       set_frame_TIPS()                            #
+        #       Runs_Test()   # Might include multithread   #
+        #       Get_Results()                               #
+        #       Update_Dataholder()                         #
+        #       Go_To_Next_Test()                           #
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # 
         _parent.set_frame_test_in_progress()
-
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
-        self.data_holder.test1_completed = True
-        self.data_holder.test1_pass = True
-        self.data_holder.print()
 
     # functionality for the logout button
     def btn_logout_action(self, _parent):
         _parent.set_frame_login_frame()
 
-    # def set_entry(self, index):
-    #     ent_test = self.ent_test
-    #     self.ent_test.delete(0, tk.END)
-    #     if index == 0:
-    #         self.ent_test.insert(0, "General Resistance Test")
-    #     if index == 1:
-    #         self.ent_test.insert(0, "ID Resistor Test")
-    #     if index == 2:
-    #         self.ent_test.insert(0, "I2C Comm. Test")
-    #     if index == 3:
-    #         self.ent_test.insert(0, "Bit Rate Test")
-
-# class Test1Scene(TestScene):
-    # def __init__(self, parent, master_frame, data_holder):
-    #     super().__init__(parent, master_frame, data_holder)
-
-    #     self.data_holder = data_holder
-        
-    #     self.update_frame(parent)
-    #     self.update_entry()
-
-    # # Entering the test name based on the test
-    # def update_entry(self):
-    #     TestScene.set_entry(self, 0)
-
-# class Test2Scene(TestScene):
-#         # Entering the test name based on the test
-#     def update_entry(self):
-#         TestScene.set_entry(self, 1)
-
-# class Test3Scene(TestScene):
-#     # Entering the test name based on the test
-#     def update_entry(self):
-#         TestScene.set_entry(self, 2)
-
-# class Test4Scene(TestScene):
-#         # Entering the test name based on the test
-#     def update_entry(self):
-#         TestScene.set_entry(self, 3)
+class Test1Scene(TestScene):
+   def btn_confirm_action(self, _parent):
+         #TODO EDIT THIS WITH ACTUAL TEST DATA
+        self.data_holder.test1_completed = True
+        self.data_holder.test1_pass = True
+        self.data_holder.print()
+        return super().btn_confirm_action(_parent)
+class Test2Scene(TestScene):
+    def btn_confirm_action(self, _parent):
+         #TODO EDIT THIS WITH ACTUAL TEST DATA
+        self.data_holder.test2_completed = True
+        self.data_holder.test2_pass = True
+        self.data_holder.print()
+        return super().btn_confirm_action(_parent)
+class Test3Scene(TestScene):
+    def btn_confirm_action(self, _parent):
+         #TODO EDIT THIS WITH ACTUAL TEST DATA
+        self.data_holder.test3_completed = True
+        self.data_holder.test3_pass = True
+        self.data_holder.print()
+        return super().btn_confirm_action(_parent)
+class Test4Scene(TestScene):
+    def btn_confirm_action(self, _parent):
+         #TODO EDIT THIS WITH ACTUAL TEST DATA
+        self.data_holder.test4_completed = True
+        self.data_holder.test4_pass = True
+        self.data_holder.print()
+        return super().btn_confirm_action(_parent)
