@@ -30,7 +30,7 @@ python -m venv virtenv
 
 virtenv/Scripts/activate
 
-pip -m install requests.txt
+pip install -r requests.txt
 
 python ./MainFunction.py
 ```

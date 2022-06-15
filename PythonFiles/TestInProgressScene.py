@@ -93,7 +93,7 @@ class TestInProgressScene(tk.Frame):
         # Create a progress bar that does not track progress but adds motion to the window
         prgbar_progress = ttk.Progressbar(
             self, 
-            orient = 'horizontal', 
+            orient = 'horizontal',
             mode = 'indeterminate', length = 350)
         prgbar_progress.pack(padx = 50)
         prgbar_progress.start()
