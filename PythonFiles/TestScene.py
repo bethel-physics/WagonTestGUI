@@ -156,31 +156,49 @@ class TestScene(tk.Frame):
     def btn_logout_action(self, _parent):
         _parent.set_frame_login_frame()
 
+
 class Test1Scene(TestScene):
-   def btn_confirm_action(self, _parent):
+    # Override to add specific functionality
+    def btn_confirm_action(self, _parent):
+
+        super().btn_confirm_action(_parent)
+
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test1_completed = True
         self.data_holder.test1_pass = True
         self.data_holder.print()
-        return super().btn_confirm_action(_parent)
+        
+
+
 class Test2Scene(TestScene):
+    # Override to add specific functionality
     def btn_confirm_action(self, _parent):
+
+        super().btn_confirm_action(_parent)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test2_completed = True
         self.data_holder.test2_pass = True
         self.data_holder.print()
-        return super().btn_confirm_action(_parent)
+
+
+
 class Test3Scene(TestScene):
+    # Override to add specific functionality
     def btn_confirm_action(self, _parent):
+
+        super().btn_confirm_action(_parent)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test3_completed = True
         self.data_holder.test3_pass = True
         self.data_holder.print()
-        return super().btn_confirm_action(_parent)
+
+
 class Test4Scene(TestScene):
+    # Override to add specific functionality
     def btn_confirm_action(self, _parent):
+
+        super().btn_confirm_action(_parent)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test4_completed = True
         self.data_holder.test4_pass = True
         self.data_holder.print()
-        return super().btn_confirm_action(_parent)
