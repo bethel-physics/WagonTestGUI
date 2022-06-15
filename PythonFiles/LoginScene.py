@@ -95,6 +95,7 @@ class LoginScene(tk.Frame):
 
         self.data_holder.print()
 
+    # To be given commands later, for now it is a dummy function
     def btn_add_user_action(self, _parent):
         pass
 

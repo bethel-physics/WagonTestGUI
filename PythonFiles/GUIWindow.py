@@ -2,7 +2,6 @@
 from pickle import NONE
 import tkinter as tk
 from turtle import bgcolor
-import time
 
 # Importing all the neccessary files and classes from them
 from PythonFiles.SidebarScene import SidebarScene
