@@ -20,7 +20,7 @@ class TestInProgressScene(tk.Frame):
     # when the frame is being brought to the top
     def initialize_console(self):
         
-        print("\n\n\n INITALISZED \n\n\n")
+        print("\n\n\n INITALIAZED \n\n\n")
 
         global console_popup
 
