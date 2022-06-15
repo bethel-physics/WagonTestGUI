@@ -172,26 +172,13 @@ class ScanScene(tk.Frame):
 
     # Function for the submit button
     def btn_submit_action(self, _parent):
-        # Tests for what tests have been completed and takes the user to the appropriate test
-        if self.data_holder.test1_completed == True:
-            if self.data_holder.test2_completed == True:
-                if self.data_holder.test3_completed == True:
-                    if self.data_holder.test4_completed == True:
-                        _parent.set_frame(_parent.test_summary_frame)
-                    else:
-                        _parent.set_frame(_parent.test4_frame)
-                else:
-                    _parent.set_frame(_parent.test3_frame)
-            else:
-                _parent.set_frame(_parent.test2_frame)
-        else:
-            _parent.set_frame(_parent.test1_frame)
+        _parent.go_to_next_test()
 
     # Function for the log out button
     def btn_logout_action(self, _parent):
 
          # Send user back to login frame
-        _parent.set_frame(_parent.login_frame)    
+        _parent.set_frame_login_frame() 
 
     # Function to activate the submit button
     def show_submit_button(self):

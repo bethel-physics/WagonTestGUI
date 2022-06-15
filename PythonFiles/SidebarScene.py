@@ -140,19 +140,19 @@ class SidebarScene(tk.Frame):
         self.grid_propagate(0)
 
     def btn_test1_action(self, _parent):
-        _parent.set_frame(_parent.test1_frame)
+        _parent.set_frame_test1()
 
     def btn_test2_action(self, _parent):
-        _parent.set_frame(_parent.test2_frame)
+        _parent.set_frame_test2()
 
     def btn_test3_action(self, _parent):
-        _parent.set_frame(_parent.test3_frame)
+        _parent.set_frame_test3()
 
     def btn_test4_action(self, _parent):
-        _parent.set_frame(_parent.test4_frame)
+        _parent.set_frame_test4()
 
     def btn_summary_action(self, _parent):
-        _parent.set_frame(_parent.test_summary_frame)
+        _parent.set_frame_test_summary()
 
     def disable_all_btns(self):
         self.btn_login.config(state = 'disabled')

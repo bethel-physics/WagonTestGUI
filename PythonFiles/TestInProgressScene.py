@@ -10,10 +10,10 @@ from PythonFiles.ConsoleOutput import *
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
 
-    def __init__(self, parent, master_frame, next_frame, previous_frame, data_holder):
+    def __init__(self, parent, master_frame, data_holder):
         self.data_holder = data_holder
         self.is_current_scene = False
-        self.initialize_scene(parent, master_frame, next_frame, previous_frame)
+        self.initialize_scene(parent, master_frame)
 
     # A function to be called within GUIWindow to create the console output
     # when the frame is being brought to the top
@@ -74,9 +74,7 @@ class TestInProgressScene(tk.Frame):
 
     # Used to initialize the frame that is on the main window
     # next_frame is used to progress to the next scene and is passed in from GUIWindow
-    def initialize_scene(self, parent, master_frame, next_frame, previous_frame):
-        self.next_frame = next_frame
-        self.previous_frame = previous_frame
+    def initialize_scene(self, parent, master_frame):
         super().__init__(master_frame, width = 850, height = 500)
 
 
@@ -140,48 +138,9 @@ class TestInProgressScene(tk.Frame):
 
     # Goes to the next scene after the progress scene is complete
     def go_to_next_frame(self, _parent):
+        _parent.go_to_next_test()
 
-
-        # Testing to see which frame you currently are in
-        if self == _parent.test1_in_progress:
-            self.current = 1
-        if self == _parent.test2_in_progress:
-            self.current = 2
-        if self == _parent.test3_in_progress:
-            self.current = 3
-        if self == _parent.test4_in_progress:
-            self.current = 4
-        # Array of potentially uncompleted tests
-        test_list = [
-            self.data_holder.test2_completed,
-            self.data_holder.test3_completed,
-            self.data_holder.test4_completed
-        ]
-
-        # Checks tells the function which frame to set based on what frame is currently up
-        for index, test in enumerate(test_list):
-            if test == True:
-                pass
-            else:
-                if index == 0 and self.current == 1:
-                    _parent.set_frame(_parent.test2_frame)
-                    break
-                elif index == 1 and self.current < 3:
-                    _parent.set_frame(_parent.test3_frame)
-                    break
-                elif index == 2 and self.current < 4:
-                    _parent.set_frame(_parent.test4_frame)
-                else:
-                    _parent.set_frame(_parent.test_summary_frame)
-
-        # Tests if all the tests have been completed
-        # if true, brings user to Test Summary Frame rather than the next test
-        if (self.data_holder.test1_completed == True and 
-            self.data_holder.test2_completed == True and 
-            self.data_holder.test3_completed == True and 
-            self.data_holder.test4_completed == True):
-
-            _parent.set_frame(_parent.test_summary_frame)
+        
 
     # Used to bring the user back to the test that just failed
     def go_to_previous_frame(self, _parent, previous_frame):
@@ -247,3 +206,7 @@ class TestInProgressScene(tk.Frame):
     # Dummy Script Function
     def run_test_bit_rate(self):
          print("Bit Rate Test Run")
+
+    
+    def update_frame(self):
+        pass

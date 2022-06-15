@@ -76,17 +76,9 @@ class GUIWindow():
         self.test4_frame= Test4Scene(self, master_frame, self.data_holder)
         self.test4_frame.grid(row=0, column=0)
 
-        self.test1_in_progress = TestInProgressScene(self, master_frame, self.test2_frame, self.test1_frame, self.data_holder)
-        self.test1_in_progress.grid(row=0, column=0)
+        self.test_in_progress_frame = TestInProgressScene(self, master_frame, self.data_holder)
+        self.test_in_progress_frame.grid(row=0, column=0)
 
-        self.test2_in_progress = TestInProgressScene(self, master_frame, self.test3_frame, self.test2_frame, self.data_holder)
-        self.test2_in_progress.grid(row=0, column=0)
-
-        self.test3_in_progress = TestInProgressScene(self, master_frame, self.test4_frame, self.test3_frame, self.data_holder)
-        self.test3_in_progress.grid(row=0, column=0)
-
-        self.test4_in_progress = TestInProgressScene(self, master_frame, self.test_summary_frame, self.test4_frame, self.data_holder)
-        self.test4_in_progress.grid(row=0, column=0)
 
         # Near bottom so it can reference other frames with its code
         self.splash_frame = SplashScene(self, master_frame)
@@ -106,7 +98,7 @@ class GUIWindow():
 
 
 
-    def set_frame_login_scene(self):
+    def set_frame_login_frame(self):
         # Disables all buttons except login when the login frame is the only frame
         self.sidebar.disable_all_btns_but_login()
 
@@ -138,46 +130,64 @@ class GUIWindow():
         self.test_summary_frame.update_frame()
         self.set_frame(self.test_summary_frame)
 
+    
+    def set_frame_test1(self):
+        self.test1_frame.update_frame(self)
+        self.set_frame(self.test1_frame)
+
+    def set_frame_test2(self):
+        self.test2_frame.update_frame(self)
+        self.set_frame(self.test2_frame)
+
+    def set_frame_test3(self):
+        self.test3_frame.update_frame(self)
+        self.set_frame(self.test3_frame)
+
+    def set_frame_test4(self):
+        self.test4_frame.update_frame(self)
+        self.set_frame(self.test4_frame)
+
+    def set_frame_test_in_progress(self):
+        self.test_in_progress_frame.update_frame(self)
+        self.set_frame(self.test_in_progress_frame)
+
+
+
 
     def go_to_next_test(self):
-        if(_frame is self.test1_frame):
-            self.test1_frame.update_frame(self)
-     
-        if(_frame is self.test2_frame):
-            self.test2_frame.update_frame(self)
 
-        if(_frame is self.test3_frame):
-            self.test3_frame.update_frame(self)
+        # Array of potentially uncompleted tests
+        test_completed_list = [
+            self.data_holder.test1_completed,
+            self.data_holder.test2_completed,
+            self.data_holder.test3_completed,
+            self.data_holder.test4_completed
+        ]
 
-        if(_frame is self.test4_frame):
-            self.test4_frame.update_frame(self)
+        list_of_tests =[
+            self.set_frame_test1(),
+            self.set_frame_test2(),
+            self.set_frame_test3(),
+            self.set_frame_test4(),
+        ]
 
-        # These create the console windows when their 
-        # respective frame is brought to the foreground
-        # Also disables sidebar buttons during in_progress frames
-        if(_frame is self.test1_in_progress):
-            self.test1_in_progress.initialize_console()
-            self.sidebar.disable_all_btns()
-            # Calls test script to run
-            self.test1_in_progress.run_test_gen_resist()
-        
-        if(_frame is self.test2_in_progress):
-            self.test2_in_progress.initialize_console()
-            self.sidebar.disable_all_btns()
-            # Calls test script to run
-            self.test2_in_progress.run_test_id_resistor()
- 
-        if(_frame is self.test3_in_progress):
-            self.test3_in_progress.initialize_console()
-            self.sidebar.disable_all_btns()
-            # Calls test script to run
-            self.test3_in_progress.run_test_i2c_comm()
-  
-        if(_frame is self.test4_in_progress):
-            self.test4_in_progress.initialize_console()
-            self.sidebar.disable_all_btns()
-            # Calls test script to run
-            self.test4_in_progress.run_test_bit_rate()
+        test_incomplete = False
+
+        # Checks tells the function which frame to set based on what frame is currently up
+        for index, test in enumerate(test_completed_list):
+            if test == True:
+                pass
+
+            else:
+                test_incomplete = True
+                list_of_tests[index]
+                break
+
+
+        # Tests if all the tests have been completed
+        # if true, brings user to Test Summary Frame rather than the next test
+        if (not test_incomplete):
+            self.set_frame_test_summary()
 
 
 
@@ -256,17 +266,8 @@ class GUIWindow():
     def destroy_function(self):
 
         # If statements are to destroy console windows if they exist
-        if(self.test1_in_progress.is_current_scene):
-            self.test1_in_progress.console_destroy()
-        
-        if(self.test2_in_progress.is_current_scene):
-            self.test2_in_progress.console_destroy()
- 
-        if(self.test3_in_progress.is_current_scene):
-            self.test3_in_progress.console_destroy()
-  
-        if(self.test4_in_progress.is_current_scene):
-            self.test4_in_progress.console_destroy() 
+        if(self.test_in_progress_frame.is_current_scene):
+            self.test_in_progress_frame.console_destroy()
 
         # Destroys the popup and master window
         popup.destroy()
@@ -275,7 +276,5 @@ class GUIWindow():
         # Ensures the application closes with the exit button
         exit()
 
-    # Function to return scan_frame
-    def get_scan_frame(self):
-        return self.scan_frame
+    
 
