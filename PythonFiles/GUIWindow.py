@@ -103,51 +103,43 @@ class GUIWindow():
         master_window.mainloop()
     
 
-    # Called to change the frame to the argument _frame
-    def set_frame(self, _frame):
-        
-        # Updates the sidebar every time the frame is set
-        self.sidebar.update_sidebar(self)
 
+
+
+    def set_frame_login_scene(self):
         # Disables all buttons except login when the login frame is the only frame
-        if (_frame is self.login_frame):
-            self.sidebar.disable_all_btns_but_login()
+        self.sidebar.disable_all_btns_but_login()
 
-        # Disables all buttons except scan when the scan frame is the only frame
-        if (_frame is self.scan_frame):
-            self.sidebar.disable_all_btns_but_scan()
+        self.set_frame(self.login_frame)
 
+
+
+    def set_frame_scan_frame(self):
+
+        self.scan_frame.is_current_scene = True
+        self.scan_frame.scan_QR_code()
+
+        # Disables the sidebar buttons except LOGIN and SCAN when on scan_frame
+        self.sidebar.disable_all_but_log_scan()
+
+        self.set_frame(self.scan_frame)
+
+
+
+
+    def set_frame_splash_frame(self):
         # Disables all buttons when the splash frame is the only frame
-        if (_frame is self.splash_frame):
-            self.sidebar.disable_all_btns()
+        self.sidebar.disable_all_btns()
 
-        
+    
 
-        # Disables the sidebar login button when the login frame is not the current frame
-        # or when scan_frame is not the current frame
-        if (_frame is not self.login_frame):
-            self.sidebar.disable_login_button()
 
-        if (_frame is self.scan_frame):
-            self.scan_frame.is_current_scene = True
-            self.scan_frame.scan_QR_code()
+    def set_frame_test_summary(self):
+        self.test_summary_frame.update_frame()
+        self.set_frame(self.test_summary_frame)
 
-            # Disables the sidebar buttons except LOGIN and SCAN when on scan_frame
-            self.sidebar.disable_all_but_log_scan()
 
-        # Hides the submit button on scan frame until an entry is given to the computer
-        if (_frame is not self.scan_frame):
-            self.scan_frame.is_current_scene = False
-            self.scan_frame.hide_submit_button()
-            
-            # Disables the sidebar scan button when the scan frame is not the current frame
-            self.sidebar.disable_scan_button()
-
-        # The below if statements update frames when they are brought to
-        # the top so they display current information
-        if(_frame is self.test_summary_frame):
-            self.test_summary_frame.update_frame()
-
+    def go_to_next_test(self):
         if(_frame is self.test1_frame):
             self.test1_frame.update_frame(self)
      
@@ -186,7 +178,33 @@ class GUIWindow():
             self.sidebar.disable_all_btns()
             # Calls test script to run
             self.test4_in_progress.run_test_bit_rate()
+
+
+
+
+
+    # Called to change the frame to the argument _frame
+    def set_frame(self, _frame):
         
+        # Updates the sidebar every time the frame is set
+        self.sidebar.update_sidebar(self)
+
+
+        # Disables the sidebar login button when the login frame is not the current frame
+        # or when scan_frame is not the current frame
+        if (_frame is not self.login_frame):
+            self.sidebar.disable_login_button()
+            
+
+        # Hides the submit button on scan frame until an entry is given to the computer
+        if (_frame is not self.scan_frame):
+            self.scan_frame.is_current_scene = False
+            self.scan_frame.hide_submit_button()
+            
+            # Disables the sidebar scan button when the scan frame is not the current frame
+            self.sidebar.disable_scan_button()
+
+
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
 
