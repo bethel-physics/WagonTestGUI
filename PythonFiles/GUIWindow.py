@@ -86,9 +86,9 @@ class GUIWindow():
         master_window.protocol('WM_DELETE_WINDOW', self.exit_function)
 
         # Sets the current frame to the splash frame
-        self.set_frame(self.splash_frame)
+        self.set_frame_splash_frame()
 
-        master_frame.after(1500, self.set_frame, self.login_frame)
+        master_frame.after(1500, self.set_frame_login_frame)
 
         master_window.mainloop()
     
@@ -96,32 +96,24 @@ class GUIWindow():
 
 
 
-    def set_frame_login_frame(self):
-        # Disables all buttons except login when the login frame is the only frame
-        self.sidebar.disable_all_btns_but_login()
+    def set_frame_login_frame(self):  
 
-        self.set_frame(self.login_frame)
-
+        self.set_frame(self.login_frame)    
 
 
     def set_frame_scan_frame(self):
 
         self.scan_frame.is_current_scene = True
         self.scan_frame.scan_QR_code()
-
-        # Disables the sidebar buttons except LOGIN and SCAN when on scan_frame
-        self.sidebar.disable_all_but_log_scan()
-
         self.set_frame(self.scan_frame)
 
 
-
-
     def set_frame_splash_frame(self):
+
+        self.set_frame(self.splash_frame)
+
         # Disables all buttons when the splash frame is the only frame
         self.sidebar.disable_all_btns()
-
-    
 
 
     def set_frame_test_summary(self):
@@ -134,24 +126,26 @@ class GUIWindow():
         self.test1_frame.update_frame(self)
         self.set_frame(self.test1_frame)
 
+
     def set_frame_test2(self):
         self.test2_frame.update_frame(self)
         self.set_frame(self.test2_frame)
+
 
     def set_frame_test3(self):
         self.test3_frame.update_frame(self)
         self.set_frame(self.test3_frame)
 
+
     def set_frame_test4(self):
         self.test4_frame.update_frame(self)
         self.set_frame(self.test4_frame)
 
+
     def set_frame_test_in_progress(self):
         self.test_in_progress_frame.update_frame(self)
-        
-        
-
         self.set_frame(self.test_in_progress_frame)
+        self.sidebar.disable_all_btns
 
 
 
@@ -220,7 +214,18 @@ class GUIWindow():
         
         # Updates the sidebar every time the frame is set
         self.sidebar.update_sidebar(self)
+ 
+        #############################################################################
+        #  The Following Code Determines What Buttons Are Visible On The Side Bar   #
+        #############################################################################
 
+        # Disables all but login button when on login_frame
+        if _frame is self.login_frame:
+            self.sidebar.disable_all_btns_but_login()
+
+        # Disables all but scan button when on scan_frame
+        if _frame is self.scan_frame:
+            self.sidebar.disable_all_btns_but_scan()
 
         # Disables the sidebar login button when the login frame is not the current frame
         # or when scan_frame is not the current frame
@@ -236,6 +241,9 @@ class GUIWindow():
             # Disables the sidebar scan button when the scan frame is not the current frame
             self.sidebar.disable_scan_button()
 
+        #############################################################################
+        #                        End Button Visibility Code                         #
+        #############################################################################
 
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
