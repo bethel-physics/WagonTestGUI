@@ -8,6 +8,7 @@ import time
 from PythonFiles.SidebarScene import SidebarScene
 from PythonFiles.LoginScene import LoginScene
 from PythonFiles.ScanScene import ScanScene
+from PythonFiles.TestFailedPopup import TestFailedPopup
 from PythonFiles.TestSummary import TestSummaryScene
 from PythonFiles.TestFrames.Test1Scene import Test1Scene
 from PythonFiles.TestFrames.Test2Scene import Test2Scene
@@ -90,7 +91,7 @@ class GUIWindow():
         # Sets the current frame to the splash frame
         self.set_frame(self.splash_frame)
 
-        master_frame.after(3000, self.set_frame, self.login_frame)
+        master_frame.after(1500, self.set_frame, self.login_frame)
 
         master_window.mainloop()
     
@@ -128,6 +129,7 @@ class GUIWindow():
 
     def set_frame_test_summary(self):
         self.test_summary_frame.update_frame()
+        self.check_if_test_passed()
         self.set_frame(self.test_summary_frame)
 
     
@@ -149,7 +151,29 @@ class GUIWindow():
 
     def set_frame_test_in_progress(self):
         self.test_in_progress_frame.update_frame(self)
+        
+        
+
         self.set_frame(self.test_in_progress_frame)
+
+
+
+    def check_if_test_passed(self):
+        # Brings up the test_failed popup if the test is false, continues on if not
+        if self.data_holder.test1_pass == False:
+            TestFailedPopup(self)
+
+        elif self.data_holder.test2_pass == False:
+            TestFailedPopup(self)
+
+        elif self.data_holder.test3_pass == False:
+            TestFailedPopup(self)
+
+        elif self.data_holder.test4_pass == False:
+            TestFailedPopup(self)
+
+    
+
 
 
 
@@ -163,13 +187,7 @@ class GUIWindow():
             self.data_holder.test3_completed,
             self.data_holder.test4_completed
         ]
-
-        list_of_tests =[
-            self.set_frame_test1(),
-            self.set_frame_test2(),
-            self.set_frame_test3(),
-            self.set_frame_test4(),
-        ]
+        
 
         test_incomplete = False
 
@@ -180,7 +198,14 @@ class GUIWindow():
 
             else:
                 test_incomplete = True
-                list_of_tests[index]
+                if (index ==0):
+                    self.set_frame_test1()
+                elif (index == 1):
+                    self.set_frame_test2()
+                elif (index == 2):
+                    self.set_frame_test3()
+                elif (index == 3):
+                    self.set_frame_test4()
                 break
 
 

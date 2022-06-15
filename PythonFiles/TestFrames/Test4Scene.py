@@ -129,16 +129,16 @@ class Test4Scene(tk.Frame):
     
     # Rescan button takes the user back to scanning in a new board
     def btn_rescan_action(self, _parent):
-        _parent.set_frame(_parent.scan_frame)
+        _parent.set_frame_scan_frame()
 
     # Back button action takes the user back to the scanning device
     def btn_back_action(self, _parent):
-        _parent.set_frame(_parent.test3_frame)
+        _parent.set_frame_test4()
 
         
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
-        _parent.set_frame(_parent.test4_in_progress)
+        _parent.set_frame_test_in_progress()
 
         #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test4_completed = True
@@ -147,4 +147,4 @@ class Test4Scene(tk.Frame):
 
     # Logout button that takes the user back to the login scene
     def btn_logout_action(self, _parent):
-        _parent.set_frame(_parent.login_frame)
+        _parent.set_frame_login_frame()
