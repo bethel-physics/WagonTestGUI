@@ -5,15 +5,10 @@ import tkinter.font as font
 
 # Creating class for the window
 class TestScene(tk.Frame):
-    def __init__(self, parent, master_frame, data_holder):
+    def __init__(self, parent, master_frame, data_holder, test_name):
         super().__init__(master_frame, width=850, height=500)
 
-        self.scan_frame = parent.scan_frame
-        self.test2_frame = parent.test2_frame
-        self.test3_frame = parent.test3_frame
-        self.test4_frame = parent.test4_frame
-        self.test_summary_frame = parent.test_summary_frame
-
+        self.test_name = test_name
         self.data_holder = data_holder
         
         self.update_frame(parent)
@@ -71,12 +66,13 @@ class TestScene(tk.Frame):
 
 
         # Create a entry for the test type
-        ent_test = tk.Entry(
+        self.ent_test = tk.Entry(
             frm_window, 
             font = font_scene
             )
-        ent_test.pack(side = 'top')
-        ent_test.config(state = "disabled")
+        self.ent_test.pack(side = 'top')
+        self.ent_test.insert(0, self.test_name)
+        self.ent_test.config(state = "disabled")
 
         # Create a label for confirming test
         lbl_confirm = tk.Label(
@@ -159,59 +155,42 @@ class TestScene(tk.Frame):
     def btn_logout_action(self, _parent):
         _parent.set_frame_login_frame()
 
-class Test1Scene(TestScene):
-    def __init__(self, parent, master_frame, data_holder):
+    # def set_entry(self, index):
+    #     ent_test = self.ent_test
+    #     self.ent_test.delete(0, tk.END)
+    #     if index == 0:
+    #         self.ent_test.insert(0, "General Resistance Test")
+    #     if index == 1:
+    #         self.ent_test.insert(0, "ID Resistor Test")
+    #     if index == 2:
+    #         self.ent_test.insert(0, "I2C Comm. Test")
+    #     if index == 3:
+    #         self.ent_test.insert(0, "Bit Rate Test")
 
-        # Setting the confirm button's frame
-        parent.next_frame = parent.test2_frame
+# class Test1Scene(TestScene):
+    # def __init__(self, parent, master_frame, data_holder):
+    #     super().__init__(parent, master_frame, data_holder)
 
-        # Setting the back button's frame
-        parent.back_frame = parent.scan_frame
+    #     self.data_holder = data_holder
+        
+    #     self.update_frame(parent)
+    #     self.update_entry()
 
-        super.__init__(parent, master_frame, data_holder)
+    # # Entering the test name based on the test
+    # def update_entry(self):
+    #     TestScene.set_entry(self, 0)
 
-        # Entering the test name based on the test
-        parent.ent_test.insert(0, "General Resistance Test")
+# class Test2Scene(TestScene):
+#         # Entering the test name based on the test
+#     def update_entry(self):
+#         TestScene.set_entry(self, 1)
 
-class Test2Scene(TestScene):
-    def __init__(self, parent, master_frame, data_holder):
+# class Test3Scene(TestScene):
+#     # Entering the test name based on the test
+#     def update_entry(self):
+#         TestScene.set_entry(self, 2)
 
-        # Setting the confirm button's frame
-        parent.next_frame = parent.test3_frame
-
-        # Setting the back button's frame
-        parent.back_frame = parent.test1_frame
-
-        super.__init__(parent, master_frame, data_holder)
-
-        # Entering the test name based on the test
-        parent.ent_test.insert(0, "ID Resistor Test")
-
-class Test3Scene(TestScene):
-    def __init__(self, parent, master_frame, data_holder):
-
-        # Setting the confirm button's frame
-        parent.next_frame = parent.test4_frame
-
-        # Setting the back button's frame
-        parent.back_frame = parent.test2_frame
-
-        super.__init__(parent, master_frame, data_holder)
-
-        # Entering the test name based on the test
-        parent.ent_test.insert(0, "I2C Comm. Test")
-
-class Test4Scene(TestScene):
-    def __init__(self, parent, master_frame, data_holder):
-
-        # Setting the confirm button's frame
-        parent.next_frame = parent.test_summary_frame
-
-        # Setting the back button's frame
-        parent.back_frame = parent.test3_frame
-
-        super.__init__(parent, master_frame, data_holder)
-
-        # Entering the test name based on the test
-        parent.ent_test.insert(0, "Bit Rate Test")
-
+# class Test4Scene(TestScene):
+#         # Entering the test name based on the test
+#     def update_entry(self):
+#         TestScene.set_entry(self, 3)
