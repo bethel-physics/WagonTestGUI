@@ -1,8 +1,8 @@
 from Tkinter import *
 import ttk
 from tkFileDialog import askopenfilename
-from read_barcode import read_barcode
-from board_requests import add_board_info, add_initial_tests, add_general_test, get_test_list, verify_person
+from utils.read_barcode import read_barcode
+from utils.board_requests import add_board_info, add_initial_tests, add_general_test, get_test_list, verify_person
 import os
 
 # Need to make inspection its own test
