@@ -142,10 +142,9 @@ class GUIWindow():
 
 
     def set_frame_test_in_progress(self):
+        self.test_in_progress_frame.tkraise()
+        self.sidebar.disable_all_btns()
         self.test_in_progress_frame.update_frame(self)
-        self.set_frame(self.test_in_progress_frame)
-        self.sidebar.disable_all_btns
-
 
 
     def check_if_test_passed(self):
