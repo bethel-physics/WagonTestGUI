@@ -7,3 +7,4 @@
 PythonFiles/TestFrames/__pycache__/Test1.cpython-39.pyc
 __pycache__/
 *.py[cod]
+/virtenv
