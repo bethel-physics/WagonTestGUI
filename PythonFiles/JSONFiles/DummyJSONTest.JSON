@@ -1,0 +1,10 @@
+{
+    "name": "IIC Check",
+    "board_sn": 32031100299999,
+    "tester": "Bryan",
+    "pass": true,
+    "data": {
+        "num_iic_checks": 10000,
+        "num_iic_correct": 10000
+    }
+}

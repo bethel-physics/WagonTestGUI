@@ -1,0 +1,9 @@
+/__pycache__
+/PREV-VERSION/__pycache__
+/virtualenvironment
+/vir_env
+/PythonFiles/__pycache__
+*.pyc
+PythonFiles/TestFrames/__pycache__/Test1.cpython-39.pyc
+__pycache__/
+*.py[cod]
