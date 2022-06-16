@@ -14,82 +14,52 @@ socket.bind("tcp://*:5555")
 
 print ("started")
 
-while True:
-    #  Wait for next request from client
-    message = socket.recv()
-    print("Received request: %s" % message)
-    if message == b"Test1":
-        print("Received request for test 1")
+try:
+    while True:
+        #  Wait for next request from client
+        # string = socket.recv_string().lower()
+        message = socket.recv()
+        print("Received request: %s" % message)
 
-        current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-        current_JSON_data = json.load(current_JSON_file)
+        if message == b"Test1":
+            print("Received request for test 1")
+            time.sleep(3)
+            socket.send(b"Unknown Error")
 
-        json_string = json.dumps(current_JSON_data)
-        json_byte_string = bytes(json_string,'UTF-8')
+        elif message == b"Test2":
+            print("Received request for test 2")
+            time.sleep(3)
+            current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
+            current_JSON_data = json.load(current_JSON_file)
 
-        print(json_string)
+            json_string = json.dumps(current_JSON_data)
+            json_byte_string = bytes(json_string,'UTF-8')
 
+            print(json_string)
+        
+            socket.send(json_byte_string)
 
-        socket.send(json_byte_string)
+        elif message == b"Test3":
+            print("Received request for test 3")
+            time.sleep(3)
+            socket.send(b"Test Failed")
 
+        elif message == b"Test4":
+            print("Received request for test 4")
+            time.sleep(3)
+            current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
+            current_JSON_data = json.load(current_JSON_file)
 
-    elif message == b"Test2":
-        print("Received request for test 2")
+            json_string = json.dumps(current_JSON_data)
+            json_byte_string = bytes(json_string,'UTF-8')
 
-        current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-        current_JSON_data = json.load(current_JSON_file)
+            print(json_string)
+        
+            socket.send(json_byte_string)
+        else:
+            socket.send(b"Invalid request.")
 
-        json_string = json.dumps(current_JSON_data)
-        json_byte_string = bytes(json_string,'UTF-8')
-
-        print(json_string)
-
-
-        socket.send(json_byte_string)
-
-
-    elif message == b"Test3":
-        print("Received request for test 3")
-
-        current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-        current_JSON_data = json.load(current_JSON_file)
-
-        json_string = json.dumps(current_JSON_data)
-        json_byte_string = bytes(json_string,'UTF-8')
-
-        print(json_string)
-
-
-        socket.send(json_byte_string)
-
-    elif message == b"Test4":
-        print("Received request for test 4")
-
-        current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-        current_JSON_data = json.load(current_JSON_file)
-
-        json_string = json.dumps(current_JSON_data)
-        json_byte_string = bytes(json_string,'UTF-8')
-
-        print(json_string)
-
-
-        socket.send(json_byte_string)
-
-    else:
-
-        current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-        current_JSON_data = json.load(current_JSON_file)
-
-        json_string = json.dumps(current_JSON_data)
-        json_byte_string = bytes(json_string,'UTF-8')
-
-        print(json_string)
-
-
-        socket.send(json_byte_string)
-    #  Do some 'work'
-    time.sleep(1)
-
-    #  Send reply back to client
-    # socket.send(b"World")
+except KeyboardInterrupt:
+    print("Closing the server...")
+    socket.close()
+    context.term()
