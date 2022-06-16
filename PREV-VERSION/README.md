@@ -1,6 +1,3 @@
-
-
-
 # WagonTestGUI
 
 This repository contains the GUI used to run the quality control testing for all HGCAL LD Wagons.
@@ -18,23 +15,6 @@ When updating the code, you can use the following commands:
     git push origin <LocalBranchName>:<RemoteBranchName>
     
 You can then open a pull request (PR) by going to the Github repo and then we can merge your code into the master branch. 
-
-## To run the program:
-
-To run the program:
-
-Open files in VS Code (or any application that runs Python) and run the following commands in the terminal:
-
-``` 
-python -m venv virtenv 
-
-virtenv/Scripts/activate
-
-pip install -r requests.txt
-
-python ./MainFunction.py
-```
-
 
 ## Goals for this Framework:
 
