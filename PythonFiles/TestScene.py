@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.font as font
+from PythonFiles.utils.clientZMQ import ClientZMQ
 
 
 
@@ -162,7 +163,7 @@ class Test1Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
-
+        test_1_client = ClientZMQ(b"Test1")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test1_completed = True
         self.data_holder.test1_pass = True
@@ -175,6 +176,7 @@ class Test2Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
+        test_2_client = ClientZMQ(b"Test2")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test2_completed = True
         self.data_holder.test2_pass = True
@@ -187,6 +189,7 @@ class Test3Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
+        test_3_client = ClientZMQ(b"Test3")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test3_completed = True
         self.data_holder.test3_pass = True
@@ -198,6 +201,7 @@ class Test4Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
+        test_4_client = ClientZMQ(b"Test4")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test4_completed = True
         self.data_holder.test4_pass = True
