@@ -6,6 +6,7 @@
 
 # Importing necessary modules
 import zmq
+import json
 
 # Making the Client Server a class
 class ClientZMQ():
@@ -23,11 +24,13 @@ class ClientZMQ():
 
 
         # Does 10 requests, waiting for a response each time
-        for request in range(10):
-            print("Sending request %s ..." % request)
 
-            socket.send(self.desired_test)
+        socket.send(self.desired_test)
 
-            # Get the reply
-            message = socket.recv()
-            print("Received reply %s [ %s ]" % (request, message))
+        # Get the reply
+        message = socket.recv()
+        # print("Received reply %s [ %s ]" % (request, message))
+
+        valid_json_return = json.loads(message)
+
+        print("\n", valid_json_return, "\n")
