@@ -12,7 +12,7 @@ context = zmq.Context()
 # Creates a socket to talk to the server
 print("Connecting to the Hello World server...")
 socket = context.socket(zmq.REQ)
-socket.connect("tcp:localhost:5555")
+socket.connect("tcp://localhost:5555")
 
 
 # Does 10 requests, waiting for a response each time
