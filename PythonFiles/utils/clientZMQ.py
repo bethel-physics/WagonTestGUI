@@ -1,6 +1,8 @@
-# Currently a test client server to make sure this works correctly
-#
-################################
+#####################################################################
+#                                                                   #
+#  Currently a test client server to make sure this works correctly #
+#                                                                   #
+#####################################################################
 
 # Importing necessary modules
 import zmq
