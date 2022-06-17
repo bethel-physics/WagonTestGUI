@@ -24,7 +24,7 @@ class ClientZMQ():
     #################################################
 
     # Starts the test by creating a thread for the test to run inside of
-    def run_test(self, desired_test):
+    def run_test_thread(self, desired_test):
         self.test_thread = threading.Thread(target=self.ping_server(desired_test))
         self.test_thread.daemon = True
         self.test_thread.start()
@@ -59,7 +59,9 @@ class ClientZMQ():
         # When it fails, print what the server sends back
         except:
             print("Server did not send json.")
+            message.decode('UTF-8')
             print(message)
+            print(message.decode('UTF-8'))
 
     #################################################
 

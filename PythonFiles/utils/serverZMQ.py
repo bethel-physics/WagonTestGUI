@@ -8,9 +8,9 @@
 ## MAYBE TURN THIS INTO A CLASS THAT IS INSTANTIATED IN THIS FILE ##
 
 # importing necessary modules
-import time, zmq, json
+import time, zmq, json, sys, io
 # Should contain imports for the test scripts
-
+from GenResTest import GenResTest
 # Creates a context class which contains the method to create a socket.
 cxt = zmq.Context()
 socket = cxt.socket(zmq.REP)
@@ -20,6 +20,7 @@ socket.bind("tcp://*:5555")
 
 print ("Server has started.")
 time.sleep(1)
+
 
 try:
     # Sets up an infinite loop so the server is always on until a keyboard interrupt occurs
@@ -36,13 +37,34 @@ try:
         if message == "test1":
             print("Received request for test 1")
 
+            # Switches the environment for print statements
+            old_stdout = sys.stdout
+            new_stdout = io.StringIO()
+            sys.stdout = new_stdout
+
             # Simulates the test running
-            # test1 = run_test1()
-            # test1.run_test()
-            time.sleep(3)
+            test1 = GenResTest()
+            test1.run_test()
+            output = new_stdout.getvalue()
+            output_byte_string = bytes(output,'UTF-8')
+
+            try:
+                for message in output:
+                    try:
+                        socket.send(output_byte_string)
+                    except:
+                        break
+            except:
+                pass
+            
+            # Switches back to the normal print environment
+            sys.stdout = old_stdout
 
             # Test code to ensure json/text sending is working correctly
-            socket.send(b"Unknown Error")
+            try:
+                socket.send(b"Unknown Error")
+            except:
+                pass
 
         elif message == "test2":
             print("Received request for test 2")
