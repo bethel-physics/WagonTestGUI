@@ -99,7 +99,7 @@ class GUIWindow():
         # Sets the current frame to the splash frame
         self.set_frame_splash_frame()
 
-        master_frame.after(1500, self.set_frame_login_frame)
+        master_frame.after(500, self.set_frame_login_frame)
 
         master_window.mainloop()
     

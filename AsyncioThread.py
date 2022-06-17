@@ -1,8 +1,11 @@
+import time
 from tkinter import *
 import asyncio
 import threading
 import random
 import queue
+
+from TestScriptEx import TestScriptEx
 
 
 # Fancy child of a thread that can send data to and from the tkinter stuff
@@ -23,7 +26,7 @@ class AsyncioThread(threading.Thread):
         self.max_data = max_data
 
         # Calls the thread (parent class) constructor
-        threading.Thread.__init__(self)
+        threading.Thread.__init__(self, daemon= True)
 
 
     # Method that is called when the thread is started
@@ -41,7 +44,7 @@ class AsyncioThread(threading.Thread):
 
         # List of tasks that should be completed
         tasks = [
-            self.create_dummy_data(key)
+            self.run_test_script(key)
             for key in range(self.max_data)
         ]
 
@@ -54,12 +57,23 @@ class AsyncioThread(threading.Thread):
 
     # Creates the random numbers that are shown as "data"
     # Randomly does tasks 
-    async def create_dummy_data(self, key):
+    async def run_test_script(self, key):
         """ Create data and store it in the queue. """
         
-        
-        sec = random.randint(1, 10)
-        data = '{}:{}'.format(key, random.random())
-        await asyncio.sleep(sec)
+        # sec = random.randint(1, 10)
+        # data = '{}:{}'.format(key, random.random())
+        # await asyncio.sleep(sec)
 
-        self.the_queue.put((key, data))
+        test_script_object = TestScriptEx()
+        await asyncio.sleep(1)
+        test_script_object.run_inc_thread()
+
+        
+        while self.is_alive :
+            
+            time.sleep(1)
+            
+            data = test_script_object.get_current_status()
+
+            self.the_queue.put((key, data))
+        

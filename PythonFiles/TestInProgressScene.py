@@ -1,10 +1,12 @@
 #################################################################################
 
 # Imports all the necessary modules
+import queue
 import tkinter as tk
 from tkinter import ttk
 from xml.dom.expatbuilder import parseFragmentString
 import sys
+from AsyncioThread import AsyncioThread
 
 # Imports the ConsoleOutput class and its functions
 from PythonFiles.ConsoleOutput import *
@@ -17,10 +19,33 @@ from PythonFiles.ConsoleOutput import *
 class TestInProgressScene(tk.Frame):
     def __init__(self, parent, master_frame, data_holder):
         
+        super().__init__(master_frame, width = 850, height = 500)
+
+        # thread-safe data storage
+        self.the_queue = queue.Queue()
+
+        # create the data variable
+        self.data = []
+        for key in range(1):
+            self.data.append(tk.StringVar())
+            self.data[key].set('<default>')
+
+        # Button to start the asyncio tasks
+        new_button = tk.Button(
+                master= self,
+                text='Start Asyncio Tasks',
+                command=lambda: self.do_asyncio())
+        new_button.pack()
+        
+        # # Frames to display data from the asyncio tasks
+        # for key in range(1):
+        #     tk.Label(master=self, textvariable=self.data[key]).pack()
+
         self.data_holder = data_holder
         self.is_current_scene = False
         self.initialize_scene(parent, master_frame)
 
+<<<<<<< Updated upstream
     #################################################
 
     # Used to initialize the frame that is on the main window
@@ -79,6 +104,63 @@ class TestInProgressScene(tk.Frame):
         _parent.set_frame(previous_frame)
 
     #################################################
+=======
+
+
+
+    # Method that is run when the button is clicked
+    def do_asyncio(self):
+        """
+            Button-Event-Handler starting the asyncio part in a separate
+            thread.
+        """
+        # create fancy thread object
+        # Parameters: the queue that is storing the "updates", the maximum amount of data that can go in
+        self.thread = AsyncioThread(self.the_queue, len(self.data))
+
+        #  timer to refresh the gui with data from the asyncio thread
+        self.after(1000, self.refresh_data)  # called only once!
+
+        # start the thread
+        self.thread.start()
+
+
+
+    
+    # Recursive Method
+    # Refreshes the data that will be put on the tkinter window
+    def refresh_data(self):
+        """
+        """
+        # do nothing if the aysyncio thread is dead
+        # and no more data in the queue
+        # Breaking statement of recursive loop
+        if not self.thread.is_alive() and self.the_queue.empty():
+            return
+
+        # refresh the GUI with new data from the queue
+        while not self.the_queue.empty():
+            data = self.the_queue.get()
+            self.data[0].set(data)
+
+            to_display = self.data[0].get()
+            to_display = to_display[5: -2]
+            
+            if len(to_display) > 0:
+                print(to_display)
+
+        # print('RefreshData...')
+
+        #  timer to refresh the gui with data from the asyncio thread
+        self.after(1000, self.refresh_data)  # called only once!
+
+
+
+
+
+
+
+>>>>>>> Stashed changes
 
     # A function to be called within GUIWindow to create the console output
     # when the frame is being brought to the top
@@ -144,7 +226,68 @@ class TestInProgressScene(tk.Frame):
         # Destroys the console output window
         console_popup.destroy()
         
+<<<<<<< Updated upstream
     ################################################# 
+=======
+
+    # Used to initialize the frame that is on the main window
+    # next_frame is used to progress to the next scene and is passed in from GUIWindow
+    def initialize_scene(self, parent, master_frame):
+        
+
+
+        # Creating the main title in the frame
+        lbl_title = tk.Label(self, 
+            text = "Test in progress. Please wait.", 
+            font = ('Arial', 20)
+            )
+        lbl_title.pack(padx = 0, pady = 100)
+
+        # Create a progress bar that does not track progress but adds motion to the window
+        prgbar_progress = ttk.Progressbar(
+            self, 
+            orient = 'horizontal',
+            mode = 'indeterminate', length = 350)
+        prgbar_progress.pack(padx = 50)
+        prgbar_progress.start()
+
+        # A Button To Stop the Progress Bar and Progress Forward (Temporary until we link to actual progress)
+        btn_stop = ttk.Button(
+            self, 
+            text='Stop', 
+            command= lambda: self.btn_stop_action(parent))
+        btn_stop.pack(padx = 0, pady = 100)
+
+        # Forces the frame to stay the size of the master_frame
+        self.pack_propagate(0)
+
+    # A function for the stop button
+    def btn_stop_action(self, _parent):
+
+        _parent.go_to_next_test()
+
+        
+        # Destroys the console window
+        self.console_destroy()
+        
+        
+
+
+    # Goes to the next scene after the progress scene is complete
+    def go_to_next_frame(self, _parent):
+        _parent.go_to_next_test()
+
+        
+
+    # Used to bring the user back to the test that just failed
+    def go_to_previous_frame(self, _parent, previous_frame):
+        self.previous_frame = previous_frame
+        _parent.set_frame(previous_frame)
+
+    
+
+     
+>>>>>>> Stashed changes
 
     # Dummy Script Function
     def run_test_gen_resist(self):
