@@ -62,8 +62,19 @@ class ClientZMQ():
             message.decode('UTF-8')
             print(message)
             print(message.decode('UTF-8'))
+            self.message = message.decode('UTF-8')
 
     #################################################
 
+    def get_message(self):
+        return self.message
+
+    #################################################
+
+    def set_message(self, string):
+        self.message = string
+
+    #################################################
+    
             
 #################################################################################
