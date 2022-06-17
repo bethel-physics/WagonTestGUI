@@ -35,9 +35,7 @@ class ScanScene(tk.Frame):
         # params are the same as defined above
         self.initialize_GUI(parent, master_frame)
 
-<<<<<<< Updated upstream
-    #################################################
-=======
+
     # Creates a thread for the scanning of a barcode
     # Needs to be updated to run the read_barcode function in the original GUI
     def scan_QR_code(self):
@@ -82,7 +80,7 @@ class ScanScene(tk.Frame):
             self.data_holder.current_serial_ID = self.scanned_QR_value
 
         self.data_holder.print()
->>>>>>> Stashed changes
+
 
     # Creates the GUI itself
     def initialize_GUI(self, parent, master_frame):
