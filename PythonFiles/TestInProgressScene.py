@@ -45,7 +45,7 @@ class TestInProgressScene(tk.Frame):
         self.is_current_scene = False
         self.initialize_scene(parent, master_frame)
 
-<<<<<<< Updated upstream
+
     #################################################
 
     # Used to initialize the frame that is on the main window
@@ -103,9 +103,6 @@ class TestInProgressScene(tk.Frame):
         self.previous_frame = previous_frame
         _parent.set_frame(previous_frame)
 
-    #################################################
-=======
-
 
 
     # Method that is run when the button is clicked
@@ -158,9 +155,6 @@ class TestInProgressScene(tk.Frame):
 
 
 
-
-
->>>>>>> Stashed changes
 
     # A function to be called within GUIWindow to create the console output
     # when the frame is being brought to the top
@@ -225,10 +219,7 @@ class TestInProgressScene(tk.Frame):
         
         # Destroys the console output window
         console_popup.destroy()
-        
-<<<<<<< Updated upstream
-    ################################################# 
-=======
+
 
     # Used to initialize the frame that is on the main window
     # next_frame is used to progress to the next scene and is passed in from GUIWindow
@@ -285,9 +276,6 @@ class TestInProgressScene(tk.Frame):
         _parent.set_frame(previous_frame)
 
     
-
-     
->>>>>>> Stashed changes
 
     # Dummy Script Function
     def run_test_gen_resist(self):
