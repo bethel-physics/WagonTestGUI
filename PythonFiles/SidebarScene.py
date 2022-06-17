@@ -1,16 +1,25 @@
+#################################################################################
+
 import tkinter as tk
 from PIL import ImageTk as iTK
 from PIL import Image
 import tkinter.font as font
 
+#################################################################################
+
 
 class SidebarScene(tk.Frame):
+
+    #################################################
+
     def __init__(self, parent, sidebar_frame, data_holder):
         super().__init__(sidebar_frame, width=213, height = 500, bg = '#808080', padx = 10, pady=10)
 
         self.data_holder = data_holder
 
         self.update_sidebar(parent)
+
+    #################################################
 
     def update_sidebar(self, parent):
 
@@ -139,6 +148,8 @@ class SidebarScene(tk.Frame):
 
         self.grid_propagate(0)
 
+    #################################################
+
     def btn_test1_action(self, _parent):
         _parent.set_frame_test1()
 
@@ -154,6 +165,8 @@ class SidebarScene(tk.Frame):
     def btn_summary_action(self, _parent):
         _parent.set_frame_test_summary()
 
+    #################################################
+
     def disable_all_btns(self):
         self.btn_login.config(state = 'disabled')
         self.btn_scan.config(state = 'disabled')
@@ -163,12 +176,16 @@ class SidebarScene(tk.Frame):
         self.btn_test4.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 
+    #################################################
+
     def disable_all_but_log_scan(self):
         self.btn_test1.config(state = 'disabled')
         self.btn_test2.config(state = 'disabled')
         self.btn_test3.config(state = 'disabled')
         self.btn_test4.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
+
+    #################################################
 
     def disable_all_btns_but_scan(self):
         self.btn_login.config(state = 'disabled')
@@ -177,6 +194,8 @@ class SidebarScene(tk.Frame):
         self.btn_test3.config(state = 'disabled')
         self.btn_test4.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
+
+    #################################################
 
     def disable_all_btns_but_login(self):
         self.btn_login.config(state = 'normal')
@@ -187,12 +206,23 @@ class SidebarScene(tk.Frame):
         self.btn_test4.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 
+    #################################################
+
     def disable_log_scan(self):
         self.btn_login.config(state = 'disabled')
         self.btn_scan.config(state = 'disabled')
+
+    #################################################
         
     def disable_login_button(self):
         self.btn_login.config(state = 'disabled')
 
+    #################################################
+
     def disable_scan_button(self):
         self.btn_scan.config(state = 'disabled')
+    
+    #################################################
+
+
+#################################################################################

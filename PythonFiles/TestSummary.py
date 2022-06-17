@@ -1,3 +1,5 @@
+#################################################################################
+
 import json
 import tkinter as tk
 from PIL import ImageTk as iTK
@@ -5,14 +7,19 @@ from PIL import Image
 from matplotlib.pyplot import table
 from pyparsing import col
 
+#################################################################################
 
-'''
-Frame that shows all of the final test results
-@param parent -> References a GUIWindow object
-@param master_frame -> Tkinter object that the frame is going to be placed on
-@param data_holder -> DataHolder object that stores all relevant data
-'''
+
+
+# Frame that shows all of the final test results
+# @param parent -> References a GUIWindow object
+# @param master_frame -> Tkinter object that the frame is going to be placed on
+# @param data_holder -> DataHolder object that stores all relevant data
+
 class TestSummaryScene(tk.Frame):
+
+    #################################################
+
     def __init__(self, parent, master_frame, data_holder):
     
         self.parent = parent
@@ -44,50 +51,12 @@ class TestSummaryScene(tk.Frame):
         # Fits the frame to set size rather than interior widgets
         self.grid_propagate(0)
 
-
-    # A function to be called within GUIWindow to create the console output
-    # when the frame is being brought to the top
-    def create_JSON_popup(self, JSON_String):
-        
-        # Creating a popup window for the JSON Details
-        self.JSON_popup = tk.Tk()
-        self.JSON_popup.geometry("500x300+750+100")
-        self.JSON_popup.title("JSON Details")
-        self.JSON_popup.wm_attributes('-toolwindow', 'True')
+    #################################################
 
     
-
-        # Creating a Frame For Console Output
-        frm_JSON = tk.Frame(self.JSON_popup, width = 500, height = 300, bg = 'green')
-        frm_JSON.pack_propagate(0)
-        frm_JSON.pack()
-
-        # Placing an entry box in the frm_console
-        self.JSON_entry_box = tk.Text(
-            frm_JSON, 
-            bg = '#6e5e5d', 
-            fg = 'white', 
-            font = ('Arial', 14)
-            )
-        self.JSON_entry_box.pack(anchor = 'center', fill=tk.BOTH, expand=1)
-
-        current_JSON_file = open(JSON_String)
-        current_JSON_data = json.load(current_JSON_file)
-
-
-        temp = ""
-        for key, value in current_JSON_data.items():
-            temp = temp + "{} : {}".format(key, value) + "\n"
-
-
-        self.JSON_entry_box.delete(1.0,"end")
-        self.JSON_entry_box.insert(1.0, temp)
-
-
-    '''
-    Creates the table with the updated information from the data_holder
-    @param parent -> References the GUIWindow object that creates the class
-    '''
+    # Creates the table with the updated information from the data_holder
+    # @param parent -> References the GUIWindow object that creates the class
+    
     def create_updated_table(self, parent):
                 
         
@@ -208,11 +177,12 @@ class TestSummaryScene(tk.Frame):
        
         self.grid_propagate(0)
 
-
+    #################################################
 
     # Creates all of the retest button
     def create_retest_more_info_btns(self, parent):
-        
+
+       
         row1 = tk.Frame(self.frm_table)
         row1.grid(column = 3, row = 1)
         
@@ -233,7 +203,7 @@ class TestSummaryScene(tk.Frame):
                 command = lambda: self.btn_more_info1_action(parent)
                 )
         btn_more_info1.grid(column=0, row = 0)
-    
+
 
 
 
@@ -319,7 +289,47 @@ class TestSummaryScene(tk.Frame):
                 )
         btn_next_test.grid(column = 3, row = 5)
 
+    #################################################
 
+    # A function to be called within GUIWindow to create the console output
+    # when the frame is being brought to the top
+    def create_JSON_popup(self, JSON_String):
+        
+        # Creating a popup window for the JSON Details
+        self.JSON_popup = tk.Tk()
+        self.JSON_popup.geometry("500x300+750+100")
+        self.JSON_popup.title("JSON Details")
+        self.JSON_popup.wm_attributes('-toolwindow', 'True')
+
+    
+
+        # Creating a Frame For Console Output
+        frm_JSON = tk.Frame(self.JSON_popup, width = 500, height = 300, bg = 'green')
+        frm_JSON.pack_propagate(0)
+        frm_JSON.pack()
+
+        # Placing an entry box in the frm_console
+        self.JSON_entry_box = tk.Text(
+            frm_JSON, 
+            bg = '#6e5e5d', 
+            fg = 'white', 
+            font = ('Arial', 14)
+            )
+        self.JSON_entry_box.pack(anchor = 'center', fill=tk.BOTH, expand=1)
+
+        current_JSON_file = open(JSON_String)
+        current_JSON_data = json.load(current_JSON_file)
+
+
+        temp = ""
+        for key, value in current_JSON_data.items():
+            temp = temp + "{} : {}".format(key, value) + "\n"
+
+
+        self.JSON_entry_box.delete(1.0,"end")
+        self.JSON_entry_box.insert(1.0, temp)
+
+    #################################################
 
     # All of the different methods for what the retest buttons should do
     def btn_retest1_action(self, _parent):
@@ -334,6 +344,7 @@ class TestSummaryScene(tk.Frame):
     def btn_retest4_action(self, _parent):
         _parent.set_frame(_parent.test4_frame)
 
+    #################################################
 
     def btn_more_info1_action(self, _parent):
         self.create_JSON_popup(".\PythonFiles\JSONFiles\DummyJSONTest.JSON")
@@ -347,20 +358,26 @@ class TestSummaryScene(tk.Frame):
     def btn_more_info4_action(self, _parent):
         self.create_JSON_popup(".\PythonFiles\JSONFiles\GarrettJSONTest.JSON")
 
-
+    #################################################
 
     # Next test button action
     def btn_next_test_action(self, _parent):
         _parent.set_frame(_parent.scan_frame)
         
+    #################################################
 
     # Updates the frame to show current data
     def update_frame(self):
         self.create_updated_table(self.parent)
 
-
+    #################################################
 
     # TODO Check what this is used for
     def add_new_test(self, _list_of_completed_tests, _list_of_pass_fail):
         self.list_of_completed_tests = _list_of_completed_tests
         self.list_of_pass_fail = _list_of_pass_fail
+
+    #################################################
+
+
+#################################################################################

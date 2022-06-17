@@ -1,14 +1,23 @@
+#################################################################################
+
 # Importing necessary modules
 import tkinter as tk
 import tkinter.font as font
 from PIL import ImageTk as iTK
 from PIL import Image
 
+#################################################################################
+
 
 class SplashScene(tk.Frame):
+
+    #################################################
+
     def __init__(self, parent, master_frame):
         self.initialize_GUI(parent, master_frame)
 
+    #################################################
+    
     def initialize_GUI(self, parent, master_frame):
         super().__init__(master_frame, width = 850, height = 500)
 
@@ -40,3 +49,7 @@ class SplashScene(tk.Frame):
 
         self.grid_propagate(0)
 
+    #################################################
+
+
+#################################################################################

@@ -1,3 +1,5 @@
+#################################################################################
+
 # Importing all neccessary modules
 from pickle import NONE
 import tkinter as tk
@@ -15,10 +17,14 @@ from PythonFiles.DataHolder import DataHolder
 from PythonFiles.SplashScene import SplashScene
 from PythonFiles.TestInProgressScene import *
 
+#################################################################################
+
 
 # Create a class for creating the basic GUI Window to be called by the main function to
 # instantiate the actual object
 class GUIWindow():
+
+    #################################################
 
     def __init__(self):                     
         # Create the window named "master_window"
@@ -49,7 +55,9 @@ class GUIWindow():
         self.sidebar = SidebarScene(self, sidebar_frame, self.data_holder)
         self.sidebar.pack()
 
-        # Creates all the different frames in layers
+        #################################################
+        #   Creates all the different frames in layers  #
+        #################################################
 
         # At top so it can be referenced by other frames' code... Order of creation matters
         self.test_summary_frame = TestSummaryScene(self, master_frame, self.data_holder)
@@ -81,6 +89,10 @@ class GUIWindow():
         self.splash_frame = SplashScene(self, master_frame)
         self.splash_frame.grid(row=0, column=0)
 
+        #################################################
+        #              End Frame Creation               #
+        #################################################
+        
         # Tells the master window that its exit window button is being given a new function
         master_window.protocol('WM_DELETE_WINDOW', self.exit_function)
 
@@ -91,14 +103,13 @@ class GUIWindow():
 
         master_window.mainloop()
     
-
-
-
+    #################################################
 
     def set_frame_login_frame(self):  
 
         self.set_frame(self.login_frame)    
 
+    #################################################
 
     def set_frame_scan_frame(self):
 
@@ -106,6 +117,7 @@ class GUIWindow():
         self.scan_frame.scan_QR_code()
         self.set_frame(self.scan_frame)
 
+    #################################################
 
     def set_frame_splash_frame(self):
 
@@ -114,38 +126,45 @@ class GUIWindow():
         # Disables all buttons when the splash frame is the only frame
         self.sidebar.disable_all_btns()
 
+    #################################################
 
     def set_frame_test_summary(self):
         self.test_summary_frame.update_frame()
         self.check_if_test_passed()
         self.set_frame(self.test_summary_frame)
 
-    
+    #################################################
+
     def set_frame_test1(self):
         self.test1_frame.update_frame(self)
         self.set_frame(self.test1_frame)
 
+    #################################################
 
     def set_frame_test2(self):
         self.test2_frame.update_frame(self)
         self.set_frame(self.test2_frame)
 
+    #################################################
 
     def set_frame_test3(self):
         self.test3_frame.update_frame(self)
         self.set_frame(self.test3_frame)
 
+    #################################################
 
     def set_frame_test4(self):
         self.test4_frame.update_frame(self)
         self.set_frame(self.test4_frame)
 
+    #################################################
 
     def set_frame_test_in_progress(self):
         self.test_in_progress_frame.tkraise()
         self.sidebar.disable_all_btns()
         self.test_in_progress_frame.update_frame(self)
 
+    #################################################
 
     def check_if_test_passed(self):
         # Brings up the test_failed popup if the test is false, continues on if not
@@ -161,11 +180,7 @@ class GUIWindow():
         elif self.data_holder.test4_pass == False:
             TestFailedPopup(self)
 
-    
-
-
-
-
+    #################################################
 
     def go_to_next_test(self):
 
@@ -203,9 +218,7 @@ class GUIWindow():
         if (not test_incomplete):
             self.set_frame_test_summary()
 
-
-
-
+    #################################################
 
     # Called to change the frame to the argument _frame
     def set_frame(self, _frame):
@@ -246,8 +259,7 @@ class GUIWindow():
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
 
-
-
+    #################################################
 
     # New function for clicking on the exit button
     def exit_function(self):
@@ -286,9 +298,13 @@ class GUIWindow():
         )
         btn_no.grid(column = 1, row = 1)
 
+    #################################################
+
     # Called when the no button is pressed to destroy popup and return you to the main window
     def destroy_popup(self):
         popup.destroy()
+
+    #################################################
 
     # Called when the yes button is pressed to destroy both windows
     def destroy_function(self):
@@ -304,5 +320,7 @@ class GUIWindow():
         # Ensures the application closes with the exit button
         exit()
 
-    
+    #################################################
 
+    
+#################################################################################

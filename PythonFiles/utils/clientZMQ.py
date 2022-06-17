@@ -5,20 +5,31 @@
 #                                                                   #
 #####################################################################
 
+#################################################################################
+
 # Importing necessary modules
 import zmq, json, threading
 
+#################################################################################
+
 # Making the Client Server a class
 class ClientZMQ():
+
+    #################################################
+
     # Ensures nothing happens on instantiantion
     def __init__(self):
         pass
+
+    #################################################
 
     # Starts the test by creating a thread for the test to run inside of
     def run_test(self, desired_test):
         self.test_thread = threading.Thread(target=self.ping_server(desired_test))
         self.test_thread.daemon = True
         self.test_thread.start()
+
+    #################################################
 
     # The function used to run the test
     def ping_server(self, desired_test):
@@ -50,4 +61,7 @@ class ClientZMQ():
             print("Server did not send json.")
             print(message)
 
+    #################################################
+
             
+#################################################################################

@@ -1,5 +1,9 @@
+#################################################################################
+
 # importing necessary modules
 import tkinter as tk
+
+#################################################################################
 
 
 # Creates a class that is called by the GUIWindow. 
@@ -9,13 +13,14 @@ import tkinter as tk
 # @param data_holder -> passes data_holder into the class so the data_holder functions can
 #       be accessed within the class.
 class LoginScene(tk.Frame):
+
+    #################################################
+
     def __init__(self, parent, master_frame, data_holder):
         super().__init__(master_frame, width=850, height=500)
 
         self.data_holder = data_holder
 
-
-        
 
         # Creating a list of users for dropdown menu
         # Eventually need to add a way for a database to have control over this list
@@ -83,6 +88,8 @@ class LoginScene(tk.Frame):
         # rather than adjusting to the size of the widgets
         self.pack_propagate(0)
 
+    #################################################
+
     # Creates the function for the submit button command
     # @params "_parent" is also a parent like "parent", but it is a different "parent",
     # passes in GUIWindow
@@ -95,10 +102,19 @@ class LoginScene(tk.Frame):
 
         self.data_holder.print()
 
+    #################################################
+
     # To be given commands later, for now it is a dummy function
     def btn_add_user_action(self, _parent):
         pass
+    
+    #################################################
 
     # A function to pack the submit button
     def show_submit_button(self):
         self.btn_submit.config(state = 'active')
+    
+    #################################################
+
+
+#################################################################################

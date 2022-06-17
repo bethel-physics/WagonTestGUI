@@ -1,11 +1,20 @@
+#################################################################################
+
+# Importing Necessary Modules
 import tkinter as tk
 import tkinter.font as font
+
+# Importing Necessary Files
 from PythonFiles.utils.clientZMQ import ClientZMQ
 
+#################################################################################
 
 
 # Creating class for the window
 class TestScene(tk.Frame):
+
+    #################################################
+
     def __init__(self, parent, master_frame, data_holder, test_name):
         super().__init__(master_frame, width=850, height=500)
 
@@ -13,6 +22,8 @@ class TestScene(tk.Frame):
         self.data_holder = data_holder
         
         self.update_frame(parent)
+
+    #################################################
 
     def update_frame(self, parent):
 
@@ -131,15 +142,21 @@ class TestScene(tk.Frame):
         
 
         self.grid_propagate(0)
-    
+        
+    #################################################
+
     # Rescan button takes the user back to scanning in a new board
     def btn_rescan_action(self, _parent):
         _parent.set_frame_scan_frame()
 
+    #################################################
+
     # Back button action takes the user back to the scanning device
     def btn_back_action(self, _parent):
         pass
-   
+    
+    #################################################
+
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
         # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -153,9 +170,16 @@ class TestScene(tk.Frame):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # 
         _parent.set_frame_test_in_progress()
 
+    #################################################
+
     # functionality for the logout button
     def btn_logout_action(self, _parent):
         _parent.set_frame_login_frame()
+
+    #################################################
+
+
+#################################################################################
 
 
 class Test1Scene(TestScene):
@@ -171,6 +195,7 @@ class Test1Scene(TestScene):
         self.data_holder.print()
 
         
+#################################################################################
 
 
 class Test2Scene(TestScene):
@@ -186,6 +211,8 @@ class Test2Scene(TestScene):
         self.data_holder.print()
 
 
+#################################################################################
+
 
 class Test3Scene(TestScene):
     # Override to add specific functionality
@@ -200,6 +227,9 @@ class Test3Scene(TestScene):
         self.data_holder.print()
 
 
+#################################################################################
+
+
 class Test4Scene(TestScene):
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
@@ -211,3 +241,6 @@ class Test4Scene(TestScene):
         self.data_holder.test4_completed = True
         self.data_holder.test4_pass = True
         self.data_holder.print()
+
+
+#################################################################################
