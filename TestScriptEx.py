@@ -1,6 +1,9 @@
 import threading
 import time
 
+from PythonFiles.utils.clientZMQ import ClientZMQ
+
+
 class TestScriptEx():
     def __init__(self):
         
@@ -19,13 +22,18 @@ class TestScriptEx():
         self.inc_thread.start()
 
     def start_incrementing(self):
-        while True:
-            time.sleep(3)
-            self.incrementor = self.incrementor + "Here's another line for you"
+        
+        self.client1 = ClientZMQ()
+        self.client1.run_test_thread(b"test1")
+        
+        self.incrementor = self.client1.get_message()
+        # while True:
+        #     time.sleep(3)
+        #     self.incrementor = self.incrementor + "Here's another line for you"
 
 
     
     def get_current_status(self):
-        temp = self.incrementor
-        self.incrementor = ""
-        return temp
+        self.incrementor = self.client1.get_message()
+        self.client1.set_message("")
+        return self.incrementor

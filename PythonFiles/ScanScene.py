@@ -244,9 +244,9 @@ class ScanScene(tk.Frame):
         self.scanned_QR_value = 000
 
         # Delay to simulate scanning a QRcode
-        for i in range(3):
-            time.sleep(1)
-            print(i + 1)
+        
+        time.sleep(1)
+        print(1)
         time.sleep(0.5)
         print("Finished Scan")
         ent_snum.insert(0, QRcode)
