@@ -1,13 +1,12 @@
 #####################################################################
 #                                                                   #
-#  Currently a test client server to make sure this works correctly #
+#  This is the code for a client to send a request to a server to   #
+#                   run specific test scripts.                      #
 #                                                                   #
 #####################################################################
 
 # Importing necessary modules
-import zmq
-import json
-import threading
+import zmq, json, threading
 
 # Making the Client Server a class
 class ClientZMQ():
@@ -20,7 +19,7 @@ class ClientZMQ():
         self.test_thread = threading.Thread(target=self.ping_server(desired_test))
         self.test_thread.daemon = True
         self.test_thread.start()
-    
+
     # The function used to run the test
     def ping_server(self, desired_test):
 
