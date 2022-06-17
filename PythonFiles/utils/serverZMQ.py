@@ -1,95 +1,102 @@
-#
-#   Hello World server in Python
-#   Binds REP socket to tcp://*:5555
-#   Expects b"Hello" from client, replies with b"World"
-#
+#####################################################################
+#                                                                   #
+#  This code creates a server to be housed locally on the testing   #
+#       station (at the moment this would be the raspberry pi)      #
+#                                                                   #
+#####################################################################
 
-import time
-import zmq
-import json
+# importing necessary modules
+import time, zmq, json
+# Should contain imports for the test scripts
 
-context = zmq.Context()
-socket = context.socket(zmq.REP)
+# Creates a context class which contains the method to create a socket.
+cxt = zmq.Context()
+socket = cxt.socket(zmq.REP)
+
+# Server-side for talking to a network point. "Bind"   ## socket.connect() is only used for CLIENTS
 socket.bind("tcp://*:5555")
 
-print ("started")
+print ("Server has started.")
+time.sleep(1)
 
-while True:
-    #  Wait for next request from client
-    message = socket.recv()
-    print("Received request: %s" % message)
-    if message == b"Test1":
-        print("Received request for test 1")
+try:
+    # Sets up an infinite loop so the server is always on until a keyboard interrupt occurs
+    while 1>0:
+        #  Wait for next request from client
+        # string = socket.recv_string().lower()
+        print("Wating for request...")
+        message = socket.recv_string().lower()
+        print("Received request: %s " % message)
 
-        current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-        current_JSON_data = json.load(current_JSON_file)
+        # Testing to see what the request sent to the server was. The only requests we
+        # care about are test1, test2, test3, & test4. Anything else will send back 
+        # "invalid request" to the client.
+        if message == "test1":
+            print("Received request for test 1")
 
-        json_string = json.dumps(current_JSON_data)
-        json_byte_string = bytes(json_string,'UTF-8')
+            # Simulates the test running
+            # test1 = run_test1()
+            # test1.run_test()
+            time.sleep(3)
 
-        print(json_string)
+            # Test code to ensure json/text sending is working correctly
+            socket.send(b"Unknown Error")
 
+        elif message == "test2":
+            print("Received request for test 2")
 
-        socket.send(json_byte_string)
+            # Simulates the test running
+            # test2 = run_test2()
+            # test2.run_test()
+            time.sleep(3)
 
+            # Test code to ensure json/text sending is working correctly
+            current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
+            current_JSON_data = json.load(current_JSON_file)
 
-    elif message == b"Test2":
-        print("Received request for test 2")
+            json_string = json.dumps(current_JSON_data)
+            json_byte_string = bytes(json_string,'UTF-8')
 
-        current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-        current_JSON_data = json.load(current_JSON_file)
+            print(json_string)
+        
+            socket.send(json_byte_string)
 
-        json_string = json.dumps(current_JSON_data)
-        json_byte_string = bytes(json_string,'UTF-8')
+        elif message == "test3":
+            print("Received request for test 3")
 
-        print(json_string)
+            # Simulates the test running
+            # test3 = run_test3()
+            # test3.run_test()
+            time.sleep(3)
 
+            # Test code to ensure json/text sending is working correctly
+            socket.send(b"Test Failed")
 
-        socket.send(json_byte_string)
+        elif message == "test4":
+            print("Received request for test 4")
 
+            # Simulates the test running
+            # test4 = run_test4()
+            # test4.run_test()
+            time.sleep(3)
 
-    elif message == b"Test3":
-        print("Received request for test 3")
+            # Test code to ensure json/text sending is working correctly
+            current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
+            current_JSON_data = json.load(current_JSON_file)
 
-        current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-        current_JSON_data = json.load(current_JSON_file)
+            json_string = json.dumps(current_JSON_data)
+            json_byte_string = bytes(json_string,'UTF-8')
 
-        json_string = json.dumps(current_JSON_data)
-        json_byte_string = bytes(json_string,'UTF-8')
+            print(json_string)
+        
+            socket.send(json_byte_string)
 
-        print(json_string)
+        else:
+            socket.send(b"Invalid request.")
 
-
-        socket.send(json_byte_string)
-
-    elif message == b"Test4":
-        print("Received request for test 4")
-
-        current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-        current_JSON_data = json.load(current_JSON_file)
-
-        json_string = json.dumps(current_JSON_data)
-        json_byte_string = bytes(json_string,'UTF-8')
-
-        print(json_string)
-
-
-        socket.send(json_byte_string)
-
-    else:
-
-        current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-        current_JSON_data = json.load(current_JSON_file)
-
-        json_string = json.dumps(current_JSON_data)
-        json_byte_string = bytes(json_string,'UTF-8')
-
-        print(json_string)
-
-
-        socket.send(json_byte_string)
-    #  Do some 'work'
-    time.sleep(1)
-
-    #  Send reply back to client
-    # socket.send(b"World")
+# Keyboard interrupt with ZMQ has a bug when on BOTH Windows AND Python at the same time.
+# This code should allow for CTRL + C interrupt for the server on any non-windows system.
+except KeyboardInterrupt:
+    print("Closing the server...")
+    socket.close()
+    cxt.term()
