@@ -1,4 +1,4 @@
-import zmq, threading, signal
+import zmq, threading, time
 
 class SUBClient():
 
@@ -13,22 +13,23 @@ class SUBClient():
         self.listen_thread.start()
 
     def listen_for_prints(self):
-        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        # signal.signal(signal.SIGINT, signal.SIG_DFL)
         cxt = zmq.Context()
-        listen_socket = cxt.Socket(zmq.SUB)
+        listen_socket = cxt.socket(zmq.SUB)
         listen_socket.connect("tcp://localhost:5556")
         listen_socket.setsockopt(zmq.SUBSCRIBE, b'print')
 
-        self.message = listen_socket.recv_multipart()
+        while 1 > 0:
+            self.message = listen_socket.recv_multipart()
         
-        try:
             if self.message == True:
                 try:
                     self.message = self.message.decode("UTF-8")
                 except:
                     self.message = "Message decode failed"
-        except:
-            pass
+            else:
+                self.message = "self.message != True"
+
 
     def get_message(self):
         return self.message

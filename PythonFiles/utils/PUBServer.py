@@ -45,7 +45,7 @@ class PUBServer():
                     pub_socket.send(b'print')
                     # print('I have sent print')
                     pub_socket.send(contents_byte_string)
-                    # print('I have sent the contents')
+                    print('I have sent the contents')
 
                     # Sanity Check
                     # print("I have sent the information")

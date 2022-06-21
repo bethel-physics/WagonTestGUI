@@ -27,7 +27,8 @@ class TestScriptEx():
         
         self.reqclient = REQClient()
         self.subclient = SUBClient()
-
+        self.subclient.create_client()
+        time.sleep(2)
         self.reqclient.run_test_thread(self.test_type)
     
         self.incrementor = self.subclient.get_message()

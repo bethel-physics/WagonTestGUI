@@ -10,6 +10,7 @@
 # importing necessary modules
 from asyncore import write
 import time, zmq, json, sys, io, threading
+from tkinter import NONE
 # Should contain imports for the test scripts
 from GenResTest import GenResTest
 
@@ -17,9 +18,11 @@ from GenResTest import GenResTest
 class REPServer():
 
     def __init__(self):
+        self.output = None
         rep_thread = threading.Thread(target = self.run_server())
         rep_thread.daemon = True
         rep_thread.start()
+   
 
     def run_server(self):
         # Creates a context class which contains the method to create a socket.
@@ -53,20 +56,19 @@ class REPServer():
                     new_stdout = io.StringIO()
                     sys.stdout = new_stdout
 
+
+                    passive_thread = threading.Thread(target = self.passive_fxn())
+                    passive_thread.daemon = True
+                    passive_thread.start()
+
                     # Simulates the test running
                     test1 = GenResTest()
                     test1.run_test()
-                    output = new_stdout.getvalue()
+                    self.output = new_stdout.getvalue()
 
-                    try:
-                            try:
-                                write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
-                                write_function.write(output)
-                                write_function.close()
-                            except:
-                                break
-                    except:
-                        pass
+                    
+
+                    
 
                     # Switches back to the normal print environment
                     sys.stdout = old_stdout
@@ -138,5 +140,44 @@ class REPServer():
             socket.close()
             cxt.term()
 
+    def passive_fxn(self):
+
+        while 1>0:
+            if self.output:
+                try:
+                    try:
+                        write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
+                        write_function.write(self.output)
+                        write_function.close()
+                    except:
+                        break
+                except:
+                    pass
+                self.output = None
+            elif self.output == "Done.":
+                try:
+                    try:
+                        write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
+                        write_function.write(self.output)
+                        write_function.close()
+                    except:
+                        break
+                except:
+                    pass
+                self.output = None
+                break
+            else:
+                time.sleep(.5)
+
+
+            try:
+                    try:
+                        write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
+                        write_function.write(self.output)
+                        write_function.close()
+                    except:
+                        break
+            except:
+                pass
 # Instantiates the server        
 REP_Server = REPServer()
