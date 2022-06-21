@@ -1,6 +1,9 @@
+#################################################################################
 
 
 class DataHolder():
+
+    #################################################
 
     # List of the variables being held by data holder
     def __init__(self):
@@ -16,13 +19,19 @@ class DataHolder():
         self.test3_pass = False           # Whether the test has been passed
         self.test4_pass = False           # Whether the test has been passed
 
+    #################################################
+
     # Clears the data by reseting all the values to the initial state
     def clear_DataHolder(self):
         self.__init__()
 
+    #################################################
+
     # Future method to send data to the database
     def send_to_DB(self):
         pass
+    
+    #################################################
 
     # Prints all the variable values inside data_holder
     def print(self):
@@ -37,6 +46,8 @@ class DataHolder():
         print("test2_pass: ", self.test2_pass)
         print("test3_pass: ", self.test3_pass)
         print("test4_pass: ", self.test4_pass)
+
+    #################################################
 
     # Gets all the variables from data_holder
     def get(self):
@@ -53,3 +64,8 @@ class DataHolder():
                 str(self.test3_pass) +
                 str(self.test4_pass) 
         )
+
+    ################################################
+
+
+#################################################################################

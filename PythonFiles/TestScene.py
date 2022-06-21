@@ -1,10 +1,20 @@
+#################################################################################
+
+# Importing Necessary Modules
 import tkinter as tk
 import tkinter.font as font
 
+# Importing Necessary Files
+from PythonFiles.utils.REQClient import REQClient
+
+#################################################################################
 
 
 # Creating class for the window
 class TestScene(tk.Frame):
+
+    #################################################
+
     def __init__(self, parent, master_frame, data_holder, test_name):
         super().__init__(master_frame, width=850, height=500)
 
@@ -12,6 +22,8 @@ class TestScene(tk.Frame):
         self.data_holder = data_holder
         
         self.update_frame(parent)
+
+    #################################################
 
     def update_frame(self, parent):
 
@@ -130,15 +142,21 @@ class TestScene(tk.Frame):
         
 
         self.grid_propagate(0)
-    
+        
+    #################################################
+
     # Rescan button takes the user back to scanning in a new board
     def btn_rescan_action(self, _parent):
         _parent.set_frame_scan_frame()
 
+    #################################################
+
     # Back button action takes the user back to the scanning device
     def btn_back_action(self, _parent):
         pass
-   
+    
+    #################################################
+
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
         # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -152,9 +170,16 @@ class TestScene(tk.Frame):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # 
         _parent.set_frame_test_in_progress()
 
+    #################################################
+
     # functionality for the logout button
     def btn_logout_action(self, _parent):
         _parent.set_frame_login_frame()
+
+    #################################################
+
+
+#################################################################################
 
 
 class Test1Scene(TestScene):
@@ -162,12 +187,15 @@ class Test1Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
-
+        test_1_client = REQClient()
+        test_1_client.run_test_thread(b"Test1")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test1_completed = True
         self.data_holder.test1_pass = True
         self.data_holder.print()
+
         
+#################################################################################
 
 
 class Test2Scene(TestScene):
@@ -175,11 +203,15 @@ class Test2Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
+        test_2_client = REQClient()
+        test_2_client.run_test_thread(b"Test2")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test2_completed = True
         self.data_holder.test2_pass = True
         self.data_holder.print()
 
+
+#################################################################################
 
 
 class Test3Scene(TestScene):
@@ -187,10 +219,15 @@ class Test3Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
+        test_3_client = REQClient()
+        test_3_client.run_test_thread(b"Test3")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test3_completed = True
         self.data_holder.test3_pass = True
         self.data_holder.print()
+
+
+#################################################################################
 
 
 class Test4Scene(TestScene):
@@ -198,7 +235,12 @@ class Test4Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
+        test_4_client = REQClient()
+        test_4_client.run_test_thread(b"Test4")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test4_completed = True
         self.data_holder.test4_pass = True
         self.data_holder.print()
+
+
+#################################################################################
