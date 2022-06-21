@@ -13,7 +13,7 @@ import zmq, json, threading
 #################################################################################
 
 # Making the Client Server a class
-class ClientZMQ():
+class REQClient():
 
     #################################################
 
