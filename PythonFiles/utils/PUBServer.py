@@ -24,7 +24,7 @@ class PUBServer():
                     ## the same folder as PUBServer
 
                     # Reads the file
-                    with open('SERVER-MESSAGE-QUEUE.bytes', 'r', encoding = 'UTF-8') as read_function:
+                    with open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'r') as read_function:
                         contents = read_function.read()
                         read_function.close()
 
@@ -32,30 +32,30 @@ class PUBServer():
                     print(contents)
 
                     # Makes the file blank
-                    with open('SERVER-MESSAGE-QUEUE.bytes', 'w', encoding = 'UTF-8') as overwrite:
+                    with open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'w') as overwrite:
                         overwrite.write('\n')
                         overwrite.close()
                     
                     # Sanity Check
-                    print("I have overwritten the file.")
+                    # print("I have overwritten the file.")
 
                     # Sends the contents of the file to the SUB client
                     contents_byte_string = bytes(contents, 'UTF-8')  
-                    print("I have converted the string to bytes")
-                    pub_socket.send('print')
-                    print('I have sent print')
+                    # print("I have converted the string to bytes")
+                    pub_socket.send(b'print')
+                    # print('I have sent print')
                     pub_socket.send(contents_byte_string)
-                    print('I have sent the contents')
+                    # print('I have sent the contents')
 
                     # Sanity Check
-                    print("I have sent the information")
+                    # print("I have sent the information")
 
                     # Wait 1 second before trying again
-                    time.sleep(1)
+                    time.sleep(5)
 
                 except:
                     print("Waiting for messages to be added to the queue...")
-                    time.sleep(1)
+                    time.sleep(5)
 
         except KeyboardInterrupt:
             print("Closing the server...")

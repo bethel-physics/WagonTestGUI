@@ -17,7 +17,7 @@ class SUBClient():
         cxt = zmq.Context()
         listen_socket = cxt.Socket(zmq.SUB)
         listen_socket.connect("tcp://localhost:5556")
-        listen_socket.setsockopt(zmq.SUBSCRIBE, 'print')
+        listen_socket.setsockopt(zmq.SUBSCRIBE, b'print')
 
         self.message = listen_socket.recv_multipart()
         

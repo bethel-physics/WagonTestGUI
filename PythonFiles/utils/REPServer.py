@@ -8,6 +8,7 @@
 ## MAYBE TURN THIS INTO A CLASS THAT IS INSTANTIATED IN THIS FILE ##
 
 # importing necessary modules
+from asyncore import write
 import time, zmq, json, sys, io, threading
 # Should contain imports for the test scripts
 from GenResTest import GenResTest
@@ -56,18 +57,17 @@ class REPServer():
                     test1 = GenResTest()
                     test1.run_test()
                     output = new_stdout.getvalue()
-                    output_byte_string = bytes(output, 'UTF-8')
 
                     try:
-                        for message in output:
                             try:
-                                write_function = open('SERVER-MESSAGE-QUEUE.bytes', 'a', encoding = 'UTF-8')
-                                write_function.write(output_byte_string)
+                                write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
+                                write_function.write(output)
+                                write_function.close()
                             except:
                                 break
                     except:
                         pass
-                    
+
                     # Switches back to the normal print environment
                     sys.stdout = old_stdout
 
@@ -76,7 +76,9 @@ class REPServer():
                         socket.send(b"Unknown Error")
                     except:
                         pass
-
+                    
+                    message = ''
+                    
                 elif message == "test2":
                     print("Received request for test 2")
 
