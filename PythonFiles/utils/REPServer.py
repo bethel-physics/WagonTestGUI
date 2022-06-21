@@ -18,7 +18,7 @@ socket = cxt.socket(zmq.REP)
 # Server-side for talking to a network point. "Bind"   ## socket.connect() is only used for CLIENTS
 socket.bind("tcp://*:5555")
 
-print ("Server has started.")
+print ("Reply Server has started.")
 time.sleep(1)
 
 
