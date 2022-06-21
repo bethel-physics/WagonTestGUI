@@ -299,7 +299,7 @@ class TestSummaryScene(tk.Frame):
         self.JSON_popup = tk.Tk()
         self.JSON_popup.geometry("500x300+750+100")
         self.JSON_popup.title("JSON Details")
-        self.JSON_popup.wm_attributes('-toolwindow', 'True')
+        # self.JSON_popup.wm_attributes('-toolwindow', 'True')
 
     
 

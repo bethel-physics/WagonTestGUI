@@ -166,7 +166,7 @@ class TestInProgressScene(tk.Frame):
         console_popup = tk.Tk()
         console_popup.geometry("300x300+975+200")
         console_popup.title("Console Output Window")
-        console_popup.wm_attributes('-toolwindow', 'True')
+        # console_popup.wm_attributes('-toolwindow', 'True')
 
         # Used to tell the console window that its 
         # exit window button is being given a new function

@@ -38,7 +38,7 @@ class GUIWindow():
         master_window.resizable(0,0)
 
         # Removes the tkinter logo from the window
-        master_window.wm_attributes('-toolwindow', 'True')
+        # master_window.wm_attributes('-toolwindow', 'True')
 
         # Creates and packs a frame that exists on top of the master_frame
         master_frame = tk.Frame(master_window, width=850, height= 500)
@@ -267,7 +267,7 @@ class GUIWindow():
         # Creates a popup to confirm whether or not to exit out of the window
         global popup
         popup = tk.Tk()
-        popup.wm_attributes('-toolwindow', 'True')
+        # popup.wm_attributes('-toolwindow', 'True')
         popup.title("Exit Confirmation Window") 
         popup.geometry("300x150")
         popup.eval("tk::PlaceWindow . center")
