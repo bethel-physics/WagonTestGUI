@@ -64,14 +64,14 @@ class AsyncioThread(threading.Thread):
         # data = '{}:{}'.format(key, random.random())
         # await asyncio.sleep(sec)
 
-        test_script_object = TestScriptEx()
+        test_script_object = TestScriptEx("test1")
         await asyncio.sleep(1)
         test_script_object.run_inc_thread()
 
         
         while self.is_alive :
             
-            time.sleep(1)
+            time.sleep(0.75)
             
             data = test_script_object.get_current_status()
 

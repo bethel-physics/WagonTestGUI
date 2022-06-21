@@ -5,9 +5,10 @@ from PythonFiles.utils.clientZMQ import ClientZMQ
 
 
 class TestScriptEx():
-    def __init__(self):
+    def __init__(self, _test_type):
         
         self.incrementor = "Your console appears to be working"
+        self.test_type = bytes(_test_type,'UTF-8')
 
         time.sleep(0.75)
 
@@ -24,7 +25,7 @@ class TestScriptEx():
     def start_incrementing(self):
         
         self.client1 = ClientZMQ()
-        self.client1.run_test_thread(b"test1")
+        self.client1.run_test_thread(self.test_type)
         
         self.incrementor = self.client1.get_message()
         # while True:
