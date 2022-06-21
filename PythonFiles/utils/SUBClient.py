@@ -1,4 +1,3 @@
-
 import zmq, threading, signal
 
 class SUBClient():
@@ -15,11 +14,10 @@ class SUBClient():
     def listen_for_prints(self):
         signal.signal(signal.SIGINT, signal.SIG_DFL)
         cxt = zmq.Context()
-        sub_socket = cxt.Socket(zmq.SUB)
-        sub_socket.connect("tcp://localhost:5556")
-        sub_socket.setsockopt(zmq.SUBSCRIBE, b'print')
+        listen_socket = cxt.Socket(zmq.SUB)
+        listen_socket.connect("tcp://localhost:5556")
 
-        self.message = sub_socket.recv_multipart()
+        self.message = listen_socket.recv()
         
         try:
             if self.message == True:
@@ -32,4 +30,5 @@ class SUBClient():
 
     def get_message(self):
         return self.message
+
 
