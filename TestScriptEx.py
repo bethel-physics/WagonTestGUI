@@ -1,7 +1,7 @@
 import threading
 import time
 
-from PythonFiles.utils.clientZMQ import ClientZMQ
+from PythonFiles.utils.REQClient import REQClient
 
 
 class TestScriptEx():
@@ -24,7 +24,7 @@ class TestScriptEx():
 
     def start_incrementing(self):
         
-        self.client1 = ClientZMQ()
+        self.client1 = REQClient()
         self.client1.run_test_thread(self.test_type)
         
         self.incrementor = self.client1.get_message()

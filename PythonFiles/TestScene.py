@@ -5,7 +5,7 @@ import tkinter as tk
 import tkinter.font as font
 
 # Importing Necessary Files
-from PythonFiles.utils.clientZMQ import ClientZMQ
+from PythonFiles.utils.REQClient import REQClient
 
 #################################################################################
 
@@ -187,7 +187,7 @@ class Test1Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
-        test_1_client = ClientZMQ()
+        test_1_client = REQClient()
         test_1_client.run_test_thread(b"Test1")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test1_completed = True
@@ -203,7 +203,7 @@ class Test2Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
-        test_2_client = ClientZMQ()
+        test_2_client = REQClient()
         test_2_client.run_test_thread(b"Test2")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test2_completed = True
@@ -219,7 +219,7 @@ class Test3Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
-        test_3_client = ClientZMQ()
+        test_3_client = REQClient()
         test_3_client.run_test_thread(b"Test3")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test3_completed = True
@@ -235,7 +235,7 @@ class Test4Scene(TestScene):
     def btn_confirm_action(self, _parent):
 
         super().btn_confirm_action(_parent)
-        test_4_client = ClientZMQ()
+        test_4_client = REQClient()
         test_4_client.run_test_thread(b"Test4")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test4_completed = True
