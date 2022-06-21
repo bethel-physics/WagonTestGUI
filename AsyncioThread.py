@@ -59,10 +59,6 @@ class AsyncioThread(threading.Thread):
     # Randomly does tasks 
     async def run_test_script(self, key):
         """ Create data and store it in the queue. """
-        
-        # sec = random.randint(1, 10)
-        # data = '{}:{}'.format(key, random.random())
-        # await asyncio.sleep(sec)
 
         test_script_object = TestScriptEx("test1")
         await asyncio.sleep(1)
