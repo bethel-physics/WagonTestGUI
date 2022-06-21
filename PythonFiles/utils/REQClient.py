@@ -1,139 +1,81 @@
 #####################################################################
 #                                                                   #
-#  This code creates a server to be housed locally on the testing   #
-#       station (at the moment this would be the raspberry pi)      #
+#  This is the code for a client to send a request to a server to   #
+#                   run specific test scripts.                      #
 #                                                                   #
 #####################################################################
 
-## MAYBE TURN THIS INTO A CLASS THAT IS INSTANTIATED IN THIS FILE ##
+#################################################################################
 
-# importing necessary modules
-import time, zmq, json, sys, io, threading
-# Should contain imports for the test scripts
-from GenResTest import GenResTest
+# Importing necessary modules
+import zmq, json, threading
 
-# Makes the REPServer a class
-class REPServer():
+#################################################################################
 
+# Making the Client Server a class
+class REQClient():
+
+    #################################################
+
+    # Ensures nothing happens on instantiantion
     def __init__(self):
-        rep_thread = threading.Thread(target = self.run_server())
-        rep_thread.daemon = True
-        rep_thread.start()
+        self.message = ""
+        pass
 
-    def run_server(self):
-        # Creates a context class which contains the method to create a socket.
-        cxt = zmq.Context()
-        socket = cxt.socket(zmq.REP)
+    #################################################
 
-        # Server-side for talking to a network point. "Bind"   ## socket.connect() is only used for CLIENTS
-        socket.bind("tcp://*:5555")
+    # Starts the test by creating a thread for the test to run inside of
+    def run_test_thread(self, desired_test):
+        self.test_thread = threading.Thread(target=self.ping_server(desired_test))
+        self.test_thread.daemon = True
+        self.test_thread.start()
 
-        print ("Reply Server has started.")
-        time.sleep(1)
+    #################################################
 
+    # The function used to run the test
+    def ping_server(self, desired_test):
 
+        # Establishing variable for use
+        self.desired_test = desired_test
+
+        # Necessary for zmqClient    
+        context = zmq.Context()
+
+        # Creates a socket to talk to the server
+        # print("Connecting to the testing server...")
+        socket = context.socket(zmq.REQ)
+        socket.connect("tcp://localhost:5555")
+
+        # Tell the server what test to run
+        socket.send(self.desired_test)
+
+        # Get the reply
+        self.message = socket.recv()
+
+        # Try to interpret the response as a json
         try:
-            # Sets up an infinite loop so the server is always on until a keyboard interrupt occurs
-            while 1>0:
-                #  Wait for next request from client
-                # string = socket.recv_string().lower()
-                print("Wating for request...")
-                message = socket.recv_string().lower()
-                print("Received request: %s " % message)
+            self.message = socket.recv()
+            valid_json_return = json.loads(self.message)
+            # print("\n", valid_json_return, "\n")
+        # When it fails, print what the server sends back
+        except:
+            # print("Server did not send json.")
+            self.message.decode('UTF-8')
+            # print(message)
+            # print(message.decode('UTF-8'))
+            self.message = self.message.decode('UTF-8')
 
-                # Testing to see what the request sent to the server was. The only requests we
-                # care about are test1, test2, test3, & test4. Anything else will send back 
-                # "invalid request" to the client.
-                if message == "test1":
-                    print("Received request for test 1")
+    #################################################
 
-                    # Switches the environment for print statements
-                    old_stdout = sys.stdout
-                    new_stdout = io.StringIO()
-                    sys.stdout = new_stdout
+    def get_message(self):
+        return self.message
 
-                    # Simulates the test running
-                    test1 = GenResTest()
-                    test1.run_test()
-                    output = new_stdout.getvalue()
-                    output_byte_string = bytes(output,'UTF-8')
+    #################################################
 
-                    try:
-                        for message in output:
-                            try:
-                                socket.send(output_byte_string)
-                            except:
-                                break
-                    except:
-                        pass
-                    
-                    # Switches back to the normal print environment
-                    sys.stdout = old_stdout
+    def set_message(self, string):
+        self.message = string
 
-                    # Test code to ensure json/text sending is working correctly
-                    try:
-                        socket.send(b"Unknown Error")
-                    except:
-                        pass
-
-                elif message == "test2":
-                    print("Received request for test 2")
-
-                    # Simulates the test running
-                    # test2 = run_test2()
-                    # test2.run_test()
-                    time.sleep(3)
-
-                    # Test code to ensure json/text sending is working correctly
-                    current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-                    current_JSON_data = json.load(current_JSON_file)
-
-                    json_string = json.dumps(current_JSON_data)
-                    json_byte_string = bytes(json_string,'UTF-8')
-
-                    print(json_string)
-                
-                    socket.send(json_byte_string)
-
-                elif message == "test3":
-                    print("Received request for test 3")
-
-                    # Simulates the test running
-                    # test3 = run_test3()
-                    # test3.run_test()
-                    time.sleep(3)
-
-                    # Test code to ensure json/text sending is working correctly
-                    socket.send(b"Test Failed")
-
-                elif message == "test4":
-                    print("Received request for test 4")
-
-                    # Simulates the test running
-                    # test4 = run_test4()
-                    # test4.run_test()
-                    time.sleep(3)
-
-                    # Test code to ensure json/text sending is working correctly
-                    current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-                    current_JSON_data = json.load(current_JSON_file)
-
-                    json_string = json.dumps(current_JSON_data)
-                    json_byte_string = bytes(json_string,'UTF-8')
-
-                    print(json_string)
-                
-                    socket.send(json_byte_string)
-
-                else:
-                    socket.send(b"Invalid request.")
-
-        # Keyboard interrupt with ZMQ has a bug when on BOTH Windows AND Python at the same time.
-        # This code should allow for CTRL + C interrupt for the server on any non-windows system.
-        except KeyboardInterrupt:
-            print("Closing the server...")
-            socket.close()
-            cxt.term()
-
-# Instantiates the server        
-REP_Server = REPServer()
+    #################################################
+    
+            
+#################################################################################
