@@ -1,11 +1,19 @@
+#################################################################################
+
 import tkinter as tk
     
-    
+#################################################################################
+
+
 class TestFailedPopup():
     
+    #################################################
+
     def __init__(self, parent):
         self.test_failed_popup(parent)
     
+    #################################################
+
     # Function to make retry or continue window if the test fails
     def test_failed_popup(self, parent):
 
@@ -40,7 +48,7 @@ class TestFailedPopup():
         )
         btn_continue.grid(column = 1, row = 1)
 
-
+    #################################################
     
     # Called when the no button is pressed to destroy popup and return you to the main window
     def retry_function(self, parent):
@@ -49,8 +57,14 @@ class TestFailedPopup():
         #TODO This needs to be overhauled
         parent.go_to_next_test()
         
+    #################################################
 
     # Called to continue on in the testing procedure
     def continue_function(self, _parent):
         self.popup.destroy()
         _parent.go_to_next_test()
+
+    #################################################
+
+
+#################################################################################
