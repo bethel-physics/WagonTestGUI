@@ -3,6 +3,7 @@ import zmq, threading, signal
 class SUBClient():
 
     def __init__(self):
+        self.message = ""
         pass
 
     # Creates a thread to start listening for the print statements
@@ -31,5 +32,9 @@ class SUBClient():
 
     def get_message(self):
         return self.message
+
+    def set_message(self, string):
+        self.message = string
+
 
 
