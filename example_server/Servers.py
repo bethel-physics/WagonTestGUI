@@ -7,8 +7,8 @@ class PublishServer:
         self.pub = ctx.socket(zmq.PUB)
         self.pub.bind("tcp://*:5555")
 
-    def send(self, msg):
-        self.pub.send_string(msg.encode('utf-8'))
+    def send(self, topic, msg):
+        self.pub.send_string("{};{}".format(topic,msg))
 
 
 class SubscribeServer:
@@ -21,4 +21,4 @@ class SubscribeServer:
 
 
     def recv(self):
-        return self.sub.recv_string()
+        return self.sub.recv_string().split(";")

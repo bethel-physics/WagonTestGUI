@@ -7,4 +7,6 @@ def run_test(conn):
         conn.send("Test output for {}".format(i))
         time.sleep(0.1)
 
+    test_json = '{"Test": "Test 1", "Pass": "True"}'
+    conn.send(test_json)
     conn.close()

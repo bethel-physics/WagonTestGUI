@@ -10,8 +10,11 @@ def listener(conn):
     print("Starting listener in a separate process")
     while True:
         output = parent_conn.recv()
-        if output:
-            pub.send(output)
+        if output.find("{") is not -1:
+            pub.send("json",output)
+            return
+        elif output:
+            pub.send("print",output)
         else:
             return
         time.sleep(0.01)
