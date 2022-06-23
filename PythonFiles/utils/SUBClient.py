@@ -10,11 +10,18 @@ class SUBClient():
         listen_socket = cxt.socket(zmq.SUB)
         listen_socket.connect("tcp://localhost:5556")
         listen_socket.setsockopt(zmq.SUBSCRIBE, b'print')
+        listen_socket.setsockopt(zmq.SUBSCRIBE, b'JSON')
 
         while 1 > 0:
-            self.topic, self.message = listen_socket.recv_string().split(";")
-            print(self.message)
-            queue.put(self.message)
+            self.topic, self.message = listen_socket.recv_string().split(" ; ")
+            if self.topic == "print":
+                print(self.topic)
+                print(self.message)
+                queue.put(self.message)
+            elif self.topic == "JSON":
+                print("JSON Received.")
+                queue.put("JSON Received.")
+
 
 
     def get_message(self):

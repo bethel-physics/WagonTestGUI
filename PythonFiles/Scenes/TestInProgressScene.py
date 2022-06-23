@@ -246,7 +246,7 @@ class TestInProgressScene(tk.Frame):
             self, 
             bg = 'black', 
             fg = 'white', 
-            font = ('Arial', 15),
+            font = ('Courier', 15),
             yscrollcommand = scrollbar.set
             )
         ent_console.pack(anchor = 'center', fill = tk.BOTH, expand = 1)
