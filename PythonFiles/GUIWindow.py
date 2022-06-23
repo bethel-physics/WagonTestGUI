@@ -5,6 +5,8 @@ from pickle import NONE
 import tkinter as tk
 from turtle import bgcolor
 
+from pyparsing import trace_parse_action
+
 # Importing all the neccessary files and classes from them
 from PythonFiles.SidebarScene import SidebarScene
 from PythonFiles.LoginScene import LoginScene
@@ -16,9 +18,11 @@ from PythonFiles.TestInProgressScene import TestInProgressScene
 from PythonFiles.DataHolder import DataHolder
 from PythonFiles.SplashScene import SplashScene
 from PythonFiles.TestInProgressScene import *
+from PythonFiles.CreateConsole import OutputConsole
 
 #################################################################################
-
+def create_console(conn):
+    console = OutputConsole(conn)
 
 # Create a class for creating the basic GUI Window to be called by the main function to
 # instantiate the actual object
@@ -26,13 +30,15 @@ class GUIWindow():
 
     #################################################
 
-    def __init__(self):                     
+    def __init__(self, conn, queue):
+        self.conn = conn
+        self.queue = queue
+                             
         # Create the window named "master_window"
         # global makes master_window global and therefore accessible outside the function
         global master_window
         master_window = tk.Tk()
         master_window.title("Bethel Interns' Window")
-
         # Creates the size of the window and disables resizing
         master_window.geometry("1063x500+25+100")
         master_window.resizable(0,0)
@@ -41,8 +47,8 @@ class GUIWindow():
         # master_window.wm_attributes('-toolwindow', 'True')
 
         # Creates and packs a frame that exists on top of the master_frame
-        master_frame = tk.Frame(master_window, width=850, height= 500)
-        master_frame.grid(column = 1, row = 0, columnspan = 4)
+        self.master_frame = tk.Frame(master_window, width=850, height= 500)
+        self.master_frame.grid(column = 1, row = 0, columnspan = 4)
 
         # Creates a frame to house the sidebar on master_window
         sidebar_frame = tk.Frame(master_window, width = 213, height = 500)
@@ -60,33 +66,34 @@ class GUIWindow():
         #################################################
 
         # At top so it can be referenced by other frames' code... Order of creation matters
-        self.test_summary_frame = TestSummaryScene(self, master_frame, self.data_holder)
+        self.test_summary_frame = TestSummaryScene(self, self.master_frame, self.data_holder)
         self.test_summary_frame.grid(row=0, column=0)
 
-        self.login_frame = LoginScene(self, master_frame, self.data_holder)
+        self.login_frame = LoginScene(self, self.master_frame, self.data_holder)
         self.login_frame.grid(row=0, column=0)
     
-        self.scan_frame = ScanScene(self, master_frame, self.data_holder)
+        self.scan_frame = ScanScene(self, self.master_frame, self.data_holder)
         self.scan_frame.grid(row=0, column=0)
 
-        self.test1_frame= Test1Scene(self, master_frame, self.data_holder, "General Resistance Test")
+        self.test1_frame= Test1Scene(self, self.master_frame, self.data_holder, "General Resistance Test", conn, queue)
         self.test1_frame.grid(row=0, column=0)
 
-        self.test2_frame= Test2Scene(self, master_frame, self.data_holder,  "ID Resistor Test")
+        self.test2_frame= Test2Scene(self, self.master_frame, self.data_holder,  "ID Resistor Test", conn, queue)
         self.test2_frame.grid(row=0, column=0)
 
-        self.test3_frame= Test3Scene(self, master_frame, self.data_holder, "I2C Comm. Test")
+        self.test3_frame= Test3Scene(self, self.master_frame, self.data_holder, "I2C Comm. Test", conn, queue)
         self.test3_frame.grid(row=0, column=0)
 
-        self.test4_frame= Test4Scene(self, master_frame, self.data_holder, "Bit Rate Test")
+        self.test4_frame= Test4Scene(self, self.master_frame, self.data_holder, "Bit Rate Test", conn, queue)
         self.test4_frame.grid(row=0, column=0)
 
-        self.test_in_progress_frame = TestInProgressScene(self, master_frame, self.data_holder)
+        self.test_in_progress_frame = TestInProgressScene(self, self.master_frame, self.data_holder, queue)
+        self.test_in_progress_frame.initialize_scene(self, self.master_frame)
         self.test_in_progress_frame.grid(row=0, column=0)
 
 
         # Near bottom so it can reference other frames with its code
-        self.splash_frame = SplashScene(self, master_frame)
+        self.splash_frame = SplashScene(self, self.master_frame)
         self.splash_frame.grid(row=0, column=0)
 
         #################################################
@@ -99,7 +106,7 @@ class GUIWindow():
         # Sets the current frame to the splash frame
         self.set_frame_splash_frame()
 
-        master_frame.after(500, self.set_frame_login_frame)
+        self.master_frame.after(500, self.set_frame_login_frame)
 
         master_window.mainloop()
     
@@ -158,11 +165,23 @@ class GUIWindow():
         self.set_frame(self.test4_frame)
 
     #################################################
+   
 
-    def set_frame_test_in_progress(self):
-        self.test_in_progress_frame.tkraise()
+    def set_frame_test_in_progress(self, conn, queue):
+        print("first set_frame called")
+        
+        self.set_frame(self.test_in_progress_frame)
+        print("tk.raise called")
         self.sidebar.disable_all_btns()
-        self.test_in_progress_frame.update_frame(self)
+        print("Buttons disabled")
+        self.test_in_progress_frame.begin_update(master_window, conn, queue)
+        print("after command called")
+        
+       
+        # process_console = mp.Process(target = create_console, args=(conn,))
+        # process_console.start()
+
+   
 
     #################################################
 

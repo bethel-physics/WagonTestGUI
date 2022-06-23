@@ -5,8 +5,9 @@ import queue
 import tkinter as tk
 from tkinter import ttk
 from xml.dom.expatbuilder import parseFragmentString
-import sys
-from AsyncioThread import AsyncioThread
+import sys, time
+import multiprocessing as mp
+from PythonFiles.AsyncioThread import AsyncioThread
 
 # Imports the ConsoleOutput class and its functions
 from PythonFiles.ConsoleOutput import *
@@ -17,68 +18,68 @@ from PythonFiles.ConsoleOutput import *
 
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
-    def __init__(self, parent, master_frame, data_holder):
+    def __init__(self, parent, master_frame, data_holder, queue):
         
         super().__init__(master_frame, width = 850, height = 500)
 
-        # thread-safe data storage
-        self.the_queue = queue.Queue()
+        # # thread-safe data storage
+        # self.the_queue = queue.Queue()
 
-        # create the data variable
-        self.data = []
-        for key in range(1):
-            self.data.append(tk.StringVar())
-            self.data[key].set('<default>')
+        # # create the data variable
+        # self.data = []
+        # for key in range(1):
+        #     self.data.append(tk.StringVar())
+        #     self.data[key].set('<default>')
 
-        # Button to start the asyncio tasks
-        new_button = tk.Button(
-                master= self,
-                text='Start Asyncio Tasks',
-                command=lambda: self.do_asyncio())
-        new_button.pack()
+        # # Button to start the asyncio tasks
+        # new_button = tk.Button(
+        #         master= self,
+        #         text='Start Asyncio Tasks',
+        #         command=lambda: self.do_asyncio())
+        # new_button.pack()
         
         # # Frames to display data from the asyncio tasks
         # for key in range(1):
         #     tk.Label(master=self, textvariable=self.data[key]).pack()
-
+        self.queue = queue
         self.data_holder = data_holder
         self.is_current_scene = False
-        self.initialize_scene(parent, master_frame)
+        # self.initialize_scene(parent, master_frame)
 
 
     #################################################
 
     # Used to initialize the frame that is on the main window
     # next_frame is used to progress to the next scene and is passed in from GUIWindow
-    def initialize_scene(self, parent, master_frame):
-        super().__init__(master_frame, width = 850, height = 500)
+    # 
+# def initialize_scene(self, parent, master_frame):
+    #     super().__init__(master_frame, width = 850, height = 500)
 
 
-        # Creating the main title in the frame
-        lbl_title = tk.Label(self, 
-            text = "Test in progress. Please wait.", 
-            font = ('Arial', 20)
-            )
-        lbl_title.pack(padx = 0, pady = 100)
+    #     # Creating the main title in the frame
+    #     lbl_title = tk.Label(self, 
+    #         text = "Test in progress. Please wait.", 
+    #         font = ('Arial', 20)
+    #         )
+    #     lbl_title.pack(padx = 0, pady = 100)
 
-        # Create a progress bar that does not track progress but adds motion to the window
-        prgbar_progress = ttk.Progressbar(
-            self, 
-            orient = 'horizontal',
-            mode = 'indeterminate', length = 350)
-        prgbar_progress.pack(padx = 50)
-        prgbar_progress.start()
+    #     # Create a progress bar that does not track progress but adds motion to the window
+    #     prgbar_progress = ttk.Progressbar(
+    #         self, 
+    #         orient = 'horizontal',
+    #         mode = 'indeterminate', length = 350)
+    #     prgbar_progress.pack(padx = 50)
+    #     prgbar_progress.start()
 
-        # A Button To Stop the Progress Bar and Progress Forward (Temporary until we link to actual progress)
-        btn_stop = ttk.Button(
-            self, 
-            text='Stop', 
-            command= lambda: self.btn_stop_action(parent))
-        btn_stop.pack(padx = 0, pady = 100)
+    #     # A Button To Stop the Progress Bar and Progress Forward (Temporary until we link to actual progress)
+    #     btn_stop = ttk.Button(
+    #         self, 
+    #         text='Stop', 
+    #         command= lambda: self.btn_stop_action(parent))
+    #     btn_stop.pack(padx = 0, pady = 100)
 
-        # Forces the frame to stay the size of the master_frame
-        self.pack_propagate(0)
-
+    #     # Forces the frame to stay the size of the master_frame
+    #     self.pack_propagate(0)
     #################################################
 
     # A function for the stop button
@@ -107,19 +108,20 @@ class TestInProgressScene(tk.Frame):
 
     # Method that is run when the button is clicked
     def do_asyncio(self):
-        """
-            Button-Event-Handler starting the asyncio part in a separate
-            thread.
-        """
-        # create fancy thread object
-        # Parameters: the queue that is storing the "updates", the maximum amount of data that can go in
-        self.thread = AsyncioThread(self.the_queue, len(self.data))
+        # """
+        #     Button-Event-Handler starting the asyncio part in a separate
+        #     thread.
+        # """
+        # # create fancy thread object
+        # # Parameters: the queue that is storing the "updates", the maximum amount of data that can go in
+        # self.thread = AsyncioThread(self.the_queue, len(self.data))
 
-        #  timer to refresh the gui with data from the asyncio thread
-        self.after(1000, self.refresh_data)  # called only once!
+        # #  timer to refresh the gui with data from the asyncio thread
+        # self.after(1000, self.refresh_data)  # called only once!
 
-        # start the thread
-        self.thread.start()
+        # # start the thread
+        # self.thread.start()
+        pass
 
 
 
@@ -158,7 +160,7 @@ class TestInProgressScene(tk.Frame):
 
     # A function to be called within GUIWindow to create the console output
     # when the frame is being brought to the top
-    def initialize_console(self):
+    def initialize_console(self, conn):
 
         global console_popup
 
@@ -170,7 +172,7 @@ class TestInProgressScene(tk.Frame):
 
         # Used to tell the console window that its 
         # exit window button is being given a new function
-        console_popup.protocol('WM_DELETE_WINDOW', self.fake_destroy)
+        # console_popup.protocol('WM_DELETE_WINDOW', self.fake_destroy)
 
         # Creating a Frame For Console Output
         frm_console = tk.Frame(console_popup, width = 300, height = 300, bg = 'black')
@@ -196,59 +198,87 @@ class TestInProgressScene(tk.Frame):
         # Adding scrollbar functionality
         scrollbar.config(command = ent_console.yview)
 
-        # Instantiates the console writing class
-        console = ConsoleOutput(ent_console)
+        try:
+            while 1>0:
+                if conn.recv is not None:
+                    ent_console.insert(tk.END, conn.recv())
+                else:
+                    time.sleep(1)
+        except:
+            print("Your stupid code didn't work.")
+        # # Instantiates the console writing class
+        # console = ConsoleOutput(ent_console)
 
-        # replace sys.stdout with our new console object
-        sys.stdout = console
+        # # replace sys.stdout with our new console object
+        # sys.stdout = console
 
     #################################################
 
     # A pass function that the console window is being redirected to so its exit button
     # does not function
-    def fake_destroy(self):
-        pass
+    # def fake_destroy(self):
+    #     pass
     
     #################################################
 
     # A Function to be called when the console should be destroyed
-    def console_destroy(self):
+    # def console_destroy(self):
         
-        # Redirects any console readouts back to the actual console rather than the fake object
-        sys.stdout = sys.__stdout__
+    #     # Redirects any console readouts back to the actual console rather than the fake object
+    #     sys.stdout = sys.__stdout__
         
-        # Destroys the console output window
-        console_popup.destroy()
+    #     # Destroys the console output window
+    #     console_popup.destroy()
 
 
     # Used to initialize the frame that is on the main window
     # next_frame is used to progress to the next scene and is passed in from GUIWindow
     def initialize_scene(self, parent, master_frame):
-        
+
+        # console_frm = tk.Frame(master_frame, width=850, height= 500, bg = 'black')
+        # console_frm.grid(column = 1, row = 0, columnspan = 4)
+        # console_frm.grid_propagate(0)
+
+        scrollbar = tk.Scrollbar(self)
+        scrollbar.pack(side = "right", fill = 'y')
 
 
-        # Creating the main title in the frame
-        lbl_title = tk.Label(self, 
-            text = "Test in progress. Please wait.", 
-            font = ('Arial', 20)
+        # Placing an entry box in the frm_console
+        global ent_console
+        ent_console = tk.Text(
+            self, 
+            bg = 'black', 
+            fg = 'white', 
+            font = ('Arial', 15),
+            yscrollcommand = scrollbar.set
             )
-        lbl_title.pack(padx = 0, pady = 100)
+        ent_console.pack(anchor = 'center', fill = tk.BOTH, expand = 1)
 
-        # Create a progress bar that does not track progress but adds motion to the window
-        prgbar_progress = ttk.Progressbar(
-            self, 
-            orient = 'horizontal',
-            mode = 'indeterminate', length = 350)
-        prgbar_progress.pack(padx = 50)
-        prgbar_progress.start()
+        # Adding scrollbar functionality
+        scrollbar.config(command = ent_console.yview)
+########################################################################################
+        # # Creating the main title in the frame
+        # lbl_title = tk.Label(self, 
+        #     text = "Test in progress. Please wait.", 
+        #     font = ('Arial', 20)
+        #     )
+        # lbl_title.pack(padx = 0, pady = 100)
 
-        # A Button To Stop the Progress Bar and Progress Forward (Temporary until we link to actual progress)
-        btn_stop = ttk.Button(
-            self, 
-            text='Stop', 
-            command= lambda: self.btn_stop_action(parent))
-        btn_stop.pack(padx = 0, pady = 100)
+        # # Create a progress bar that does not track progress but adds motion to the window
+        # prgbar_progress = ttk.Progressbar(
+        #     self, 
+        #     orient = 'horizontal',
+        #     mode = 'indeterminate', length = 350)
+        # prgbar_progress.pack(padx = 50)
+        # prgbar_progress.start()
 
+        # # A Button To Stop the Progress Bar and Progress Forward (Temporary until we link to actual progress)
+        # btn_stop = ttk.Button(
+        #     self, 
+        #     text='Stop', 
+        #     command= lambda: self.btn_stop_action(parent))
+        # btn_stop.pack(padx = 0, pady = 100)
+##################################################################################################
         # Forces the frame to stay the size of the master_frame
         self.pack_propagate(0)
 
@@ -301,8 +331,23 @@ class TestInProgressScene(tk.Frame):
 
     #################################################
 
-    # Unnecessary function but used for uniformity in GUIWindow code
-    def update_frame(self, parent):
-        self.initialize_console()
-
-    #################################################
+    def begin_update(self, master_window, conn, queue):
+        print("started update loop")
+        # try:
+        while 1>0:
+                # try:
+            master_window.update()
+            if not queue.empty():    
+                print("Waiting for queue objects...")
+                text = queue.get()
+                print(text)
+                ent_console.insert(tk.END, text)
+                ent_console.insert(tk.END, "\n")
+                time.sleep(1)
+            else:
+                time.sleep(.01)
+            
+                # except:
+                    # time.sleep(1)
+        # except:
+            # print("Your stupid code didn't work.")

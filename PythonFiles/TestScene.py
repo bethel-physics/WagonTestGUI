@@ -15,9 +15,10 @@ class TestScene(tk.Frame):
 
     #################################################
 
-    def __init__(self, parent, master_frame, data_holder, test_name):
+    def __init__(self, parent, master_frame, data_holder, test_name, conn, queue):
         super().__init__(master_frame, width=850, height=500)
-
+        self.conn = conn
+        self.queue = queue
         self.test_name = test_name
         self.data_holder = data_holder
         
@@ -99,7 +100,7 @@ class TestScene(tk.Frame):
             frm_window, 
             text = "Confirm", 
             relief = tk.RAISED, 
-            command = lambda:self.btn_confirm_action(parent)
+            command = lambda:self.btn_confirm_action(parent, self.conn)
             )
         btn_confirm.pack(side = 'top')
         btn_confirm['font'] = font.Font(family = 'Arial', size = 13)
@@ -158,7 +159,7 @@ class TestScene(tk.Frame):
     #################################################
 
     # Confirm button action takes the user to the test in progress scene
-    def btn_confirm_action(self, _parent):
+    def btn_confirm_action(self, _parent, conn):
         # # # # # # # # # # # # # # # # # # # # # # # # # # #
         #   ++ GOAL CODE ++                                 #
         # def confirm():                                    #
@@ -168,7 +169,8 @@ class TestScene(tk.Frame):
         #       Update_Dataholder()                         #
         #       Go_To_Next_Test()                           #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-        _parent.set_frame_test_in_progress()
+        # _parent.set_frame_test_in_progress(conn, self.queue)
+        pass
 
     #################################################
 
@@ -184,11 +186,12 @@ class TestScene(tk.Frame):
 
 class Test1Scene(TestScene):
     # Override to add specific functionality
-    def btn_confirm_action(self, _parent):
+    def btn_confirm_action(self, _parent, conn):
 
-        super().btn_confirm_action(_parent)
-        test_1_client = REQClient()
-        test_1_client.run_test_thread(b"Test1")
+        
+        super().btn_confirm_action(_parent, conn)
+        test_1_client = REQClient(b'test1')
+        _parent.set_frame_test_in_progress(conn, self.queue)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test1_completed = True
         self.data_holder.test1_pass = True
@@ -200,9 +203,9 @@ class Test1Scene(TestScene):
 
 class Test2Scene(TestScene):
     # Override to add specific functionality
-    def btn_confirm_action(self, _parent):
+    def btn_confirm_action(self, _parent, conn):
 
-        super().btn_confirm_action(_parent)
+        super().btn_confirm_action(_parent, conn)
         test_2_client = REQClient()
         test_2_client.run_test_thread(b"Test2")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
@@ -216,9 +219,9 @@ class Test2Scene(TestScene):
 
 class Test3Scene(TestScene):
     # Override to add specific functionality
-    def btn_confirm_action(self, _parent):
+    def btn_confirm_action(self, _parent, conn):
 
-        super().btn_confirm_action(_parent)
+        super().btn_confirm_action(_parent, conn)
         test_3_client = REQClient()
         test_3_client.run_test_thread(b"Test3")
          #TODO EDIT THIS WITH ACTUAL TEST DATA
@@ -232,9 +235,9 @@ class Test3Scene(TestScene):
 
 class Test4Scene(TestScene):
     # Override to add specific functionality
-    def btn_confirm_action(self, _parent):
+    def btn_confirm_action(self, _parent, conn):
 
-        super().btn_confirm_action(_parent)
+        super().btn_confirm_action(_parent, conn)
         test_4_client = REQClient()
         test_4_client.run_test_thread(b"Test4")
          #TODO EDIT THIS WITH ACTUAL TEST DATA

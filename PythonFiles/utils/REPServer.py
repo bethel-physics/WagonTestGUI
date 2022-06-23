@@ -9,22 +9,19 @@
 
 # importing necessary modules
 from asyncore import write
-import time, zmq, json, sys, io, threading
+import time, zmq, json
+import multiprocessing as mp
 from tkinter import NONE
 # Should contain imports for the test scripts
 from GenResTest import GenResTest
+from PUBServer import PUBServer
 
 # Makes the REPServer a class
 class REPServer():
 
     def __init__(self):
         self.output = None
-        rep_thread = threading.Thread(target = self.run_server())
-        rep_thread.daemon = True
-        rep_thread.start()
-   
-
-    def run_server(self):
+        
         # Creates a context class which contains the method to create a socket.
         cxt = zmq.Context()
         socket = cxt.socket(zmq.REP)
@@ -45,41 +42,15 @@ class REPServer():
                 message = socket.recv_string().lower()
                 print("Received request: %s " % message)
 
+
                 # Testing to see what the request sent to the server was. The only requests we
                 # care about are test1, test2, test3, & test4. Anything else will send back 
                 # "invalid request" to the client.
                 if message == "test1":
-                    print("Received request for test 1")
 
-                    # Switches the environment for print statements
-                    old_stdout = sys.stdout
-                    new_stdout = io.StringIO()
-                    sys.stdout = new_stdout
-
-
-                    passive_thread = threading.Thread(target = self.passive_fxn())
-                    passive_thread.daemon = True
-                    passive_thread.start()
-
-                    # Simulates the test running
-                    test1 = GenResTest()
-                    test1.run_test()
-                    self.output = new_stdout.getvalue()
-
-                    
-
-                    
-
-                    # Switches back to the normal print environment
-                    sys.stdout = old_stdout
-
-                    # Test code to ensure json/text sending is working correctly
-                    try:
-                        socket.send(b"Unknown Error")
-                    except:
-                        pass
-                    
-                    message = ''
+                    socket.send(b"Request receieved for Test 1. Starting test.")
+                    self.begin_processes(message)
+                    message = ''               
                     
                 elif message == "test2":
                     print("Received request for test 2")
@@ -140,44 +111,77 @@ class REPServer():
             socket.close()
             cxt.term()
 
-    def passive_fxn(self):
+    # def passive_fxn(self):
 
-        while 1>0:
-            if self.output:
-                try:
-                    try:
-                        write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
-                        write_function.write(self.output)
-                        write_function.close()
-                    except:
-                        break
-                except:
-                    pass
-                self.output = None
-            elif self.output == "Done.":
-                try:
-                    try:
-                        write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
-                        write_function.write(self.output)
-                        write_function.close()
-                    except:
-                        break
-                except:
-                    pass
-                self.output = None
-                break
-            else:
-                time.sleep(.5)
+    #     while 1>0:
+    #         if self.output:
+    #             try:
+    #                 try:
+    #                     write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
+    #                     write_function.write(self.output)
+    #                     write_function.close()
+    #                 except:
+    #                     break
+    #             except:
+    #                 pass
+    #             self.output = None
+    #         elif self.output == "Done.":
+    #             try:
+    #                 try:
+    #                     write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
+    #                     write_function.write(self.output)
+    #                     write_function.close()
+    #                 except:
+    #                     break
+    #             except:
+    #                 pass
+    #             self.output = None
+    #             break
+    #         else:
+    #             time.sleep(.5)
 
 
-            try:
-                    try:
-                        write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
-                        write_function.write(self.output)
-                        write_function.close()
-                    except:
-                        break
-            except:
-                pass
-# Instantiates the server        
-REP_Server = REPServer()
+    #         try:
+    #                 try:
+    #                     write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
+    #                     write_function.write(self.output)
+    #                     write_function.close()
+    #                 except:
+    #                     break
+    #         except:
+    #             pass
+
+    def task_test(self, conn, desired_test):
+        if desired_test == 'test1':
+            test1 = GenResTest(conn)
+        elif desired_test == 'test2':
+            pass
+        elif desired_test == 'test3':
+            pass
+        elif desired_test == 'test4':
+            pass
+        else:
+            pass
+
+    def task_PUBServer(self, conn):
+        pub_server = PUBServer(conn)
+
+    def begin_processes(self, desired_test):
+        print("Starting processes")
+        conn_test, conn_PUBServer = mp.Pipe()
+        process_test = mp.Process(target = self.task_test, args=(conn_test, desired_test,))
+        process_PUBServer = mp.Process(target = self.task_PUBServer, args=(conn_PUBServer,))
+        
+        process_test.start()
+        process_PUBServer.start()
+
+        process_test.join()
+        process_PUBServer.join()
+
+        print("Processes have ended.")
+
+try:
+    # Instantiates the server        
+    REP_Server = REPServer()
+except:
+    print("REPServer already instantiated")

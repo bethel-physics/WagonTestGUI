@@ -18,26 +18,12 @@ class REQClient():
     #################################################
 
     # Ensures nothing happens on instantiantion
-    def __init__(self):
+    def __init__(self, desired_test):
         self.message = ""
-        pass
-
-    #################################################
-
-    # Starts the test by creating a thread for the test to run inside of
-    def run_test_thread(self, desired_test):
-        self.test_thread = threading.Thread(target=self.ping_server(desired_test))
-        self.test_thread.daemon = True
-        self.test_thread.start()
-
-    #################################################
-
-    # The function used to run the test
-    def ping_server(self, desired_test):
-
+        
         # Establishing variable for use
         self.desired_test = desired_test
-
+        test = desired_test.decode('UTF-8')
         # Necessary for zmqClient    
         context = zmq.Context()
 
@@ -46,24 +32,27 @@ class REQClient():
         socket = context.socket(zmq.REQ)
         socket.connect("tcp://localhost:5555")
 
+        print("Sending request to REPServer for: ", test)
         # Tell the server what test to run
         socket.send(self.desired_test)
-
+        print("Request sent. Waiting for confirmation receipt...")
         # Get the reply
         self.message = socket.recv()
-
-        # Try to interpret the response as a json
-        try:
-            self.message = socket.recv()
-            valid_json_return = json.loads(self.message)
-            # print("\n", valid_json_return, "\n")
-        # When it fails, print what the server sends back
-        except:
-            # print("Server did not send json.")
-            self.message.decode('UTF-8')
-            # print(message)
-            # print(message.decode('UTF-8'))
-            self.message = self.message.decode('UTF-8')
+        received = self.message.decode('UTF-8')
+        print(received)
+        socket.close()
+        # # Try to interpret the response as a json
+        # try:
+        #     self.message = socket.recv()
+        #     valid_json_return = json.loads(self.message)
+        #     # print("\n", valid_json_return, "\n")
+        # # When it fails, print what the server sends back
+        # except:
+        #     # print("Server did not send json.")
+        #     self.message.decode('UTF-8')
+        #     # print(message)
+        #     # print(message.decode('UTF-8'))
+        #     self.message = self.message.decode('UTF-8')
 
     #################################################
 
