@@ -206,12 +206,13 @@ class Test2Scene(TestScene):
     def btn_confirm_action(self, _parent, conn):
 
         super().btn_confirm_action(_parent, conn)
-        test_2_client = REQClient()
-        test_2_client.run_test_thread(b"Test2")
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test2_completed = True
         self.data_holder.test2_pass = True
         self.data_holder.print()
+        test_2_client = REQClient()
+        test_2_client.run_test_thread(b"Test2")
+         #TODO EDIT THIS WITH ACTUAL TEST DATA
+        
 
 
 #################################################################################

@@ -171,8 +171,9 @@ class GUIWindow():
         print("tk.raise called")
         self.sidebar.disable_all_btns()
         print("Buttons disabled")
-        self.test_in_progress_frame.begin_update(master_window, conn, queue)
+        self.test_in_progress_frame.begin_update(self, master_window, conn, queue)
         print("after command called")
+        self.go_to_next_test()
         
        
         # process_console = mp.Process(target = create_console, args=(conn,))

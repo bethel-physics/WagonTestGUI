@@ -328,7 +328,7 @@ class TestInProgressScene(tk.Frame):
 
     #################################################
 
-    def begin_update(self, master_window, conn, queue):
+    def begin_update(self, _parent, master_window, conn, queue):
         print("started update loop")
         # try:
         while 1>0:
@@ -341,9 +341,11 @@ class TestInProgressScene(tk.Frame):
                 ent_console.insert(tk.END, text)
                 ent_console.insert(tk.END, "\n")
                 time.sleep(1)
+                if text == "JSON Received.":
+                    break
+                
             else:
                 time.sleep(.01)
-            
                 # except:
                     # time.sleep(1)
         # except:
