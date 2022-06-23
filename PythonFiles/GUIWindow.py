@@ -8,21 +8,18 @@ from turtle import bgcolor
 from pyparsing import trace_parse_action
 
 # Importing all the neccessary files and classes from them
-from PythonFiles.SidebarScene import SidebarScene
-from PythonFiles.LoginScene import LoginScene
-from PythonFiles.ScanScene import ScanScene
+from PythonFiles.Scenes.SidebarScene import SidebarScene
+from PythonFiles.Scenes.LoginScene import LoginScene
+from PythonFiles.Scenes.ScanScene import ScanScene
 from PythonFiles.TestFailedPopup import TestFailedPopup
-from PythonFiles.TestSummary import TestSummaryScene
-from PythonFiles.TestScene import *
-from PythonFiles.TestInProgressScene import TestInProgressScene
-from PythonFiles.DataHolder import DataHolder
-from PythonFiles.SplashScene import SplashScene
-from PythonFiles.TestInProgressScene import *
-from PythonFiles.CreateConsole import OutputConsole
+from PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
+from PythonFiles.Scenes.TestScene import *
+from PythonFiles.Scenes.TestInProgressScene import TestInProgressScene
+from PythonFiles.Data.DataHolder import DataHolder
+from PythonFiles.Scenes.SplashScene import SplashScene
+from PythonFiles.Scenes.TestInProgressScene import *
 
 #################################################################################
-def create_console(conn):
-    console = OutputConsole(conn)
 
 # Create a class for creating the basic GUI Window to be called by the main function to
 # instantiate the actual object

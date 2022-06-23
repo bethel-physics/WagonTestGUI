@@ -6,7 +6,6 @@ from numpy import multiply
 # Imports the GUIWindow
 from PythonFiles.GUIWindow import GUIWindow
 from PythonFiles.utils.SUBClient import SUBClient
-from PythonFiles.CreateConsole import OutputConsole
 
 
 

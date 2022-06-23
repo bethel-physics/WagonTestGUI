@@ -7,10 +7,7 @@ from tkinter import ttk
 from xml.dom.expatbuilder import parseFragmentString
 import sys, time
 import multiprocessing as mp
-from PythonFiles.AsyncioThread import AsyncioThread
 
-# Imports the ConsoleOutput class and its functions
-from PythonFiles.ConsoleOutput import *
 
 
 #################################################################################
