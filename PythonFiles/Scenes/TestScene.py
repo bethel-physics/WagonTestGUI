@@ -188,14 +188,13 @@ class Test1Scene(TestScene):
     # Override to add specific functionality
     def btn_confirm_action(self, _parent, conn):
 
-        
+        self.data_holder.test1_completed = True
+        self.data_holder.test1_pass = True
+        self.data_holder.print()
         super().btn_confirm_action(_parent, conn)
         test_1_client = REQClient(b'test1')
         _parent.set_frame_test_in_progress(conn, self.queue)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
-        self.data_holder.test1_completed = True
-        self.data_holder.test1_pass = True
-        self.data_holder.print()
 
         
 #################################################################################
@@ -204,14 +203,14 @@ class Test1Scene(TestScene):
 class Test2Scene(TestScene):
     # Override to add specific functionality
     def btn_confirm_action(self, _parent, conn):
-
-        super().btn_confirm_action(_parent, conn)
         self.data_holder.test2_completed = True
         self.data_holder.test2_pass = True
         self.data_holder.print()
-        test_2_client = REQClient()
-        test_2_client.run_test_thread(b"Test2")
+        super().btn_confirm_action(_parent, conn)
+        test_2_client = REQClient(b'test2')
+        _parent.set_frame_test_in_progress(conn, self.queue)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
+        
         
 
 
@@ -222,13 +221,13 @@ class Test3Scene(TestScene):
     # Override to add specific functionality
     def btn_confirm_action(self, _parent, conn):
 
-        super().btn_confirm_action(_parent, conn)
-        test_3_client = REQClient()
-        test_3_client.run_test_thread(b"Test3")
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test3_completed = True
         self.data_holder.test3_pass = True
         self.data_holder.print()
+        super().btn_confirm_action(_parent, conn)
+        test_3_client = REQClient(b'test3')
+        _parent.set_frame_test_in_progress(conn, self.queue)
+         #TODO EDIT THIS WITH ACTUAL TEST DATA
 
 
 #################################################################################
@@ -238,13 +237,12 @@ class Test4Scene(TestScene):
     # Override to add specific functionality
     def btn_confirm_action(self, _parent, conn):
 
-        super().btn_confirm_action(_parent, conn)
-        test_4_client = REQClient()
-        test_4_client.run_test_thread(b"Test4")
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
         self.data_holder.test4_completed = True
         self.data_holder.test4_pass = True
         self.data_holder.print()
-
+        super().btn_confirm_action(_parent, conn)
+        test_4_client = REQClient(b'test4')
+        _parent.set_frame_test_in_progress(conn, self.queue)
+         #TODO EDIT THIS WITH ACTUAL TEST DATA
 
 #################################################################################

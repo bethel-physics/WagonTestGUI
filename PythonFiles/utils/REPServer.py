@@ -15,6 +15,9 @@ from tkinter import NONE
 # Should contain imports for the test scripts
 from GenResTest import GenResTest
 from PUBServer import PUBServer
+from IDResTest import IDResTest
+from I2CConnTest import I2CConnTest
+from BitRateTest import BitRateTest
 
 # Makes the REPServer a class
 class REPServer():
@@ -53,53 +56,19 @@ class REPServer():
                     message = ''               
                     
                 elif message == "test2":
-                    print("Received request for test 2")
-
-                    # Simulates the test running
-                    # test2 = run_test2()
-                    # test2.run_test()
-                    time.sleep(3)
-
-                    # Test code to ensure json/text sending is working correctly
-                    current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-                    current_JSON_data = json.load(current_JSON_file)
-
-                    json_string = json.dumps(current_JSON_data)
-                    json_byte_string = bytes(json_string,'UTF-8')
-
-                    print(json_string)
-                
-                    socket.send(json_byte_string)
+                    socket.send(b"Request receieved for Test 2. Starting test.")
+                    self.begin_processes(message)
+                    message = ''   
 
                 elif message == "test3":
-                    print("Received request for test 3")
-
-                    # Simulates the test running
-                    # test3 = run_test3()
-                    # test3.run_test()
-                    time.sleep(3)
-
-                    # Test code to ensure json/text sending is working correctly
-                    socket.send(b"Test Failed")
+                    socket.send(b"Request receieved for Test 3. Starting test.")
+                    self.begin_processes(message)
+                    message = ''   
 
                 elif message == "test4":
-                    print("Received request for test 4")
-
-                    # Simulates the test running
-                    # test4 = run_test4()
-                    # test4.run_test()
-                    time.sleep(3)
-
-                    # Test code to ensure json/text sending is working correctly
-                    current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-                    current_JSON_data = json.load(current_JSON_file)
-
-                    json_string = json.dumps(current_JSON_data)
-                    json_byte_string = bytes(json_string,'UTF-8')
-
-                    print(json_string)
-                
-                    socket.send(json_byte_string)
+                    socket.send(b"Request receieved for Test 4. Starting test.")
+                    self.begin_processes(message)
+                    message = ''   
 
                 else:
                     socket.send(b"Invalid request.")
@@ -110,62 +79,25 @@ class REPServer():
             print("Closing the server...")
             socket.close()
             cxt.term()
-
-    # def passive_fxn(self):
-
-    #     while 1>0:
-    #         if self.output:
-    #             try:
-    #                 try:
-    #                     write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
-    #                     write_function.write(self.output)
-    #                     write_function.close()
-    #                 except:
-    #                     break
-    #             except:
-    #                 pass
-    #             self.output = None
-    #         elif self.output == "Done.":
-    #             try:
-    #                 try:
-    #                     write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
-    #                     write_function.write(self.output)
-    #                     write_function.close()
-    #                 except:
-    #                     break
-    #             except:
-    #                 pass
-    #             self.output = None
-    #             break
-    #         else:
-    #             time.sleep(.5)
-
-
-    #         try:
-    #                 try:
-    #                     write_function = open('./PythonFiles/utils/SERVER-MESSAGE-QUEUE.txt', 'a')
-    #                     write_function.write(self.output)
-    #                     write_function.close()
-    #                 except:
-    #                     break
-    #         except:
-    #             pass
-
+    # The target function for processs_test being created in begin_process
     def task_test(self, conn, desired_test):
+        # Tests for what test is being requested and then starts the corresponding test.
+        # If it is not one of the tests, this passes (maybe change that.)
         if desired_test == 'test1':
             test1 = GenResTest(conn)
         elif desired_test == 'test2':
-            pass
+            test2 = IDResTest(conn)
         elif desired_test == 'test3':
-            pass
+            test3 = I2CConnTest(conn)
         elif desired_test == 'test4':
-            pass
+            test4 = BitRateTest(conn)
         else:
             pass
-
+    # The target function for process_PUBServer being created in begin_process
     def task_PUBServer(self, conn):
         pub_server = PUBServer(conn)
 
+    # Starts up the test and PUBServer as separate processes
     def begin_processes(self, desired_test):
         print("Starting processes")
         conn_test, conn_PUBServer = mp.Pipe()
