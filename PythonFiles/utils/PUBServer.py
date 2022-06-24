@@ -17,6 +17,7 @@ class PUBServer():
         # try:
             prints = conn.recv()
             if prints == "Done.":
+                prints = "print ; " + prints
                 pub_socket.send_string(prints)
                 json = conn.recv()
                 json = "JSON ; " + json 
