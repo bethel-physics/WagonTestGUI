@@ -2,7 +2,6 @@
 from audioop import mul
 import multiprocessing as mp
 import socket
-from numpy import multiply
 # Imports the GUIWindow
 from PythonFiles.GUIWindow import GUIWindow
 from PythonFiles.utils.SUBClient import SUBClient

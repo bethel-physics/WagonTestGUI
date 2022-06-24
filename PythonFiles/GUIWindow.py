@@ -299,11 +299,11 @@ class GUIWindow():
     def unable_to_exit(self):
         # Creates a popup to confirm whether or not to exit out of the window
         global popup
-        popup = tk.Tk()
+        popup = tk.Toplevel()
         # popup.wm_attributes('-toolwindow', 'True')
-        popup.title("Unable to Exit") 
-        popup.geometry("300x150")
-        popup.eval("tk::PlaceWindow . center")
+        popup.title("Exit Window") 
+        popup.geometry("300x150+500+300")
+        popup.grab_set()
        
 
         # Creates frame in the new window
@@ -311,17 +311,23 @@ class GUIWindow():
         frm_popup.pack()
 
         # Creates label in the frame
-        lbl_popup = tk.Label(frm_popup, text = "You cannot exit the program during a test!")
+        lbl_popup = tk.Label(
+            frm_popup, 
+            text = " You cannot exit the program \n during a test! ",
+            font = ('Arial', 13)
+            )
         lbl_popup.grid(column = 0, row = 0, columnspan = 2, pady = 25)
 
 
-        btn_no = tk.Button(
+        btn_ok = tk.Button(
             frm_popup,
-            text = "Ok",
+            width = 15,
+            height = 3,
+            text = "OK",
             relief = tk.RAISED,
             command = lambda: self.destroy_popup()
         )
-        btn_no.grid(column = 0, row = 1, columnspan=2)
+        btn_ok.grid(column = 0, row = 1, columnspan=2)
 
     #################################################
 
@@ -337,11 +343,11 @@ class GUIWindow():
 
         # Creates a popup to confirm whether or not to exit out of the window
         global popup
-        popup = tk.Tk()
+        popup = tk.Toplevel()
         # popup.wm_attributes('-toolwindow', 'True')
-        popup.title("Exit Confirmation Window") 
-        popup.geometry("300x150")
-        popup.eval("tk::PlaceWindow . center")
+        popup.title("Exit Window") 
+        popup.geometry("300x150+500+300")
+        popup.grab_set()
        
 
         # Creates frame in the new window
@@ -349,20 +355,28 @@ class GUIWindow():
         frm_popup.pack()
 
         # Creates label in the frame
-        lbl_popup = tk.Label(frm_popup, text = "Are you sure you would like to exit?")
+        lbl_popup = tk.Label(
+            frm_popup, 
+            text = "Are you sure you would like to exit?",
+            font = ('Arial', 13)
+            )
         lbl_popup.grid(column = 0, row = 0, columnspan = 2, pady = 25)
 
         # Creates yes and no buttons for exiting
         btn_yes = tk.Button(
-             frm_popup,
-             text = "Yes", 
-             relief = tk.RAISED, 
-             command = lambda: self.destroy_function()
-             ) 
+            frm_popup,     
+            width = 15,
+            height = 3,
+            text = "Yes", 
+            relief = tk.RAISED, 
+            command = lambda: self.destroy_function()
+            ) 
         btn_yes.grid(column = 0, row = 1)
 
         btn_no = tk.Button(
             frm_popup,
+            width = 15,
+            height = 3,
             text = "No",
             relief = tk.RAISED,
             command = lambda: self.destroy_popup()

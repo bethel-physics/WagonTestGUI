@@ -18,17 +18,21 @@ class TestFailedPopup():
     def test_failed_popup(self, parent, previous_frame):
 
         # Creates a popup to ask whether or not to retry the test
-        self.popup = tk.Tk()
+        self.popup = tk.Toplevel()
         self.popup.title("Test Failed") 
-        self.popup.geometry("300x150")
-        self.popup.eval("tk::PlaceWindow . center")
+        self.popup.geometry("300x150+500+300")
+        self.popup.grab_set()
 
         # Creates frame in the new window
         frm_popup = tk.Frame(self.popup)
         frm_popup.pack()
 
         # Creates label in the frame
-        lbl_popup = tk.Label(frm_popup, text = "The board failed a test. Would you like to retry?")
+        lbl_popup = tk.Label(
+            frm_popup, 
+            text = " The board failed the test. \n Would you like to retry? ",
+            font = ('Arial', 13)
+            )
         lbl_popup.grid(column = 0, row = 0, columnspan = 2, pady = 25)
 
         # Creates retry and continue buttons
