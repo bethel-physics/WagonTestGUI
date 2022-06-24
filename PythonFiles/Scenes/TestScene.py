@@ -15,9 +15,8 @@ class TestScene(tk.Frame):
 
     #################################################
 
-    def __init__(self, parent, master_frame, data_holder, test_name, conn, queue):
+    def __init__(self, parent, master_frame, data_holder, test_name, queue):
         super().__init__(master_frame, width=850, height=500)
-        self.conn = conn
         self.queue = queue
         self.test_name = test_name
         self.data_holder = data_holder
@@ -100,7 +99,7 @@ class TestScene(tk.Frame):
             frm_window, 
             text = "Confirm", 
             relief = tk.RAISED, 
-            command = lambda:self.btn_confirm_action(parent, self.conn)
+            command = lambda:self.btn_confirm_action(parent)
             )
         btn_confirm.pack(side = 'top')
         btn_confirm['font'] = font.Font(family = 'Arial', size = 13)
@@ -121,16 +120,6 @@ class TestScene(tk.Frame):
         frm_back = tk.Frame(self)
         frm_back.grid(column = 2, row = 0, sticky = 'ne')
 
-        # # # # # # # # # 
-        # Create a back button
-        btn_back = tk.Button(
-            frm_back, 
-            text = "Back", 
-            relief = tk.RAISED, 
-            command = lambda: self.btn_back_action(parent))
-        btn_back.pack(anchor = 'ne')
-        # # # # # # # # # 
-
         # Create a rescan button
         btn_rescan = tk.Button(
             frm_back, 
@@ -149,17 +138,11 @@ class TestScene(tk.Frame):
     # Rescan button takes the user back to scanning in a new board
     def btn_rescan_action(self, _parent):
         _parent.set_frame_scan_frame()
-
-    #################################################
-
-    # Back button action takes the user back to the scanning device
-    def btn_back_action(self, _parent):
-        pass
     
     #################################################
 
     # Confirm button action takes the user to the test in progress scene
-    def btn_confirm_action(self, _parent, conn):
+    def btn_confirm_action(self, _parent):
         # # # # # # # # # # # # # # # # # # # # # # # # # # #
         #   ++ GOAL CODE ++                                 #
         # def confirm():                                    #
@@ -169,7 +152,7 @@ class TestScene(tk.Frame):
         #       Update_Dataholder()                         #
         #       Go_To_Next_Test()                           #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-        # _parent.set_frame_test_in_progress(conn, self.queue)
+        # _parent.set_frame_test_in_progress(self.queue)
         pass
 
     #################################################
@@ -186,14 +169,14 @@ class TestScene(tk.Frame):
 
 class Test1Scene(TestScene):
     # Override to add specific functionality
-    def btn_confirm_action(self, _parent, conn):
+    def btn_confirm_action(self, _parent):
 
         self.data_holder.test1_completed = True
         self.data_holder.test1_pass = True
         self.data_holder.print()
-        super().btn_confirm_action(_parent, conn)
+        super().btn_confirm_action(_parent)
         test_1_client = REQClient(b'test1')
-        _parent.set_frame_test_in_progress(conn, self.queue)
+        _parent.set_frame_test_in_progress(self.queue)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
 
         
@@ -202,13 +185,13 @@ class Test1Scene(TestScene):
 
 class Test2Scene(TestScene):
     # Override to add specific functionality
-    def btn_confirm_action(self, _parent, conn):
+    def btn_confirm_action(self, _parent):
         self.data_holder.test2_completed = True
         self.data_holder.test2_pass = True
         self.data_holder.print()
-        super().btn_confirm_action(_parent, conn)
+        super().btn_confirm_action(_parent)
         test_2_client = REQClient(b'test2')
-        _parent.set_frame_test_in_progress(conn, self.queue)
+        _parent.set_frame_test_in_progress(self.queue)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         
         
@@ -219,14 +202,14 @@ class Test2Scene(TestScene):
 
 class Test3Scene(TestScene):
     # Override to add specific functionality
-    def btn_confirm_action(self, _parent, conn):
+    def btn_confirm_action(self, _parent):
 
         self.data_holder.test3_completed = True
         self.data_holder.test3_pass = True
         self.data_holder.print()
-        super().btn_confirm_action(_parent, conn)
+        super().btn_confirm_action(_parent)
         test_3_client = REQClient(b'test3')
-        _parent.set_frame_test_in_progress(conn, self.queue)
+        _parent.set_frame_test_in_progress(self.queue)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
 
 
@@ -235,14 +218,14 @@ class Test3Scene(TestScene):
 
 class Test4Scene(TestScene):
     # Override to add specific functionality
-    def btn_confirm_action(self, _parent, conn):
+    def btn_confirm_action(self, _parent):
 
         self.data_holder.test4_completed = True
         self.data_holder.test4_pass = True
         self.data_holder.print()
-        super().btn_confirm_action(_parent, conn)
+        super().btn_confirm_action(_parent)
         test_4_client = REQClient(b'test4')
-        _parent.set_frame_test_in_progress(conn, self.queue)
+        _parent.set_frame_test_in_progress(self.queue)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
 
 #################################################################################

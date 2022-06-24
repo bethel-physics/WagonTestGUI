@@ -41,7 +41,7 @@ class REPServer():
             while 1>0:
                 #  Wait for next request from client
                 # string = socket.recv_string().lower()
-                print("Wating for request...")
+                print("Waiting for request...")
                 message = socket.recv_string().lower()
                 print("Received request: %s " % message)
 
@@ -50,28 +50,32 @@ class REPServer():
                 # care about are test1, test2, test3, & test4. Anything else will send back 
                 # "invalid request" to the client.
                 if message == "test1":
-
+                    # Immediately sends a response to the GUI, begins the test and PUBServer, then resets the message variable.
                     socket.send(b"Request receieved for Test 1. Starting test.")
                     self.begin_processes(message)
                     message = ''               
                     
                 elif message == "test2":
+                    # Immediately sends a response to the GUI, begins the test and PUBServer, then resets the message variable.
                     socket.send(b"Request receieved for Test 2. Starting test.")
                     self.begin_processes(message)
                     message = ''   
 
                 elif message == "test3":
+                    # Immediately sends a response to the GUI, begins the test and PUBServer, then resets the message variable.
                     socket.send(b"Request receieved for Test 3. Starting test.")
                     self.begin_processes(message)
                     message = ''   
 
                 elif message == "test4":
+                    # Immediately sends a response to the GUI, begins the test and PUBServer, then resets the message variable.
                     socket.send(b"Request receieved for Test 4. Starting test.")
                     self.begin_processes(message)
                     message = ''   
 
                 else:
-                    socket.send(b"Invalid request.")
+                    # Contingency response for debugging
+                    socket.send(b"Invalid request. Request must be a test.")
 
         # Keyboard interrupt with ZMQ has a bug when on BOTH Windows AND Python at the same time.
         # This code should allow for CTRL + C interrupt for the server on any non-windows system.
@@ -79,10 +83,13 @@ class REPServer():
             print("Closing the server...")
             socket.close()
             cxt.term()
+
     # The target function for processs_test being created in begin_process
     def task_test(self, conn, desired_test):
         # Tests for what test is being requested and then starts the corresponding test.
         # If it is not one of the tests, this passes (maybe change that.)
+        # Every test tasks "conn" which is for piping "print" statements
+        # from the tests to the publish server
         if desired_test == 'test1':
             test1 = GenResTest(conn)
         elif desired_test == 'test2':
@@ -93,6 +100,7 @@ class REPServer():
             test4 = BitRateTest(conn)
         else:
             pass
+
     # The target function for process_PUBServer being created in begin_process
     def task_PUBServer(self, conn):
         pub_server = PUBServer(conn)
@@ -107,11 +115,13 @@ class REPServer():
         process_test.start()
         process_PUBServer.start()
 
+        # Prevents the code from continuing here until both processes have ended.
         process_test.join()
         process_PUBServer.join()
 
         print("Processes have ended.")
 
+# Having an odd bug where it trys to instantiate the server twice, this prevents anything weird from happening
 try:
     # Instantiates the server        
     REP_Server = REPServer()

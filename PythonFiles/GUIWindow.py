@@ -72,20 +72,31 @@ class GUIWindow():
         self.scan_frame = ScanScene(self, self.master_frame, self.data_holder)
         self.scan_frame.grid(row=0, column=0)
 
-        self.test1_frame= Test1Scene(self, self.master_frame, self.data_holder, "General Resistance Test", conn, queue)
+        self.test1_frame= Test1Scene(self, self.master_frame, self.data_holder, 
+                            "General Resistance Test",
+                            queue
+                            )
         self.test1_frame.grid(row=0, column=0)
 
-        self.test2_frame= Test2Scene(self, self.master_frame, self.data_holder,  "ID Resistor Test", conn, queue)
+        self.test2_frame= Test2Scene(self, self.master_frame, self.data_holder,
+                            "ID Resistor Test", 
+                            queue
+                            )
         self.test2_frame.grid(row=0, column=0)
 
-        self.test3_frame= Test3Scene(self, self.master_frame, self.data_holder, "I2C Comm. Test", conn, queue)
+        self.test3_frame= Test3Scene(self, self.master_frame, self.data_holder, 
+                            "I2C Comm. Test", 
+                            queue
+                            )
         self.test3_frame.grid(row=0, column=0)
 
-        self.test4_frame= Test4Scene(self, self.master_frame, self.data_holder, "Bit Rate Test", conn, queue)
+        self.test4_frame= Test4Scene(self, self.master_frame, self.data_holder, 
+                            "Bit Rate Test", 
+                            queue
+                            )
         self.test4_frame.grid(row=0, column=0)
 
         self.test_in_progress_frame = TestInProgressScene(self, self.master_frame, self.data_holder, queue)
-        self.test_in_progress_frame.initialize_scene(self, self.master_frame)
         self.test_in_progress_frame.grid(row=0, column=0)
 
 
@@ -162,24 +173,17 @@ class GUIWindow():
         self.set_frame(self.test4_frame)
 
     #################################################
-   
 
-    def set_frame_test_in_progress(self, conn, queue):
+    def set_frame_test_in_progress(self, queue):
         print("first set_frame called")
         
         self.set_frame(self.test_in_progress_frame)
         print("tk.raise called")
         self.sidebar.disable_all_btns()
         print("Buttons disabled")
-        self.test_in_progress_frame.begin_update(self, master_window, conn, queue)
+        self.test_in_progress_frame.begin_update(master_window, queue)
         print("after command called")
-        self.go_to_next_test()
-        
-       
-        # process_console = mp.Process(target = create_console, args=(conn,))
-        # process_console.start()
-
-   
+        self.go_to_next_test()   
 
     #################################################
 

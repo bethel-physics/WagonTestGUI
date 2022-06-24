@@ -23,6 +23,7 @@ class TestInProgressScene(tk.Frame):
         self.queue = queue
         self.data_holder = data_holder
         self.is_current_scene = False
+        self.initialize_scene(parent, master_frame)
 
 
     ##################################################
@@ -153,7 +154,7 @@ class TestInProgressScene(tk.Frame):
 
     #################################################
 
-    def begin_update(self, _parent, master_window, conn, queue):
+    def begin_update(self, master_window, queue):
         print("started update loop")
         # try:
         while 1>0:
