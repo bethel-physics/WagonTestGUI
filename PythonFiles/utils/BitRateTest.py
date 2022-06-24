@@ -4,7 +4,8 @@ import time, json
 class BitRateTest():
 
     def __init__(self, conn):
-        for i in range(10):
+        time.sleep(1)
+        for i in range(7):
             conn.send("Run:"+ str(i))
             time.sleep(0.25)
 

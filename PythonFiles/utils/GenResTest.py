@@ -5,7 +5,7 @@ class GenResTest():
 
     def __init__(self, conn):
         time.sleep(2)
-        for i in range(100):
+        for i in range(17):
             conn.send("Run:"+ str(i))
             time.sleep(0.25)
 

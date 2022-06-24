@@ -4,6 +4,7 @@ import time, json
 class IDResTest():
 
     def __init__(self, conn):
+        time.sleep(1)
         for i in range(10):
             conn.send("Run:"+ str(i))
             time.sleep(0.25)

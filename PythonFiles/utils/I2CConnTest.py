@@ -4,7 +4,8 @@ import time, json
 class I2CConnTest():
 
     def __init__(self, conn):
-        for i in range(10):
+        time.sleep(1)
+        for i in range(13):
             conn.send("Run:"+ str(i))
             time.sleep(0.25)
 
