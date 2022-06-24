@@ -4,11 +4,8 @@ import time
 class GenResTest():
 
     def __init__(self, conn):
-        time.sleep(1)
-        conn.send("One")
-        time.sleep(2)
-        conn.send("Two")
-        time.sleep(2)
-        conn.send("Three")
-        time.sleep(2)
+        for i in range(10):
+            conn.send("Run:"+ str(i))
+            time.sleep(0.25)
+
         conn.send("Done.")
