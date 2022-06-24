@@ -1,12 +1,17 @@
+# Importing necessary modules
 import zmq
 
+# Creating a class for the SUBSCRIBE socket-type Client
 class SUBClient():
 
     def __init__(self, conn, queue):
+        print("SUBClient has started") 
+        # Insantiates variables       
         self.conn = conn
-        print("SUBClient has started")
         self.message = ""
+        # Creates the zmq.Context object
         cxt = zmq.Context()
+        # Creates the socket as the SUBSCRIBE type
         listen_socket = cxt.socket(zmq.SUB)
         listen_socket.connect("tcp://localhost:5556")
         # Sets the topics that the server will listen for
@@ -39,7 +44,7 @@ class SUBClient():
                 # TestInProgressScene's begin_update() method
                 queue.put("JSON Received.")
             else:
-                
+
                 # DEBUG
                 print("Invalid topic sent. Must be 'print' or 'JSON'.")
                 # END DEBUG

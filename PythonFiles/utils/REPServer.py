@@ -5,8 +5,6 @@
 #                                                                   #
 #####################################################################
 
-## MAYBE TURN THIS INTO A CLASS THAT IS INSTANTIATED IN THIS FILE ##
-
 # importing necessary modules
 from asyncore import write
 import time, zmq, json
