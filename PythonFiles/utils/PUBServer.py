@@ -17,9 +17,10 @@ class PUBServer():
         # try:
             prints = conn.recv()
             if prints == "Done.":
-                prints = "JSON ; " + prints
-                # prints_byte_string = bytes(prints, 'UTF-8')  
                 pub_socket.send_string(prints)
+                json = conn.recv()
+                json = "JSON ; " + json 
+                pub_socket.send_string(json)
                 break
             else:
         # try:

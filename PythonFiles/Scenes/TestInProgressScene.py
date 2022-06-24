@@ -165,7 +165,7 @@ class TestInProgressScene(tk.Frame):
                 print(text)
                 ent_console.insert(tk.END, text)
                 ent_console.insert(tk.END, "\n")
-                self.entry.see('end')
+                ent_console.see('end')
 
                 if text == "JSON Received.":
                     break
