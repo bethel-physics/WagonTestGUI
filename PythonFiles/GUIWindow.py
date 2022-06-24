@@ -242,6 +242,14 @@ class GUIWindow():
         
         # Updates the sidebar every time the frame is set
         self.sidebar.update_sidebar(self)
+
+        # If frame is test_in_progress frame, disable the close program button
+        # Tells the master window that its exit window button is being given a new function
+        if _frame is self.test_in_progress_frame:
+            master_window.protocol('WM_DELETE_WINDOW', self.unable_to_exit)
+        else:
+            # Tells the master window that its exit window button is being given a new function
+            master_window.protocol('WM_DELETE_WINDOW', self.exit_function)
  
         #############################################################################
         #  The Following Code Determines What Buttons Are Visible On The Side Bar   #
@@ -277,6 +285,43 @@ class GUIWindow():
         _frame.tkraise()
 
     #################################################
+
+
+    def unable_to_exit(self):
+        # Creates a popup to confirm whether or not to exit out of the window
+        global popup
+        popup = tk.Tk()
+        # popup.wm_attributes('-toolwindow', 'True')
+        popup.title("Unable to Exit") 
+        popup.geometry("300x150")
+        popup.eval("tk::PlaceWindow . center")
+       
+
+        # Creates frame in the new window
+        frm_popup = tk.Frame(popup)
+        frm_popup.pack()
+
+        # Creates label in the frame
+        lbl_popup = tk.Label(frm_popup, text = "You cannot exit the program during a test!")
+        lbl_popup.grid(column = 0, row = 0, columnspan = 2, pady = 25)
+
+
+        btn_no = tk.Button(
+            frm_popup,
+            text = "Ok",
+            relief = tk.RAISED,
+            command = lambda: self.destroy_popup()
+        )
+        btn_no.grid(column = 0, row = 1, columnspan=2)
+
+    #################################################
+
+    # Called when the no button is pressed to destroy popup and return you to the main window
+    def destroy_popup(self):
+        popup.destroy()
+
+
+
 
     # New function for clicking on the exit button
     def exit_function(self):
@@ -326,13 +371,14 @@ class GUIWindow():
     # Called when the yes button is pressed to destroy both windows
     def destroy_function(self):
 
-        # If statements are to destroy console windows if they exist
-        if(self.test_in_progress_frame.is_current_scene):
-            self.test_in_progress_frame.console_destroy()
+        master_window.update()
+        popup.update()
 
         # Destroys the popup and master window
         popup.destroy()
         master_window.destroy()
+
+        
 
         # Ensures the application closes with the exit button
         exit()
