@@ -32,7 +32,7 @@ class TestScene(tk.Frame):
 
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 850, height = 500)
-        frm_window.grid(column=1, row=1, padx = 235, pady = 97)
+        frm_window.grid(column=1, row=1, padx = 235, pady = 109)
 
         # Create a label for the tester's name
         lbl_tester = tk.Label(
@@ -187,7 +187,7 @@ class Test2Scene(TestScene):
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
         self.data_holder.test2_completed = True
-        self.data_holder.test2_pass = True
+        self.data_holder.test2_pass = False
         self.data_holder.print()
         super().btn_confirm_action(_parent)
         test_2_client = REQClient(b'test2')

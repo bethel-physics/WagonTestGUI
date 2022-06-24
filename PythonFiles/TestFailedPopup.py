@@ -9,13 +9,13 @@ class TestFailedPopup():
     
     #################################################
 
-    def __init__(self, parent):
-        self.test_failed_popup(parent)
+    def __init__(self, parent, previous_frame):
+        self.test_failed_popup(parent, previous_frame)
     
     #################################################
 
     # Function to make retry or continue window if the test fails
-    def test_failed_popup(self, parent):
+    def test_failed_popup(self, parent, previous_frame):
 
         # Creates a popup to ask whether or not to retry the test
         self.popup = tk.Tk()
@@ -36,7 +36,7 @@ class TestFailedPopup():
              frm_popup,
              text = "Retry", 
              relief = tk.RAISED, 
-             command = lambda: self.retry_function(parent, self.previous_frame)
+             command = lambda: self.retry_function(parent, previous_frame)
              ) 
         btn_retry.grid(column = 0, row = 1)
 
@@ -44,25 +44,24 @@ class TestFailedPopup():
             frm_popup,
             text = "Continue",
             relief = tk.RAISED,
-            command = lambda: self.continue_function(parent)
+            command = lambda: self.continue_function()
         )
         btn_continue.grid(column = 1, row = 1)
 
     #################################################
     
     # Called when the no button is pressed to destroy popup and return you to the main window
-    def retry_function(self, parent):
+    def retry_function(self, parent, previous_frame):
         self.popup.destroy()
 
         #TODO This needs to be overhauled
-        parent.go_to_next_test()
+        parent.set_frame(previous_frame)
         
     #################################################
 
     # Called to continue on in the testing procedure
-    def continue_function(self, _parent):
+    def continue_function(self):
         self.popup.destroy()
-        _parent.go_to_next_test()
 
     #################################################
 

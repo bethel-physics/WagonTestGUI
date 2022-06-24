@@ -188,23 +188,11 @@ class GUIWindow():
     #################################################
 
     def check_if_test_passed(self):
-        # Brings up the test_failed popup if the test is false, continues on if not
-        if self.data_holder.test1_pass == False:
-            TestFailedPopup(self)
-
-        elif self.data_holder.test2_pass == False:
-            TestFailedPopup(self)
-
-        elif self.data_holder.test3_pass == False:
-            TestFailedPopup(self)
-
-        elif self.data_holder.test4_pass == False:
-            TestFailedPopup(self)
-
+        pass
     #################################################
 
     def go_to_next_test(self):
-
+        
         # Array of potentially uncompleted tests
         test_completed_list = [
             self.data_holder.test1_completed,
@@ -232,6 +220,7 @@ class GUIWindow():
                 elif (index == 3):
                     self.set_frame_test4()
                 break
+        
 
 
         # Tests if all the tests have been completed
@@ -239,6 +228,8 @@ class GUIWindow():
         if (not test_incomplete):
             self.set_frame_test_summary()
 
+        
+        self.check_if_test_passed()
     #################################################
 
     # Called to change the frame to the argument _frame
@@ -284,6 +275,20 @@ class GUIWindow():
         #############################################################################
         #                        End Button Visibility Code                         #
         #############################################################################
+
+        # Brings up the test_failed popup if the test is false, continues on if not
+        if _frame == self.test2_frame:
+            if self.data_holder.test1_pass == False:
+                TestFailedPopup(self, self.test1_frame)
+        if _frame == self.test3_frame:
+            if self.data_holder.test2_pass == False:
+                TestFailedPopup(self, self.test2_frame)
+        if _frame == self.test4_frame:
+            if self.data_holder.test3_pass == False:
+                TestFailedPopup(self, self.test3_frame)
+        if _frame == self.test_summary_frame:
+            if self.data_holder.test4_pass == False:
+                TestFailedPopup(self, self.test4_frame)
 
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
