@@ -1,12 +1,10 @@
 #################################################################################
 
 # Imports all the necessary modules
-import queue
 import tkinter as tk
 from tkinter import ttk
 from xml.dom.expatbuilder import parseFragmentString
-import sys, time
-import multiprocessing as mp
+import time
 
 
 

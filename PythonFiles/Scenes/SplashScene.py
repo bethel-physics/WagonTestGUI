@@ -2,7 +2,6 @@
 
 # Importing necessary modules
 import tkinter as tk
-import tkinter.font as font
 from PIL import ImageTk as iTK
 from PIL import Image
 
