@@ -4,7 +4,6 @@
 from pickle import NONE
 import tkinter as tk
 from turtle import bgcolor
-
 from pyparsing import trace_parse_action
 
 # Importing all the neccessary files and classes from them
@@ -321,9 +320,10 @@ class GUIWindow():
 
         btn_ok = tk.Button(
             frm_popup,
-            width = 15,
-            height = 3,
+            width = 12,
+            height = 2,
             text = "OK",
+            font = ('Arial', 12),
             relief = tk.RAISED,
             command = lambda: self.destroy_popup()
         )
@@ -365,20 +365,22 @@ class GUIWindow():
         # Creates yes and no buttons for exiting
         btn_yes = tk.Button(
             frm_popup,     
-            width = 15,
-            height = 3,
+            width = 12,
+            height = 2,
             text = "Yes", 
-            relief = tk.RAISED, 
+            relief = tk.RAISED,
+            font = ('Arial', 12), 
             command = lambda: self.destroy_function()
-            ) 
+            )
         btn_yes.grid(column = 0, row = 1)
 
         btn_no = tk.Button(
             frm_popup,
-            width = 15,
-            height = 3,
+            width = 12,
+            height = 2,
             text = "No",
             relief = tk.RAISED,
+            font = ('Arial', 12),
             command = lambda: self.destroy_popup()
         )
         btn_no.grid(column = 1, row = 1)

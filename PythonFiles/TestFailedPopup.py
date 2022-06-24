@@ -38,16 +38,22 @@ class TestFailedPopup():
         # Creates retry and continue buttons
         btn_retry = tk.Button(
              frm_popup,
+             width = 8,
+             height = 2,
              text = "Retry", 
-             relief = tk.RAISED, 
+             relief = tk.RAISED,
+             font = ('Arial', 12),
              command = lambda: self.retry_function(parent, previous_frame)
-             ) 
+             )
         btn_retry.grid(column = 0, row = 1)
 
         btn_continue = tk.Button(
             frm_popup,
+            width = 8,
+            height = 2,
             text = "Continue",
             relief = tk.RAISED,
+            font = ('Arial', 12),
             command = lambda: self.continue_function()
         )
         btn_continue.grid(column = 1, row = 1)
