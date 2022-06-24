@@ -12,9 +12,7 @@ class PUBServer():
         pub_socket = cxt.socket(zmq.PUB)
         pub_socket.bind("tcp://*:5556")
 
-        # try:
         while 1 > 0:
-        # try:
             prints = conn.recv()
             if prints == "Done.":
                 prints = "print ; " + prints
@@ -24,12 +22,9 @@ class PUBServer():
                 pub_socket.send_string(json)
                 break
             else:
-        # try:
                 prints = "print ; " + prints
-                # prints_byte_string = bytes(prints, 'UTF-8')  
                 pub_socket.send_string(prints)
 
-            time.sleep(1)
 
         print("PUBServer Closing")    
         pub_socket.close()
