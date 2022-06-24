@@ -4,12 +4,23 @@ import time, json
 class GenResTest():
 
     def __init__(self, conn):
-        for i in range(10):
+        time.sleep(2)
+        for i in range(100):
             conn.send("Run:"+ str(i))
             time.sleep(0.25)
 
+
+
+
+
+#################################################################################
+
+    # Include this in every test file
+        # Or in some sense
+
         conn.send("Done.")
         time.sleep(0.25)
+        
         # Test code to ensure json/text sending is working correctly
         current_JSON_file = open("./PythonFiles/JSONFiles/testingJSON.JSON")
         current_JSON_data = json.load(current_JSON_file)
