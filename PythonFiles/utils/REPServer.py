@@ -5,122 +5,123 @@
 #                                                                   #
 #####################################################################
 
-## MAYBE TURN THIS INTO A CLASS THAT IS INSTANTIATED IN THIS FILE ##
-
 # importing necessary modules
-import time, zmq, json, sys, io
+from asyncore import write
+import time, zmq, json
+import multiprocessing as mp
+from tkinter import NONE
 # Should contain imports for the test scripts
 from GenResTest import GenResTest
-# Creates a context class which contains the method to create a socket.
-cxt = zmq.Context()
-socket = cxt.socket(zmq.REP)
+from PUBServer import PUBServer
+from IDResTest import IDResTest
+from I2CConnTest import I2CConnTest
+from BitRateTest import BitRateTest
 
-# Server-side for talking to a network point. "Bind"   ## socket.connect() is only used for CLIENTS
-socket.bind("tcp://*:5555")
+# Makes the REPServer a class
+class REPServer():
 
-print ("Reply Server has started.")
-time.sleep(1)
-
-
-try:
-    # Sets up an infinite loop so the server is always on until a keyboard interrupt occurs
-    while 1>0:
-        #  Wait for next request from client
-        # string = socket.recv_string().lower()
-        print("Wating for request...")
-        message = socket.recv_string().lower()
-        print("Received request: %s " % message)
-
-        # Testing to see what the request sent to the server was. The only requests we
-        # care about are test1, test2, test3, & test4. Anything else will send back 
-        # "invalid request" to the client.
-        if message == "test1":
-            print("Received request for test 1")
-
-            # Switches the environment for print statements
-            old_stdout = sys.stdout
-            new_stdout = io.StringIO()
-            sys.stdout = new_stdout
-
-            # Simulates the test running
-            test1 = GenResTest()
-            test1.run_test()
-            output = new_stdout.getvalue()
-            output_byte_string = bytes(output,'UTF-8')
-
-            try:
-                for message in output:
-                    try:
-                        socket.send(output_byte_string)
-                    except:
-                        break
-            except:
-                pass
-            
-            # Switches back to the normal print environment
-            sys.stdout = old_stdout
-
-            # Test code to ensure json/text sending is working correctly
-            try:
-                socket.send(b"Unknown Error")
-            except:
-                pass
-
-        elif message == "test2":
-            print("Received request for test 2")
-
-            # Simulates the test running
-            # test2 = run_test2()
-            # test2.run_test()
-            time.sleep(3)
-
-            # Test code to ensure json/text sending is working correctly
-            current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-            current_JSON_data = json.load(current_JSON_file)
-
-            json_string = json.dumps(current_JSON_data)
-            json_byte_string = bytes(json_string,'UTF-8')
-
-            print(json_string)
+    def __init__(self):
+        self.output = None
         
-            socket.send(json_byte_string)
+        # Creates a context class which contains the method to create a socket.
+        cxt = zmq.Context()
+        socket = cxt.socket(zmq.REP)
 
-        elif message == "test3":
-            print("Received request for test 3")
+        # Server-side for talking to a network point. "Bind"   ## socket.connect() is only used for CLIENTS
+        socket.bind("tcp://*:5555")
 
-            # Simulates the test running
-            # test3 = run_test3()
-            # test3.run_test()
-            time.sleep(3)
+        print ("Reply Server has started.")
+        time.sleep(1)
 
-            # Test code to ensure json/text sending is working correctly
-            socket.send(b"Test Failed")
 
-        elif message == "test4":
-            print("Received request for test 4")
+        try:
+            # Sets up an infinite loop so the server is always on until a keyboard interrupt occurs
+            while 1>0:
+                #  Wait for next request from client
+                # string = socket.recv_string().lower()
+                print("Waiting for request...")
+                message = socket.recv_string().lower()
+                print("Received request: %s " % message)
 
-            # Simulates the test running
-            # test4 = run_test4()
-            # test4.run_test()
-            time.sleep(3)
 
-            # Test code to ensure json/text sending is working correctly
-            current_JSON_file = open("./PythonFiles/utils/testingJSON.JSON")
-            current_JSON_data = json.load(current_JSON_file)
+                # Testing to see what the request sent to the server was. The only requests we
+                # care about are test1, test2, test3, & test4. Anything else will send back 
+                # "invalid request" to the client.
+                if message == "test1":
+                    # Immediately sends a response to the GUI, begins the test and PUBServer, then resets the message variable.
+                    socket.send(b"Request receieved for Test 1. Starting test.")
+                    self.begin_processes(message)
+                    message = ''               
+                    
+                elif message == "test2":
+                    # Immediately sends a response to the GUI, begins the test and PUBServer, then resets the message variable.
+                    socket.send(b"Request receieved for Test 2. Starting test.")
+                    self.begin_processes(message)
+                    message = ''   
 
-            json_string = json.dumps(current_JSON_data)
-            json_byte_string = bytes(json_string,'UTF-8')
+                elif message == "test3":
+                    # Immediately sends a response to the GUI, begins the test and PUBServer, then resets the message variable.
+                    socket.send(b"Request receieved for Test 3. Starting test.")
+                    self.begin_processes(message)
+                    message = ''   
 
-            print(json_string)
-        
-            socket.send(json_byte_string)
+                elif message == "test4":
+                    # Immediately sends a response to the GUI, begins the test and PUBServer, then resets the message variable.
+                    socket.send(b"Request receieved for Test 4. Starting test.")
+                    self.begin_processes(message)
+                    message = ''   
 
+                else:
+                    # Contingency response for debugging
+                    socket.send(b"Invalid request. Request must be a test.")
+
+        # Keyboard interrupt with ZMQ has a bug when on BOTH Windows AND Python at the same time.
+        # This code should allow for CTRL + C interrupt for the server on any non-windows system.
+        except KeyboardInterrupt:
+            print("Closing the server...")
+            socket.close()
+            cxt.term()
+
+    # The target function for processs_test being created in begin_process
+    def task_test(self, conn, desired_test):
+        # Tests for what test is being requested and then starts the corresponding test.
+        # If it is not one of the tests, this passes (maybe change that.)
+        # Every test tasks "conn" which is for piping "print" statements
+        # from the tests to the publish server
+        if desired_test == 'test1':
+            test1 = GenResTest(conn)
+        elif desired_test == 'test2':
+            test2 = IDResTest(conn)
+        elif desired_test == 'test3':
+            test3 = I2CConnTest(conn)
+        elif desired_test == 'test4':
+            test4 = BitRateTest(conn)
         else:
-            socket.send(b"Invalid request.")
+            pass
 
-# Keyboard interrupt with ZMQ has a bug when on BOTH Windows AND Python at the same time.
-# This code should allow for CTRL + C interrupt for the server on any non-windows system.
-except KeyboardInterrupt:
-    print("Closing the server...")
-    socket.close()
-    cxt.term()
+    # The target function for process_PUBServer being created in begin_process
+    def task_PUBServer(self, conn):
+        pub_server = PUBServer(conn)
+
+    # Starts up the test and PUBServer as separate processes
+    def begin_processes(self, desired_test):
+        print("Starting processes")
+        conn_test, conn_PUBServer = mp.Pipe()
+        process_test = mp.Process(target = self.task_test, args=(conn_test, desired_test,))
+        process_PUBServer = mp.Process(target = self.task_PUBServer, args=(conn_PUBServer,))
+        
+        process_test.start()
+        process_PUBServer.start()
+
+        # Prevents the code from continuing here until both processes have ended.
+        process_test.join()
+        process_PUBServer.join()
+
+        print("Processes have ended.")
+
+# Having an odd bug where it trys to instantiate the server twice, this prevents anything weird from happening
+try:
+    # Instantiates the server        
+    REP_Server = REPServer()
+except:
+    print("REPServer already instantiated")

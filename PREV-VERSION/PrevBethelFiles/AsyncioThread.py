@@ -5,7 +5,7 @@ import threading
 import random
 import queue
 
-from TestScriptEx import TestScriptEx
+from PythonFiles.TestScriptEx import TestScriptEx
 
 
 # Fancy child of a thread that can send data to and from the tkinter stuff

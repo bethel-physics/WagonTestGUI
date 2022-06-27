@@ -2,6 +2,7 @@ import threading
 import time
 
 from PythonFiles.utils.REQClient import REQClient
+from PythonFiles.utils.SUBClient import SUBClient
 
 
 class TestScriptEx():
@@ -24,10 +25,13 @@ class TestScriptEx():
 
     def start_incrementing(self):
         
-        self.client1 = REQClient()
-        self.client1.run_test_thread(self.test_type)
-        
-        self.incrementor = self.client1.get_message()
+        self.reqclient = REQClient()
+        self.subclient = SUBClient()
+        self.subclient.create_client()
+        time.sleep(2)
+        self.reqclient.run_test_thread(self.test_type)
+    
+        self.incrementor = self.subclient.get_message()
         # while True:
         #     time.sleep(3)
         #     self.incrementor = self.incrementor + "Here's another line for you"
@@ -35,6 +39,6 @@ class TestScriptEx():
 
     
     def get_current_status(self):
-        self.incrementor = self.client1.get_message()
-        self.client1.set_message("")
+        self.incrementor = self.subclient.get_message()
+        self.subclient.set_message("")
         return self.incrementor
