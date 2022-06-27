@@ -2,11 +2,11 @@
 import time, json
 
 
-class GenResTest():
+class BitRateTest():
 
     def __init__(self, conn):
-        time.sleep(2)
-        for i in range(17):
+        time.sleep(1)
+        for i in range(7):
             conn.send("Run:"+ str(i))
             time.sleep(0.25)
 
