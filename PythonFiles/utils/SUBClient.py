@@ -13,7 +13,7 @@ class SUBClient():
         cxt = zmq.Context()
         # Creates the socket as the SUBSCRIBE type
         listen_socket = cxt.socket(zmq.SUB)
-        listen_socket.connect("tcp://localhost:5556")
+        listen_socket.connect("tcp://192.168.23.23:5556")
         # Sets the topics that the server will listen for
         listen_socket.setsockopt(zmq.SUBSCRIBE, b'print')
         listen_socket.setsockopt(zmq.SUBSCRIBE, b'JSON')
