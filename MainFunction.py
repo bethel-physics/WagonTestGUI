@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 # Importing necessary modules
 from audioop import mul
 import multiprocessing as mp
@@ -5,7 +7,6 @@ import socket
 # Imports the GUIWindow
 from PythonFiles.GUIWindow import GUIWindow
 from PythonFiles.utils.SUBClient import SUBClient
-
 
 
 # Creates a task of creating the GUIWindow

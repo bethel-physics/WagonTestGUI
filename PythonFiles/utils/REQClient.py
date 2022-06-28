@@ -18,12 +18,13 @@ class REQClient():
     #################################################
 
     # Ensures nothing happens on instantiantion
-    def __init__(self, desired_test):
+    def __init__(self, desired_test, serial, tester):
         self.message = ""
-        
+        self.serial = serial
+        self.tester = tester
+        sending_msg = desired_test + ";" + serial + ";" + tester
         # Establishing variable for use
         self.desired_test = desired_test
-        test = desired_test.decode('UTF-8')
         # Necessary for zmqClient    
         context = zmq.Context()
 
@@ -32,14 +33,13 @@ class REQClient():
         socket = context.socket(zmq.REQ)
         socket.connect("tcp://192.168.23.23:5555")
 
-        print("Sending request to REPServer for: ", test)
+        print("Sending request to REPServer for: ", self.desired_test)
         # Tell the server what test to run
-        socket.send(self.desired_test)
+        socket.send_string(sending_msg)
         print("Request sent. Waiting for confirmation receipt...")
         # Get the reply
         self.message = socket.recv()
         received = self.message.decode('UTF-8')
-        print(received)
 
         # Closes the client so the code in the GUI can continue once the request is sent.
         socket.close()

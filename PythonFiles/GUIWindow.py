@@ -21,6 +21,11 @@ from PythonFiles.Scenes.TestInProgressScene import *
 
 #################################################################################
 
+
+
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
+
 # Create a class for creating the basic GUI Window to be called by the main function to
 # instantiate the actual object
 class GUIWindow():
@@ -108,15 +113,21 @@ class GUIWindow():
         #              End Frame Creation               #
         #################################################
         
+        logging.info("All frames have been created.")
+
+
         # Tells the master window that its exit window button is being given a new function
         self.master_window.protocol('WM_DELETE_WINDOW', self.exit_function)
-
+        
         # Sets the current frame to the splash frame
         self.set_frame_splash_frame()
 
         self.master_frame.after(500, self.set_frame_login_frame)
+        
+        self.master_frame.after(1000, logging.info("The window mainloop has run.")
 
         self.master_window.mainloop()
+        
 
     #################################################
 

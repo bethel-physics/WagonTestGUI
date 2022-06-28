@@ -5,6 +5,7 @@ import zmq
 class SUBClient():
 
     def __init__(self, conn, queue):
+        
         print("SUBClient has started") 
         # Insantiates variables       
         self.conn = conn
@@ -43,6 +44,12 @@ class SUBClient():
                 # Places the message in the queue. the queue.get() is in 
                 # TestInProgressScene's begin_update() method
                 queue.put("JSON Received.")
+    
+
+                self.conn.send(self.message)
+
+
+
             else:
 
                 # DEBUG
