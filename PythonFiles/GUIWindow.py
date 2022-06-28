@@ -4,7 +4,8 @@
 from pickle import NONE
 import tkinter as tk
 from turtle import bgcolor
-from pyparsing import trace_parse_action
+import multiprocessing as mp
+#from pyparsing import trace_parse_action
 
 # Importing all the neccessary files and classes from them
 from PythonFiles.Scenes.SidebarScene import SidebarScene
@@ -30,24 +31,23 @@ class GUIWindow():
         self.conn = conn
         self.queue = queue
                              
-        # Create the window named "master_window"
-        # global makes master_window global and therefore accessible outside the function
-        global master_window
-        master_window = tk.Tk()
-        master_window.title("Bethel Interns' Window")
+        # Create the window named "self.master_window"
+        # global makes self.master_window global and therefore accessible outside the function
+        self.master_window = tk.Tk()
+        self.master_window.title("Bethel Interns' Window")
         # Creates the size of the window and disables resizing
-        master_window.geometry("1063x500+25+100")
-        master_window.resizable(0,0)
+        self.master_window.geometry("1063x500+25+100")
+        self.master_window.resizable(0,0)
 
         # Removes the tkinter logo from the window
-        # master_window.wm_attributes('-toolwindow', 'True')
+        # self.master_window.wm_attributes('-toolwindow', 'True')
 
         # Creates and packs a frame that exists on top of the master_frame
-        self.master_frame = tk.Frame(master_window, width=850, height= 500)
+        self.master_frame = tk.Frame(self.master_window, width=850, height= 500)
         self.master_frame.grid(column = 1, row = 0, columnspan = 4)
 
-        # Creates a frame to house the sidebar on master_window
-        sidebar_frame = tk.Frame(master_window, width = 213, height = 500)
+        # Creates a frame to house the sidebar on self.master_window
+        sidebar_frame = tk.Frame(self.master_window, width = 213, height = 500)
         sidebar_frame.grid(column = 0 , row = 0)
 
         # Creates the "Storage System" for the data during testing
@@ -62,6 +62,7 @@ class GUIWindow():
         #################################################
 
         # At top so it can be referenced by other frames' code... Order of creation matters
+
         self.test_summary_frame = TestSummaryScene(self, self.master_frame, self.data_holder)
         self.test_summary_frame.grid(row=0, column=0)
 
@@ -108,15 +109,15 @@ class GUIWindow():
         #################################################
         
         # Tells the master window that its exit window button is being given a new function
-        master_window.protocol('WM_DELETE_WINDOW', self.exit_function)
+        self.master_window.protocol('WM_DELETE_WINDOW', self.exit_function)
 
         # Sets the current frame to the splash frame
         self.set_frame_splash_frame()
 
         self.master_frame.after(500, self.set_frame_login_frame)
 
-        master_window.mainloop()
-    
+        self.master_window.mainloop()
+
     #################################################
 
     def set_frame_login_frame(self):  
@@ -128,8 +129,8 @@ class GUIWindow():
     def set_frame_scan_frame(self):
 
         self.scan_frame.is_current_scene = True
-        self.scan_frame.scan_QR_code()
         self.set_frame(self.scan_frame)
+        self.scan_frame.scan_QR_code(self.master_window)
 
     #################################################
 
@@ -180,7 +181,7 @@ class GUIWindow():
         print("tk.raise called")
         self.sidebar.disable_all_btns()
         print("Buttons disabled")
-        self.test_in_progress_frame.begin_update(master_window, queue)
+        self.test_in_progress_frame.begin_update(self.master_window, queue)
         print("after command called")
         self.go_to_next_test()   
 
@@ -240,10 +241,10 @@ class GUIWindow():
         # If frame is test_in_progress frame, disable the close program button
         # Tells the master window that its exit window button is being given a new function
         if _frame is self.test_in_progress_frame:
-            master_window.protocol('WM_DELETE_WINDOW', self.unable_to_exit)
+            self.master_window.protocol('WM_DELETE_WINDOW', self.unable_to_exit)
         else:
             # Tells the master window that its exit window button is being given a new function
-            master_window.protocol('WM_DELETE_WINDOW', self.exit_function)
+            self.master_window.protocol('WM_DELETE_WINDOW', self.exit_function)
  
         #############################################################################
         #  The Following Code Determines What Buttons Are Visible On The Side Bar   #
@@ -297,16 +298,15 @@ class GUIWindow():
 
     def unable_to_exit(self):
         # Creates a popup to confirm whether or not to exit out of the window
-        global popup
-        popup = tk.Toplevel()
+        self.popup = tk.Toplevel()
         # popup.wm_attributes('-toolwindow', 'True')
-        popup.title("Exit Window") 
-        popup.geometry("300x150+500+300")
-        popup.grab_set()
+        self.popup.title("Exit Window") 
+        self.popup.geometry("300x150+500+300")
+        self.popup.grab_set()
        
 
         # Creates frame in the new window
-        frm_popup = tk.Frame(popup)
+        frm_popup = tk.Frame(self.popup)
         frm_popup.pack()
 
         # Creates label in the frame
@@ -333,25 +333,22 @@ class GUIWindow():
 
     # Called when the no button is pressed to destroy popup and return you to the main window
     def destroy_popup(self):
-        popup.destroy()
-
-
+        self.popup.destroy()
 
 
     # New function for clicking on the exit button
     def exit_function(self):
 
         # Creates a popup to confirm whether or not to exit out of the window
-        global popup
-        popup = tk.Toplevel()
+        self.popup = tk.Toplevel()
         # popup.wm_attributes('-toolwindow', 'True')
-        popup.title("Exit Window") 
-        popup.geometry("300x150+500+300")
-        popup.grab_set()
+        self.popup.title("Exit Window") 
+        self.popup.geometry("300x150+500+300")
+        self.popup.grab_set()
        
 
         # Creates frame in the new window
-        frm_popup = tk.Frame(popup)
+        frm_popup = tk.Frame(self.popup)
         frm_popup.pack()
 
         # Creates label in the frame
@@ -389,24 +386,36 @@ class GUIWindow():
 
     # Called when the no button is pressed to destroy popup and return you to the main window
     def destroy_popup(self):
-        popup.destroy()
+        self.popup.destroy()
 
     #################################################
 
+
     # Called when the yes button is pressed to destroy both windows
     def destroy_function(self):
+        #self.master_window.eval('::ttk::CancelRepeat')
 
-        master_window.update()
-        popup.update()
+        self.master_window.update()
+        self.popup.update()
+       
+        #popup.quit()
+        #self.master_window.quit()
+
+        if self.scan_frame.is_current_scene == True:
+            self.test_in_progress_frame.close_prgbar()
+            self.scan_frame.kill_processes()
 
         # Destroys the popup and master window
-        popup.destroy()
-        master_window.destroy()
+        self.popup.destroy()
+        self.popup.quit()
 
-        
+        self.master_window.destroy()
+        self.master_window.quit()
 
         # Ensures the application closes with the exit button
-        exit()
+        #exit_main()
+
+        print("Leaving tester. Goodbye!")
 
     #################################################
 

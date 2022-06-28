@@ -82,12 +82,12 @@ class TestInProgressScene(tk.Frame):
         lbl_title.pack(padx = 0, pady = 50)
 
         # Create a progress bar that does not track progress but adds motion to the window
-        prgbar_progress = ttk.Progressbar(
+        self.prgbar_progress = ttk.Progressbar(
             self, 
             orient = 'horizontal',
             mode = 'indeterminate', length = 350)
-        prgbar_progress.pack(padx = 50)
-        prgbar_progress.start()
+        self.prgbar_progress.pack(padx = 50)
+        self.prgbar_progress.start()
 
         # A Button To Stop the Progress Bar and Progress Forward (Temporary until we link to actual progress)
         btn_stop = ttk.Button(
@@ -108,11 +108,6 @@ class TestInProgressScene(tk.Frame):
 
         _parent.go_to_next_test()
 
-        
-        # Destroys the console window
-        self.console_destroy()
-        
-        
 
 
     # Goes to the next scene after the progress scene is complete
@@ -171,4 +166,7 @@ class TestInProgressScene(tk.Frame):
                 
             else:
                 time.sleep(.01)
-                
+
+    def close_prgbar(self):
+        self.prgbar_progress.stop()
+        self.prgbar_progress.destroy()

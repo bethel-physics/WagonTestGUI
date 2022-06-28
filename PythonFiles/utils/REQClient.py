@@ -30,7 +30,7 @@ class REQClient():
         # Creates a socket to talk to the server
         # print("Connecting to the testing server...")
         socket = context.socket(zmq.REQ)
-        socket.connect("tcp://localhost:5555")
+        socket.connect("tcp://192.168.23.23:5555")
 
         print("Sending request to REPServer for: ", test)
         # Tell the server what test to run

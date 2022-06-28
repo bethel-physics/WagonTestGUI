@@ -18,7 +18,6 @@ def task_SUBClient(conn, queue):
     # Creates the SUBSCRIBE Socket Client
     sub_client = SUBClient(conn, queue)
 
-
 def run():    
     # Creates a Pipe for the SUBClient to talk to the GUI Window
     conn_SUB, conn_GUI = mp.Pipe()
@@ -38,12 +37,17 @@ def run():
     process_GUI.join()
 
     try:
+        conn_SUB.close()
+        conn_GUI.close()
+    except:
+        print("Pipe close is unnecessary.")
+
+    try:
         # Cleans up the SUBClient process
         process_SUBClient.terminate()
     except:
         print("Terminate is unnecessary.")
         pass
-
 
 if __name__ == "__main__":
     print(socket.gethostname())
