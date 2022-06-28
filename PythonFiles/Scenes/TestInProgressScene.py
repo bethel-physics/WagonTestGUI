@@ -162,11 +162,16 @@ class TestInProgressScene(tk.Frame):
                 ent_console.see('end')
 
                 if text == "JSON Received.":
+                    print("JSON Received.")
+                    master_window.update()
+                    time.sleep(1)
                     break
                 
             else:
                 time.sleep(.01)
 
     def close_prgbar(self):
+        print("Closing the progressbar.")
         self.prgbar_progress.stop()
         self.prgbar_progress.destroy()
+        print("Progressbar succesfully closed.")

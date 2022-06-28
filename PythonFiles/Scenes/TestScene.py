@@ -175,7 +175,7 @@ class Test1Scene(TestScene):
         self.data_holder.test1_pass = True
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_1_client = REQClient(b'test1')
+        test_1_client = REQClient('test1', self.data_holder.current_serial_ID, self.data_holder.user_ID)
         _parent.set_frame_test_in_progress(self.queue)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
 
@@ -190,7 +190,7 @@ class Test2Scene(TestScene):
         self.data_holder.test2_pass = False
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_2_client = REQClient(b'test2')
+        test_2_client = REQClient('test2', self.data_holder.current_serial_ID, self.data_holder.user_ID)
         _parent.set_frame_test_in_progress(self.queue)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
         
@@ -208,7 +208,7 @@ class Test3Scene(TestScene):
         self.data_holder.test3_pass = True
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_3_client = REQClient(b'test3')
+        test_3_client = REQClient('test3', self.data_holder.current_serial_ID, self.data_holder.user_ID)
         _parent.set_frame_test_in_progress(self.queue)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
 
@@ -224,7 +224,7 @@ class Test4Scene(TestScene):
         self.data_holder.test4_pass = True
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_4_client = REQClient(b'test4')
+        test_4_client = REQClient('test4', self.data_holder.current_serial_ID, self.data_holder.user_ID)
         _parent.set_frame_test_in_progress(self.queue)
          #TODO EDIT THIS WITH ACTUAL TEST DATA
 

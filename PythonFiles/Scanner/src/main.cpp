@@ -16,7 +16,7 @@ int main(void)
 
 	//std::cout << "Please scan barcode or type 'q' to quit: " << std::endl;
 
-	std::cout << "<datalabel>33 32 30 35 39 39 39 39 39 39 30 30 30 30 31</datalabel>" << std::endl;
+	//std::cout << "<datalabel>33 32 30 35 39 39 39 39 39 39 30 30 30 30 31</datalabel>" << std::endl;
 
 	while(!el.GetToClose())
 	{
