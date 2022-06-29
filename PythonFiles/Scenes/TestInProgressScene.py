@@ -5,11 +5,12 @@ import tkinter as tk
 from tkinter import ttk
 from xml.dom.expatbuilder import parseFragmentString
 import time
-
-
+import logging
 
 #################################################################################
 
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
@@ -52,7 +53,8 @@ class TestInProgressScene(tk.Frame):
     # Used to initialize the frame that is on the main window
     # next_frame is used to progress to the next scene and is passed in from GUIWindow
     def initialize_scene(self, parent, master_frame):
-
+        
+        logging.info("TestInProgressScene: The frame has been initialized.")
         scrollbar = tk.Scrollbar(self)
         scrollbar.pack(side = "right", fill = 'y')
 
@@ -121,40 +123,16 @@ class TestInProgressScene(tk.Frame):
         self.previous_frame = previous_frame
         _parent.set_frame(previous_frame)
 
-    
-
-    # Dummy Script Function
-    def run_test_gen_resist(self):
-        print ("General Resistance Test Run")
-
-    #################################################
-
-    # Dummy Script Function
-    def run_test_id_resistor(self):
-        print ("ID Resistor Test Run")
-
-    #################################################
-
-    # Dummy Script Function
-    def run_test_i2c_comm(self):
-        print("I2C Comm. Test Run") 
-
-    #################################################
-
-    # Dummy Script Function
-    def run_test_bit_rate(self):
-         print("Bit Rate Test Run")
-
     #################################################
 
     def begin_update(self, master_window, queue):
-        print("started update loop")
+        logging.info("TestInProgressScene: Started console update loop.")
         # try:
         while 1>0:
                 # try:
             master_window.update()
             if not queue.empty():    
-                print("Waiting for queue objects...")
+                logging.info("TestInProgressScene: Waiting for queue objects...")
                 text = queue.get()
                 print(text)
                 ent_console.insert(tk.END, text)
@@ -162,7 +140,7 @@ class TestInProgressScene(tk.Frame):
                 ent_console.see('end')
 
                 if text == "JSON Received.":
-                    print("JSON Received.")
+                    logging.info("TestInProgressScene: JSON Received.")
                     master_window.update()
                     time.sleep(1)
                     break
@@ -171,7 +149,7 @@ class TestInProgressScene(tk.Frame):
                 time.sleep(.01)
 
     def close_prgbar(self):
-        print("Closing the progressbar.")
+        logging.debug("TestInProgressScene: Closing the progressbar.")
         self.prgbar_progress.stop()
         self.prgbar_progress.destroy()
-        print("Progressbar succesfully closed.")
+        logging.debug("TestInProgressScene: Progressbar succesfully closed.")
