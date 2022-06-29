@@ -13,8 +13,6 @@ class DataHolder():
         # Object that sends information to the database
         self.data_sender = DBSender()
         
-
-
         self.user_ID = ""                 # Tester's Name
         self.test_stand = ""              # Test stand for the unit
         self.current_serial_ID = -1        # Unit Serial Number
@@ -26,6 +24,30 @@ class DataHolder():
         self.test2_pass = False           # Whether the test has been passed
         self.test3_pass = False           # Whether the test has been passed
         self.test4_pass = False           # Whether the test has been passed
+
+    #################################################
+
+    def set_user_ID(self, user_ID):
+        self.data_sender.verify_person(user_ID)
+        self.user_ID = user_ID
+
+
+    ##################################################
+
+    def set_serial_ID(self, sn):
+        # TODO
+        # self.data_sender.add_new_board(sn)
+
+        self.current_serial_ID = sn
+
+
+    ##################################################
+
+    def get_serial_ID(self):
+        # TODO
+        # self.data_sender.add_new_board(sn)
+
+        return self.current_serial_ID
 
     #################################################
 
@@ -119,9 +141,9 @@ class DataHolder():
             self.test4_completed = True
             self.test4_pass = json_dict["pass"]
 
-    
-    def reset_data_holder(self):
-        self.user_ID = ""           
+
+    # Keeps the login information stored
+    def reset_data_holder(self):        
         self.test_stand = ""        
         self.current_serial_ID = -1  
         self.test1_completed = False

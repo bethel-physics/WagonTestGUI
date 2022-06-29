@@ -69,13 +69,13 @@ class ScanScene(tk.Frame):
             except:
                 pass
             if not len(serial) == 0:
-                self.data_holder.current_serial_ID = parse_xml(serial[0])
+                self.data_holder.set_serial_ID( parse_xml(serial[0]))
 
                 self.listener.terminate()
                 self.scanner.terminate()
                
                 ent_snum.delete(0,END)
-                ent_snum.insert(0, str(self.data_holder.current_serial_ID))
+                ent_snum.insert(0, str(self.data_holder.get_serial_ID()))
                 ent_snum.config(state = 'disabled')
                 self.show_rescan_button()
                 break
@@ -116,7 +116,7 @@ class ScanScene(tk.Frame):
             print(i + 1)
         time.sleep(0.5)'''
         print("Finished Scan")
-        ent_snum.insert(0, self.data_holder.current_serial_ID)
+        ent_snum.insert(0, self.data_holder.get_serial_ID())
         #ent_snum.insert(0, QRcode)
         ent_snum.config(state = 'disabled')
 
