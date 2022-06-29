@@ -1,6 +1,9 @@
 #################################################################################
-import json
+import json, logging
 from PythonFiles.Data.DBSender import DBSender
+
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 class DataHolder():
 
@@ -28,9 +31,10 @@ class DataHolder():
     #################################################
 
     def set_user_ID(self, user_ID):
+
         self.data_sender.verify_person(user_ID)
         self.user_ID = user_ID
-
+        logging.debug("DataHolder: User ID has been set.")
 
     ##################################################
 
@@ -39,7 +43,7 @@ class DataHolder():
         # self.data_sender.add_new_board(sn)
 
         self.current_serial_ID = sn
-
+        logging.info("DataHolder: Serial Number has been set.")
 
     ##################################################
 
@@ -54,7 +58,7 @@ class DataHolder():
     # Clears the data by reseting all the values to the initial state
     def clear_DataHolder(self):
         self.__init__()
-
+        logging.info("DataHolder: DataHolder has been fully reset.")
     #################################################
 
     # Future method to send data to the database
@@ -135,15 +139,15 @@ class DataHolder():
         elif test_type == "Bit Error Rate Test":
             with open("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_BERT_JSON.json", "w") as file:
                 json.dump(json_dict, file)
-            
             self.user_ID = json_dict["tester"]
             self.current_serial_ID = json_dict["board_sn"] 
             self.test4_completed = True
             self.test4_pass = json_dict["pass"]
 
+        logging.info("DataHolder: Test results have been saved")
 
     # Keeps the login information stored
-    def reset_data_holder(self):        
+    def data_holder_new_test(self):    
         self.test_stand = ""        
         self.current_serial_ID = -1  
         self.test1_completed = False
@@ -153,7 +157,9 @@ class DataHolder():
         self.test1_pass = False     
         self.test2_pass = False     
         self.test3_pass = False     
-        self.test4_pass = False     
+        self.test4_pass = False 
+
+        logging.info("DataHolder: DataHolder Information has been reset for a new test.")        
 
     ################################################
 

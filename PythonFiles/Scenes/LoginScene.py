@@ -2,8 +2,12 @@
 
 # importing necessary modules
 import tkinter as tk
+import logging
 
 #################################################################################
+
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 
 # Creates a class that is called by the GUIWindow. 
@@ -18,16 +22,16 @@ class LoginScene(tk.Frame):
 
     def __init__(self, parent, master_frame, data_holder):
         super().__init__(master_frame, width=850, height=500)
-
+        logging.info("LoginScene: Frame has been created.")
         self.data_holder = data_holder
 
 
         # Creating a list of users for dropdown menu
         # Eventually need to add a way for a database to have control over this list
         User_List = [
-            "Bob Johnson",
-            "Spencer Higgins",
-            "Amanda Holmes"
+            "Bryan Crossman",
+            "Andrew Kirzeder",
+            "Garrett Schindler"
         ]
 
         # Creating the title for the window
@@ -112,6 +116,7 @@ class LoginScene(tk.Frame):
 
     # A function to pack the submit button
     def show_submit_button(self):
+        logging.info("LoginScene: User has been selected.")
         self.btn_submit.config(state = 'active')
     
     #################################################

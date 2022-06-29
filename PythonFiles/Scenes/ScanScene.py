@@ -2,7 +2,7 @@
 
 # importing necessary modules
 import multiprocessing as mp
-import threading, time
+import logging, time
 import tkinter as tk
 import sys, time
 from tkinter import *
@@ -13,6 +13,8 @@ from PIL import Image
 
 #################################################################################
 
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Creating variable for testing QR Code entry
 QRcode = "1090201033667425"
@@ -37,13 +39,12 @@ class ScanScene(tk.Frame):
         # Runs the initilize_GUI function, which actually creates the frame
         # params are the same as defined above
         self.initialize_GUI(parent, master_frame)
-
+        
 
     # Creates a thread for the scanning of a barcode
     # Needs to be updated to run the read_barcode function in the original GUI
     def scan_QR_code(self, master_window):
         
-        print("Begin to scan")
         ent_snum.config(state = 'normal')
         ent_snum.delete(0,END)
         self.master_window = master_window
@@ -57,6 +58,8 @@ class ScanScene(tk.Frame):
         serial = manager.list()
 
         ent_snum.config(state = 'normal')
+
+        logging.info("ScanScene: Beginning scan...")
         self.scanner = scan()
         self.listener = mp.Process(target=listen, args=(serial, self.scanner))
 
@@ -81,58 +84,15 @@ class ScanScene(tk.Frame):
                 break
 
             elif self.EXIT_CODE:
+                logging.info("ScanScene: Exit code received. Terminating processes.")
                 self.listener.terminate()
                 self.scanner.terminate()
+                logging.info("ScanScene: Processes terminated successfully.")
                 break
             else:
                 time.sleep(.01)
-
-        '''
-        self.QR_thread = mp.Process(target=self.insert_QR_ID)
-
-        self.QR_thread.start()
-
-        self.QR_thread.join()
-        '''
-    # Updates the QR ID in the task
-    # Place holder function to insert the QRcode into the textbox 
-    def insert_QR_ID(self):
-
             
-        # Clears the textbox of anything possibly in the box
-        ent_snum.delete(0, END)
-
-        # Disables the rescan button until after the scanning is complete
-        self.hide_rescan_button()
-
-        # Runs the hide_submit_button function and sets a default value to the QR_value
-        self.hide_submit_button()
-        #self.scanned_QR_value = 000
-
-        # Delay to simulate scanning a QRcode
-        '''for i in range(1):
-            time.sleep(1)
-            time.sleep(1)
-            print(i + 1)
-        time.sleep(0.5)'''
-        print("Finished Scan")
-        ent_snum.insert(0, self.data_holder.get_serial_ID())
-        #ent_snum.insert(0, QRcode)
-        ent_snum.config(state = 'disabled')
-
-        # Restores access to the rescan button
-        self.show_rescan_button()
-
-        
-        # Sets the scanned_QR_value to 0 when the function is not in use
-        '''if (not self.is_current_scene):
-            self.scanned_QR_value = 0
-        else:
-            self.scanned_QR_value = QRcode
-            self.data_holder.current_serial_ID = self.scanned_QR_value
-        '''
-        self.data_holder.print()
-
+        logging.info("ScanScene: Scan complete.")
 
     # Creates the GUI itself
     def initialize_GUI(self, parent, master_frame):
@@ -141,6 +101,7 @@ class ScanScene(tk.Frame):
         
         super().__init__(self.master_frame, width = 850, height = 500)
 
+        logging.info("ScanScene: Frame has been created.")
         # Create a photoimage object of the QR Code
         QR_image = Image.open("./PythonFiles/Images/QRimage.png")
         QR_PhotoImage = iTK.PhotoImage(QR_image)
@@ -270,9 +231,10 @@ class ScanScene(tk.Frame):
     #################################################
         
     def kill_processes(self):
+        logging.info("ScanScene: Terminating scanner proceses.")
         try:
             self.scanner.kill()
             self.listener.terminate()
             self.EXIT_CODE = 1
         except:
-            print("Processes could not be terminated.")
+            logging.info("ScanScene: Processes could not be terminated.")

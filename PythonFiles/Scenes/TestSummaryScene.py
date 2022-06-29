@@ -374,8 +374,9 @@ class TestSummaryScene(tk.Frame):
 
     # Next test button action
     def btn_next_test_action(self, _parent):
-        self.data_holder.reset_data_holder()
+        self.data_holder.data_holder_new_test()
         _parent.set_frame(_parent.scan_frame)
+        logging.info("TestSummaryScene: Starting a new test.")
         
     #################################################
 
