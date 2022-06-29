@@ -139,7 +139,7 @@ class TestInProgressScene(tk.Frame):
                 ent_console.insert(tk.END, "\n")
                 ent_console.see('end')
 
-                if text == "JSON Received.":
+                if text == "Results received successfully.":
                     logging.info("TestInProgressScene: JSON Received.")
                     master_window.update()
                     time.sleep(1)

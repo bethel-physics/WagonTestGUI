@@ -3,12 +3,15 @@
 # Importing Necessary Modules
 import tkinter as tk
 import tkinter.font as font
+import logging
 
 # Importing Necessary Files
 from PythonFiles.utils.REQClient import REQClient
 
 #################################################################################
 
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Creating class for the window
 class TestScene(tk.Frame):
@@ -26,7 +29,7 @@ class TestScene(tk.Frame):
     #################################################
 
     def update_frame(self, parent):
-
+        logging.debug("ParentTestClass: A test frame has been updated.")
         # Creates a font to be more easily referenced later in the code
         font_scene = ('Arial', 15)
 
@@ -143,16 +146,6 @@ class TestScene(tk.Frame):
 
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
-        # # # # # # # # # # # # # # # # # # # # # # # # # # #
-        #   ++ GOAL CODE ++                                 #
-        # def confirm():                                    #
-        #       set_frame_TIPS()                            #
-        #       Runs_Test()   # Might include multithread   #
-        #       Get_Results()                               #
-        #       Update_Dataholder()                         #
-        #       Go_To_Next_Test()                           #
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-        # _parent.set_frame_test_in_progress(self.queue)
         pass
 
     #################################################
@@ -168,6 +161,9 @@ class TestScene(tk.Frame):
 
 
 class Test1Scene(TestScene):
+    
+    logging.info("Test1Scene: Frame has successfully been created.")
+
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
 
@@ -184,6 +180,9 @@ class Test1Scene(TestScene):
 
 
 class Test2Scene(TestScene):
+
+    logging.info("Test2Scene: Frame has successfully been created.")
+
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
         self.data_holder.test2_completed = True
@@ -201,6 +200,9 @@ class Test2Scene(TestScene):
 
 
 class Test3Scene(TestScene):
+
+    logging.info("Test3Scene: Frame has successfully been created.")
+
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
 
@@ -217,6 +219,9 @@ class Test3Scene(TestScene):
 
 
 class Test4Scene(TestScene):
+
+    logging.info("Test4Scene: Frame has successfully been created.")
+
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
 
