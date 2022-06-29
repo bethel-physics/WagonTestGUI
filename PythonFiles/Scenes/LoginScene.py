@@ -95,7 +95,7 @@ class LoginScene(tk.Frame):
     # passes in GUIWindow
     def btn_submit_action(self, _parent):
             # Sets the user_ID in the data_holder to the selected user
-        self.data_holder.user_ID = self.user_selected.get()
+        self.data_holder.set_user_ID(self.user_selected.get())
         # Changes frame to scan_frame
         _parent.set_frame_scan_frame()
 
