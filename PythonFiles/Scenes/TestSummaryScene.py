@@ -296,10 +296,10 @@ class TestSummaryScene(tk.Frame):
     def create_JSON_popup(self, JSON_String):
         
         # Creating a popup window for the JSON Details
-        self.JSON_popup = tk.Tk()
+        self.JSON_popup = tk.Toplevel()
         self.JSON_popup.geometry("500x300+750+100")
         self.JSON_popup.title("JSON Details")
-        self.JSON_popup.wm_attributes('-toolwindow', 'True')
+        # self.JSON_popup.wm_attributes('-toolwindow', 'True')
 
     
 
@@ -347,21 +347,22 @@ class TestSummaryScene(tk.Frame):
     #################################################
 
     def btn_more_info1_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\JSONFiles\DummyJSONTest.JSON")
+        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/DummyJSONTest.JSON")
 
     def btn_more_info2_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\JSONFiles\GarrettJSONTest.JSON")
+        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/DummyJSONTest.JSON")
 
     def btn_more_info3_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\JSONFiles\DummyJSONTest.JSON")
+        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/DummyJSONTest.JSON")
     
     def btn_more_info4_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\JSONFiles\GarrettJSONTest.JSON")
+        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/DummyJSONTest.JSON")
 
     #################################################
 
     # Next test button action
     def btn_next_test_action(self, _parent):
+        self.data_holder.reset_data_holder()
         _parent.set_frame(_parent.scan_frame)
         
     #################################################
@@ -378,6 +379,5 @@ class TestSummaryScene(tk.Frame):
         self.list_of_pass_fail = _list_of_pass_fail
 
     #################################################
-
 
 #################################################################################

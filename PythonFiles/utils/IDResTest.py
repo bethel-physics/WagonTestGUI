@@ -2,11 +2,11 @@
 import time, json
 
 
-class GenResTest():
+class IDResTest():
 
     def __init__(self, conn):
-        time.sleep(2)
-        for i in range(17):
+        time.sleep(1)
+        for i in range(10):
             conn.send("Run:"+ str(i))
             time.sleep(0.25)
 

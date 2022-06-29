@@ -182,7 +182,7 @@ class ScanScene(tk.Frame):
 
     # Function for the submit button
     def btn_submit_action(self, _parent):
-        _parent.go_to_next_test()
+        _parent.set_frame_inspection_frame()
 
     #################################################
 

@@ -9,7 +9,7 @@ class DataHolder():
     def __init__(self):
         self.user_ID = ""                 # Tester's Name
         self.test_stand = ""              # Test stand for the unit
-        self.current_serial_ID = 0        # Unit Serial Number
+        self.current_serial_ID = -1        # Unit Serial Number
         self.test1_completed = False      # Whether the test has been completed
         self.test2_completed = False      # Whether the test has been completed
         self.test3_completed = False      # Whether the test has been completed
@@ -66,6 +66,67 @@ class DataHolder():
         )
 
     ################################################
+
+
+
+    def update_from_json_string(self, imported_json_string):
+        json_dict = json.loads(imported_json_string)
+
+        
+        test_type = json_dict["name"]
+        if test_type == "GenRes Test":
+            with open("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_GenRes_JSON.json", "w") as file:
+                json.dump(json_dict, file)
+
+            self.user_ID = json_dict["tester"]
+            self.current_serial_ID = json_dict["board_sn"] 
+            self.test1_completed = True
+            self.test1_pass = json_dict["pass"]
+
+        elif test_type == "IDRes Test":
+            with open("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_IDRes_JSON.json", "w") as file:
+                json.dump(json_dict, file)
+
+            self.user_ID = json_dict["tester"]
+            self.current_serial_ID = json_dict["board_sn"] 
+            self.test2_completed = True
+            self.test2_pass = json_dict["pass"]
+
+
+        elif test_type == "IIC Test":
+            with open("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_IIC_JSON.json", "w") as file:
+                json.dump(json_dict, file)
+
+            self.user_ID = json_dict["tester"]
+            self.current_serial_ID = json_dict["board_sn"] 
+            self.test3_completed = True
+            self.test3_pass = json_dict["pass"]
+
+        elif test_type == "Bit Error Rate Test":
+            with open("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_BERT_JSON.json", "w") as file:
+                json.dump(json_dict, file)
+            
+            self.user_ID = json_dict["tester"]
+            self.current_serial_ID = json_dict["board_sn"] 
+            self.test4_completed = True
+            self.test4_pass = json_dict["pass"]
+
+    
+    def reset_data_holder(self):
+        self.user_ID = ""           
+        self.test_stand = ""        
+        self.current_serial_ID = -1  
+        self.test1_completed = False
+        self.test2_completed = False
+        self.test3_completed = False
+        self.test4_completed = False
+        self.test1_pass = False     
+        self.test2_pass = False     
+        self.test3_pass = False     
+        self.test4_pass = False     
+
+    ################################################
+
 
 
 #################################################################################
