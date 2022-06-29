@@ -5,6 +5,7 @@ from pickle import NONE
 import tkinter as tk
 from turtle import bgcolor
 import multiprocessing as mp
+import logging
 #from pyparsing import trace_parse_action
 
 # Importing all the neccessary files and classes from them
@@ -113,7 +114,7 @@ class GUIWindow():
         #              End Frame Creation               #
         #################################################
         
-        logging.info("All frames have been created.")
+        logging.info("GUIWindow: All frames have been created.")
 
 
         # Tells the master window that its exit window button is being given a new function
@@ -124,7 +125,6 @@ class GUIWindow():
 
         self.master_frame.after(500, self.set_frame_login_frame)
         
-        self.master_frame.after(1000, logging.info("The window mainloop has run.")
 
         self.master_window.mainloop()
         
@@ -134,7 +134,8 @@ class GUIWindow():
     def set_frame_login_frame(self):  
 
         self.set_frame(self.login_frame)    
-
+        
+        logging.debug("GUIWindow: The frame has been set to login_frame.")
     #################################################
 
     def set_frame_scan_frame(self):
@@ -142,6 +143,8 @@ class GUIWindow():
         self.scan_frame.is_current_scene = True
         self.set_frame(self.scan_frame)
         self.scan_frame.scan_QR_code(self.master_window)
+        
+        logging.debug("GUIWindow: The frame has been set to scan_frame."
 
     #################################################
 
@@ -152,6 +155,8 @@ class GUIWindow():
         # Disables all buttons when the splash frame is the only frame
         self.sidebar.disable_all_btns()
 
+        logging.debug("GUIWindow: The frame has been set to splash_frame."
+
     #################################################
 
     def set_frame_test_summary(self):
@@ -159,47 +164,49 @@ class GUIWindow():
         self.check_if_test_passed()
         self.set_frame(self.test_summary_frame)
 
+        logging.debug("GUIWindow: The frame has been set to test_summary_frame.")
+
     #################################################
 
     def set_frame_test1(self):
         self.test1_frame.update_frame(self)
         self.set_frame(self.test1_frame)
 
+        logging.debug("GUIWindow: The frame has been set to test1_frame.")
     #################################################
 
     def set_frame_test2(self):
         self.test2_frame.update_frame(self)
         self.set_frame(self.test2_frame)
 
+        logging.debug("GUIWindow: The frame has been set to test2_frame.")
     #################################################
 
     def set_frame_test3(self):
         self.test3_frame.update_frame(self)
         self.set_frame(self.test3_frame)
 
+        logging.debug("GUIWindow: The frame has been set to test3_frame.")
     #################################################
 
     def set_frame_test4(self):
         self.test4_frame.update_frame(self)
         self.set_frame(self.test4_frame)
 
+        logging.debug("GUIWindow: The frame has been set to test4_frame.")
     #################################################
 
     def set_frame_test_in_progress(self, queue):
-        print("first set_frame called")
-        
         self.set_frame(self.test_in_progress_frame)
-        print("tk.raise called")
         self.sidebar.disable_all_btns()
-        print("Buttons disabled")
         self.test_in_progress_frame.begin_update(self.master_window, queue)
-        print("after command called")
         self.go_to_next_test()   
 
+        logging.debug("GUIWindow: The frame has been set to test_in_progress_frame.")
     #################################################
 
     def check_if_test_passed(self):
-        pass
+        logging.debug("GUIWindow: The method check_if_test_passed(self) has been called. This method is empty.")
     #################################################
 
     def go_to_next_test(self):
@@ -214,7 +221,9 @@ class GUIWindow():
         
 
         test_incomplete = False
+        
 
+        logging.info("GUIWindow: Testing which tests have been completed.")
         # Checks tells the function which frame to set based on what frame is currently up
         for index, test in enumerate(test_completed_list):
             if test == True:
@@ -286,6 +295,8 @@ class GUIWindow():
         #############################################################################
         #                        End Button Visibility Code                         #
         #############################################################################
+        
+        logging.debug("GUIWindow: Sidebar buttons have been updated.")
 
         # Brings up the test_failed popup if the test is false, continues on if not
         if _frame == self.test2_frame:
@@ -304,10 +315,15 @@ class GUIWindow():
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
 
+        logging.info("GUIWindow: The frame has been raised.")
+
     #################################################
 
 
     def unable_to_exit(self):
+        
+        logging.debug("GUIWindow: The user tried to exit during a test in progress.")
+
         # Creates a popup to confirm whether or not to exit out of the window
         self.popup = tk.Toplevel()
         # popup.wm_attributes('-toolwindow', 'True')
@@ -345,7 +361,7 @@ class GUIWindow():
     # Called when the no button is pressed to destroy popup and return you to the main window
     def destroy_popup(self):
         self.popup.destroy()
-
+        logging.debug("GUIWindow: The popup has been destroyed.")
 
     # New function for clicking on the exit button
     def exit_function(self):
@@ -393,11 +409,6 @@ class GUIWindow():
         )
         btn_no.grid(column = 1, row = 1)
 
-    #################################################
-
-    # Called when the no button is pressed to destroy popup and return you to the main window
-    def destroy_popup(self):
-        self.popup.destroy()
 
     #################################################
 
@@ -405,6 +416,8 @@ class GUIWindow():
     # Called when the yes button is pressed to destroy both windows
     def destroy_function(self):
         #self.master_window.eval('::ttk::CancelRepeat')
+        
+        logging.info("GUIWindow: Exiting the GUI.")
 
         self.master_window.update()
         self.popup.update()
