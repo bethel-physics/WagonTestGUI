@@ -18,7 +18,7 @@ class DataHolder():
         
         self.user_ID = ""                 # Tester's Name
         self.test_stand = ""              # Test stand for the unit
-        self.current_serial_ID = -1        # Unit Serial Number
+        self.current_serial_ID = "-1BAD"        # Unit Serial Number
         self.test1_completed = False      # Whether the test has been completed
         self.test2_completed = False      # Whether the test has been completed
         self.test3_completed = False      # Whether the test has been completed
@@ -149,7 +149,7 @@ class DataHolder():
     # Keeps the login information stored
     def data_holder_new_test(self):    
         self.test_stand = ""        
-        self.current_serial_ID = -1  
+        self.current_serial_ID = "-1BAD"  
         self.test1_completed = False
         self.test2_completed = False
         self.test3_completed = False
