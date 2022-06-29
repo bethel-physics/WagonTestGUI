@@ -144,7 +144,7 @@ class GUIWindow():
         self.set_frame(self.scan_frame)
         self.scan_frame.scan_QR_code(self.master_window)
         
-        logging.debug("GUIWindow: The frame has been set to scan_frame."
+        logging.debug("GUIWindow: The frame has been set to scan_frame.")
 
     #################################################
 
@@ -155,7 +155,7 @@ class GUIWindow():
         # Disables all buttons when the splash frame is the only frame
         self.sidebar.disable_all_btns()
 
-        logging.debug("GUIWindow: The frame has been set to splash_frame."
+        logging.debug("GUIWindow: The frame has been set to splash_frame.")
 
     #################################################
 

@@ -1,5 +1,6 @@
 #################################################################################
-
+import json
+from PythonFiles.Data.DBSender import DBSender
 
 class DataHolder():
 
@@ -7,6 +8,13 @@ class DataHolder():
 
     # List of the variables being held by data holder
     def __init__(self):
+
+
+        # Object that sends information to the database
+        self.data_sender = DBSender()
+        
+
+
         self.user_ID = ""                 # Tester's Name
         self.test_stand = ""              # Test stand for the unit
         self.current_serial_ID = -1        # Unit Serial Number
