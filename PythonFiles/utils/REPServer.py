@@ -16,6 +16,7 @@ from PUBServer import PUBServer
 from IDResTest import IDResTest
 from I2CConnTest import I2CConnTest
 from BitRateTest import BitRateTest
+from StressScript import StressScript
 
 # Makes the REPServer a class
 class REPServer():
@@ -96,6 +97,8 @@ class REPServer():
             test3 = I2CConnTest(conn)
         elif desired_test == 'test4':
             test4 = BitRateTest(conn)
+        elif desired_test == "STRESS":
+            stress_test = StressScript(conn)
         else:
             pass
 
