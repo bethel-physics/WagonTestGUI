@@ -4,9 +4,12 @@
 import tkinter as tk
 from PIL import ImageTk as iTK
 from PIL import Image
+import logging
 
 #################################################################################
 
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 class SplashScene(tk.Frame):
 
@@ -20,6 +23,7 @@ class SplashScene(tk.Frame):
     def initialize_GUI(self, parent, master_frame):
         super().__init__(master_frame, width = 850, height = 500)
 
+        logging.info("SplashScene: Frame has been initialized.")
         # Creating Bethel Logo
         img_bethel_logo = Image.open("./PythonFiles/Images/Bethel_Logo.png")
         img_bethel_logo = img_bethel_logo.resize((250,100), Image.ANTIALIAS)

@@ -3,9 +3,12 @@
 import tkinter as tk
 from PIL import ImageTk as iTK
 from PIL import Image
+import logging
 
 #################################################################################
 
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 class SidebarScene(tk.Frame):
 
@@ -21,6 +24,8 @@ class SidebarScene(tk.Frame):
     #################################################
 
     def update_sidebar(self, parent):
+        
+        logging.info("SidebarScene: The sidebar has been updated.")
 
         # List for creating check marks with for loop
         self.list_of_pass_fail = [

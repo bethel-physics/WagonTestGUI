@@ -36,6 +36,7 @@ class GUIWindow():
     def __init__(self, conn, queue):
         self.conn = conn
         self.queue = queue
+        self.retry_attempt = False
                              
         # Create the window named "self.master_window"
         # global makes self.master_window global and therefore accessible outside the function
@@ -144,7 +145,7 @@ class GUIWindow():
         self.set_frame(self.scan_frame)
         self.scan_frame.scan_QR_code(self.master_window)
         
-        logging.debug("GUIWindow: The frame has been set to scan_frame."
+        logging.debug("GUIWindow: The frame has been set to scan_frame.")
 
     #################################################
 
@@ -155,7 +156,7 @@ class GUIWindow():
         # Disables all buttons when the splash frame is the only frame
         self.sidebar.disable_all_btns()
 
-        logging.debug("GUIWindow: The frame has been set to splash_frame."
+        logging.debug("GUIWindow: The frame has been set to splash_frame.")
 
     #################################################
 
@@ -360,9 +361,11 @@ class GUIWindow():
 
     # Called when the no button is pressed to destroy popup and return you to the main window
     def destroy_popup(self):
-        self.popup.destroy()
-        logging.debug("GUIWindow: The popup has been destroyed.")
-
+        try:
+            self.popup.destroy()
+            logging.debug("GUIWindow: The popup has been destroyed.")
+        except:
+            logging.error("GUIWindow: The popup has not been destroyed.")
     # New function for clicking on the exit button
     def exit_function(self):
 
@@ -415,31 +418,32 @@ class GUIWindow():
 
     # Called when the yes button is pressed to destroy both windows
     def destroy_function(self):
-        #self.master_window.eval('::ttk::CancelRepeat')
-        
-        logging.info("GUIWindow: Exiting the GUI.")
+        try:
+            logging.info("GUIWindow: Exiting the GUI.")
 
-        self.master_window.update()
-        self.popup.update()
-       
-        #popup.quit()
-        #self.master_window.quit()
+            self.master_window.update()
+            self.popup.update()
 
-        if self.scan_frame.is_current_scene == True:
-            self.test_in_progress_frame.close_prgbar()
-            self.scan_frame.kill_processes()
+            if self.scan_frame.is_current_scene == True:
+                self.test_in_progress_frame.close_prgbar()
+                self.scan_frame.kill_processes()
 
-        # Destroys the popup and master window
-        self.popup.destroy()
-        self.popup.quit()
+            # Destroys the popup and master window
+            self.popup.destroy()
+            self.popup.quit()
 
-        self.master_window.destroy()
-        self.master_window.quit()
+            self.master_window.destroy()
+            self.master_window.quit()
 
-        # Ensures the application closes with the exit button
-        #exit_main()
+            logging.info("GUIWindow: The application has exited successfully.")
+        except Exception as e:
+            logging.debug("GUIWindow: " + e)
+            logging.error("GUIWindow: The application has failed to close.")
+            if self.retry_attempt == False:    
+                logging.info("GUIWindow: Retrying...")
+                self.destroy_function()
+                self.retry_attempt = True
 
-        print("Leaving tester. Goodbye!")
 
     #################################################
 

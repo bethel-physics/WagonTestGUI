@@ -1,6 +1,6 @@
 #################################################################################
 
-import json
+import json, logging
 import tkinter as tk
 from PIL import ImageTk as iTK
 from PIL import Image
@@ -9,7 +9,8 @@ from pyparsing import col
 
 #################################################################################
 
-
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Frame that shows all of the final test results
 # @param parent -> References a GUIWindow object
@@ -27,6 +28,8 @@ class TestSummaryScene(tk.Frame):
         # Call to the super class's constructor
         # Super class is the tk.Frame class
         super().__init__(master_frame, width=850, height=500)
+
+        logging.info("TestSummaryScene: Frame has been created.")
 
         self.data_holder = data_holder
 
@@ -58,7 +61,8 @@ class TestSummaryScene(tk.Frame):
     # @param parent -> References the GUIWindow object that creates the class
     
     def create_updated_table(self, parent):
-                
+
+        logging.debug("TestSummaryScene: Table is being updated.")        
         
         self.list_of_tests = ["General Resistance Test", "ID Resistor Test", "I2C Comm. Test", "Bit Rate Test"]
         self.list_of_table_labels = ["Test Name", "Test Status", "Pass/Fail"]
@@ -177,12 +181,15 @@ class TestSummaryScene(tk.Frame):
        
         self.grid_propagate(0)
 
+        logging.debug("TestSummaryScene: Table finished update.")     
+
     #################################################
 
     # Creates all of the retest button
     def create_retest_more_info_btns(self, parent):
 
-       
+        logging.debug("TestSummaryScene: Buttons are being created.")
+
         row1 = tk.Frame(self.frm_table)
         row1.grid(column = 3, row = 1)
         
@@ -289,45 +296,50 @@ class TestSummaryScene(tk.Frame):
                 )
         btn_next_test.grid(column = 3, row = 5)
 
+        logging.debug("TestSummaryScene: Buttons finshed being created.")
+
     #################################################
 
     # A function to be called within GUIWindow to create the console output
     # when the frame is being brought to the top
     def create_JSON_popup(self, JSON_String):
+        try:
+            # Creating a popup window for the JSON Details
+            self.JSON_popup = tk.Toplevel()
+            self.JSON_popup.geometry("500x300+750+100")
+            self.JSON_popup.title("JSON Details")
+            # self.JSON_popup.wm_attributes('-toolwindow', 'True')
+
         
-        # Creating a popup window for the JSON Details
-        self.JSON_popup = tk.Toplevel()
-        self.JSON_popup.geometry("500x300+750+100")
-        self.JSON_popup.title("JSON Details")
-        # self.JSON_popup.wm_attributes('-toolwindow', 'True')
 
-    
+            # Creating a Frame For Console Output
+            frm_JSON = tk.Frame(self.JSON_popup, width = 500, height = 300, bg = 'green')
+            frm_JSON.pack_propagate(0)
+            frm_JSON.pack()
 
-        # Creating a Frame For Console Output
-        frm_JSON = tk.Frame(self.JSON_popup, width = 500, height = 300, bg = 'green')
-        frm_JSON.pack_propagate(0)
-        frm_JSON.pack()
+            # Placing an entry box in the frm_console
+            self.JSON_entry_box = tk.Text(
+                frm_JSON, 
+                bg = '#6e5e5d', 
+                fg = 'white', 
+                font = ('Arial', 14)
+                )
+            self.JSON_entry_box.pack(anchor = 'center', fill=tk.BOTH, expand=1)
 
-        # Placing an entry box in the frm_console
-        self.JSON_entry_box = tk.Text(
-            frm_JSON, 
-            bg = '#6e5e5d', 
-            fg = 'white', 
-            font = ('Arial', 14)
-            )
-        self.JSON_entry_box.pack(anchor = 'center', fill=tk.BOTH, expand=1)
-
-        current_JSON_file = open(JSON_String)
-        current_JSON_data = json.load(current_JSON_file)
+            current_JSON_file = open(JSON_String)
+            current_JSON_data = json.load(current_JSON_file)
 
 
-        temp = ""
-        for key, value in current_JSON_data.items():
-            temp = temp + "{} : {}".format(key, value) + "\n"
+            temp = ""
+            for key, value in current_JSON_data.items():
+                temp = temp + "{} : {}".format(key, value) + "\n"
 
 
-        self.JSON_entry_box.delete(1.0,"end")
-        self.JSON_entry_box.insert(1.0, temp)
+            self.JSON_entry_box.delete(1.0,"end")
+            self.JSON_entry_box.insert(1.0, temp)
+        except Exception as e:
+            logging.debug(e)
+            logging.warning("TestSummaryScene: More Info popup has failed to be created.")
 
     #################################################
 
@@ -362,8 +374,9 @@ class TestSummaryScene(tk.Frame):
 
     # Next test button action
     def btn_next_test_action(self, _parent):
-        self.data_holder.reset_data_holder()
+        self.data_holder.data_holder_new_test()
         _parent.set_frame(_parent.scan_frame)
+        logging.info("TestSummaryScene: Starting a new test.")
         
     #################################################
 

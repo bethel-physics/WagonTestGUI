@@ -1,8 +1,12 @@
 #################################################################################
 
 import tkinter as tk
+import logging
     
 #################################################################################
+
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 
 class TestFailedPopup():
@@ -16,7 +20,8 @@ class TestFailedPopup():
 
     # Function to make retry or continue window if the test fails
     def test_failed_popup(self, parent, previous_frame):
-
+        
+        logging.info("TestFailedPopup: A test has been failed. Prompting user for 'retry' or 'continue'.")
         # Creates a popup to ask whether or not to retry the test
         self.popup = tk.Toplevel()
         self.popup.title("Test Failed") 
@@ -64,7 +69,6 @@ class TestFailedPopup():
     def retry_function(self, parent, previous_frame):
         self.popup.destroy()
 
-        #TODO This needs to be overhauled
         parent.set_frame(previous_frame)
         
     #################################################
