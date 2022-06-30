@@ -1,5 +1,4 @@
 import logging, time
-import multiprocessing as mp
 
 from PythonFiles.utils.REQClient import REQClient
 
@@ -69,7 +68,7 @@ class StressTest():
                             # Records the error and run information
                             run_time = self.determine_time(run_start_time, "string")
                             logging.error(e)
-                            logging.error("StressTest: An error has occurred during Run %s inside the nested while loop. Run time was %s" % str(run_num), run_time)
+                            logging.error("StressTest: An error has occurred during Run %s inside the nested while loop. Run time was %s" % (str(run_num), run_time))
                     # Grabs the test running time for the conditional
                     run_day, run_hr, run_min, run_sec = self.determine_time(start_time, "integer")
                     # Here is where you set the conditional to determine how many runs you want it to run for.
@@ -79,12 +78,12 @@ class StressTest():
                     pass
             # Assuming everyting went well, this will send a test completion message with information
             test_time = self.determine_time(start_time, "string")
-            logging.info("StressTest: Test completed. The test time was %s and contained %s runs." % test_time, str(run_num))
+            logging.info("StressTest: Test completed. The test time was %s and contained %s runs." % (test_time, str(run_num)))
         except Exception as e:
             # Records the error and run information
             test_time = self.determine_time(start_time)
             logging.error(e)
-            logging.error("StressTest: An error has occurred in the outer while loop during Run %s. The error occurred after %s" % str(run_num), test_time)
+            logging.error("StressTest: An error has occurred in the outer while loop during Run %s. The error occurred after %s" % (str(run_num), test_time))
 
     # Takes the a start time and the type of data you would like returned 
     # Calculates the amount of time since that start time
@@ -107,7 +106,7 @@ class StressTest():
                 if working_run_time > 24:
                     run_day = working_run_time / 24
                     run_hr = working_run_time % 24
-        results = "%s days, %s, hours, %s minutes, and %s seconds" % run_day, run_hr, run_min, run_sec
+        results = "%s days, %s, hours, %s minutes, and %s seconds" % (run_day, run_hr, run_min, run_sec)
         if return_type == "string":
             return results
         elif return_type == "integer":

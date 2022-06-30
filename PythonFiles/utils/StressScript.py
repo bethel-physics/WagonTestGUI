@@ -4,7 +4,7 @@ from random import randint
 
 
 class StressScript():
-    def __init__(self, conn, serial = "", tester = ""):
+    def __init__(self, conn):
         test_length = randint(500,1500)
         i = 0
         while i < test_length:
