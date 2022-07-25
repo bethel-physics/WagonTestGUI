@@ -48,4 +48,7 @@ def verify_person(name):
 
     return person_id
 
-add_test_json("example.json", {"attach1": open("test.txt","rb")})
+#add_test_json("example.json", {"attach1": open("test.txt","rb")})
+
+print(get_test_list())
+

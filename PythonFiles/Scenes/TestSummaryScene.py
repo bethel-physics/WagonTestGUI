@@ -66,14 +66,14 @@ class TestSummaryScene(tk.Frame):
         
         self.list_of_tests = ["General Resistance Test", "ID Resistor Test", "I2C Comm. Test", "Bit Rate Test"]
         self.list_of_table_labels = ["Test Name", "Test Status", "Pass/Fail"]
-        self.list_of_completed_tests = [self.data_holder.test1_completed, self.data_holder.test2_completed, self.data_holder.test3_completed, self.data_holder.test4_completed]
-        self.list_of_pass_fail = [self.data_holder.test1_pass, self.data_holder.test2_pass, self.data_holder.test3_pass, self.data_holder.test4_pass]
+        self.list_of_completed_tests = self.data_holder.data_lists['test_completion']
+        self.list_of_pass_fail = self.data_holder.data_lists['test_results']
 
 
         # Adds Board Serial Number to the TestSummaryFrame
         self.lbl_snum = tk.Label(
                 self, 
-                text = "Serial Number: " + str(self.data_holder.current_serial_ID),
+                text = "Serial Number: " + str(self.data_holder.data_dict['current_serial_ID']),
                 font=('Arial', 14)
                 )
         self.lbl_snum.grid(column = 2, row = 0, pady = 20)
@@ -81,7 +81,7 @@ class TestSummaryScene(tk.Frame):
         # Adds Tester Name to the TestSummary Frame
         self.lbl_tester = tk.Label(
                 self, 
-                text = "Tester: " + self.data_holder.user_ID,
+                text = "Tester: " + self.data_holder.data_dict['user_ID'],
                 font=('Arial', 14)
                 )
         self.lbl_tester.grid(column = 0, row = 0, pady = 20)
@@ -158,7 +158,7 @@ class TestSummaryScene(tk.Frame):
         for index in range(len(self.list_of_pass_fail)):
             if(self.list_of_pass_fail[index]):
                 # Create a photoimage object of the QR Code
-                Green_Check_Image = Image.open("./PythonFiles/Images/GreenCheckMark.png")
+                Green_Check_Image = Image.open("WagonTestGUI/PythonFiles/Images/GreenCheckMark.png")
                 Green_Check_Image = Green_Check_Image.resize((75,75), Image.ANTIALIAS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
                 GreenCheck_Label = tk.Label(self.frm_table, image=Green_Check_PhotoImage, width=75, height=75)
@@ -168,7 +168,7 @@ class TestSummaryScene(tk.Frame):
 
             else:
                 # Create a photoimage object of the QR Code
-                Red_X_Image = Image.open("./PythonFiles/Images/RedX.png")
+                Red_X_Image = Image.open("WagonTestGUI/PythonFiles/Images/RedX.png")
                 Red_X_Image = Red_X_Image.resize((75,75), Image.ANTIALIAS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
                 RedX_Label = tk.Label(self.frm_table, image=Red_X_PhotoImage, width=75, height=75)
@@ -290,7 +290,7 @@ class TestSummaryScene(tk.Frame):
 
         btn_next_test = tk.Button(
                 self.frm_table, 
-                text = "NEXT TEST",
+                text = "NEXT BOARD",
                 font = ('Arial', 15), 
                 command = lambda: self.btn_next_test_action(parent)
                 )
@@ -310,7 +310,8 @@ class TestSummaryScene(tk.Frame):
             self.JSON_popup.title("JSON Details")
             # self.JSON_popup.wm_attributes('-toolwindow', 'True')
 
-        
+            self.JSON_popup.grab_set()
+            self.JSON_popup.attributes('-topmost', 'true') 
 
             # Creating a Frame For Console Output
             frm_JSON = tk.Frame(self.JSON_popup, width = 500, height = 300, bg = 'green')
@@ -327,7 +328,7 @@ class TestSummaryScene(tk.Frame):
             self.JSON_entry_box.pack(anchor = 'center', fill=tk.BOTH, expand=1)
 
             current_JSON_file = open(JSON_String)
-            current_JSON_data = json.load(current_JSON_file)
+            current_JSON_data = json.load(current_JSON_file, indent = 4)
 
 
             temp = ""
@@ -337,19 +338,23 @@ class TestSummaryScene(tk.Frame):
 
             self.JSON_entry_box.delete(1.0,"end")
             self.JSON_entry_box.insert(1.0, temp)
+            
+            current_JSON_file.close()   
         except Exception as e:
             logging.debug(e)
             logging.warning("TestSummaryScene: More Info popup has failed to be created.")
+
+            
 
     #################################################
 
     # All of the different methods for what the retest buttons should do
     def btn_retest1_action(self, _parent):
         _parent.set_frame(_parent.test1_frame)
-    
+ 
     def btn_retest2_action(self, _parent):
         _parent.set_frame(_parent.test2_frame)
-
+        
     def btn_retest3_action(self, _parent):
         _parent.set_frame(_parent.test3_frame)
 
@@ -359,23 +364,23 @@ class TestSummaryScene(tk.Frame):
     #################################################
 
     def btn_more_info1_action(self, _parent):
-        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/DummyJSONTest.JSON")
+        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_GenRes_JSON.json")
 
     def btn_more_info2_action(self, _parent):
-        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/DummyJSONTest.JSON")
+        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_IDRes_JSON.json")
 
     def btn_more_info3_action(self, _parent):
-        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/DummyJSONTest.JSON")
+        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_IIC_JSON.json")
     
     def btn_more_info4_action(self, _parent):
-        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/DummyJSONTest.JSON")
+        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_BERT_JSON.json")
 
     #################################################
 
     # Next test button action
     def btn_next_test_action(self, _parent):
         self.data_holder.data_holder_new_test()
-        _parent.set_frame(_parent.scan_frame)
+        _parent.reset_board()
         logging.info("TestSummaryScene: Starting a new test.")
         
     #################################################

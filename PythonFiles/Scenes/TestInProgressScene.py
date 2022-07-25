@@ -14,8 +14,7 @@ logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/log
 
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
-    def __init__(self, parent, master_frame, data_holder, queue):
-        
+    def __init__(self, parent, master_frame, data_holder, queue, _conn):
         super().__init__(master_frame, width = 850, height = 500)
 
 
@@ -23,7 +22,7 @@ class TestInProgressScene(tk.Frame):
         self.data_holder = data_holder
         self.is_current_scene = False
         self.initialize_scene(parent, master_frame)
-
+        self.conn = _conn
 
     ##################################################
 
@@ -91,6 +90,8 @@ class TestInProgressScene(tk.Frame):
         self.prgbar_progress.pack(padx = 50)
         self.prgbar_progress.start()
 
+        print("\n\n\n\n\n\n\n\n Starting Progress Bar \n\n\n\n\n\n\n")
+
         # A Button To Stop the Progress Bar and Progress Forward (Temporary until we link to actual progress)
         btn_stop = ttk.Button(
             self, 
@@ -140,6 +141,12 @@ class TestInProgressScene(tk.Frame):
                 ent_console.see('end')
 
                 if text == "Results received successfully.":
+                
+                    message =  self.conn.recv()
+                    
+                    print("\n\nmessage:",message , "\n\n")
+                    self.data_holder.update_from_json_string(message) 
+                    
                     logging.info("TestInProgressScene: JSON Received.")
                     master_window.update()
                     time.sleep(1)

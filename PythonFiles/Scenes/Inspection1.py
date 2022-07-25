@@ -30,8 +30,8 @@ class Inspection1(tk.Frame):
         font_scene_14 = ('Arial', 14)
 
         # Create a centralized window for information
-        frm_window = tk.Frame(self, width = 675, height = 500)
-        frm_window.grid(column=0, row=0, padx=10, pady=10)
+        frm_window = tk.Frame(self, width = 850, height = 500)
+        frm_window.grid(column=0, row=0)
 
         # Create a label for the tester's name
         lbl_tester = tk.Label(
@@ -46,7 +46,7 @@ class Inspection1(tk.Frame):
             frm_window, 
             font = font_scene
             )
-        ent_tester.insert(0, self.data_holder.user_ID)
+        ent_tester.insert(0, self.data_holder.data_dict['user_ID'])
         ent_tester.grid(row=0, column=1, pady=15 )
         ent_tester.config(state = "disabled")
 
@@ -63,7 +63,7 @@ class Inspection1(tk.Frame):
             frm_window, 
             font = font_scene
             )
-        ent_snum.insert(0, self.data_holder.current_serial_ID)
+        ent_snum.insert(0, self.data_holder.data_dict['current_serial_ID'])
         ent_snum.grid(row=0, column=3, pady=15)
         ent_snum.config(state = "disabled")
 
@@ -139,14 +139,13 @@ class Inspection1(tk.Frame):
         lbl_snum.grid(row=5, column=1, pady=(25, 0) )
 
         # Comment Box
-        comment_box = tk.Text(
+        self.comment_box = tk.Entry(
             frm_window,
             font = font_scene,
             state= 'normal',
             width= 75,
-            height = 5
         )
-        comment_box.grid(row = 6, column =1, sticky='w', columnspan=5)
+        self.comment_box.grid(row = 6, column =1, sticky='w', columnspan=5)
 
 
 
@@ -215,11 +214,12 @@ class Inspection1(tk.Frame):
     #################################################
 
     def update_data_holder(self):
-        self.data_holder.board_chipped_bent = self.board_chipped_bent.get()
-        self.data_holder.wagon_connection_pin_bent = self.wagon_connection_pin_bent.get()
-        self.data_holder.engine_connection_pin_bent = self.engine_connection_pin_bent.get()
-        self.data_holder.visual_scratches = self.visual_scratches.get()
-
+        self.data_holder.inspection_data['board_chipped_bent'] = self.board_chipped_bent.get()
+        self.data_holder.inspection_data['wagon_connection_pin_bent'] = self.wagon_connection_pin_bent.get()
+        self.data_holder.inspection_data['engine_connection_pin_bent'] = self.engine_connection_pin_bent.get()
+        self.data_holder.inspection_data['visual_scratches'] = self.visual_scratches.get()
+        self.data_holder.inspection_data['inspection_comments'] = self.comment_box.get()
+        self.data_holder.add_inspection_to_comments()
         self.data_holder.print()
 
 
@@ -229,7 +229,8 @@ class Inspection1(tk.Frame):
     def btn_confirm_action(self, _parent):
         
         self.update_data_holder()
-        
+        _parent.go_to_next_test()
+
         # # # # # # # # # # # # # # # # # # # # # # # # # # #
         #   ++ GOAL CODE ++                                 #
         # def confirm():                                    #

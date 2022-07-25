@@ -103,7 +103,7 @@ class ScanScene(tk.Frame):
 
         logging.info("ScanScene: Frame has been created.")
         # Create a photoimage object of the QR Code
-        QR_image = Image.open("./PythonFiles/Images/QRimage.png")
+        QR_image = Image.open("WagonTestGUI/PythonFiles/Images/QRimage.png")
         QR_PhotoImage = iTK.PhotoImage(QR_image)
         QR_label = tk.Label(self, image=QR_PhotoImage)
         QR_label.image = QR_PhotoImage
@@ -128,7 +128,7 @@ class ScanScene(tk.Frame):
             text = "Serial Number:",
             font = ('Arial', 16)
         )
-        lbl_snum.pack()
+        lbl_snum.pack(padx = 20)
 
         # Entry for the serial number to be displayed. Upon Scan, update and disable?
         global ent_snum
@@ -157,23 +157,23 @@ class ScanScene(tk.Frame):
         self.btn_rescan = tk.Button(
             Scan_Board_Prompt_Frame,
             text="Rescan",
-            padx = 50,
+            padx = 20,
             pady =10,
             relief = tk.RAISED,
             command = lambda:  self.scan_QR_code(self.master_window)
             )
-        self.btn_rescan.pack(padx=10, pady=30)
+        self.btn_rescan.pack(pady=30)
 
         # Submit button creation
         self.btn_submit = tk.Button(
             Scan_Board_Prompt_Frame,
             text="Submit",
-            padx = 50,
+            padx = 20,
             pady = 10,
             relief = tk.RAISED,
             command= lambda:  self.btn_submit_action(parent)
             )
-        self.btn_submit.pack(padx=10)
+        self.btn_submit.pack()
 
         # Creating frame for logout button
         frm_logout = tk.Frame(self)
@@ -186,7 +186,7 @@ class ScanScene(tk.Frame):
             text = "Logout",
             command = lambda: self.btn_logout_action(parent)
         )
-        btn_logout.pack(anchor = 'se', padx = 230, pady = 180)
+        btn_logout.pack(anchor = 'se', padx = 0, pady = 80)
         # Locks frame size to the master_frame size
         self.grid_propagate(0)
 
@@ -194,7 +194,10 @@ class ScanScene(tk.Frame):
 
     # Function for the submit button
     def btn_submit_action(self, _parent):
-        _parent.go_to_next_test()
+
+        self.data_holder.check_if_new_board()
+        _parent.scan_frame_progress()
+
 
     #################################################
 

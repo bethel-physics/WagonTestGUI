@@ -35,7 +35,7 @@ class TestScene(tk.Frame):
 
         # Create a centralized window for information
         frm_window = tk.Frame(self, width = 850, height = 500)
-        frm_window.grid(column=1, row=1, padx = 235, pady = 109)
+        frm_window.grid(column=1, row=1, padx = 223, pady = 100)
 
         # Create a label for the tester's name
         lbl_tester = tk.Label(
@@ -50,7 +50,7 @@ class TestScene(tk.Frame):
             frm_window, 
             font = font_scene
             )
-        ent_tester.insert(0, self.data_holder.user_ID)
+        ent_tester.insert(0, self.data_holder.data_dict['user_ID'])
         ent_tester.pack(side = 'top')
         ent_tester.config(state = "disabled")
 
@@ -67,7 +67,7 @@ class TestScene(tk.Frame):
             frm_window, 
             font = font_scene
             )
-        ent_snum.insert(0, self.data_holder.current_serial_ID)
+        ent_snum.insert(0, self.data_holder.data_dict['current_serial_ID'])
         ent_snum.pack(side = 'top')
         ent_snum.config(state = "disabled")
 
@@ -109,7 +109,7 @@ class TestScene(tk.Frame):
 
         # Create frame for logout button
         frm_logout = tk.Frame(self)
-        frm_logout.grid(column = 2, row = 2, sticky = 'ne')
+        frm_logout.grid(column = 2, row = 2, sticky = 'n')
 
         # Create a logout button
         btn_logout = tk.Button(
@@ -117,11 +117,11 @@ class TestScene(tk.Frame):
             text = "Logout", 
             relief = tk.RAISED, 
             command = lambda: self.btn_logout_action(parent))
-        btn_logout.pack(anchor = 'se')
+        btn_logout.pack(anchor = 'center')
 
         # Create a frame for the back button
         frm_back = tk.Frame(self)
-        frm_back.grid(column = 2, row = 0, sticky = 'ne')
+        frm_back.grid(column = 2, row = 0, sticky = 'n')
 
         # Create a rescan button
         btn_rescan = tk.Button(
@@ -129,7 +129,7 @@ class TestScene(tk.Frame):
             text = "Change Boards", 
             relief = tk.RAISED, 
             command = lambda: self.btn_rescan_action(parent))
-        btn_rescan.pack(anchor = 'ne')
+        btn_rescan.pack(anchor = 'n')
 
 
         
@@ -140,7 +140,7 @@ class TestScene(tk.Frame):
 
     # Rescan button takes the user back to scanning in a new board
     def btn_rescan_action(self, _parent):
-        _parent.set_frame_scan_frame()
+        _parent.reset_board()
     
     #################################################
 
@@ -167,15 +167,11 @@ class Test1Scene(TestScene):
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
 
-        self.data_holder.test1_completed = True
-        self.data_holder.test1_pass = True
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_1_client = REQClient('test1', self.data_holder.current_serial_ID, self.data_holder.user_ID)
+        test_1_client = REQClient('test1', self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
         _parent.set_frame_test_in_progress(self.queue)
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
 
-        
 #################################################################################
 
 
@@ -185,14 +181,10 @@ class Test2Scene(TestScene):
 
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
-        self.data_holder.test2_completed = True
-        self.data_holder.test2_pass = False
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_2_client = REQClient('test2', self.data_holder.current_serial_ID, self.data_holder.user_ID)
+        test_2_client = REQClient('test2', self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
         _parent.set_frame_test_in_progress(self.queue)
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
-        
         
 
 
@@ -206,13 +198,10 @@ class Test3Scene(TestScene):
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
 
-        self.data_holder.test3_completed = True
-        self.data_holder.test3_pass = True
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_3_client = REQClient('test3', self.data_holder.current_serial_ID, self.data_holder.user_ID)
+        test_3_client = REQClient('test3', self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
         _parent.set_frame_test_in_progress(self.queue)
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
 
 
 #################################################################################
@@ -225,12 +214,10 @@ class Test4Scene(TestScene):
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
 
-        self.data_holder.test4_completed = True
-        self.data_holder.test4_pass = True
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_4_client = REQClient('test4', self.data_holder.current_serial_ID, self.data_holder.user_ID)
+        test_4_client = REQClient('test4', self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
         _parent.set_frame_test_in_progress(self.queue)
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
 
 #################################################################################
+
