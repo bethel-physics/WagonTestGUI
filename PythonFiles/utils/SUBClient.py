@@ -2,7 +2,7 @@
 import zmq, logging
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/SUBClient.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/SUBClient.log", filemode = 'w', format=FORMAT, level=logging.INFO)
 
 
 # Creating a class for the SUBSCRIBE socket-type Client
@@ -30,7 +30,7 @@ class SUBClient():
                 # will have extra spaces.
                 self.topic, self.message = listen_socket.recv_string().split(" ; ")
                 logging.debug("The received topic is: %s" % self.topic)
-                self.debug("The received message is: %s" % self.message)
+                logging.debug("The received message is: %s" % self.message)
 
                 # Tests what topic was received and then does the appropriate code accordingly
                 if self.topic == "print":

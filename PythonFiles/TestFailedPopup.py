@@ -13,14 +13,14 @@ class TestFailedPopup():
     
     #################################################
 
-    def __init__(self, parent, previous_frame):
-        self.test_failed_popup(parent, previous_frame)
+    def __init__(self, parent, previous_frame, data_holder):
+        self.test_failed_popup(parent, previous_frame, data_holder)
     
     #################################################
 
     # Function to make retry or continue window if the test fails
-    def test_failed_popup(self, parent, previous_frame):
-        
+    def test_failed_popup(self, parent, previous_frame, data_holder):
+        self.data_holder = data_holder
         logging.info("TestFailedPopup: A test has been failed. Prompting user for 'retry' or 'continue'.")
         # Creates a popup to ask whether or not to retry the test
         self.popup = tk.Toplevel()
@@ -68,7 +68,6 @@ class TestFailedPopup():
     # Called when the no button is pressed to destroy popup and return you to the main window
     def retry_function(self, parent, previous_frame):
         self.popup.destroy()
-
         parent.set_frame(previous_frame)
         
     #################################################

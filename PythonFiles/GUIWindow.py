@@ -19,6 +19,8 @@ from PythonFiles.Scenes.TestInProgressScene import TestInProgressScene
 from PythonFiles.Data.DataHolder import DataHolder
 from PythonFiles.Scenes.SplashScene import SplashScene
 from PythonFiles.Scenes.TestInProgressScene import *
+from PythonFiles.Scenes.Inspection1 import Inspection1
+from PythonFiles.Scenes.AddUserScene import AddUserScene
 
 #################################################################################
 
@@ -37,6 +39,8 @@ class GUIWindow():
         self.conn = conn
         self.queue = queue
         self.retry_attempt = False
+        self.completed_window_alive = False
+        self.current_test_index = 0
                              
         # Create the window named "self.master_window"
         # global makes self.master_window global and therefore accessible outside the function
@@ -75,7 +79,10 @@ class GUIWindow():
 
         self.login_frame = LoginScene(self, self.master_frame, self.data_holder)
         self.login_frame.grid(row=0, column=0)
-    
+        
+        self.visual_frame = Inspection1(self, self.master_frame, self.data_holder)
+        self.visual_frame.grid(row=0, column=0)
+ 
         self.scan_frame = ScanScene(self, self.master_frame, self.data_holder)
         self.scan_frame.grid(row=0, column=0)
 
@@ -103,9 +110,12 @@ class GUIWindow():
                             )
         self.test4_frame.grid(row=0, column=0)
 
-        self.test_in_progress_frame = TestInProgressScene(self, self.master_frame, self.data_holder, queue)
+        self.test_in_progress_frame = TestInProgressScene(self, self.master_frame, self.data_holder, queue, conn)
         self.test_in_progress_frame.grid(row=0, column=0)
 
+        
+        self.add_user_frame = AddUserScene(self, self.master_frame, self.data_holder)
+        self.add_user_frame.grid(row=0, column=0)
 
         # Near bottom so it can reference other frames with its code
         self.splash_frame = SplashScene(self, self.master_frame)
@@ -123,12 +133,18 @@ class GUIWindow():
         
         # Sets the current frame to the splash frame
         self.set_frame_splash_frame()
-
-        self.master_frame.after(500, self.set_frame_login_frame)
-        
+        self.master_frame.update() 
+        self.master_frame.after(50, self.set_frame_login_frame)
 
         self.master_window.mainloop()
         
+
+    #################################################
+
+    def set_frame_add_user_frame(self):
+        self.set_frame(self.add_user_frame)
+        
+        logging.debug("GUIWindow: The frame has been set to add_user_frame.")
 
     #################################################
 
@@ -160,10 +176,39 @@ class GUIWindow():
 
     #################################################
 
+    def set_frame_visual_frame(self):
+        self.visual_frame.update_frame(self)
+        self.set_frame(self.visual_frame)
+
+        logging.debug("GUIWindow: The frame has been set to visual_frame.")
+
+
+    #################################################
+
+    def scan_frame_progress(self):
+        if self.data_holder.data_dict['is_new_board'] == True:
+            self.set_frame_visual_frame()
+        elif self.data_holder.data_dict['is_new_board'] == False:
+            self.go_to_next_test()
+
+
+    #################################################
+
+    # The numbers being passed as args into the self.data_holder.send_to_DB(#) 
+    # are the test number of the test we want to send the results of.
+    # For example, when we set the frame to test2_frame, we want to send the results
+    # of test1 because it just completed.
+
+
+
     def set_frame_test_summary(self):
         self.test_summary_frame.update_frame()
         self.check_if_test_passed()
         self.set_frame(self.test_summary_frame)
+        
+        self.data_holder.send_to_DB(4)
+
+        print("\n\n INFORMATION HAS BEEN SENT TO THE DB \n\n")
 
         logging.debug("GUIWindow: The frame has been set to test_summary_frame.")
 
@@ -180,12 +225,22 @@ class GUIWindow():
         self.test2_frame.update_frame(self)
         self.set_frame(self.test2_frame)
 
+        self.data_holder.send_to_DB(1)
+
+        print("\n\n INFORMATION HAS BEEN SENT TO THE DB \n\n")
+
+
         logging.debug("GUIWindow: The frame has been set to test2_frame.")
     #################################################
 
     def set_frame_test3(self):
         self.test3_frame.update_frame(self)
         self.set_frame(self.test3_frame)
+        
+        self.data_holder.send_to_DB(2)
+
+        print("\n\n INFORMATION HAS BEEN SENT TO THE DB \n\n")
+
 
         logging.debug("GUIWindow: The frame has been set to test3_frame.")
     #################################################
@@ -193,6 +248,11 @@ class GUIWindow():
     def set_frame_test4(self):
         self.test4_frame.update_frame(self)
         self.set_frame(self.test4_frame)
+
+        self.data_holder.send_to_DB(3)
+
+        print("\n\n INFORMATION HAS BEEN SENT TO THE DB \n\n")
+
 
         logging.debug("GUIWindow: The frame has been set to test4_frame.")
     #################################################
@@ -213,12 +273,7 @@ class GUIWindow():
     def go_to_next_test(self):
         
         # Array of potentially uncompleted tests
-        test_completed_list = [
-            self.data_holder.test1_completed,
-            self.data_holder.test2_completed,
-            self.data_holder.test3_completed,
-            self.data_holder.test4_completed
-        ]
+        test_completed_list = self.data_holder.data_lists['test_completion']
         
 
         test_incomplete = False
@@ -227,19 +282,29 @@ class GUIWindow():
         logging.info("GUIWindow: Testing which tests have been completed.")
         # Checks tells the function which frame to set based on what frame is currently up
         for index, test in enumerate(test_completed_list):
-            if test == True:
+            
+            if test == True and index >=  self.current_test_index:
+                print("Test", index + 1, "== True")
+                if self.completed_window_alive == False:
+                    self.completed_window_popup()
+                else:
+                    pass
+            elif test == True:
                 pass
-
             else:
                 test_incomplete = True
                 if (index ==0):
                     self.set_frame_test1()
+                    self.current_test_index = 1
                 elif (index == 1):
                     self.set_frame_test2()
+                    self.current_test_index = 2
                 elif (index == 2):
                     self.set_frame_test3()
+                    self.current_test_index = 3
                 elif (index == 3):
                     self.set_frame_test4()
+                    self.current_test_index = 4
                 break
         
 
@@ -249,8 +314,10 @@ class GUIWindow():
         if (not test_incomplete):
             self.set_frame_test_summary()
 
-        
-        self.check_if_test_passed()
+    def reset_board(self):
+        self.current_test_index = 0
+        self.set_frame_scan_frame()
+
     #################################################
 
     # Called to change the frame to the argument _frame
@@ -300,18 +367,20 @@ class GUIWindow():
         logging.debug("GUIWindow: Sidebar buttons have been updated.")
 
         # Brings up the test_failed popup if the test is false, continues on if not
-        if _frame == self.test2_frame:
-            if self.data_holder.test1_pass == False:
-                TestFailedPopup(self, self.test1_frame)
-        if _frame == self.test3_frame:
-            if self.data_holder.test2_pass == False:
-                TestFailedPopup(self, self.test2_frame)
-        if _frame == self.test4_frame:
-            if self.data_holder.test3_pass == False:
-                TestFailedPopup(self, self.test3_frame)
-        if _frame == self.test_summary_frame:
-            if self.data_holder.test4_pass == False:
-                TestFailedPopup(self, self.test4_frame)
+        # Also tests the current test index so that in the event you are retrying a test it will not prompt 
+        # the user about the previous test failing
+        if _frame == self.test2_frame and self.current_test_index == 1:
+           if self.data_holder.data_dict['test1_pass'] == False:
+                TestFailedPopup(self, self.test1_frame, self.data_holder)
+        if _frame == self.test3_frame and self.current_test_index == 2:
+            if self.data_holder.data_dict['test2_pass'] == False:
+                TestFailedPopup(self, self.test2_frame, self.data_holder)
+        if _frame == self.test4_frame and self.current_test_index == 3:
+            if self.data_holder.data_dict['test3_pass'] == False:
+                TestFailedPopup(self, self.test3_frame, self.data_holder)
+        if _frame == self.test_summary_frame and self.current_test_index == 4:
+            if self.data_holder.data_dict['test4_pass'] == False:
+                TestFailedPopup(self, self.test4_frame, self.data_holder)
 
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
@@ -358,11 +427,48 @@ class GUIWindow():
         btn_ok.grid(column = 0, row = 1, columnspan=2)
 
     #################################################
+    
+    # Called when a test is skipped because it has been previously passed
+    def completed_window_popup(self):
+        
+        self.completed_window_alive = True
+       
+        # Creates a popup to inform user about the passing of a test
+        self.popup = tk.Toplevel()
+        # popup.wm_attributes('-toolwindow', 'True')
+        self.popup.title("Information Window") 
+        self.popup.geometry("300x150+500+300")
+        self.popup.grab_set()
+       
 
+        # Creates frame in the new window
+        frm_popup = tk.Frame(self.popup)
+        frm_popup.pack()
+
+        # Creates label in the frame
+        lbl_popup = tk.Label(
+            frm_popup, 
+            text = "A test has been skipped because it\n has been previously passed.",
+            font = ('Arial', 13)
+            )
+        lbl_popup.grid(column = 0, row = 0, pady = 25)
+
+        # Creates yes and no buttons for exiting
+        btn_okay = tk.Button(
+            frm_popup,     
+            width = 12,
+            height = 2,
+            text = "OK", 
+            relief = tk.RAISED,
+            font = ('Arial', 12), 
+            command = lambda: self.destroy_popup()
+            )
+        btn_okay.grid(column = 0, row = 1)
     # Called when the no button is pressed to destroy popup and return you to the main window
     def destroy_popup(self):
         try:
             self.popup.destroy()
+            self.completed_window_alive = False
             logging.debug("GUIWindow: The popup has been destroyed.")
         except:
             logging.error("GUIWindow: The popup has not been destroyed.")
@@ -411,6 +517,7 @@ class GUIWindow():
             command = lambda: self.destroy_popup()
         )
         btn_no.grid(column = 1, row = 1)
+        
 
 
     #################################################

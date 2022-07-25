@@ -8,9 +8,17 @@
 #################################################################################
 
 # Importing necessary modules
-import zmq
+import zmq, logging
 
 #################################################################################
+
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(
+    filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/StressTest.log", 
+    filemode = 'w', 
+    format=FORMAT, 
+    level=logging.INFO
+    )
 
 # Making the Client Server a class
 class REQClient():
@@ -33,13 +41,14 @@ class REQClient():
         socket = context.socket(zmq.REQ)
         socket.connect("tcp://192.168.23.23:5555")
 
-        print("Sending request to REPServer for: ", self.desired_test)
+        debug_msg = "REQClient: Sending request to REPServer for: " + self.desired_test
+        logging.debug(debug_msg)
         # Tell the server what test to run
         socket.send_string(sending_msg)
-        print("Request sent. Waiting for confirmation receipt...")
+        logging.debug("REQClient: Request sent. Waiting for confirmation receipt...")
         # Get the reply
-        self.message = socket.recv()
-        received = self.message.decode('UTF-8')
+        self.message = socket.recv_string()
+        print("REQClient: Request received.")
 
         # Closes the client so the code in the GUI can continue once the request is sent.
         socket.close()

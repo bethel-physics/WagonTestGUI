@@ -28,18 +28,13 @@ class SidebarScene(tk.Frame):
         logging.info("SidebarScene: The sidebar has been updated.")
 
         # List for creating check marks with for loop
-        self.list_of_pass_fail = [
-            self.data_holder.test1_pass, 
-            self.data_holder.test2_pass, 
-            self.data_holder.test3_pass, 
-            self.data_holder.test4_pass
-            ]
+        self.list_of_pass_fail = self.data_holder.data_lists['test_results']
 
         # For loop to create checkmarks based on pass/fail
         for index in range(len(self.list_of_pass_fail)):
             if(self.list_of_pass_fail[index] == True):
                 # Create a photoimage object of the QR Code
-                Green_Check_Image = Image.open("./PythonFiles/Images/GreenCheckMark.png")
+                Green_Check_Image = Image.open("WagonTestGUI/PythonFiles/Images/GreenCheckMark.png")
                 Green_Check_Image = Green_Check_Image.resize((50,50), Image.ANTIALIAS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
                 GreenCheck_Label = tk.Label(self, image=Green_Check_PhotoImage, width=50, height=50, bg = '#808080')
@@ -49,7 +44,7 @@ class SidebarScene(tk.Frame):
 
             else:
                 # Create a photoimage object of the QR Code
-                Red_X_Image = Image.open("./PythonFiles/Images/RedX.png")
+                Red_X_Image = Image.open("WagonTestGUI/PythonFiles/Images/RedX.png")
                 Red_X_Image = Red_X_Image.resize((50,50), Image.ANTIALIAS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
                 RedX_Label = tk.Label(self, image=Red_X_PhotoImage, width=50, height=50, bg = '#808080')
@@ -94,7 +89,7 @@ class SidebarScene(tk.Frame):
             )
         self.btn_test1.grid(column = 0, row = 2)
 
-        if self.data_holder.test1_pass == True:
+        if self.data_holder.data_dict['test1_pass'] == True:
             self.btn_test1.config(state = 'disabled')
 
 
@@ -109,7 +104,7 @@ class SidebarScene(tk.Frame):
             )
         self.btn_test2.grid(column = 0, row = 3)
 
-        if self.data_holder.test2_pass == True:
+        if self.data_holder.data_dict['test2_pass'] == True:
             self.btn_test2.config(state = 'disabled')
 
         self.btn_test3 = tk.Button(
@@ -123,7 +118,7 @@ class SidebarScene(tk.Frame):
             )
         self.btn_test3.grid(column = 0, row = 4)
 
-        if self.data_holder.test3_pass == True:
+        if self.data_holder.data_dict['test3_pass'] == True:
             self.btn_test3.config(state = 'disabled')
 
         self.btn_test4 = tk.Button(
@@ -136,7 +131,7 @@ class SidebarScene(tk.Frame):
             command = lambda: self.btn_test4_action(parent)
             )
         self.btn_test4.grid(column = 0, row = 5)
-        if self.data_holder.test4_pass == True:
+        if self.data_holder.data_dict['test4_pass'] == True:
             self.btn_test4.config(state = 'disabled')
 
         self.btn_summary = tk.Button(

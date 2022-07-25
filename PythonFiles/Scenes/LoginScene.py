@@ -28,11 +28,7 @@ class LoginScene(tk.Frame):
 
         # Creating a list of users for dropdown menu
         # Eventually need to add a way for a database to have control over this list
-        User_List = [
-            "Bryan Crossman",
-            "Andrew Kirzeder",
-            "Garrett Schindler"
-        ]
+        User_List = self.data_holder.get_all_users()
 
         # Creating the title for the window
         lbl_title = tk.Label(
@@ -110,7 +106,7 @@ class LoginScene(tk.Frame):
 
     # To be given commands later, for now it is a dummy function
     def btn_add_user_action(self, _parent):
-        pass
+        _parent.set_frame_add_user_frame()
     
     #################################################
 
