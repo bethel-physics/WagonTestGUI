@@ -3,11 +3,12 @@
 # importing necessary modules
 import tkinter as tk
 import logging
+import WagonTestGUI
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 
 # Creates a class that is called by the GUIWindow. 
@@ -21,9 +22,19 @@ class LoginScene(tk.Frame):
     #################################################
 
     def __init__(self, parent, master_frame, data_holder):
+
         super().__init__(master_frame, width=850, height=500)
-        logging.info("LoginScene: Frame has been created.")
         self.data_holder = data_holder
+        self.update_frame(parent)
+
+
+    def update_frame(self, parent):
+
+        for widget in self.winfo_children():
+            widget.destroy()
+
+
+        logging.info("LoginScene: Frame has been created.")
 
 
         # Creating a list of users for dropdown menu
@@ -88,6 +99,11 @@ class LoginScene(tk.Frame):
         # rather than adjusting to the size of the widgets
         self.pack_propagate(0)
 
+    
+
+
+
+
     #################################################
 
     # Creates the function for the submit button command
@@ -117,5 +133,5 @@ class LoginScene(tk.Frame):
     
     #################################################
 
-
+    
 #################################################################################

@@ -1,9 +1,9 @@
-#################################################################################
-import json, logging, socket
-from PythonFiles.Data.DBSender import DBSender
+################################################################################
+import json, logging, socket, WagonTestGUI
+from WagonTestGUI.PythonFiles.Data.DBSender import DBSender
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 class DataHolder():
 
@@ -45,7 +45,7 @@ class DataHolder():
     
     #################################################
 
-    def add_new_user_name(self, user_ID):
+    def add_new_user_name(self, user_ID, passwd):
         self.data_dict['user_ID'] = user_ID
         
         is_new_user_ID = True
@@ -56,7 +56,7 @@ class DataHolder():
         print("\n\n\n\n\n\nIs the user new?:{}\n\n\n\n\n\n".format(is_new_user_ID))
 
         if is_new_user_ID:
-            self.data_sender.add_new_user_ID(self.data_dict['user_ID'])        
+            self.data_sender.add_new_user_ID(self.data_dict['user_ID'], passwd)        
 
 
     def check_if_new_board(self):
@@ -141,10 +141,10 @@ class DataHolder():
             if self.data_list['test_results'][i]:
                 temp = 1
             info_dict = {"serial_num":serial_number,"tester": person_ID, "test_type": self.tests_run[i], "successful": temp, "comments": comments} 
-            with open("WagonTestGUI/PythonFiles/JSONFiles/storage.json", "w") as outfile:
+            with open("{}/PythonFiles/JSONFiles/storage.json".format(WagonTestGUI.__path__[0]), "w") as outfile:
                 print(info_dict)
                 json.dump(info_dict, outfile)
-            self.data_sender.add_test_json("WagonTestGUI/PythonFiles/JSONFiles/storage.json")
+            self.data_sender.add_test_json("{}/PythonFiles/JSONFiles/storage.json".format(WagonTestGUI.__path__[0]))
         logging.info("DataHolder: All results sent to database.")
     #################################################
 
@@ -152,10 +152,10 @@ class DataHolder():
         index = test_run - 1
         
         file_path_list = [
-            "WagonTestGUI/PythonFiles/JSONFiles/Current_GenRes_JSON.json",
-            "WagonTestGUI/PythonFiles/JSONFiles/Current_IDRes_JSON.json",
-            "WagonTestGUI/PythonFiles/JSONFiles/Current_IIC_JSON.json",
-            "WagonTestGUI/PythonFiles/JSONFiles/Current_BERT_JSON.json"
+            "{}/PythonFiles/JSONFiles/Current_GenRes_JSON.json".format(WagonTestGUI.__path__[0]),
+            "{}/PythonFiles/JSONFiles/Current_IDRes_JSON.json".format(WagonTestGUI.__path__[0]),
+            "{}/PythonFiles/JSONFiles/Current_IIC_JSON.json".format(WagonTestGUI.__path__[0]),
+            "{}/PythonFiles/JSONFiles/Current_BERT_JSON.json".format(WagonTestGUI.__path__[0])
         ]
             
 
@@ -167,10 +167,10 @@ class DataHolder():
 
         info_dict = {"serial_num":self.get_serial_ID(),"tester": self.data_dict['user_ID'], "test_type": self.data_dict['tests_run'][index], "successful": temp, "comments": self.data_dict['comments']}
         
-        with open("WagonTestGUI/PythonFiles/JSONFiles/storage.json", "w") as outfile:
+        with open("{}/PythonFiles/JSONFiles/storage.json".format(WagonTestGUI.__path__[0]), "w") as outfile:
             print(info_dict)
             json.dump(info_dict, outfile)
-        self.data_sender.add_test_json("WagonTestGUI/PythonFiles/JSONFiles/storage.json", file_path_list[index])
+        self.data_sender.add_test_json("{}/PythonFiles/JSONFiles/storage.json".format(WagonTestGUI.__path__[0]), file_path_list[index])
         logging.info("DataHolder: Test results sent to database.")
 
     #################################################
@@ -194,40 +194,45 @@ class DataHolder():
         test_type = json_dict["name"]
 
         if test_type == "General Resistance Test":
-            with open("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_GenRes_JSON.json", "w") as file:
+            with open("{}/PythonFiles/JSONFiles/Current_GenRes_JSON.json".format(WagonTestGUI.__path__[0]), "w") as file:
                 json.dump(json_dict['data'], file)
             print("\n\n\n\n GENRES TEST \n\n\n\n")
             self.data_dict['user_ID'] = json_dict["tester"]
             self.data_dict['current_serial_ID'] = json_dict["board_sn"] 
             self.data_dict['test1_completed'] = True
             self.data_dict['test1_pass'] = json_dict["pass"]
+            self.send_to_DB(1)
+
 
         elif test_type == "ID Resistance Test":
-            with open("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_IDRes_JSON.json", "w") as file:
+            with open("{}/PythonFiles/JSONFiles/Current_IDRes_JSON.json".format(WagonTestGUI.__path__[0]), "w") as file:
                 json.dump(json_dict['data'], file)
 
             self.data_dict['user_ID'] = json_dict["tester"]
             self.data_dict['current_serial_ID'] = json_dict["board_sn"] 
             self.data_dict['test2_completed'] = True
             self.data_dict['test2_pass'] = json_dict["pass"]
+            self.send_to_DB(2)
 
 
         elif test_type == "IIC Check":
-            with open("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_IIC_JSON.json", "w") as file:
+            with open("{}/PythonFiles/JSONFiles/Current_IIC_JSON.json".format(WagonTestGUI.__path__[0]), "w") as file:
                 json.dump(json_dict['data'], file)
 
             self.data_dict['user_ID'] = json_dict["tester"]
             self.data_dict['current_serial_ID'] = json_dict["board_sn"] 
             self.data_dict['test3_completed'] = True
             self.data_dict['test3_pass'] = json_dict["pass"]
+            self.send_to_DB(3)
 
         elif test_type == "Bit Error Rate Test":
-            with open("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_BERT_JSON.json", "w") as file:
+            with open("{}/PythonFiles/JSONFiles/Current_BERT_JSON.json".format(WagonTestGUI.__path__[0]), "w") as file:
                 json.dump(json_dict['data'], file)
             self.data_dict['user_ID'] = json_dict["tester"]
             self.data_dict['current_serial_ID'] = json_dict["board_sn"] 
             self.data_dict['test4_completed'] = True
             self.data_dict['test4_pass'] = json_dict["pass"]
+            self.send_to_DB(4)
 
         # Updates the lists
         self.data_lists['test_results'] = [self.data_dict['test1_pass'], self.data_dict['test2_pass'], self.data_dict['test3_pass'], self.data_dict['test4_pass']]

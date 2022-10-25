@@ -1,5 +1,5 @@
 import logging, time
-
+import WagonTestGUI
 from PythonFiles.utils.REQClient import REQClient
 
 # Format for the logging configuration
@@ -7,7 +7,7 @@ FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
 
 # Configures the logging. Set level to 'logging.INFO' to see relevant information. Set level to 'logging.DEBUG' if you wish to see every received message (only run this for a couple minutes on DEBUG, the file size is immmense.
 logging.basicConfig(
-    filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/StressTest.log", 
+    filename="{}/PythonFiles/logs/StressTest.log".format(WagonTestGUI.__path__[0]), 
     filemode = 'w', 
     format=FORMAT, 
     level=logging.INFO

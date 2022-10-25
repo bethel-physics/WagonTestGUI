@@ -9,12 +9,13 @@
 
 # Importing necessary modules
 import zmq, logging
+import WagonTestGUI
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
 logging.basicConfig(
-    filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/StressTest.log", 
+    filename="{}/PythonFiles/logs/StressTest.log".format(WagonTestGUI.__path__[0]), 
     filemode = 'w', 
     format=FORMAT, 
     level=logging.INFO
@@ -27,6 +28,8 @@ class REQClient():
 
     # Ensures nothing happens on instantiantion
     def __init__(self, desired_test, serial, tester):
+        with open("{}/PythonFiles/utils/server_ip.txt".format(WagonTestGUI.__path__[0]),"r") as openfile:
+            grabbed_ip = openfile.read()
         self.message = ""
         self.serial = serial
         self.tester = tester
@@ -39,7 +42,7 @@ class REQClient():
         # Creates a socket to talk to the server
         # print("Connecting to the testing server...")
         socket = context.socket(zmq.REQ)
-        socket.connect("tcp://192.168.23.23:5555")
+        socket.connect("tcp://{ip_address}:5555".format(ip_address = grabbed_ip))
 
         debug_msg = "REQClient: Sending request to REPServer for: " + self.desired_test
         logging.debug(debug_msg)

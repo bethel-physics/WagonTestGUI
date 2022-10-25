@@ -4,11 +4,12 @@
 # importing necessary modules
 import tkinter as tk
 import logging
+import WagonTestGUI
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 
 # Creates a class that is called by the GUIWindow. 
@@ -26,15 +27,20 @@ class AddUserScene(tk.Frame):
         super().__init__(master_frame, width=850, height=500)
         logging.info("AddUserScene: Frame has been created.")
         self.data_holder = data_holder
+        self.update_frame(parent)
 
-
+    def update_frame(self, parent):
+        
+        for widget in self.winfo_children():
+            widget.destroy()
+        
         # Creating the title for the window
         lbl_title = tk.Label(
             self, 
             text="Add User", 
             font=('Arial', '24')
             )
-        lbl_title.pack(pady=75)
+        lbl_title.pack(pady=(50,0))
 
         # Creating entry box for new user's name
         self.new_user_name = ""
@@ -45,6 +51,23 @@ class AddUserScene(tk.Frame):
             )
         self.user_entry.pack(pady=30)
 
+        # Creating the title for the window
+        password_label = tk.Label(
+            self, 
+            text="Enter Admin Password", 
+            font=('Arial', '20')
+            )
+        password_label.pack(pady=(10,0))
+
+        # Creating entry box for new user's name
+        self.password = ""
+        self.user_password = tk.Entry(
+            self,
+            textvariable= self.password,
+            font=('Arial', '15'),
+            show = "*"
+            )
+        self.user_password.pack(pady=30)
 
         # Creating the submit button
         self.btn_submit = tk.Button(
@@ -80,9 +103,10 @@ class AddUserScene(tk.Frame):
     def btn_submit_action(self, _parent):
        
         self.new_user_name = self.user_entry.get()        
- 
+        self.password = self.user_password.get() 
+
         # Popup to confirm that a new user is added into the DB
-        cnfm_pop = ConfirmPopup(_parent, self.data_holder, self.new_user_name)
+        cnfm_pop = ConfirmPopup(_parent, self.data_holder, self.new_user_name, self.password)
 
 
     #################################################
@@ -100,16 +124,18 @@ class ConfirmPopup():
     
     #################################################
 
-    def __init__(self, parent, data_holder, new_user_name):
-        self.confirm_popup(data_holder, new_user_name)
+    def __init__(self, parent, data_holder, new_user_name, password):
+        print("\n\n\n\n\n{}\n\n\n\n".format(parent))
+        self.confirm_popup(data_holder, new_user_name, password)
         self.parent = parent    
 
     #################################################
 
     # Function to make retry or continue window if the test fails
-    def confirm_popup(self, data_holder, new_user_name):
+    def confirm_popup(self, data_holder, new_user_name, password):
         self.data_holder = data_holder
         self.new_user_name = new_user_name
+        self.password = password
         logging.info("ConfirmPopup: Confirming that the user wants to add {}".format(self.new_user_name))
         # Creates a popup to ask whether or not to retry the test
         self.popup = tk.Toplevel()
@@ -148,9 +174,10 @@ class ConfirmPopup():
             text = "Confirm",
             relief = tk.RAISED,
             font = ('Arial', 12),
-            command = lambda: self.continue_function()
+            command = lambda: self.continue_function(self.parent)
         )
         btn_continue.grid(column = 1, row = 1)
+
 
     #################################################
     
@@ -161,15 +188,14 @@ class ConfirmPopup():
     #################################################
 
     # Called to continue on in the testing procedure
-    def continue_function(self):
+    def continue_function(self, _parent):
         self.popup.destroy()
             
         # Adding a new user name to data_holder/DB 
         logging.info("AddUserScene: Going to DataHolder to try to add {} as a username".format(self.new_user_name))
-        self.data_holder.add_new_user_name(self.new_user_name)
+        self.data_holder.add_new_user_name(self.new_user_name, self.password)
         # Changes frame to scan_frame
-        self.parent.set_frame_scan_frame()
-
+        _parent.set_frame_login_frame()
 
         self.data_holder.print()
 

@@ -9,15 +9,13 @@ from tkinter import *
 from turtle import back
 from PIL import ImageTk as iTK
 from PIL import Image
+import WagonTestGUI
  
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
-
-# Creating variable for testing QR Code entry
-QRcode = "1090201033667425"
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 
 # creating the Scan Frame's class (called ScanScene) to be instantiated in the GUIWindow
@@ -45,19 +43,19 @@ class ScanScene(tk.Frame):
     # Needs to be updated to run the read_barcode function in the original GUI
     def scan_QR_code(self, master_window):
         
-        ent_snum.config(state = 'normal')
-        ent_snum.delete(0,END)
+        self.ent_snum.config(state = 'normal')
+        self.ent_snum.delete(0,END)
         self.master_window = master_window
         self.hide_rescan_button()
 
         sys.path.insert(1,'/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/Scanner/python')
 
-        from get_barcodes import scan, listen, parse_xml
+        from ..Scanner.python.get_barcodes import scan, listen, parse_xml
 
         manager = mp.Manager()
         serial = manager.list()
 
-        ent_snum.config(state = 'normal')
+        self.ent_snum.config(state = 'normal')
 
         logging.info("ScanScene: Beginning scan...")
         self.scanner = scan()
@@ -77,9 +75,9 @@ class ScanScene(tk.Frame):
                 self.listener.terminate()
                 self.scanner.terminate()
                
-                ent_snum.delete(0,END)
-                ent_snum.insert(0, str(self.data_holder.get_serial_ID()))
-                ent_snum.config(state = 'disabled')
+                self.ent_snum.delete(0,END)
+                self.ent_snum.insert(0, str(self.data_holder.get_serial_ID()))
+                self.ent_snum.config(state = 'disabled')
                 self.show_rescan_button()
                 break
 
@@ -103,7 +101,7 @@ class ScanScene(tk.Frame):
 
         logging.info("ScanScene: Frame has been created.")
         # Create a photoimage object of the QR Code
-        QR_image = Image.open("WagonTestGUI/PythonFiles/Images/QRimage.png")
+        QR_image = Image.open("{}/PythonFiles/Images/QRimage.png".format(WagonTestGUI.__path__[0]))
         QR_PhotoImage = iTK.PhotoImage(QR_image)
         QR_label = tk.Label(self, image=QR_PhotoImage)
         QR_label.image = QR_PhotoImage
@@ -137,12 +135,12 @@ class ScanScene(tk.Frame):
         user_text = tk.StringVar(self)
         
         # Creates an entry box
-        ent_snum = tk.Entry(
+        self.ent_snum = tk.Entry(
             Scan_Board_Prompt_Frame,
             font = ('Arial', 16),
             textvariable= user_text, 
             )
-        ent_snum.pack(padx = 50)
+        self.ent_snum.pack(padx = 50)
 
         # Traces an input to show the submit button once text is inside the entry box
         user_text.trace(
@@ -194,7 +192,7 @@ class ScanScene(tk.Frame):
 
     # Function for the submit button
     def btn_submit_action(self, _parent):
-
+        self.data_holder.set_serial_ID(self.ent_snum.get())
         self.data_holder.check_if_new_board()
         _parent.scan_frame_progress()
 

@@ -5,9 +5,9 @@ from audioop import mul
 import multiprocessing as mp
 import socket
 # Imports the GUIWindow
-from PythonFiles.GUIWindow import GUIWindow
-from PythonFiles.utils.SUBClient import SUBClient
-
+from WagonTestGUI.PythonFiles.GUIWindow import GUIWindow
+from WagonTestGUI.PythonFiles.utils.SUBClient import SUBClient
+import os
 
 # Creates a task of creating the GUIWindow
 def task_GUI(conn, queue):
@@ -54,6 +54,10 @@ def main(args):
     pass
 
 if __name__ == "__main__":
+
+    curpath = os.path.abspath(os.curdir)
+    print( "Current path is: %s" % (curpath))
+
     print(socket.gethostname())
     ###### Example code to branch between the different GUIS #####
     # visual_GUI_computers = [
