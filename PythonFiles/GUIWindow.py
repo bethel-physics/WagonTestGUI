@@ -9,25 +9,25 @@ import logging
 #from pyparsing import trace_parse_action
 
 # Importing all the neccessary files and classes from them
-from PythonFiles.Scenes.SidebarScene import SidebarScene
-from PythonFiles.Scenes.LoginScene import LoginScene
-from PythonFiles.Scenes.ScanScene import ScanScene
-from PythonFiles.TestFailedPopup import TestFailedPopup
-from PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
-from PythonFiles.Scenes.TestScene import *
-from PythonFiles.Scenes.TestInProgressScene import TestInProgressScene
-from PythonFiles.Data.DataHolder import DataHolder
-from PythonFiles.Scenes.SplashScene import SplashScene
-from PythonFiles.Scenes.TestInProgressScene import *
-from PythonFiles.Scenes.Inspection1 import Inspection1
-from PythonFiles.Scenes.AddUserScene import AddUserScene
+from WagonTestGUI.PythonFiles.Scenes.SidebarScene import SidebarScene
+from WagonTestGUI.PythonFiles.Scenes.LoginScene import LoginScene
+from WagonTestGUI.PythonFiles.Scenes.ScanScene import ScanScene
+from WagonTestGUI.PythonFiles.TestFailedPopup import TestFailedPopup
+from WagonTestGUI.PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
+from WagonTestGUI.PythonFiles.Scenes.TestScene import *
+from WagonTestGUI.PythonFiles.Scenes.TestInProgressScene import TestInProgressScene
+from WagonTestGUI.PythonFiles.Data.DataHolder import DataHolder
+from WagonTestGUI.PythonFiles.Scenes.SplashScene import SplashScene
+from WagonTestGUI.PythonFiles.Scenes.TestInProgressScene import *
+from WagonTestGUI.PythonFiles.Scenes.Inspection1 import Inspection1
+from WagonTestGUI.PythonFiles.Scenes.AddUserScene import AddUserScene
 
 #################################################################################
 
 
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Create a class for creating the basic GUI Window to be called by the main function to
 # instantiate the actual object
@@ -142,6 +142,7 @@ class GUIWindow():
     #################################################
 
     def set_frame_add_user_frame(self):
+        self.add_user_frame.update_frame(self)
         self.set_frame(self.add_user_frame)
         
         logging.debug("GUIWindow: The frame has been set to add_user_frame.")
@@ -150,8 +151,9 @@ class GUIWindow():
 
     def set_frame_login_frame(self):  
 
-        self.set_frame(self.login_frame)    
-        
+        self.login_frame.update_frame(self)
+        self.set_frame(self.login_frame)        
+
         logging.debug("GUIWindow: The frame has been set to login_frame.")
     #################################################
 
@@ -194,8 +196,6 @@ class GUIWindow():
 
     #################################################
 
-    # The numbers being passed as args into the self.data_holder.send_to_DB(#) 
-    # are the test number of the test we want to send the results of.
     # For example, when we set the frame to test2_frame, we want to send the results
     # of test1 because it just completed.
 
@@ -206,9 +206,6 @@ class GUIWindow():
         self.check_if_test_passed()
         self.set_frame(self.test_summary_frame)
         
-        self.data_holder.send_to_DB(4)
-
-        print("\n\n INFORMATION HAS BEEN SENT TO THE DB \n\n")
 
         logging.debug("GUIWindow: The frame has been set to test_summary_frame.")
 
@@ -225,10 +222,6 @@ class GUIWindow():
         self.test2_frame.update_frame(self)
         self.set_frame(self.test2_frame)
 
-        self.data_holder.send_to_DB(1)
-
-        print("\n\n INFORMATION HAS BEEN SENT TO THE DB \n\n")
-
 
         logging.debug("GUIWindow: The frame has been set to test2_frame.")
     #################################################
@@ -237,10 +230,6 @@ class GUIWindow():
         self.test3_frame.update_frame(self)
         self.set_frame(self.test3_frame)
         
-        self.data_holder.send_to_DB(2)
-
-        print("\n\n INFORMATION HAS BEEN SENT TO THE DB \n\n")
-
 
         logging.debug("GUIWindow: The frame has been set to test3_frame.")
     #################################################
@@ -248,10 +237,6 @@ class GUIWindow():
     def set_frame_test4(self):
         self.test4_frame.update_frame(self)
         self.set_frame(self.test4_frame)
-
-        self.data_holder.send_to_DB(3)
-
-        print("\n\n INFORMATION HAS BEEN SENT TO THE DB \n\n")
 
 
         logging.debug("GUIWindow: The frame has been set to test4_frame.")

@@ -6,11 +6,12 @@ from tkinter import ttk
 from xml.dom.expatbuilder import parseFragmentString
 import time
 import logging
+import WagonTestGUI
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):

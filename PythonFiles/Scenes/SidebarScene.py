@@ -4,11 +4,12 @@ import tkinter as tk
 from PIL import ImageTk as iTK
 from PIL import Image
 import logging
+import WagonTestGUI
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 class SidebarScene(tk.Frame):
 
@@ -34,7 +35,7 @@ class SidebarScene(tk.Frame):
         for index in range(len(self.list_of_pass_fail)):
             if(self.list_of_pass_fail[index] == True):
                 # Create a photoimage object of the QR Code
-                Green_Check_Image = Image.open("WagonTestGUI/PythonFiles/Images/GreenCheckMark.png")
+                Green_Check_Image = Image.open("{}/PythonFiles/Images/GreenCheckMark.png".format(WagonTestGUI.__path__[0]))
                 Green_Check_Image = Green_Check_Image.resize((50,50), Image.ANTIALIAS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
                 GreenCheck_Label = tk.Label(self, image=Green_Check_PhotoImage, width=50, height=50, bg = '#808080')
@@ -44,7 +45,7 @@ class SidebarScene(tk.Frame):
 
             else:
                 # Create a photoimage object of the QR Code
-                Red_X_Image = Image.open("WagonTestGUI/PythonFiles/Images/RedX.png")
+                Red_X_Image = Image.open("{}/PythonFiles/Images/RedX.png".format(WagonTestGUI.__path__[0]))
                 Red_X_Image = Red_X_Image.resize((50,50), Image.ANTIALIAS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
                 RedX_Label = tk.Label(self, image=Red_X_PhotoImage, width=50, height=50, bg = '#808080')

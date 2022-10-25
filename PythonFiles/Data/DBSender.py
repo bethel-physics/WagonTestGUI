@@ -1,5 +1,6 @@
 import requests
 import json
+import WagonTestGUI
 # from read_barcode import read_barcode
 
 
@@ -10,8 +11,8 @@ class DBSender():
         pass
 
 
-    def add_new_user_ID(self, user_ID):
-        r = requests.post('http://cmslab3.umncmslab/~cros0400/cgi-bin/add_new_user_ID.py', data= user_ID)
+    def add_new_user_ID(self, user_ID, passwd):
+        r = requests.post('http://cmslab3.umncmslab/~cros0400/cgi-bin/add_tester2.py', data= {'person_name':user_ID, 'password': passwd})
 
 
 
@@ -129,14 +130,6 @@ class DBSender():
         attach_data = {'attach1': datafile}
         print("Read from json file:", results)
         r = requests.post('http://cmslab3.umncmslab/~cros0400/cgi-bin/add_test_json.py', data = results, files = attach_data)
-        
-        '''
-        html_file = open("WagonTestGUI/PythonFiles/JSONFiles/sample_html_file.html", "w")
-        html_file.write((r.content).decode("UTF-8"))
-        html_file.close()
-        print(r.content) 
-   
-        '''
 
 
  # Returns a list of all different types of tests
@@ -158,45 +151,3 @@ class DBSender():
 
         return tests
 
-        '''
-    # Verifies that the person is within the database
-    # Returns their user_ID (int)`
-    def verify_person(self, name):
-        r = requests.post('http://cmslab3.umncmslab/~cros0400/cgi-bin/verify_person.py', data={'tester': name})
-        lines = r.text.split('\n')
-
-
-
-        print("lines", lines)
-        # print (r.content)
-
-        html_file = open("sample_html_file2.html", "w")
-        html_file.write((r.content).decode("UTF-8"))
-        html_file.close()
-
-
-        begin = lines.index("Begin") + 1
-        end = lines.index("End")
-
-       
-        person_id = []
-
-        for i in range (begin, end):
-            
-            temp = lines[i][1:-1].split(",")
-            temp[0] = str(temp[0][1:-1])
-            temp[1] = int(temp[1])
-            person_id.append(temp)
-
-
-
-        print("\nVerified ID= ", person_id0)
-        print("\n\n")
-        return person_id
-
-    #add_test_json("example.json", {"attach1": open("test.txt","rb")})
-
-
-trial = DBSender()
-print(str(trial.verify_person("Bryan")))
-        '''

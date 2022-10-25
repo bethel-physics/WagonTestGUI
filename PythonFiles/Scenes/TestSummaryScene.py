@@ -1,16 +1,18 @@
 #################################################################################
 
+import WagonTestGUI
 import json, logging
 import tkinter as tk
 from PIL import ImageTk as iTK
 from PIL import Image
 from matplotlib.pyplot import table
 from pyparsing import col
+import WagonTestGUI
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/logs/GUIWindow.log", filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Frame that shows all of the final test results
 # @param parent -> References a GUIWindow object
@@ -158,7 +160,7 @@ class TestSummaryScene(tk.Frame):
         for index in range(len(self.list_of_pass_fail)):
             if(self.list_of_pass_fail[index]):
                 # Create a photoimage object of the QR Code
-                Green_Check_Image = Image.open("WagonTestGUI/PythonFiles/Images/GreenCheckMark.png")
+                Green_Check_Image = Image.open("{}/PythonFiles/Images/GreenCheckMark.png".format(WagonTestGUI.__path__[0]))
                 Green_Check_Image = Green_Check_Image.resize((75,75), Image.ANTIALIAS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
                 GreenCheck_Label = tk.Label(self.frm_table, image=Green_Check_PhotoImage, width=75, height=75)
@@ -168,7 +170,7 @@ class TestSummaryScene(tk.Frame):
 
             else:
                 # Create a photoimage object of the QR Code
-                Red_X_Image = Image.open("WagonTestGUI/PythonFiles/Images/RedX.png")
+                Red_X_Image = Image.open("{}/PythonFiles/Images/RedX.png".format(WagonTestGUI.__path__[0]))
                 Red_X_Image = Red_X_Image.resize((75,75), Image.ANTIALIAS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
                 RedX_Label = tk.Label(self.frm_table, image=Red_X_PhotoImage, width=75, height=75)
@@ -328,7 +330,7 @@ class TestSummaryScene(tk.Frame):
             self.JSON_entry_box.pack(anchor = 'center', fill=tk.BOTH, expand=1)
 
             current_JSON_file = open(JSON_String)
-            current_JSON_data = json.load(current_JSON_file, indent = 4)
+            current_JSON_data = json.load(current_JSON_file)
 
 
             temp = ""
@@ -364,16 +366,16 @@ class TestSummaryScene(tk.Frame):
     #################################################
 
     def btn_more_info1_action(self, _parent):
-        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_GenRes_JSON.json")
+        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_GenRes_JSON.json".format(WagonTestGUI.__path__[0]))
 
     def btn_more_info2_action(self, _parent):
-        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_IDRes_JSON.json")
+        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_IDRes_JSON.json".format(WagonTestGUI.__path__[0]))
 
     def btn_more_info3_action(self, _parent):
-        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_IIC_JSON.json")
+        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_IIC_JSON.json".format(WagonTestGUI.__path__[0]))
     
     def btn_more_info4_action(self, _parent):
-        self.create_JSON_popup("/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/JSONFiles/Current_BERT_JSON.json")
+        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_BERT_JSON.json".format(WagonTestGUI.__path__[0]))
 
     #################################################
 
