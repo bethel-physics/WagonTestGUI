@@ -97,7 +97,7 @@ class GUIWindow():
                             queue
                             )
         self.test2_frame.grid(row=0, column=0)
-
+        
         self.test3_frame= Test3Scene(self, self.master_frame, self.data_holder, 
                             "I2C Comm. Test", 
                             queue
@@ -266,8 +266,8 @@ class GUIWindow():
 
         logging.info("GUIWindow: Testing which tests have been completed.")
         # Checks tells the function which frame to set based on what frame is currently up
-        for index, test in enumerate(test_completed_list):
-            
+        for index, test in enumerate(test_completed_list):            
+
             if test == True and index >=  self.current_test_index:
                 print("Test", index + 1, "== True")
                 if self.completed_window_alive == False:
@@ -366,7 +366,6 @@ class GUIWindow():
         if _frame == self.test_summary_frame and self.current_test_index == 4:
             if self.data_holder.data_dict['test4_pass'] == False:
                 TestFailedPopup(self, self.test4_frame, self.data_holder)
-
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
 
