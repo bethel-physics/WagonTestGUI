@@ -1,12 +1,12 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 # Importing necessary modules
 from audioop import mul
 import multiprocessing as mp
 import socket
 # Imports the GUIWindow
-from WagonTestGUI.PythonFiles.GUIWindow import GUIWindow
-from WagonTestGUI.PythonFiles.utils.SUBClient import SUBClient
+from PythonFiles.GUIWindow import GUIWindow
+from PythonFiles.utils.SUBClient import SUBClient
 import os
 
 # Creates a task of creating the GUIWindow
