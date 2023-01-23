@@ -1,16 +1,16 @@
 # Importing necessary modules
 import zmq, logging
-import WagonTestGUI
+import PythonFiles
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/SUBClient.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.INFO)
+logging.basicConfig(filename="{}/logs/SUBClient.log".format(PythonFiles.__path__[0]), filemode = 'w', format=FORMAT, level=logging.INFO)
 
 
 # Creating a class for the SUBSCRIBE socket-type Client
 class SUBClient():
 
     def __init__(self, conn, queue):
-        with open("{}/PythonFiles/utils/server_ip.txt".format(WagonTestGUI.__path__[0]), "r") as openfile:
+        with open("{}/utils/server_ip.txt".format(PythonFiles.__path__[0]), "r") as openfile:
             grabbed_ip = openfile.read()
         logging.info("SUBClient has started") 
         # Insantiates variables       

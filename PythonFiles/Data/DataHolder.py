@@ -1,9 +1,9 @@
 ################################################################################
-import json, logging, socket, WagonTestGUI
-from WagonTestGUI.PythonFiles.Data.DBSender import DBSender
+import json, logging, socket, PythonFiles
+from PythonFiles.Data.DBSender import DBSender
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/logs/GUIWindow.log".format(PythonFiles.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 class DataHolder():
 
@@ -141,10 +141,10 @@ class DataHolder():
             if self.data_list['test_results'][i]:
                 temp = 1
             info_dict = {"serial_num":serial_number,"tester": person_ID, "test_type": self.tests_run[i], "successful": temp, "comments": comments} 
-            with open("{}/PythonFiles/JSONFiles/storage.json".format(WagonTestGUI.__path__[0]), "w") as outfile:
+            with open("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]), "w") as outfile:
                 print(info_dict)
                 json.dump(info_dict, outfile)
-            self.data_sender.add_test_json("{}/PythonFiles/JSONFiles/storage.json".format(WagonTestGUI.__path__[0]))
+            self.data_sender.add_test_json("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]))
         logging.info("DataHolder: All results sent to database.")
     #################################################
 
@@ -152,10 +152,10 @@ class DataHolder():
         index = test_run - 1
         
         file_path_list = [
-            "{}/PythonFiles/JSONFiles/Current_GenRes_JSON.json".format(WagonTestGUI.__path__[0]),
-            "{}/PythonFiles/JSONFiles/Current_IDRes_JSON.json".format(WagonTestGUI.__path__[0]),
-            "{}/PythonFiles/JSONFiles/Current_IIC_JSON.json".format(WagonTestGUI.__path__[0]),
-            "{}/PythonFiles/JSONFiles/Current_BERT_JSON.json".format(WagonTestGUI.__path__[0])
+            "{}/JSONFiles/Current_GenRes_JSON.json".format(PythonFiles.__path__[0]),
+            "{}/JSONFiles/Current_IDRes_JSON.json".format(PythonFiles.__path__[0]),
+            "{}/JSONFiles/Current_IIC_JSON.json".format(PythonFiles.__path__[0]),
+            "{}/JSONFiles/Current_BERT_JSON.json".format(PythonFiles.__path__[0])
         ]
             
 
@@ -167,10 +167,10 @@ class DataHolder():
 
         info_dict = {"serial_num":self.get_serial_ID(),"tester": self.data_dict['user_ID'], "test_type": self.data_dict['tests_run'][index], "successful": temp, "comments": self.data_dict['comments']}
         
-        with open("{}/PythonFiles/JSONFiles/storage.json".format(WagonTestGUI.__path__[0]), "w") as outfile:
+        with open("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]), "w") as outfile:
             print(info_dict)
             json.dump(info_dict, outfile)
-        self.data_sender.add_test_json("{}/PythonFiles/JSONFiles/storage.json".format(WagonTestGUI.__path__[0]), file_path_list[index])
+        self.data_sender.add_test_json("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]), file_path_list[index])
         logging.info("DataHolder: Test results sent to database.")
 
     #################################################
@@ -194,7 +194,7 @@ class DataHolder():
         test_type = json_dict["name"]
 
         if test_type == "General Resistance Test":
-            with open("{}/PythonFiles/JSONFiles/Current_GenRes_JSON.json".format(WagonTestGUI.__path__[0]), "w") as file:
+            with open("{}/JSONFiles/Current_GenRes_JSON.json".format(PythonFiles.__path__[0]), "w") as file:
                 json.dump(json_dict['data'], file)
             print("\n\n\n\n GENRES TEST \n\n\n\n")
             self.data_dict['user_ID'] = json_dict["tester"]
@@ -205,7 +205,7 @@ class DataHolder():
 
 
         elif test_type == "ID Resistance Test":
-            with open("{}/PythonFiles/JSONFiles/Current_IDRes_JSON.json".format(WagonTestGUI.__path__[0]), "w") as file:
+            with open("{}/JSONFiles/Current_IDRes_JSON.json".format(PythonFiles.__path__[0]), "w") as file:
                 json.dump(json_dict['data'], file)
 
             self.data_dict['user_ID'] = json_dict["tester"]
@@ -216,7 +216,7 @@ class DataHolder():
 
 
         elif test_type == "IIC Check":
-            with open("{}/PythonFiles/JSONFiles/Current_IIC_JSON.json".format(WagonTestGUI.__path__[0]), "w") as file:
+            with open("{}/JSONFiles/Current_IIC_JSON.json".format(PythonFiles.__path__[0]), "w") as file:
                 json.dump(json_dict['data'], file)
 
             self.data_dict['user_ID'] = json_dict["tester"]
@@ -226,7 +226,7 @@ class DataHolder():
             self.send_to_DB(3)
 
         elif test_type == "Bit Error Rate Test":
-            with open("{}/PythonFiles/JSONFiles/Current_BERT_JSON.json".format(WagonTestGUI.__path__[0]), "w") as file:
+            with open("{}/JSONFiles/Current_BERT_JSON.json".format(PythonFiles.__path__[0]), "w") as file:
                 json.dump(json_dict['data'], file)
             self.data_dict['user_ID'] = json_dict["tester"]
             self.data_dict['current_serial_ID'] = json_dict["board_sn"] 

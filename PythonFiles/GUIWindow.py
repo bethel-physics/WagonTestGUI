@@ -9,25 +9,26 @@ import logging
 #from pyparsing import trace_parse_action
 
 # Importing all the neccessary files and classes from them
-from WagonTestGUI.PythonFiles.Scenes.SidebarScene import SidebarScene
-from WagonTestGUI.PythonFiles.Scenes.LoginScene import LoginScene
-from WagonTestGUI.PythonFiles.Scenes.ScanScene import ScanScene
-from WagonTestGUI.PythonFiles.TestFailedPopup import TestFailedPopup
-from WagonTestGUI.PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
-from WagonTestGUI.PythonFiles.Scenes.TestScene import *
-from WagonTestGUI.PythonFiles.Scenes.TestInProgressScene import TestInProgressScene
-from WagonTestGUI.PythonFiles.Data.DataHolder import DataHolder
-from WagonTestGUI.PythonFiles.Scenes.SplashScene import SplashScene
-from WagonTestGUI.PythonFiles.Scenes.TestInProgressScene import *
-from WagonTestGUI.PythonFiles.Scenes.Inspection1 import Inspection1
-from WagonTestGUI.PythonFiles.Scenes.AddUserScene import AddUserScene
+import PythonFiles
+from PythonFiles.Scenes.SidebarScene import SidebarScene
+from PythonFiles.Scenes.LoginScene import LoginScene
+from PythonFiles.Scenes.ScanScene import ScanScene
+from PythonFiles.TestFailedPopup import TestFailedPopup
+from PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
+from PythonFiles.Scenes.TestScene import *
+from PythonFiles.Scenes.TestInProgressScene import TestInProgressScene
+from PythonFiles.Data.DataHolder import DataHolder
+from PythonFiles.Scenes.SplashScene import SplashScene
+from PythonFiles.Scenes.TestInProgressScene import *
+from PythonFiles.Scenes.Inspection1 import Inspection1
+from PythonFiles.Scenes.AddUserScene import AddUserScene
 
 #################################################################################
 
 
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(PythonFiles.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Create a class for creating the basic GUI Window to be called by the main function to
 # instantiate the actual object

@@ -9,13 +9,13 @@ from tkinter import *
 from turtle import back
 from PIL import ImageTk as iTK
 from PIL import Image
-import WagonTestGUI
+import PythonFiles
  
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/logs/GUIWindow.log".format(PythonFiles.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 
 # creating the Scan Frame's class (called ScanScene) to be instantiated in the GUIWindow
@@ -48,7 +48,7 @@ class ScanScene(tk.Frame):
         self.master_window = master_window
         self.hide_rescan_button()
 
-        sys.path.insert(1,'/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/Scanner/python')
+        sys.path.insert(1,'/home/hgcal/WagonTest/Scanner/python')
 
         from ..Scanner.python.get_barcodes import scan, listen, parse_xml
 
@@ -101,7 +101,7 @@ class ScanScene(tk.Frame):
 
         logging.info("ScanScene: Frame has been created.")
         # Create a photoimage object of the QR Code
-        QR_image = Image.open("{}/PythonFiles/Images/QRimage.png".format(WagonTestGUI.__path__[0]))
+        QR_image = Image.open("{}/Images/QRimage.png".format(PythonFiles.__path__[0]))
         QR_PhotoImage = iTK.PhotoImage(QR_image)
         QR_label = tk.Label(self, image=QR_PhotoImage)
         QR_label.image = QR_PhotoImage
