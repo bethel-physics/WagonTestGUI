@@ -157,7 +157,7 @@ class TestInProgressScene(tk.Frame):
                 time.sleep(.01)
 
     def close_prgbar(self):
-        logging.debug("TestInProgressScene: Closing the progressbar.")
-        self.prgbar_progress.stop()
-        self.prgbar_progress.destroy()
+        #logging.debug("TestInProgressScene: Closing the progressbar.")
+        #self.prgbar_progress.stop()
+        #self.prgbar_progress.destroy()
         logging.debug("TestInProgressScene: Progressbar succesfully closed.")
