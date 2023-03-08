@@ -19,11 +19,13 @@ class TestScene(tk.Frame):
 
     #################################################
 
-    def __init__(self, parent, master_frame, data_holder, test_name, queue):
+    def __init__(self, parent, master_frame, data_holder, test_name, queue, test_idx):
         super().__init__(master_frame, width=850, height=500)
         self.queue = queue
         self.test_name = test_name
         self.data_holder = data_holder
+        self.test_idx = test_idx
+        print("Making test scene with index".format(self.test_idx))
         
         self.update_frame(parent)
 
@@ -147,7 +149,9 @@ class TestScene(tk.Frame):
 
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
-        pass
+        print("Confirm button sending test{}".format(self.test_idx))
+        test_client = REQClient('test{}'.format(self.test_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
+        _parent.set_frame_test_in_progress(self.queue)
 
     #################################################
 

@@ -10,10 +10,13 @@ class DataHolder():
     #################################################
 
     # List of the variables being held by data holder
-    def __init__(self):
+    def __init__(self, gui_cfg):
         
+        # Object for taking care of instantiation for different test types
+        self.gui_cfg = gui_cfg
+
         # Object that sends information to the database
-        self.data_sender = DBSender()
+        self.data_sender = DBSender(gui_cfg)
         
         self.data_dict = {
                 'user_ID': "_",

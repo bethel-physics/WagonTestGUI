@@ -10,6 +10,7 @@ import logging
 
 # Importing all the neccessary files and classes from them
 import PythonFiles
+from PythonFiles.GUIConfig import GUIConfig
 from PythonFiles.Scenes.SidebarScene import SidebarScene
 from PythonFiles.Scenes.LoginScene import LoginScene
 from PythonFiles.Scenes.ScanScene import ScanScene
@@ -36,17 +37,18 @@ class GUIWindow():
 
     #################################################
 
-    def __init__(self, conn, queue):
+    def __init__(self, conn, queue, board_cfg):
         self.conn = conn
         self.queue = queue
         self.retry_attempt = False
         self.completed_window_alive = False
         self.current_test_index = 0
+        self.gui_cfg = GUIConfig(board_cfg)
                              
         # Create the window named "self.master_window"
         # global makes self.master_window global and therefore accessible outside the function
         self.master_window = tk.Tk()
-        self.master_window.title("Bethel Interns' Window")
+        self.master_window.title("HGCAL Test Window")
         # Creates the size of the window and disables resizing
         self.master_window.geometry("1063x500+25+100")
         self.master_window.resizable(0,0)
@@ -63,7 +65,7 @@ class GUIWindow():
         sidebar_frame.grid(column = 0 , row = 0)
 
         # Creates the "Storage System" for the data during testing
-        self.data_holder = DataHolder()
+        self.data_holder = DataHolder(self.gui_cfg)
 
         # Creates all the widgets on the sidebar
         self.sidebar = SidebarScene(self, sidebar_frame, self.data_holder)
@@ -87,29 +89,41 @@ class GUIWindow():
         self.scan_frame = ScanScene(self, self.master_frame, self.data_holder)
         self.scan_frame.grid(row=0, column=0)
 
-        self.test1_frame= Test1Scene(self, self.master_frame, self.data_holder, 
-                            "General Resistance Test",
-                            queue
-                            )
-        self.test1_frame.grid(row=0, column=0)
-
-        self.test2_frame= Test2Scene(self, self.master_frame, self.data_holder,
-                            "ID Resistor Test", 
-                            queue
-                            )
-        self.test2_frame.grid(row=0, column=0)
+        # Generalize test frames to use testing config
+        # Grab list of tests from config file and create one scene for each test
+        # Tests are indexed starting at 1 and using the order of the list in the config
         
-        self.test3_frame= Test3Scene(self, self.master_frame, self.data_holder, 
-                            "I2C Comm. Test", 
-                            queue
-                            )
-        self.test3_frame.grid(row=0, column=0)
+        self.test_frames = []
+        test_list = self.gui_cfg.getTests()
+        
+        for test_idx,test in enumerate(test_list):
 
-        self.test4_frame= Test4Scene(self, self.master_frame, self.data_holder, 
-                            "Bit Rate Test", 
-                            queue
-                            )
-        self.test4_frame.grid(row=0, column=0)
+            self.test_frames.append(TestScene(self, self.master_frame, self.data_holder, test["name"], queue, test_idx))
+            self.test_frames[test_idx].grid(row=0, column=0)
+
+        #self.test1_frame= Test1Scene(self, self.master_frame, self.data_holder, 
+        #                    "General Resistance Test",
+        #                    queue
+        #                    )
+        #self.test1_frame.grid(row=0, column=0)
+
+        #self.test2_frame= Test2Scene(self, self.master_frame, self.data_holder,
+        #                    "ID Resistor Test", 
+        #                    queue
+        #                    )
+        #self.test2_frame.grid(row=0, column=0)
+        #
+        #self.test3_frame= Test3Scene(self, self.master_frame, self.data_holder, 
+        #                    "I2C Comm. Test", 
+        #                    queue
+        #                    )
+        #self.test3_frame.grid(row=0, column=0)
+
+        #self.test4_frame= Test4Scene(self, self.master_frame, self.data_holder, 
+        #                    "Bit Rate Test", 
+        #                    queue
+        #                    )
+        #self.test4_frame.grid(row=0, column=0)
 
         self.test_in_progress_frame = TestInProgressScene(self, self.master_frame, self.data_holder, queue, conn)
         self.test_in_progress_frame.grid(row=0, column=0)
@@ -139,6 +153,14 @@ class GUIWindow():
 
         self.master_window.mainloop()
         
+
+    #################################################
+
+    def set_frame_test_choice_frame(self):
+        
+        
+
+        logging.debug("GUIWindow: The frame has been set to test_choice_frame.")
 
     #################################################
 
@@ -212,6 +234,20 @@ class GUIWindow():
 
     #################################################
 
+    def set_frame_test(self, test_idx):
+
+        selected_test_frame = self.test_frames[test_idx]
+        print("Setting frame to test {}".format(test_idx))
+        selected_test_frame.update_frame(self)
+        print("Frame updated!")
+        
+        self.set_frame(selected_test_frame)
+        print("Frame set!")
+
+        logging.debug("GUIWindow: The frame has been set to test {}.".format(test_idx))
+
+    #################################################
+
     def set_frame_test1(self):
         self.test1_frame.update_frame(self)
         self.set_frame(self.test1_frame)
@@ -279,19 +315,23 @@ class GUIWindow():
                 pass
             else:
                 test_incomplete = True
-                if (index ==0):
-                    self.set_frame_test1()
-                    self.current_test_index = 1
-                elif (index == 1):
-                    self.set_frame_test2()
-                    self.current_test_index = 2
-                elif (index == 2):
-                    self.set_frame_test3()
-                    self.current_test_index = 3
-                elif (index == 3):
-                    self.set_frame_test4()
-                    self.current_test_index = 4
+                print(self.current_test_index)
+                self.set_frame_test(self.current_test_index)
+                self.current_test_index += 1
                 break
+                #if (index ==0):
+                #    self.set_frame_test()
+                #    self.current_test_index = 1
+                #elif (index == 1):
+                #    self.set_frame_test2()
+                #    self.current_test_index = 2
+                #elif (index == 2):
+                #    self.set_frame_test3()
+                #    self.current_test_index = 3
+                #elif (index == 3):
+                #    self.set_frame_test4()
+                #    self.current_test_index = 4
+                #break
         
 
 
@@ -355,18 +395,18 @@ class GUIWindow():
         # Brings up the test_failed popup if the test is false, continues on if not
         # Also tests the current test index so that in the event you are retrying a test it will not prompt 
         # the user about the previous test failing
-        if _frame == self.test2_frame and self.current_test_index == 1:
-           if self.data_holder.data_dict['test1_pass'] == False:
-                TestFailedPopup(self, self.test1_frame, self.data_holder)
-        if _frame == self.test3_frame and self.current_test_index == 2:
-            if self.data_holder.data_dict['test2_pass'] == False:
-                TestFailedPopup(self, self.test2_frame, self.data_holder)
-        if _frame == self.test4_frame and self.current_test_index == 3:
-            if self.data_holder.data_dict['test3_pass'] == False:
-                TestFailedPopup(self, self.test3_frame, self.data_holder)
-        if _frame == self.test_summary_frame and self.current_test_index == 4:
-            if self.data_holder.data_dict['test4_pass'] == False:
-                TestFailedPopup(self, self.test4_frame, self.data_holder)
+        #if _frame == self.test2_frame and self.current_test_index == 1:
+        #   if self.data_holder.data_dict['test1_pass'] == False:
+        #        TestFailedPopup(self, self.test1_frame, self.data_holder)
+        #if _frame == self.test3_frame and self.current_test_index == 2:
+        #    if self.data_holder.data_dict['test2_pass'] == False:
+        #        TestFailedPopup(self, self.test2_frame, self.data_holder)
+        #if _frame == self.test4_frame and self.current_test_index == 3:
+        #    if self.data_holder.data_dict['test3_pass'] == False:
+        #        TestFailedPopup(self, self.test3_frame, self.data_holder)
+        #if _frame == self.test_summary_frame and self.current_test_index == 4:
+        #    if self.data_holder.data_dict['test4_pass'] == False:
+        #        TestFailedPopup(self, self.test4_frame, self.data_holder)
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
 
@@ -529,11 +569,12 @@ class GUIWindow():
 
             logging.info("GUIWindow: The application has exited successfully.")
         except Exception as e:
-            logging.debug("GUIWindow: " + e)
+            print(e)
+            logging.debug("GUIWindow: " + repr(e))
             logging.error("GUIWindow: The application has failed to close.")
             if self.retry_attempt == False:    
                 logging.info("GUIWindow: Retrying...")
-                self.destroy_function()
+                #self.destroy_function()
                 self.retry_attempt = True
 
 
