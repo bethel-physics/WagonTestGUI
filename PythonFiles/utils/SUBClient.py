@@ -11,7 +11,7 @@ class SUBClient():
 
     def __init__(self, conn, queue):
         with open("{}/utils/server_ip.txt".format(PythonFiles.__path__[0]), "r") as openfile:
-            grabbed_ip = openfile.read()
+            grabbed_ip = openfile.read()[:-1]
         logging.info("SUBClient has started") 
         # Insantiates variables       
         self.conn = conn

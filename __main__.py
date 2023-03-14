@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/TestingEnv/bin/python
 
 # Importing necessary modules
 from audioop import mul
@@ -63,6 +63,7 @@ if __name__ == "__main__":
     print(socket.gethostname())
     wagon_GUI_computers = [
         "cmsfactory1.cmsfactorynet.umn.edu",
+        "cmslab4.umncmslab",
     ]
     engine_GUI_computers = [
 

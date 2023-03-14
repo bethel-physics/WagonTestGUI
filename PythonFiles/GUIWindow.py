@@ -236,6 +236,8 @@ class GUIWindow():
 
     def set_frame_test(self, test_idx):
 
+        self.data_holder.setTestIdx(test_idx)
+
         selected_test_frame = self.test_frames[test_idx]
         print("Setting frame to test {}".format(test_idx))
         selected_test_frame.update_frame(self)

@@ -54,6 +54,7 @@ class ScanScene(tk.Frame):
 
         manager = mp.Manager()
         serial = manager.list()
+        print(serial)
 
         self.ent_snum.config(state = 'normal')
 
