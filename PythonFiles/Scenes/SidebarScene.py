@@ -33,6 +33,7 @@ class SidebarScene(tk.Frame):
 
         # For loop to create checkmarks based on pass/fail
         for index in range(len(self.list_of_pass_fail)):
+            print("Pass fail:", self.list_of_pass_fail)
             if(self.list_of_pass_fail[index] == True):
                 # Create a photoimage object of the QR Code
                 Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
@@ -79,61 +80,25 @@ class SidebarScene(tk.Frame):
         )
         self.btn_scan.grid(column = 0, row = 1)
 
-        self.btn_test1 = tk.Button(
-            self, 
-            pady = btn_pady,
-            text = 'GEN. RESIST. TEST',
-            height = btn_height,
-            width = btn_width,
-            font = btn_font,
-            command = lambda: self.btn_test1_action(parent)
-            )
-        self.btn_test1.grid(column = 0, row = 2)
+        test_names = self.data_holder.getTestNames()
 
-        if self.data_holder.data_dict['test1_pass'] == True:
-            self.btn_test1.config(state = 'disabled')
+        self.test_btns = []
 
+        for i in range(self.data_holder.getNumTest()):
 
-        self.btn_test2 = tk.Button(
-            self,
-            pady = btn_pady, 
-            text = 'ID RESISTOR TEST',
-            height = btn_height,
-            width = btn_width,
-            font = btn_font,
-            command = lambda: self.btn_test2_action(parent)
-            )
-        self.btn_test2.grid(column = 0, row = 3)
+            self.test_btns.append(tk.Button(
+                self, 
+                pady = btn_pady,
+                text = '{}'.format(test_names[i]),
+                height = btn_height,
+                width = btn_width,
+                font = btn_font,
+                command = lambda i=i: self.btn_test_action(parent, i)
+                ))
+            self.test_btns[i].grid(column = 0, row = 2 + i)
 
-        if self.data_holder.data_dict['test2_pass'] == True:
-            self.btn_test2.config(state = 'disabled')
-
-        self.btn_test3 = tk.Button(
-            self, 
-            pady = btn_pady,
-            text = 'I2C COMM. TEST',
-            height = btn_height,
-            width = btn_width,
-            font = btn_font,
-            command = lambda: self.btn_test3_action(parent)
-            )
-        self.btn_test3.grid(column = 0, row = 4)
-
-        if self.data_holder.data_dict['test3_pass'] == True:
-            self.btn_test3.config(state = 'disabled')
-
-        self.btn_test4 = tk.Button(
-            self, 
-            pady = btn_pady,
-            text = 'BIT RATE TEST',
-            height = btn_height,
-            width = btn_width,
-            font = btn_font,
-            command = lambda: self.btn_test4_action(parent)
-            )
-        self.btn_test4.grid(column = 0, row = 5)
-        if self.data_holder.data_dict['test4_pass'] == True:
-            self.btn_test4.config(state = 'disabled')
+            if self.data_holder.data_dict['test{}_pass'.format(i+1)] == True:
+                self.test_btns[i].config(state = 'disabled')
 
         self.btn_summary = tk.Button(
             self, 
@@ -144,11 +109,14 @@ class SidebarScene(tk.Frame):
             font = btn_font,
             command = lambda: self.btn_summary_action(parent)
             )
-        self.btn_summary.grid(column = 0, row = 6)
+        self.btn_summary.grid(column = 0, row = self.data_holder.getNumTest() + 2)
 
         self.grid_propagate(0)
 
     #################################################
+
+    def btn_test_action(self, _parent, test_idx):
+        _parent.set_frame_test(test_idx)
 
     def btn_test1_action(self, _parent):
         _parent.set_frame_test1()
@@ -170,29 +138,23 @@ class SidebarScene(tk.Frame):
     def disable_all_btns(self):
         self.btn_login.config(state = 'disabled')
         self.btn_scan.config(state = 'disabled')
-        self.btn_test1.config(state = 'disabled')
-        self.btn_test2.config(state = 'disabled')
-        self.btn_test3.config(state = 'disabled')
-        self.btn_test4.config(state = 'disabled')
+        for btn in self.test_btns:
+            btn.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 
     #################################################
 
     def disable_all_but_log_scan(self):
-        self.btn_test1.config(state = 'disabled')
-        self.btn_test2.config(state = 'disabled')
-        self.btn_test3.config(state = 'disabled')
-        self.btn_test4.config(state = 'disabled')
+        for btn in self.test_btns:
+            btn.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 
     #################################################
 
     def disable_all_btns_but_scan(self):
         self.btn_login.config(state = 'disabled')
-        self.btn_test1.config(state = 'disabled')
-        self.btn_test2.config(state = 'disabled')
-        self.btn_test3.config(state = 'disabled')
-        self.btn_test4.config(state = 'disabled')
+        for btn in self.test_btns:
+            btn.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 
     #################################################
@@ -200,10 +162,8 @@ class SidebarScene(tk.Frame):
     def disable_all_btns_but_login(self):
         self.btn_login.config(state = 'normal')
         self.btn_scan.config(state = 'disabled')
-        self.btn_test1.config(state = 'disabled')
-        self.btn_test2.config(state = 'disabled')
-        self.btn_test3.config(state = 'disabled')
-        self.btn_test4.config(state = 'disabled')
+        for btn in self.test_btns:
+            btn.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 
     #################################################

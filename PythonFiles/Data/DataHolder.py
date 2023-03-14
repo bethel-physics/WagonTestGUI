@@ -1,5 +1,5 @@
 ################################################################################
-import json, logging, socket, PythonFiles
+import json, logging, socket, PythonFiles, copy
 from PythonFiles.Data.DBSender import DBSender
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
@@ -22,18 +22,14 @@ class DataHolder():
                 'user_ID': "_",
                 'test_stand': str(socket.gethostname()),
                 'current_serial_ID': "-1BAD",
-                'test1_completed': False,
-                'test2_completed': False,
-                'test3_completed': False,
-                'test4_completed': False,
-                'test1_pass': False,
-                'test2_pass': False,
-                'test3_pass': False,
-                'test4_pass': False,
                 'comments': "_",
                 'is_new_board': False,
-                'tests_run': [str(1), str(2), str(3), str(4)],
+                'tests_run': [str(i + 1) for i in range(self.getNumTest())],
                 }
+        for i in range(self.gui_cfg.getNumTest()):
+            self.data_dict["test{}_completed".format(i+1)] = False
+            self.data_dict["test{}_pass".format(i+1)] = False
+
         self.inspection_data = {
                 'board_chipped_bent': False,
                 'wagon_connection_pin_bent': False,
@@ -41,11 +37,20 @@ class DataHolder():
                 'visual_scratches': False,
                 'inspection_comments': "_"
                 }
+
         self.data_lists = {
-                'test_results': [self.data_dict['test1_pass'], self.data_dict['test2_pass'], self.data_dict['test3_pass'], self.data_dict['test4_pass']],
-                'test_completion': [self.data_dict['test1_completed'], self.data_dict['test2_completed'], self.data_dict['test3_completed'], self.data_dict['test4_completed']] 
+                'test_results': [],
+                'test_completion': [] 
                 }
+
+        for i in range(self.gui_cfg.getNumTest()):
+            self.data_lists['test_results'].append(self.data_dict['test{}_pass'.format(i+1)])
+            self.data_lists['test_completion'].append(self.data_dict['test{}_completed'.format(i+1)])
     
+        self.gui_cfg.setTestIndex(1)
+
+        self.current_test_idx = self.gui_cfg.getTestIndex()
+
     #################################################
 
     def add_new_user_name(self, user_ID, passwd):
@@ -78,18 +83,10 @@ class DataHolder():
                     pass_fail = True
                 for index, test in enumerate(self.data_dict['tests_run']):
                     if test_id == test:
-                        if index == 0:
-                            self.data_dict['test1_pass'] = pass_fail
-                            self.data_dict['test1_completed'] = pass_fail
-                        elif index == 1:
-                            self.data_dict['test2_pass'] = pass_fail
-                            self.data_dict['test2_completed'] = pass_fail
-                        elif index == 2:
-                            self.data_dict['test3_pass'] = pass_fail
-                            self.data_dict['test3_completed'] = pass_fail
-                        elif index == 3:
-                            self.data_dict['test4_pass'] = pass_fail
-                            self.data_dict['test4_completed'] = pass_fail
+                        for i in range(self.gui_cfg.getNumTest()):
+                            if index == i: 
+                                self.data_dict['test{}_pass'.format(i+1)] = pass_fail
+                                self.data_dict['test{}_completed'.format(i+1)] = pass_fail
                         
         else:
             pass
@@ -141,7 +138,7 @@ class DataHolder():
         for i in range(len(self.data_dict['tests_run'])):
             print("Iteration:", i)
             temp = 0
-            if self.data_list['test_results'][i]:
+            if self.data_lists['test_results'][i]:
                 temp = 1
             info_dict = {"serial_num":serial_number,"tester": person_ID, "test_type": self.tests_run[i], "successful": temp, "comments": comments} 
             with open("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]), "w") as outfile:
@@ -152,16 +149,15 @@ class DataHolder():
     #################################################
 
     def send_to_DB(self, test_run):
-        index = test_run - 1
+        index = test_run
         
-        file_path_list = [
-            "{}/JSONFiles/Current_GenRes_JSON.json".format(PythonFiles.__path__[0]),
-            "{}/JSONFiles/Current_IDRes_JSON.json".format(PythonFiles.__path__[0]),
-            "{}/JSONFiles/Current_IIC_JSON.json".format(PythonFiles.__path__[0]),
-            "{}/JSONFiles/Current_BERT_JSON.json".format(PythonFiles.__path__[0])
-        ]
-            
+        test_names = self.gui_cfg.getTestNames()
 
+        file_path_list = []
+
+        for name in test_names:
+            file_path_list.append("{}/JSONFiles/Current_{}_JSON.json".format(PythonFiles.__path__[0], name.replace(" ", "").replace("/", "")))
+            
         # Converts self.test_results[index] into 1/0 instead of bool       
         temp = 0
         if self.data_lists['test_results'][index]:
@@ -196,50 +192,24 @@ class DataHolder():
  
         test_type = json_dict["name"]
 
-        if test_type == "General Resistance Test":
-            with open("{}/JSONFiles/Current_GenRes_JSON.json".format(PythonFiles.__path__[0]), "w") as file:
-                json.dump(json_dict['data'], file)
-            print("\n\n\n\n GENRES TEST \n\n\n\n")
-            self.data_dict['user_ID'] = json_dict["tester"]
-            self.data_dict['current_serial_ID'] = json_dict["board_sn"] 
-            self.data_dict['test1_completed'] = True
-            self.data_dict['test1_pass'] = json_dict["pass"]
-            self.send_to_DB(1)
+        test_names = self.gui_cfg.getTestNames()
 
+        current_test_idx = self.gui_cfg.getTestIndex()
+        print("current_test_idx: {}".format(current_test_idx))
 
-        elif test_type == "ID Resistance Test":
-            with open("{}/JSONFiles/Current_IDRes_JSON.json".format(PythonFiles.__path__[0]), "w") as file:
-                json.dump(json_dict['data'], file)
-
-            self.data_dict['user_ID'] = json_dict["tester"]
-            self.data_dict['current_serial_ID'] = json_dict["board_sn"] 
-            self.data_dict['test2_completed'] = True
-            self.data_dict['test2_pass'] = json_dict["pass"]
-            self.send_to_DB(2)
-
-
-        elif test_type == "IIC Check":
-            with open("{}/JSONFiles/Current_IIC_JSON.json".format(PythonFiles.__path__[0]), "w") as file:
-                json.dump(json_dict['data'], file)
-
-            self.data_dict['user_ID'] = json_dict["tester"]
-            self.data_dict['current_serial_ID'] = json_dict["board_sn"] 
-            self.data_dict['test3_completed'] = True
-            self.data_dict['test3_pass'] = json_dict["pass"]
-            self.send_to_DB(3)
-
-        elif test_type == "Bit Error Rate Test":
-            with open("{}/JSONFiles/Current_BERT_JSON.json".format(PythonFiles.__path__[0]), "w") as file:
-                json.dump(json_dict['data'], file)
-            self.data_dict['user_ID'] = json_dict["tester"]
-            self.data_dict['current_serial_ID'] = json_dict["board_sn"] 
-            self.data_dict['test4_completed'] = True
-            self.data_dict['test4_pass'] = json_dict["pass"]
-            self.send_to_DB(4)
+        with open("{}/JSONFiles/Current_{}_JSON.json".format(PythonFiles.__path__[0], test_names[current_test_idx].replace(" ", "").replace("/", "")), "w") as file:
+            json.dump(json_dict['data'], file)
+        self.data_dict['user_ID'] = json_dict["tester"]
+        self.data_dict['current_serial_ID'] = json_dict["board_sn"] 
+        self.data_dict['test{}_completed'.format(current_test_idx+1)] = True
+        self.data_dict['test{}_pass'.format(current_test_idx+1)] = json_dict["pass"]
 
         # Updates the lists
-        self.data_lists['test_results'] = [self.data_dict['test1_pass'], self.data_dict['test2_pass'], self.data_dict['test3_pass'], self.data_dict['test4_pass']]
-        self.data_lists['test_completion'] = [self.data_dict['test1_completed'], self.data_dict['test2_completed'], self.data_dict['test3_completed'], self.data_dict['test4_completed']]
+        for i in range(self.gui_cfg.getNumTest()):
+            self.data_lists['test_results'][i] = self.data_dict['test{}_pass'.format(i+1)]
+            self.data_lists['test_completion'][i] = self.data_dict['test{}_completed'.format(i+1)]
+
+        self.send_to_DB(current_test_idx)
 
         logging.info("DataHolder: Test results have been saved")
 
@@ -269,29 +239,57 @@ class DataHolder():
    
     ################################################
 
+    # Tracking the test index in another place and propagating to the config
+    def setTestIdx(self, test_idx):
+        
+        self.current_test_idx = test_idx
+        self.gui_cfg.setTestIndex(self.current_test_idx)
+
+    def getNumTest(self):
+        return self.gui_cfg.getNumTest()
+
+    def getTestNames(self):
+        return self.gui_cfg.getTestNames()
+
+    ################################################
+
     # Keeps the login information stored
     def data_holder_new_test(self): 
-        self.data_dict['current_serial_ID'] = "-1BAD"  
-        self.data_dict['test1_completed'] = False
-        self.data_dict['test2_completed'] = False
-        self.data_dict['test3_completed'] = False
-        self.data_dict['test4_completed'] = False
-        self.data_dict['test1_pass'] = False     
-        self.data_dict['test2_pass'] = False     
-        self.data_dict['test3_pass'] = False     
-        self.data_dict['test4_pass'] = False 
-        self.data_dict['comments'] = "_"
-        self.data_dict['is_new_board'] = False
 
-        self.data_lists['test_results'] = [self.data_dict['test1_pass'], self.data_dict['test2_pass'], self.data_dict['test3_pass'], self.data_dict['test4_pass']]
-        self.data_lists['test_completion'] = [self.data_dict['test1_completed'], self.data_dict['test2_completed'], self.data_dict['test3_completed'], self.data_dict['test4_completed']]
+        self.data_dict = {
+                'user_ID': self.data_dict['user_ID'],
+                'test_stand': str(socket.gethostname()),
+                'current_serial_ID': "-1BAD",
+                'comments': "_",
+                'is_new_board': False,
+                'tests_run': [str(i + 1) for i in range(self.getNumTest())],
+                }
+        for i in range(self.gui_cfg.getNumTest()):
+            self.data_dict["test{}_completed".format(i+1)] = False
+            self.data_dict["test{}_pass".format(i+1)] = False
 
-        self.inspection_data['board_chipped_bent'] = False
-        self.inspection_data['wagon_connection_pin_bent'] = False
-        self.inspection_data['engine_connection_pin_bent'] = False
-        self.inspection_data['visual_scratches'] = False
- 
+        self.inspection_data = {
+                'board_chipped_bent': False,
+                'wagon_connection_pin_bent': False,
+                'engine_connection_pin_bent': False,
+                'visual_scratches': False,
+                'inspection_comments': "_"
+                }
+
+        self.data_lists = {
+                'test_results': [],
+                'test_completion': [] 
+                }
+
+        for i in range(self.gui_cfg.getNumTest()):
+            self.data_lists['test_results'].append(self.data_dict['test{}_pass'.format(i+1)])
+            self.data_lists['test_completion'].append(self.data_dict['test{}_completed'.format(i+1)])
+
         logging.info("DataHolder: DataHolder Information has been reset for a new test.")        
+
+        self.gui_cfg.setTestIndex(1)
+
+        self.current_test_idx = self.gui_cfg.getTestIndex()
 
     ################################################
 

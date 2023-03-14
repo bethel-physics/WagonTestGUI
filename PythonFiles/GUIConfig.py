@@ -8,6 +8,7 @@ class GUIConfig():
     # Information about board tests and database are stored within the config
     def __init__(self, board_cfg):
         self.board_cfg = board_cfg
+        self.current_idx = 1
 
         self.configure()
 
@@ -35,6 +36,17 @@ class GUIConfig():
             return self.board_cfg["DBInfo"][key]
 
     def getGUIType(self):
+        print(self.board_cfg)
         return self.board_cfg["GUIType"]
 
+    def setTestIndex(self, idx):
+        self.current_idx = idx
 
+
+    def getTestIndex(self):
+        return self.current_idx
+
+
+    def getTestNames(self):
+        return [test["name"] for test in self.board_cfg["Test"]]
+        

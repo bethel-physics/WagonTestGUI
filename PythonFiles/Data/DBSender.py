@@ -1,6 +1,7 @@
 import requests
 import json
 import PythonFiles
+import socket
 # from read_barcode import read_barcode
 
 
@@ -15,6 +16,9 @@ class DBSender():
     # Since we will have the tester in a separate room, we need to do modify the http requests
     # This proxy will be used to make http requests directly to cmslab3 via an ssh tunnel
     def getProxies(self):
+        if "umncmslab" in socket.gethostname():
+            return None
+        
         return {"http": "http://127.0.0.1:8080"}
 
     def add_new_user_ID(self, user_ID, passwd):
@@ -89,12 +93,11 @@ class DBSender():
         r = requests.post('http://cmslab3.umncmslab/~cros0400/{}/add_module2.py'.format(self.db_url), data={"serial_number": str(sn)}, proxies=self.getProxies())
 
 
-
-
-
     def is_new_board(self, sn):
         
+        print('http://cmslab3.umncmslab/~cros0400/{}/is_new_board.py'.format(self.db_url))
         r = requests.post('http://cmslab3.umncmslab/~cros0400/{}/is_new_board.py'.format(self.db_url), data={"serial_number": str(sn)}, proxies=self.getProxies())
+        print(r.text)
         
         lines = r.text.split('\n')
        
