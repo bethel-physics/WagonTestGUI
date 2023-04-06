@@ -3,7 +3,7 @@ import zmq, logging
 import PythonFiles
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/logs/SUBClient.log".format(PythonFiles.__path__[0]), filemode = 'w', format=FORMAT, level=logging.INFO)
+logging.basicConfig(filename="./logs/SUBClient.log", filemode = 'w', format=FORMAT, level=logging.INFO)
 
 
 # Creating a class for the SUBSCRIBE socket-type Client
@@ -54,7 +54,8 @@ class SUBClient():
                     self.conn.send(self.message)
                     logging.info("SUBClient: The JSON has been sent to the GUIWindow along the pipe.")
 
-
+                elif self.topic == "LCD":
+                    pass
 
                 else:
                     logging.error("SUBClient: Invalid topic sent. Must be 'print' or 'JSON'.")
