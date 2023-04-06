@@ -1,7 +1,6 @@
 #!/TestingEnv/bin/python
 
 # Importing necessary modules
-from audioop import mul
 import multiprocessing as mp
 import socket
 # Imports the GUIWindow

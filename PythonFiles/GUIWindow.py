@@ -3,7 +3,8 @@
 # Importing all neccessary modules
 from pickle import NONE
 import tkinter as tk
-from turtle import bgcolor
+print(tk.TkVersion)
+#from turtle import bgcolor
 import multiprocessing as mp
 import logging
 #from pyparsing import trace_parse_action

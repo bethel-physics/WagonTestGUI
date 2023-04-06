@@ -277,7 +277,6 @@ class TestSummaryScene(tk.Frame):
 
     # All of the different methods for what the retest buttons should do
     def btn_retest_action(self, _parent, test_idx):
-        print("I am asking you to set test {} frame".format(test_idx))
         _parent.set_frame_test(test_idx)
 
     def btn_retest1_action(self, _parent):
@@ -315,6 +314,7 @@ class TestSummaryScene(tk.Frame):
     # Next test button action
     def btn_next_test_action(self, _parent):
         self.data_holder.data_holder_new_test()
+        self.lbl_snum.destroy()
         _parent.reset_board()
         logging.info("TestSummaryScene: Starting a new test.")
         
