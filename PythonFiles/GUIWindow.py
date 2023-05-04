@@ -31,7 +31,7 @@ from PythonFiles.Scenes.AddUserScene import AddUserScene
 
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/{}/shared/GUILogs/gui.log".format(os.getlogin()), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/{}/shared/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
     
 
 # Create a class for creating the basic GUI Window to be called by the main function to
