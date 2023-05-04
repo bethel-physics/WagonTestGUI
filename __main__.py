@@ -8,6 +8,7 @@ from PythonFiles.GUIWindow import GUIWindow
 from PythonFiles.utils.SUBClient import SUBClient
 import os
 import sys
+import logging
 
 # Creates a task of creating the GUIWindow
 def task_GUI(conn, queue, board_cfg):
@@ -29,6 +30,8 @@ def run(board_cfg):
 
     if os.path.exists(guiLogPath):
         os.makedirs(guiLogPath)
+
+    logging.FileHandler(guiLogPath, mode='a')
 
     # Turns creating the GUI and creating the SUBClient tasks into processes
     process_GUI = mp.Process(target = task_GUI, args=(conn_GUI, queue, board_cfg))
