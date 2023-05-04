@@ -12,7 +12,7 @@ import os
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/shared/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="~/shared/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
