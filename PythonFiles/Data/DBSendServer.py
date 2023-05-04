@@ -1,8 +1,73 @@
+# Class for monitoring requests from nodes and sending DB data back from cmslab3
+
 import requests
 import json
 import socket
-# from read_barcode import read_barcode
+import zmq
+import sys
+from SSHTunnel import Tunnel
+from DBSender import DBSender
 
+sys.path.append("../")
+sys.path.append("../../TestConfigs/")
+
+from GUIConfig import GUIConfig
+import Engine_cfg
+import Wagon_cfg
+
+class DBSendServer():
+    
+    def __init__(self, board_type):
+
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.REP)
+        self.socket.bind("tcp://*:5555")
+
+        if board_type == "wagon":
+            gui_cfg = GUIConfig(Wagon_cfg.masterCfg)
+        elif board_type == "engine":
+            gui_cfg = GUIConfig(Engine_cfg.masterCfg)
+
+        # Create DB sender object
+        self.db = DBSender(gui_cfg)
+
+        # Create SSHTunnel (password and username prompt)
+        self.tunnel = Tunnel()
+
+        print("Server created!")
+
+        self.loop()
+
+    def loop(self):
+        
+        while True:
+            message = self.socket.recv().decode('utf-8')
+            print("Received request: {}".format(message))
+
+            response = json.dumps(self.handle_request(message))
+
+            self.socket.send_string(response)
+
+    def handle_request(self, message):
+
+        rep = None
+
+        if "get_usernames" in message:
+            rep = self.db.get_usernames()
+
+        return rep
+
+if __name__ == "__main__":
+
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser()
+
+    parser.add_argument('--board', type=str, default="wagon", help="Specify which board to start the server for (wagon or engine)")
+
+    args = parser.parse_args()
+
+    serv = DBSendServer(args.board)
 
 class DBSender():
 
