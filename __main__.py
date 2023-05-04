@@ -69,7 +69,10 @@ if __name__ == "__main__":
     node = socket.gethostname()
     print(socket.gethostname())
     wagon_GUI_computers = [
-        "cmsfactory1.cmsfactorynet.umn.edu",
+        "cmsfactory1.cmsfactorynet",
+        "cmsfactory2.cmsfactorynet",
+        "cmsfactory4.cmsfactorynet",
+        "cmsfactory5.cmsfactorynet",
         "cmslab4.umncmslab",
     ]
     engine_GUI_computers = [
