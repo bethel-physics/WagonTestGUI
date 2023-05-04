@@ -1,6 +1,7 @@
 import logging, time
 import WagonTestGUI
 from PythonFiles.utils.REQClient import REQClient
+import os
 
 # Format for the logging configuration
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
