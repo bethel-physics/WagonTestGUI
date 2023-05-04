@@ -28,7 +28,7 @@ def run(board_cfg):
 
     guiLogPath = "/home/{}/shared/GUILogs/".format(os.getlogin())
 
-    if os.path.exists(guiLogPath):
+    if not os.path.exists(guiLogPath):
         os.makedirs(guiLogPath)
 
     logging.FileHandler(guiLogPath + "gui.log", mode='a')
