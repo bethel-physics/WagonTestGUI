@@ -31,7 +31,7 @@ def run(board_cfg):
     if os.path.exists(guiLogPath):
         os.makedirs(guiLogPath)
 
-    logging.FileHandler(guiLogPath, mode='a')
+    logging.FileHandler(guiLogPath + "gui.log", mode='a')
 
     # Turns creating the GUI and creating the SUBClient tasks into processes
     process_GUI = mp.Process(target = task_GUI, args=(conn_GUI, queue, board_cfg))
