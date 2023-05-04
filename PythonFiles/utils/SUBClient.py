@@ -4,7 +4,7 @@ import PythonFiles
 import os
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/shared/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'w', format=FORMAT, level=logging.INFO)
+logging.basicConfig(filename="~/shared/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'w', format=FORMAT, level=logging.INFO)
 
 
 # Creating a class for the SUBSCRIBE socket-type Client
