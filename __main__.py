@@ -26,7 +26,7 @@ def run(board_cfg):
 
     queue = mp.Queue()
 
-    guiLogPath = "/shared/{}/GUILogs/".format(os.getlogin())
+    guiLogPath = "/home/{}/shared/GUILogs/".format(os.getlogin())
 
     if os.path.exists(guiLogPath):
         os.makedirs(guiLogPath)

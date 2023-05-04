@@ -17,7 +17,7 @@ import os
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
 logging.basicConfig(
     filename="/home/{}/shared/GUILogs/gui.log".format(os.getlogin()), 
-    filemode = 'w', 
+    filemode = 'a', 
     format=FORMAT, 
     level=logging.INFO
     )
