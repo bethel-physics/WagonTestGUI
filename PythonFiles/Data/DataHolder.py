@@ -1,5 +1,6 @@
 ################################################################################
 import json, logging, socket, PythonFiles, copy, os
+from PythonFiles.Data.DBSendClient import DBSendClient
 from PythonFiles.Data.DBSender import DBSender
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
@@ -16,7 +17,8 @@ class DataHolder():
         self.gui_cfg = gui_cfg
 
         # Object that sends information to the database
-        self.data_sender = DBSender(gui_cfg)
+        #self.data_sender = DBSender(gui_cfg)
+        self.dbclient = DBSendClient()
         
         self.data_dict = {
                 'user_ID': "_",
@@ -64,7 +66,10 @@ class DataHolder():
         print("\n\n\n\n\n\nIs the user new?:{}\n\n\n\n\n\n".format(is_new_user_ID))
 
         if is_new_user_ID:
-            self.data_sender.add_new_user_ID(self.data_dict['user_ID'], passwd)        
+            #self.data_sender.add_new_user_ID(self.data_dict['user_ID'], passwd)        
+            message = "add_new_user_ID;{'user_ID': {}, 'passwd': {}}".format(self.data_dict['user_ID'], passwd)
+            self.dbclient.send_request(message)
+
 
 
     def check_if_new_board(self):
@@ -73,7 +78,9 @@ class DataHolder():
         self.data_dict['is_new_board'] = self.test_new_board(self.get_serial_ID())        
         print("result received:", self.data_dict['is_new_board'])
         if self.data_dict['is_new_board'] == False:
-            prev_results = self.data_sender.get_previous_test_results(self.get_serial_ID())
+            #prev_results = self.data_sender.get_previous_test_results(self.get_serial_ID())
+            message = "get_previous_test_results;{'serial_number': {}}".format(self.get_serial_ID())
+            prev_results = self.dbclient.send_request(message)
             for result in prev_results:
                 test_id = result[0]
                 pass_fail = result[1]
@@ -104,7 +111,9 @@ class DataHolder():
     ##################################################
 
     def set_serial_ID(self, sn):
-        self.data_sender.add_new_board(sn)
+        #self.data_sender.add_new_board(sn)
+        message = "add_new_board;{'sn': {}}".format(sn)
+        self.dbclient.send_request(message)
                     
         self.data_dict['current_serial_ID'] = sn
         logging.info("DataHolder: Serial Number has been set.")
@@ -113,16 +122,15 @@ class DataHolder():
 
     def test_new_board(self, sn):
         logging.info("DataHolder: Checking if serial is a new board")
-        return self.data_sender.is_new_board(sn)
+        #return self.data_sender.is_new_board(sn)
+        message = "is_new_board;{'sn': {}}".format(sn)
+        return self.dbclient.send_request(message)
 
 
 
     ##################################################
 
     def get_serial_ID(self):
-        # TODO
-        # self.data_sender.add_new_board(sn)
-
         return self.data_dict['current_serial_ID']
 
     #################################################
@@ -145,6 +153,7 @@ class DataHolder():
                 print(info_dict)
                 json.dump(info_dict, outfile)
             self.data_sender.add_test_json("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]))
+            #message = "add_test_json;{'json_file': {}/JSONFiles/storage.json, ''}"
         logging.info("DataHolder: All results sent to database.")
     #################################################
 
@@ -169,14 +178,17 @@ class DataHolder():
         with open("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]), "w") as outfile:
             print(info_dict)
             json.dump(info_dict, outfile)
-        self.data_sender.add_test_json("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]), file_path_list[index])
+        #self.data_sender.add_test_json("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]), file_path_list[index])
+        message = "add_test_json;{'json_file': {}, 'datafile_name': {}}".format("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]), file_path_list[index])
+        self.dbclient.send_request(message)
         logging.info("DataHolder: Test results sent to database.")
 
     #################################################
    
     def get_all_users(self):
-        users_list = self.data_sender.get_usernames() 
-        print ("\n users_list:", users_list)
+        #users_list = self.data_sender.get_usernames() 
+        users_list = self.dbclient.send_request("get_usernames")
+        #print ("\n users_list:", users_list)
         return users_list
 
     #################################################
@@ -294,3 +306,5 @@ class DataHolder():
     ################################################
 
 #################################################################################
+
+
