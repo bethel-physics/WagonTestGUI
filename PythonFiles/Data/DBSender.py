@@ -21,11 +21,11 @@ class DBSender():
         return {"http": "http://127.0.0.1:8080"}
 
     def add_new_user_ID(self, user_ID, passwd):
-        r = requests.post('http://cmslab3.umncmslab/~cros0400/{}/add_tester2.py'.format(self.db_url), data= {'person_name':user_ID, 'password': passwd}, proxies=self.getProxies())
+        r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_tester2.py'.format(self.db_url), data= {'person_name':user_ID, 'password': passwd}, proxies=self.getProxies())
 
     # Returns an acceptable list of usernames from the database
     def get_usernames(self):
-        r = requests.get('http://cmslab3.umncmslab/~cros0400/{}/get_usernames.py'.format(self.db_url), proxies=self.getProxies())
+        r = requests.get('http://cmslab3.spa.umn.edu/~cros0400/{}/get_usernames.py'.format(self.db_url), proxies=self.getProxies())
         lines = r.text.split('\n')
 
         print(lines)
@@ -46,7 +46,7 @@ class DBSender():
     # Returns a list of booleans
     # Whether test (by index) has been completed or not
     def get_test_completion_staus(self, serial_number):
-        r = requests.post('http://cmslab3.umncmslab/~cros0400/{}/get_test_completion_status.py'.format(self.db_url), data= serial_number, proxies=self.getProxies())
+        r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/get_test_completion_status.py'.format(self.db_url), data= serial_number, proxies=self.getProxies())
         
         lines = r.text.split('\n')
         begin = lines.index("Begin") + 1 
@@ -66,7 +66,7 @@ class DBSender():
     # Returns a list of booleans
     # Whether or not DB has passing results 
     def get_previous_test_results(self, serial_number):
-        r = requests.post('http://cmslab3.umncmslab/~cros0400/{}/get_previous_test_results.py'.format(self.db_url), data={'serial_number': str(serial_number)}, proxies=self.getProxies())
+        r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/get_previous_test_results.py'.format(self.db_url), data={'serial_number': str(serial_number)}, proxies=self.getProxies())
         
         lines = r.text.split('\n')
 
@@ -89,13 +89,13 @@ class DBSender():
     # #TODO Verify if a board has already been instantiated with SN
     # Posts a new board with passed in serial number
     def add_new_board(self, sn):
-        r = requests.post('http://cmslab3.umncmslab/~cros0400/{}/add_module2.py'.format(self.db_url), data={"serial_number": str(sn)}, proxies=self.getProxies())
+        r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_module2.py'.format(self.db_url), data={"serial_number": str(sn)}, proxies=self.getProxies())
 
 
     def is_new_board(self, sn):
         
-        print('http://cmslab3.umncmslab/~cros0400/{}/is_new_board.py'.format(self.db_url))
-        r = requests.post('http://cmslab3.umncmslab/~cros0400/{}/is_new_board.py'.format(self.db_url), data={"serial_number": str(sn)}, proxies=self.getProxies())
+        print('http://cmslab3.spa.umn.edu/~cros0400/{}/is_new_board.py'.format(self.db_url))
+        r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/is_new_board.py'.format(self.db_url), data={"serial_number": str(sn)}, proxies=self.getProxies())
         print(r.text)
         
         lines = r.text.split('\n')
@@ -119,13 +119,13 @@ class DBSender():
     # Posts information via the "info" dictionary
     # Serial number is within the info dictionary
     def add_board_info(self, info):
-        r = requests.post('http://cmslab3.umncmslab/~cros0400/{}/add_board_info2.py'.format(self.db_url), data = info, proxies=self.getProxies())
+        r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_board_info2.py'.format(self.db_url), data = info, proxies=self.getProxies())
     
     def add_initial_tests(self, results):
-        r = requests.post('http://cmslab3.umncmslab/~cros0400/{}/add_init_test.py'.format(self.db_url), data = results, proxies=self.getProxies())
+        r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_init_test.py'.format(self.db_url), data = results, proxies=self.getProxies())
         
     def add_general_test(self, results, files):
-        r = requests.post('http://cmslab3.umncmslab/~cros0400/{}/add_test2.py'.format(self.db_url), data = results, files=files, proxies=self.getProxies())
+        r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_test2.py'.format(self.db_url), data = results, files=files, proxies=self.getProxies())
 
     def add_test_json(self, json_file, datafile_name):
         load_file = open(json_file)
@@ -136,12 +136,12 @@ class DBSender():
 
         attach_data = {'attach1': datafile}
         print("Read from json file:", results)
-        r = requests.post('http://cmslab3.umncmslab/~cros0400/{}/add_test_json.py'.format(self.db_url), data = results, files = attach_data, proxies=self.getProxies())
+        r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_test_json.py'.format(self.db_url), data = results, files = attach_data, proxies=self.getProxies())
 
 
  # Returns a list of all different types of tests
     def get_test_list(self):
-        r = requests.get('http://cmslab3.umncmslab/~cros0400/{}/get_test_types.py'.format(self.db_url), proxies=self.getProxies())
+        r = requests.get('http://cmslab3.spa.umn.edu/~cros0400/{}/get_test_types.py'.format(self.db_url), proxies=self.getProxies())
 
         lines = r.text.split('\n')
 
