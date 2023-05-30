@@ -3,6 +3,7 @@
 # Imports all the necessary modules
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from xml.dom.expatbuilder import parseFragmentString
 import time
 import logging
@@ -130,32 +131,59 @@ class TestInProgressScene(tk.Frame):
 
     def begin_update(self, master_window, queue):
         logging.info("TestInProgressScene: Started console update loop.")
-        # try:
-        while 1>0:
-                # try:
-            master_window.update()
-            if not queue.empty():    
-                logging.info("TestInProgressScene: Waiting for queue objects...")
-                text = queue.get()
-                print(text)
-                ent_console.insert(tk.END, text)
-                ent_console.insert(tk.END, "\n")
-                ent_console.see('end')
+        
+        # How long before the queue is being checked (if empty)
+        # units of seconds
+        refresh_break = 0.01
 
-                if text == "Results received successfully.":
-                
-                    message =  self.conn.recv()
+        # Time spent in the waiting phase; in units of refresh_break
+        # Time waiting (sec) = counter * refresh_break
+        counter = 0
+
+        # Maximum timeout in seconds
+        MAX_TIMEOUT = 10
+        try:
+            
+            while 1>0:
+                    # try:
+                master_window.update()
+                if not queue.empty():    
+                    logging.info("TestInProgressScene: Waiting for queue objects...")
+                    text = queue.get()
+                    print(text)
+                    ent_console.insert(tk.END, text)
+                    ent_console.insert(tk.END, "\n")
+                    ent_console.see('end')
+
+                    if text == "Results received successfully.":
                     
-                    print("\n\nmessage:",message , "\n\n")
-                    self.data_holder.update_from_json_string(message) 
+                        message =  self.conn.recv()
+                        
+                        print("\n\nmessage:",message , "\n\n")
+                        self.data_holder.update_from_json_string(message) 
+                        
+                        logging.info("TestInProgressScene: JSON Received.")
+                        master_window.update()
+                        time.sleep(1)
+                        break
                     
-                    logging.info("TestInProgressScene: JSON Received.")
-                    master_window.update()
-                    time.sleep(1)
-                    break
-                
-            else:
-                time.sleep(.01)
+                else:
+                    # Sleep before looking for more information
+                    time.sleep(refresh_break)
+
+                    # Increment the counter of time spent sleeping
+                    counter = counter + 1
+
+                    # If beyond the MAX_TIMEOUT range -> raise an exception
+                    if (counter > MAX_TIMEOUT/refresh_break):
+                        raise Exception("Process timed out after %d", counter*refresh_break)
+        except:
+            
+            # Throw a message box that shows the error message
+            # Logs the message
+            logging.error('TestInProgressScene: Timeout Error', "Process timed out after %d", counter*refresh_break)
+
+            messagebox.showerror('Timeout Error', "TestInProgressScene: Process timed out after %d", counter*refresh_break)
 
     def close_prgbar(self):
         #logging.debug("TestInProgressScene: Closing the progressbar.")

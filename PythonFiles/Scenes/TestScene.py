@@ -158,6 +158,7 @@ class TestScene(tk.Frame):
 
     # functionality for the logout button
     def btn_logout_action(self, _parent):
+        logging.info("TestScene: Successfully logged out from the TestScene.")
         _parent.set_frame_login_frame()
 
     #################################################
