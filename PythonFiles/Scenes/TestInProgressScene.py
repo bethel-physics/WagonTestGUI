@@ -18,6 +18,8 @@ logging.basicConfig(filename="/home/{}/shared/GUILogs/gui.log".format(os.getlogi
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
     def __init__(self, parent, master_frame, data_holder, queue, _conn):
+        logging.info("TestInProgressScene: Beginning the initialization of the TestInProgressScene.")
+        
         super().__init__(master_frame, width = 850, height = 500)
 
 
@@ -143,7 +145,7 @@ class TestInProgressScene(tk.Frame):
         # Maximum timeout in seconds
         MAX_TIMEOUT = 10
         try:
-            
+            logging.info("TestInProgressScene: Beginning try catch for receiving data through the pipeline.")
             while 1>0:
                     # try:
                 master_window.update()
@@ -176,12 +178,13 @@ class TestInProgressScene(tk.Frame):
 
                     # If beyond the MAX_TIMEOUT range -> raise an exception
                     if (counter > MAX_TIMEOUT/refresh_break):
+                        logging.info("TestInProgressScene: Raising Exception -> Timeout Reached.")
                         raise Exception("Process timed out after %d", counter*refresh_break)
         except:
             
             # Throw a message box that shows the error message
             # Logs the message
-            logging.error('TestInProgressScene: Timeout Error', "Process timed out after %d", counter*refresh_break)
+            logging.error('TestInProgressScene: Timeout Error', "Exception received -> Process timed out after %d", counter*refresh_break)
 
             messagebox.showerror('Timeout Error', "TestInProgressScene: Process timed out after %d", counter*refresh_break)
 
