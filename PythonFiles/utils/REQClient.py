@@ -16,7 +16,7 @@ import os
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
 logging.basicConfig(
-    filename="/home/{}/shared/GUILogs/gui.log".format(os.getlogin()), 
+    filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), 
     filemode = 'a', 
     format=FORMAT, 
     level=logging.INFO
@@ -25,7 +25,7 @@ logging.basicConfig(
 # Making the Client Server a class
 class REQClient():
 
-    #################################################
+    ################################################
 
     # Ensures nothing happens on instantiantion
     def __init__(self, desired_test, serial, tester):
@@ -51,11 +51,29 @@ class REQClient():
         socket.send_string(sending_msg)
         logging.debug("REQClient: Request sent. Waiting for confirmation receipt...")
         # Get the reply
-        self.message = socket.recv_string()
+    
+        # Recording the number of tries to open the socket and receive a string
+        tries = 0
+
+        while (len(self.message)< 1) and tries < 10:
+            try:
+                logging.debug("REQClient: Trying to receive a message from the socket receive")
+                self.message = socket.recv_string()
+                print("\n\n\nSelf.message: {}\n\n\n".format(self.message))
+
+            except:
+                logging.debug("REQClient: No Message received from the request.")
+                tries = tries + 1 
+            #messagebox.showerror("No Message Received", "REQClient: No message received from the request.")
+
         print("REQClient: Request received.")
 
         # Closes the client so the code in the GUI can continue once the request is sent.
-        socket.close()
+        try:
+            logging.debug("REQClient: Trying to close the socket")
+            socket.close()
+        except:
+            logging.debug("REQClient: Unable to close the socket")
 
     #################################################
 

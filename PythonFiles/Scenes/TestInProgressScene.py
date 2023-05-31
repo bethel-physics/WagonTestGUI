@@ -13,7 +13,7 @@ import os
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/{}/shared/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
@@ -143,13 +143,17 @@ class TestInProgressScene(tk.Frame):
         counter = 0
 
         # Maximum timeout in seconds
-        MAX_TIMEOUT = 10
+        Timeout_after = 10
+        MAX_TIMEOUT = Timeout_after / 2.5
         try:
             logging.info("TestInProgressScene: Beginning try catch for receiving data through the pipeline.")
+            
+            information_received = False
             while 1>0:
                     # try:
                 master_window.update()
                 if not queue.empty():    
+                    information_received = True
                     logging.info("TestInProgressScene: Waiting for queue objects...")
                     text = queue.get()
                     print(text)
@@ -161,7 +165,6 @@ class TestInProgressScene(tk.Frame):
                     
                         message =  self.conn.recv()
                         
-                        print("\n\nmessage:",message , "\n\n")
                         self.data_holder.update_from_json_string(message) 
                         
                         logging.info("TestInProgressScene: JSON Received.")
@@ -177,16 +180,17 @@ class TestInProgressScene(tk.Frame):
                     counter = counter + 1
 
                     # If beyond the MAX_TIMEOUT range -> raise an exception
-                    if (counter > MAX_TIMEOUT/refresh_break):
-                        logging.info("TestInProgressScene: Raising Exception -> Timeout Reached.")
-                        raise Exception("Process timed out after %d", counter*refresh_break)
+                    if (counter > MAX_TIMEOUT/refresh_break) and not information_received:
+                        logging.info("TestInProgressScene: Raising Exception -> Timeout Reached - {} seconds".format(Timeout_after))
+                        raise Exception("Process timed out after {} seconds".format(Timeout_after))
         except:
             
             # Throw a message box that shows the error message
             # Logs the message
-            logging.error('TestInProgressScene: Timeout Error', "Exception received -> Process timed out after %d", counter*refresh_break)
+            time_sec = counter*refresh_break
+            logging.error('TestInProgressScene: Timeout Error', "Exception received -> Process timed out after {} seconds".format(Timeout_after))
 
-            messagebox.showerror('Timeout Error', "TestInProgressScene: Process timed out after %d", counter*refresh_break)
+            messagebox.showerror('Timeout Error', "TestInProgressScene: Process timed out after {} seconds".format(Timeout_after))
 
     def close_prgbar(self):
         #logging.debug("TestInProgressScene: Closing the progressbar.")
