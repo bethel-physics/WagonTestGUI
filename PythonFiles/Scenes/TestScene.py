@@ -13,7 +13,7 @@ from PythonFiles.utils.REQClient import REQClient
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/{}/shared/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 # Creating class for the window
 class TestScene(tk.Frame):
@@ -158,6 +158,7 @@ class TestScene(tk.Frame):
 
     # functionality for the logout button
     def btn_logout_action(self, _parent):
+        logging.info("TestScene: Successfully logged out from the TestScene.")
         _parent.set_frame_login_frame()
 
     #################################################
