@@ -1,12 +1,18 @@
 #!/TestingEnv/bin/python
 
+# Need to make the log file path before any imports
+import os
+guiLogPath = "/home/{}/GUILogs/".format(os.getlogin())
+
+if not os.path.exists(guiLogPath):
+    os.makedirs(guiLogPath)
+
 # Importing necessary modules
 import multiprocessing as mp
 import socket
 # Imports the GUIWindow
 from PythonFiles.GUIWindow import GUIWindow
 from PythonFiles.utils.SUBClient import SUBClient
-import os
 import sys
 import logging
 
@@ -25,11 +31,6 @@ def run(board_cfg):
     conn_SUB, conn_GUI = mp.Pipe()
 
     queue = mp.Queue()
-
-    guiLogPath = "/home/{}/GUILogs/".format(os.getlogin())
-
-    if not os.path.exists(guiLogPath):
-        os.makedirs(guiLogPath)
 
     logging.FileHandler(guiLogPath + "gui.log", mode='a')
 
