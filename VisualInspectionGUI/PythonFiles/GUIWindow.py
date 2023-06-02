@@ -4,6 +4,7 @@
 from pickle import NONE
 import tkinter as tk
 from turtle import bgcolor
+from PythonFiles.GUIConfig import GUIConfig
 from PythonFiles.Data.DataHolder import DataHolder
 from PythonFiles.Scenes.LoginScene import LoginScene
 from PythonFiles.Scenes.ScanScene import ScanScene
@@ -21,7 +22,7 @@ class GUIWindow():
 
     #################################################
 
-    def __init__(self):                     
+    def __init__(self, board_cfg):                     
         # Create the window named "master_window"
         # global makes master_window global and therefore accessible outside the function
         global master_window
@@ -39,8 +40,11 @@ class GUIWindow():
         master_frame = tk.Frame(master_window, width=850, height= 500)
         master_frame.grid(column = 0, row = 0, columnspan = 4)
 
+        # Object for taking care of instantiation of different test types
+        self.gui_cfg = GUIConfig(board_cfg)
+
         # Creates the "Storage System" for the data during testing
-        self.data_holder = DataHolder()
+        self.data_holder = DataHolder(self.gui_cfg)
 
 
         #################################################
@@ -96,10 +100,10 @@ class GUIWindow():
     def set_frame_scan_frame(self):
 
         self.scan_frame.is_current_scene = True
-        self.scan_frame.scan_QR_code()
         self.set_frame(self.scan_frame)
-
-    #################################################
+        self.scan_frame.scan_QR_code(master_window)
+   
+     #################################################
 
     def set_frame_splash_frame(self):
 

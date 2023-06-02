@@ -7,6 +7,7 @@ from tkinter import messagebox
 from xml.dom.expatbuilder import parseFragmentString
 import time
 import logging
+logging.getLogger('PIL').setLevel(logging.WARNING)
 import PythonFiles
 import os
 

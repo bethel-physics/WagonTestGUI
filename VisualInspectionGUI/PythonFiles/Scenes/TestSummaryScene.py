@@ -1,15 +1,23 @@
 #################################################################################
 
-import json
+import PythonFiles
+import json, logging
 import tkinter as tk
 from PIL import ImageTk as iTK
 from PIL import Image
 from matplotlib.pyplot import table
 from pyparsing import col
+import PythonFiles
+import os
 
 #################################################################################
 
+logging.getLogger('PIL').setLevel(logging.WARNING)
 
+
+logger = logging.getLogger('HGCAL_GUI')
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 # Frame that shows all of the final test results
 # @param parent -> References a GUIWindow object
@@ -28,14 +36,14 @@ class TestSummaryScene(tk.Frame):
         # Super class is the tk.Frame class
         super().__init__(master_frame, width=850, height=500)
 
+        logging.info("TestSummaryScene: Frame has been created.")
+
         self.data_holder = data_holder
 
         # Setting weights of columns so the column 4 is half the size of columns 0-3
-        self.columnconfigure(0, weight = 2)
-        self.columnconfigure(1, weight = 2)
-        self.columnconfigure(2, weight = 2)
-        self.columnconfigure(3, weight = 2)
-        self.columnconfigure(4, weight = 1)
+        for i in range(self.data_holder.getNumTest()):
+            self.columnconfigure(i, weight = 2)
+        self.columnconfigure(self.data_holder.getNumTest(), weight = 1)
         # Instantiates an updated table with the current data
         self.create_updated_table(parent)
 
@@ -58,18 +66,19 @@ class TestSummaryScene(tk.Frame):
     # @param parent -> References the GUIWindow object that creates the class
     
     def create_updated_table(self, parent):
-                
+
+        logging.debug("TestSummaryScene: Table is being updated.")        
         
-        self.list_of_tests = ["General Resistance Test", "ID Resistor Test", "I2C Comm. Test", "Bit Rate Test"]
+        self.list_of_tests = self.data_holder.getTestNames()
         self.list_of_table_labels = ["Test Name", "Test Status", "Pass/Fail"]
-        self.list_of_completed_tests = [self.data_holder.test1_completed, self.data_holder.test2_completed, self.data_holder.test3_completed, self.data_holder.test4_completed]
-        self.list_of_pass_fail = [self.data_holder.test1_pass, self.data_holder.test2_pass, self.data_holder.test3_pass, self.data_holder.test4_pass]
+        self.list_of_completed_tests = self.data_holder.data_lists['test_completion']
+        self.list_of_pass_fail = self.data_holder.data_lists['test_results']
 
 
         # Adds Board Serial Number to the TestSummaryFrame
         self.lbl_snum = tk.Label(
                 self, 
-                text = "Serial Number: " + str(self.data_holder.current_serial_ID),
+                text = "Serial Number: " + str(self.data_holder.data_dict['current_serial_ID']),
                 font=('Arial', 14)
                 )
         self.lbl_snum.grid(column = 2, row = 0, pady = 20)
@@ -77,7 +86,7 @@ class TestSummaryScene(tk.Frame):
         # Adds Tester Name to the TestSummary Frame
         self.lbl_tester = tk.Label(
                 self, 
-                text = "Tester: " + self.data_holder.user_ID,
+                text = "Tester: " + self.data_holder.data_dict['user_ID'],
                 font=('Arial', 14)
                 )
         self.lbl_tester.grid(column = 0, row = 0, pady = 20)
@@ -88,11 +97,9 @@ class TestSummaryScene(tk.Frame):
         self.frm_table.grid(row = 1, column= 0, columnspan = 4, rowspan = 4)
         
         # Setting weights of columns so the column 4 is half the size of columns 0-3
-        self.frm_table.columnconfigure(0, weight = 2)
-        self.frm_table.columnconfigure(1, weight = 2)
-        self.frm_table.columnconfigure(2, weight = 2)
-        self.frm_table.columnconfigure(3, weight = 1)
-        self.frm_table.columnconfigure(4, weight = 1)
+        for i in range(self.data_holder.getNumTest()):
+            self.frm_table.columnconfigure(i, weight = 2)
+        self.frm_table.columnconfigure(self.data_holder.getNumTest(), weight = 1)
         
 
         
@@ -154,7 +161,7 @@ class TestSummaryScene(tk.Frame):
         for index in range(len(self.list_of_pass_fail)):
             if(self.list_of_pass_fail[index]):
                 # Create a photoimage object of the QR Code
-                Green_Check_Image = Image.open("./PythonFiles/Images/GreenCheckMark.png")
+                Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
                 Green_Check_Image = Green_Check_Image.resize((75,75), Image.ANTIALIAS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
                 GreenCheck_Label = tk.Label(self.frm_table, image=Green_Check_PhotoImage, width=75, height=75)
@@ -164,7 +171,7 @@ class TestSummaryScene(tk.Frame):
 
             else:
                 # Create a photoimage object of the QR Code
-                Red_X_Image = Image.open("./PythonFiles/Images/RedX.png")
+                Red_X_Image = Image.open("{}/Images/RedX.png".format(PythonFiles.__path__[0]))
                 Red_X_Image = Red_X_Image.resize((75,75), Image.ANTIALIAS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
                 RedX_Label = tk.Label(self.frm_table, image=Red_X_PhotoImage, width=75, height=75)
@@ -177,167 +184,112 @@ class TestSummaryScene(tk.Frame):
        
         self.grid_propagate(0)
 
+        logging.debug("TestSummaryScene: Table finished update.")     
+
     #################################################
 
     # Creates all of the retest button
     def create_retest_more_info_btns(self, parent):
 
-       
-        row1 = tk.Frame(self.frm_table)
-        row1.grid(column = 3, row = 1)
-        
-        btn_retest1 = tk.Button(
-                row1, 
-                text = "RETEST",
-                padx= 5,
-                pady=5,  
-                command = lambda: self.btn_retest1_action(parent)
-                )
-        btn_retest1.grid(column = 1, row = 0, padx=5, pady=5)
+        logging.debug("TestSummaryScene: Buttons are being created.")
 
-        btn_more_info1 = tk.Button(
-                row1, 
-                text = "MORE INFO", 
-                padx= 5,
-                pady=5, 
-                command = lambda: self.btn_more_info1_action(parent)
-                )
-        btn_more_info1.grid(column=0, row = 0)
+        rows = []
+        retests = []
+        more_infos = []
 
+        for i in range(self.data_holder.getNumTest()):
+            rows.append(tk.Frame(self.frm_table))
+            rows[i].grid(column = 3, row = i + 1)
 
+            retests.append(tk.Button(
+                    rows[i], 
+                    text = "RETEST",
+                    padx= 5,
+                    pady=5,  
+                    command = lambda i=i: self.btn_retest_action(parent, i)
+                    ))
+            retests[i].grid(column = 1, row = 0, padx=5, pady=5)
 
-
-        row2 = tk.Frame(self.frm_table)
-        row2.grid(column = 3, row = 2)
-        
-        btn_retest2 = tk.Button(
-                row2, 
-                text = "RETEST",
-                padx= 5,
-                pady=5,  
-                command = lambda: self.btn_retest2_action(parent)
-                )
-        btn_retest2.grid(column = 1, row = 0, padx=5, pady=5)
-
-        btn_more_info2 = tk.Button(
-                row2, 
-                text = "MORE INFO", 
-                padx= 5,
-                pady=5, 
-                command = lambda: self.btn_more_info2_action(parent)
-                )
-        btn_more_info2.grid(column=0, row = 0)
-
-
-
-
-        row3 = tk.Frame(self.frm_table)
-        row3.grid(column = 3, row = 3)
-        
-        btn_retest3 = tk.Button(
-                row3, 
-                text = "RETEST",
-                padx= 5,
-                pady=5,  
-                command = lambda: self.btn_retest3_action(parent)
-                )
-        btn_retest3.grid(column = 1, row = 0, padx=5, pady=5)
-
-        btn_more_info3 = tk.Button(
-                row3, 
-                text = "MORE INFO", 
-                padx= 5,
-                pady=5, 
-                command = lambda: self.btn_more_info3_action(parent)
-                )
-        btn_more_info3.grid(column=0, row = 0)
-
-        
-        
-        
-    
-        
-        row4 = tk.Frame(self.frm_table)
-        row4.grid(column = 3, row = 4)
-        
-        btn_retest4 = tk.Button(
-                row4, 
-                text = "RETEST",
-                padx= 5,
-                pady=5, 
-                command = lambda: self.btn_retest4_action(parent)
-                )
-        btn_retest4.grid(column = 1, row = 0, padx=5, pady=5)
-
-        btn_more_info4 = tk.Button(
-                row4, 
-                text = "MORE INFO", 
-                padx= 5,
-                pady=5, 
-                command = lambda: self.btn_more_info4_action(parent)
-                )
-        btn_more_info4.grid(column=0, row = 0)
-
-
+            more_infos.append(tk.Button(
+                    rows[i], 
+                    text = "MORE INFO", 
+                    padx= 5,
+                    pady=5, 
+                    command = lambda i=i: self.btn_more_info_action(parent, i)
+                    ))
+            more_infos[i].grid(column=0, row = 0)
 
 
         btn_next_test = tk.Button(
                 self.frm_table, 
-                text = "NEXT TEST",
+                text = "NEXT BOARD",
                 font = ('Arial', 15), 
                 command = lambda: self.btn_next_test_action(parent)
                 )
-        btn_next_test.grid(column = 3, row = 5)
+        btn_next_test.grid(column = 3, row = self.data_holder.getNumTest() + 1)
+
+        logging.debug("TestSummaryScene: Buttons finshed being created.")
 
     #################################################
 
     # A function to be called within GUIWindow to create the console output
     # when the frame is being brought to the top
     def create_JSON_popup(self, JSON_String):
-        
-        # Creating a popup window for the JSON Details
-        self.JSON_popup = tk.Tk()
-        self.JSON_popup.geometry("500x300+750+100")
-        self.JSON_popup.title("JSON Details")
-        # self.JSON_popup.wm_attributes('-toolwindow', 'True')
+        try:
+            # Creating a popup window for the JSON Details
+            self.JSON_popup = tk.Toplevel()
+            self.JSON_popup.geometry("500x300+750+100")
+            self.JSON_popup.title("JSON Details")
+            # self.JSON_popup.wm_attributes('-toolwindow', 'True')
 
-    
+            self.JSON_popup.grab_set()
+            self.JSON_popup.attributes('-topmost', 'true') 
 
-        # Creating a Frame For Console Output
-        frm_JSON = tk.Frame(self.JSON_popup, width = 500, height = 300, bg = 'green')
-        frm_JSON.pack_propagate(0)
-        frm_JSON.pack()
+            # Creating a Frame For Console Output
+            frm_JSON = tk.Frame(self.JSON_popup, width = 500, height = 300, bg = 'green')
+            frm_JSON.pack_propagate(0)
+            frm_JSON.pack()
 
-        # Placing an entry box in the frm_console
-        self.JSON_entry_box = tk.Text(
-            frm_JSON, 
-            bg = '#6e5e5d', 
-            fg = 'white', 
-            font = ('Arial', 14)
-            )
-        self.JSON_entry_box.pack(anchor = 'center', fill=tk.BOTH, expand=1)
+            # Placing an entry box in the frm_console
+            self.JSON_entry_box = tk.Text(
+                frm_JSON, 
+                bg = '#6e5e5d', 
+                fg = 'white', 
+                font = ('Arial', 14)
+                )
+            self.JSON_entry_box.pack(anchor = 'center', fill=tk.BOTH, expand=1)
 
-        current_JSON_file = open(JSON_String)
-        current_JSON_data = json.load(current_JSON_file)
-
-
-        temp = ""
-        for key, value in current_JSON_data.items():
-            temp = temp + "{} : {}".format(key, value) + "\n"
+            current_JSON_file = open(JSON_String)
+            current_JSON_data = json.load(current_JSON_file)
 
 
-        self.JSON_entry_box.delete(1.0,"end")
-        self.JSON_entry_box.insert(1.0, temp)
+            temp = ""
+            for key, value in current_JSON_data.items():
+                temp = temp + "{} : {}".format(key, value) + "\n"
+
+
+            self.JSON_entry_box.delete(1.0,"end")
+            self.JSON_entry_box.insert(1.0, temp)
+            
+            current_JSON_file.close()   
+        except Exception as e:
+            logging.debug(e)
+            logging.warning("TestSummaryScene: More Info popup has failed to be created.")
+
+            
 
     #################################################
 
     # All of the different methods for what the retest buttons should do
+    def btn_retest_action(self, _parent, test_idx):
+        _parent.set_frame_test(test_idx)
+
     def btn_retest1_action(self, _parent):
         _parent.set_frame(_parent.test1_frame)
-    
+ 
     def btn_retest2_action(self, _parent):
         _parent.set_frame(_parent.test2_frame)
-
+        
     def btn_retest3_action(self, _parent):
         _parent.set_frame(_parent.test3_frame)
 
@@ -346,23 +298,30 @@ class TestSummaryScene(tk.Frame):
 
     #################################################
 
+    def btn_more_info_action(self, _parent, test_idx):
+        names = self.data_holder.getTestNames()
+        self.create_JSON_popup("{}/JSONFiles/Current_{}_JSON.json".format(PythonFiles.__path__[0], names[test_idx].replace(" ", "").replace("/", "")))
+
     def btn_more_info1_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\JSONFiles\DummyJSONTest.JSON")
+        self.create_JSON_popup("{}/JSONFiles/Current_GenRes_JSON.json".format(PythonFiles.__path__[0]))
 
     def btn_more_info2_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\JSONFiles\GarrettJSONTest.JSON")
+        self.create_JSON_popup("{}/JSONFiles/Current_IDRes_JSON.json".format(PythonFiles.__path__[0]))
 
     def btn_more_info3_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\JSONFiles\DummyJSONTest.JSON")
+        self.create_JSON_popup("{}/JSONFiles/Current_IIC_JSON.json".format(PythonFiles.__path__[0]))
     
     def btn_more_info4_action(self, _parent):
-        self.create_JSON_popup(".\PythonFiles\JSONFiles\GarrettJSONTest.JSON")
+        self.create_JSON_popup("{}/JSONFiles/Current_BERT_JSON.json".format(PythonFiles.__path__[0]))
 
     #################################################
 
     # Next test button action
     def btn_next_test_action(self, _parent):
-        _parent.set_frame(_parent.scan_frame)
+        self.data_holder.data_holder_new_test()
+        self.lbl_snum.destroy()
+        _parent.reset_board()
+        logging.info("TestSummaryScene: Starting a new test.")
         
     #################################################
 
@@ -378,6 +337,5 @@ class TestSummaryScene(tk.Frame):
         self.list_of_pass_fail = _list_of_pass_fail
 
     #################################################
-
 
 #################################################################################

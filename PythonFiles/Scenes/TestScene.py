@@ -4,6 +4,7 @@
 import tkinter as tk
 import tkinter.font as font
 import logging
+logging.getLogger('PIL').setLevel(logging.WARNING)
 import PythonFiles
 import os
 
