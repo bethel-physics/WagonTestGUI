@@ -1,24 +1,19 @@
-#################################################################################
+################################################################################
 
 # Importing necessary modules
 import tkinter as tk
-import tkinter.font as font
 from PIL import ImageTk as iTK
 from PIL import Image
-import os
 import logging
-
-
 logging.getLogger('PIL').setLevel(logging.WARNING)
-
-logger = logging.getLogger('HGCAL_GUI')
-FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/{}/GUILogs/visual_gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
-
-
+import PythonFiles
+import os
 
 #################################################################################
 
+logger = logging.getLogger('HGCAL_GUI')
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 class SplashScene(tk.Frame):
 
@@ -32,9 +27,9 @@ class SplashScene(tk.Frame):
     def initialize_GUI(self, parent, master_frame):
         super().__init__(master_frame, width = 850, height = 500)
 
+        logging.info("SplashScene: Frame has been initialized.")
         # Creating Bethel Logo
-        logging.debug("SplashScene: Opening the Bethel Logo png file")
-        img_bethel_logo = Image.open("./PythonFiles/Images/Bethel_Logo.png")
+        img_bethel_logo = Image.open("{}/Images/Bethel_Logo.png".format(PythonFiles.__path__[0]))
         img_bethel_logo = img_bethel_logo.resize((250,100), Image.ANTIALIAS)
         phimg_bethel_logo = iTK.PhotoImage(img_bethel_logo)
         lbl_bethel_logo = tk.Label(self, image=phimg_bethel_logo, width=250, height=100)
@@ -43,8 +38,7 @@ class SplashScene(tk.Frame):
         lbl_bethel_logo.grid(row=0, column= 0, padx = 50, pady = 100)
 
         # Creating UMN Logo
-        logging.debug("SplashScene: Opening the UMN Logo png file")
-        img_umn_logo = Image.open("./PythonFiles/Images/UMN_Logo.png")
+        img_umn_logo = Image.open('{}/Images/UMN_Logo.png'.format(PythonFiles.__path__[0]))
         img_umn_logo = img_umn_logo.resize((250,100), Image.ANTIALIAS)
         phimg_umn_logo = iTK.PhotoImage(img_umn_logo)
         lbl_umn_logo = tk.Label(self, image=phimg_umn_logo, width=250, height=100)

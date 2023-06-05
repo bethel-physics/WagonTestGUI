@@ -12,7 +12,7 @@ from PythonFiles.Scenes.SplashScene import SplashScene
 from PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
 from PythonFiles.Scenes.InspectionScenes.Inspection1 import Inspection1
 from PythonFiles.Scenes.AddUserScene import AddUserScene
-
+from PythonFiles.Scenes.PhotoScene import PhotoScene
 
 #################################################################################
 
@@ -32,7 +32,9 @@ class GUIWindow():
 
         # Creates the size of the window and disables resizing
         master_window.geometry("850x500+25+100")
-        master_window.resizable(0,0)
+        
+        # Following line prevents the window from being resizable
+        # master_window.resizable(0,0)
 
         # Removes the tkinter logo from the window
         # master_window.wm_attributes('-toolwindow', 'True')
@@ -68,6 +70,8 @@ class GUIWindow():
         self.add_user_frame = AddUserScene(self, master_frame, self.data_holder)
         self.add_user_frame.grid(row=0,column=0)
 
+        self.photo_frame = PhotoScene(self, master_frame, self.data_holder)
+        self.photo_frame.grid(row=0,column=0)
 
         # Near bottom so it can reference other frames with its code
         self.splash_frame = SplashScene(self, master_frame)
@@ -99,8 +103,17 @@ class GUIWindow():
         self.inspection_frame.update_frame(self)
         self.set_frame(self.inspection_frame)    
 
+
+
     #################################################
 
+    def set_frame_photo_frame(self):
+        self.photo_frame.update_frame(self)
+        self.set_frame(self.photo_frame)
+
+
+    #################################################
+    
     def set_frame_scan_frame(self):
 
         self.scan_frame.is_current_scene = True
@@ -156,7 +169,7 @@ class GUIWindow():
         popup = tk.Tk()
         # popup.wm_attributes('-toolwindow', 'True')
         popup.title("Exit Confirmation Window") 
-        popup.geometry("300x150")
+        popup.geometry("300x150+25+100")
         popup.eval("tk::PlaceWindow . center")
        
 

@@ -200,7 +200,7 @@ class ScanScene(tk.Frame):
     def btn_submit_action(self, _parent):
         self.data_holder.set_serial_ID(self.ent_snum.get())
         self.data_holder.check_if_new_board()
-        _parent.set_frame_inspection_frame()
+        _parent.set_frame_photo_frame()
 
 
     #################################################
