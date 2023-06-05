@@ -1,11 +1,17 @@
 #################################################################################
 
 import tkinter as tk
+from tkinter import ttk
+from tkinter import Canvas
+from tkinter import Scrollbar
 from PIL import ImageTk as iTK
 from PIL import Image
 import logging
 import PythonFiles
 import os
+import platform
+
+
 
 #################################################################################
 
@@ -18,7 +24,32 @@ class SidebarScene(tk.Frame):
     #################################################
 
     def __init__(self, parent, sidebar_frame, data_holder):
-        super().__init__(sidebar_frame, width=213, height = 500, bg = '#808080', padx = 10, pady=10)
+
+
+        super().__init__( sidebar_frame, width=213, height = 650, bg = '#808080', padx = 10, pady=10)
+        
+        self.mycanvas = tk.Canvas(self, background="#808080", width=213, height =650)
+        self.viewingFrame = tk.Frame(self.mycanvas, background = "#808080", width = 213, height = 650)
+        self.scroller = ttk.Scrollbar(self, orient="vertical", command=self.mycanvas.yview)
+        self.mycanvas.configure(yscrollcommand=self.scroller.set)
+
+        self.mycanvas.pack(side="right")
+        self.scroller.pack(side="left", fill="both", expand=True)
+
+
+        self.canvas_window = self.mycanvas.create_window((4,4), window=self.viewingFrame, anchor='nw', tags="self.viewingFrame")
+
+
+
+
+        self.viewingFrame.bind("<Configure>", self.onFrameConfigure)
+        self.mycanvas.bind("<Configure>", self.onCanvasConfigure)
+
+        self.viewingFrame.bind('<Enter>', self.onEnter)
+        self.viewingFrame.bind('<Leave>', self.onLeave)
+
+        self.onFrameConfigure(None)
+
 
         self.data_holder = data_holder
 
@@ -26,6 +57,17 @@ class SidebarScene(tk.Frame):
 
     #################################################
 
+    def onFrameConfigure(self, event):                                              
+        '''Reset the scroll region to encompass the inner frame'''
+        self.mycanvas.configure(scrollregion=self.mycanvas.bbox("all"))                 #whenever the size of the frame changes, alter the scroll region respectively.
+
+    def onCanvasConfigure(self, event):
+        '''Reset the canvas window to encompass inner frame when required'''
+        canvas_width = event.width
+        self.mycanvas.itemconfig(self, width = canvas_width)            #whenever the size of the canvas changes alter the window region respectively.
+
+
+    #################################################
     def update_sidebar(self, parent):
         
         logging.info("SidebarScene: The sidebar has been updated.")
@@ -41,7 +83,7 @@ class SidebarScene(tk.Frame):
                 Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
                 Green_Check_Image = Green_Check_Image.resize((50,50), Image.ANTIALIAS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
-                GreenCheck_Label = tk.Label(self, image=Green_Check_PhotoImage, width=50, height=50, bg = '#808080')
+                GreenCheck_Label = tk.Label(self.viewingFrame, image=Green_Check_PhotoImage, width=50, height=50, bg = '#808080')
                 GreenCheck_Label.image = Green_Check_PhotoImage
 
                 GreenCheck_Label.grid(row=index + 2, column=1)
@@ -51,7 +93,7 @@ class SidebarScene(tk.Frame):
                 Red_X_Image = Image.open("{}/Images/RedX.png".format(PythonFiles.__path__[0]))
                 Red_X_Image = Red_X_Image.resize((50,50), Image.ANTIALIAS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
-                RedX_Label = tk.Label(self, image=Red_X_PhotoImage, width=50, height=50, bg = '#808080')
+                RedX_Label = tk.Label(self.viewingFrame, image=Red_X_PhotoImage, width=50, height=50, bg = '#808080')
                 RedX_Label.image = Red_X_PhotoImage
 
                 RedX_Label.grid(row=index + 2, column=1)
@@ -63,7 +105,7 @@ class SidebarScene(tk.Frame):
         btn_pady = 5
 
         self.btn_login = tk.Button(
-            self,
+            self.viewingFrame,
             pady = btn_pady,
             text = 'LOGIN PAGE',
             height = btn_height,
@@ -73,7 +115,7 @@ class SidebarScene(tk.Frame):
         self.btn_login.grid(column = 0, row = 0)
 
         self.btn_scan = tk.Button(
-            self,
+            self.viewingFrame,
             pady = btn_pady,
             text = 'SCAN PAGE',
             height = btn_height,
@@ -89,7 +131,7 @@ class SidebarScene(tk.Frame):
         for i in range(self.data_holder.getNumTest()):
 
             self.test_btns.append(tk.Button(
-                self, 
+                self.viewingFrame, 
                 pady = btn_pady,
                 text = '{}'.format(test_names[i]),
                 height = btn_height,
@@ -103,7 +145,7 @@ class SidebarScene(tk.Frame):
                 self.test_btns[i].config(state = 'disabled')
 
         self.btn_summary = tk.Button(
-            self, 
+            self.viewingFrame, 
             pady = btn_pady,
             text = 'TEST SUMMARY',
             height = btn_height,
@@ -113,7 +155,28 @@ class SidebarScene(tk.Frame):
             )
         self.btn_summary.grid(column = 0, row = self.data_holder.getNumTest() + 2)
 
+
         self.grid_propagate(0)
+
+    #################################################
+
+
+    def onMouseWheel(self, event):                                                  # cross platform scroll wheel event
+        if event.num == 4:
+            self.mycanvas.yview_scroll( -1, "units" )
+        elif event.num == 5:
+            self.mycanvas.yview_scroll( 1, "units" )
+    
+    def onEnter(self, event):                                                       # bind wheel events when the cursor enters the control
+        self.mycanvas.bind_all("<Button-4>", self.onMouseWheel)
+        self.mycanvas.bind_all("<Button-5>", self.onMouseWheel)
+
+    def onLeave(self, event):                                                       # unbind wheel events when the cursorl leaves the control
+        self.mycanvas.unbind_all("<Button-4>")
+        self.mycanvas.unbind_all("<Button-5>")
+
+
+
 
     #################################################
 

@@ -53,18 +53,20 @@ class GUIWindow():
         self.master_window = tk.Tk()
         self.master_window.title("HGCAL Test Window")
         # Creates the size of the window and disables resizing
-        self.master_window.geometry("1063x500+25+100")
-        self.master_window.resizable(0,0)
+        self.master_window.geometry("1300x700+25+100")
+        
+        # Should be resizable with following code commented out
+        #self.master_window.resizable(0,0)
 
         # Removes the tkinter logo from the window
         # self.master_window.wm_attributes('-toolwindow', 'True')
 
         # Creates and packs a frame that exists on top of the master_frame
-        self.master_frame = tk.Frame(self.master_window, width=850, height= 500)
+        self.master_frame = tk.Frame(self.master_window, width=850, height= 650)
         self.master_frame.grid(column = 1, row = 0, columnspan = 4)
 
         # Creates a frame to house the sidebar on self.master_window
-        sidebar_frame = tk.Frame(self.master_window, width = 213, height = 500)
+        sidebar_frame = tk.Frame(self.master_window, width = 213, height = 650)
         sidebar_frame.grid(column = 0 , row = 0)
 
         # Creates the "Storage System" for the data during testing

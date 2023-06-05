@@ -11,6 +11,7 @@ from PythonFiles.Scenes.ScanScene import ScanScene
 from PythonFiles.Scenes.SplashScene import SplashScene
 from PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
 from PythonFiles.Scenes.InspectionScenes.Inspection1 import Inspection1
+from PythonFiles.Scenes.AddUserScene import AddUserScene
 
 
 #################################################################################
@@ -64,6 +65,9 @@ class GUIWindow():
         self.inspection_frame = Inspection1(self, master_frame, self.data_holder)
         self.inspection_frame.grid(row=0,column=0)
 
+        self.add_user_frame = AddUserScene(self, master_frame, self.data_holder)
+        self.add_user_frame.grid(row=0,column=0)
+
 
         # Near bottom so it can reference other frames with its code
         self.splash_frame = SplashScene(self, master_frame)
@@ -115,7 +119,8 @@ class GUIWindow():
         self.test_summary_frame.update_frame()
         self.set_frame(self.test_summary_frame)
 
-
+    def set_frame_add_user_frame(self):
+        self.set_frame(self.add_user_frame)
 
     #################################################
 
