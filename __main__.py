@@ -1,5 +1,8 @@
 #!/TestingEnv/bin/python
 
+# Including information about both Engine and Wagon GUIs
+
+
 # Need to make the log file path before any imports
 import os
 guiLogPath = "/home/{}/GUILogs/".format(os.getlogin())
