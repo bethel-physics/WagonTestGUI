@@ -109,6 +109,10 @@ class AddUserScene(tk.Frame):
         # Popup to confirm that a new user is added into the DB
         cnfm_pop = ConfirmPopup(_parent, self.data_holder, self.new_user_name, self.password)
 
+    def remove_widgets(self, _parent):
+        for widget in self.winfo_children():
+            widget.destroy()
+
 
     #################################################
     

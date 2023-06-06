@@ -149,8 +149,6 @@ class Inspection1(tk.Frame):
 
 
 
-
-
     
 
         # Create a button for confirming test
@@ -162,9 +160,6 @@ class Inspection1(tk.Frame):
             )
         btn_confirm.grid(row = 9, column= 1, pady= 50)
         btn_confirm['font'] = font.Font(family = 'Arial', size = 13)
-
-
-
 
 
 
@@ -249,3 +244,11 @@ class Inspection1(tk.Frame):
         _parent.set_frame_login_frame()
 
     #################################################
+
+
+    def remove_widgets(self, _parent):
+        for widget in self.winfo_children():
+            widget.destroy()
+
+
+

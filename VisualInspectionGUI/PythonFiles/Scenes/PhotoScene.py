@@ -35,6 +35,10 @@ class PhotoScene(tk.Frame):
 
     # Runs upon creation
     def __init__(self, parent, master_frame, data_holder):
+
+
+        self.master_frame = master_frame
+
         self.data_holder = data_holder
         self.is_current_scene = False
         
@@ -47,22 +51,25 @@ class PhotoScene(tk.Frame):
        # Creates the GUI itself
     def initialize_GUI(self, parent, master_frame):
         
-        self.master_frame = master_frame
         
         super().__init__(self.master_frame, width = 850, height = 500)
 
         logging.info("PhotoScene: Frame has been created.")
         # Create a photoimage object of the QR Code
         Engine_image = Image.open("{}/Images/EnginePhoto.png".format(PythonFiles.__path__[0]))
+        Engine_image = Engine_image.resize((400, 300), Image.ANTIALIAS)
         Engine_PhotoImage = iTK.PhotoImage(Engine_image)
         Engine_label = tk.Label(self, image=Engine_PhotoImage)
         Engine_label.image = Engine_PhotoImage
 
         # the .grid() adds it to the Frame
-        Engine_label.grid(column=1, row = 0)
+        Engine_label.grid(column=1, row = 1)
 
         Scan_Board_Prompt_Frame = Frame(self)
-        Scan_Board_Prompt_Frame.grid(column=0, row = 0)
+        Scan_Board_Prompt_Frame.grid(column=1, row = 0)
+
+        Blank_Frame = Frame(self)
+        Blank_Frame.grid(column = 0, row = 1, padx = 100, pady = 10)
 
         # creates a Label Variable, different customization options
         lbl_scan = tk.Label(
@@ -73,26 +80,26 @@ class PhotoScene(tk.Frame):
         lbl_scan.pack(padx = 50, pady = 50)
 
         # Create a label to label the entry box
-        lbl_snum = tk.Label(
+        lbl_correct = tk.Label(
             Scan_Board_Prompt_Frame,
-            text = "Serial Number:",
+            text = "Does this look correct?",
             font = ('Arial', 16)
         )
-        lbl_snum.pack(padx = 20)
+        lbl_correct.pack(padx = 20)
 
         # Entry for the serial number to be displayed. Upon Scan, update and disable?
-        global ent_snum
+        global ent_correct
         
         # Creating intial value in entry box
         user_text = tk.StringVar(self)
         
         # Creates an entry box
-        #self.ent_snum = tk.Entry(
+        #self.ent_correct = tk.Entry(
         #    Scan_Board_Prompt_Frame,
         #    font = ('Arial', 16),
         #    textvariable= user_text, 
         #    )
-        #self.ent_snum.pack(padx = 50)
+        #self.ent_correct.pack(padx = 50)
 
         # Traces an input to show the submit button once text is inside the entry box
         #user_text.trace(
@@ -123,11 +130,11 @@ class PhotoScene(tk.Frame):
             relief = tk.RAISED,
             command= lambda:  self.btn_submit_action(parent)
             )
-        self.btn_submit.pack()
+        self.btn_submit.pack(padx = 8, pady = 5)
 
         # Creating frame for logout button
         frm_logout = tk.Frame(self)
-        frm_logout.grid(column = 1, row = 1, sticky= 'se')
+        frm_logout.grid(column = 2, row = 1, sticky= 'se')
 
         # Creating the logout button
         btn_logout = tk.Button(
@@ -136,7 +143,7 @@ class PhotoScene(tk.Frame):
             text = "Logout",
             command = lambda: self.btn_logout_action(parent)
         )
-        btn_logout.pack(anchor = 'se', padx = 0, pady = 80)
+        btn_logout.pack(anchor = 'se', padx = 10, pady = 80)
         # Locks frame size to the master_frame size
         self.grid_propagate(0)
 
@@ -144,8 +151,9 @@ class PhotoScene(tk.Frame):
 
     # Function for the submit button
     def btn_submit_action(self, _parent):
-        self.data_holder.set_serial_ID(self.ent_snum.get())
-        self.data_holder.check_if_new_board()
+        
+        #TODO Do something with the dataholder here with the photo
+        
         _parent.set_frame_inspection_frame()
 
 
@@ -183,16 +191,10 @@ class PhotoScene(tk.Frame):
 
     #################################################
         
-    def update_frame(self, parent):
-        return
-
+    def remove_widgets(self, parent):
+        for widget in self.winfo_children():
+            widget.destroy()
 
 
     def kill_processes(self):
-        logging.info("ScanScene: Terminating scanner proceses.")
-        try:
-            self.scanner.kill()
-            self.listener.terminate()
-            self.EXIT_CODE = 1
-        except:
-            logging.info("ScanScene: Processes could not be terminated.")
+        return

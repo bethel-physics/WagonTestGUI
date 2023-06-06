@@ -195,6 +195,11 @@ class ScanScene(tk.Frame):
 
     # Function for the submit button
     def btn_submit_action(self, _parent):
+        
+        self.EXIT_CODE = 1 
+        self.listener.terminate()
+        self.scanner.terminate()
+
         self.data_holder.set_serial_ID(self.ent_snum.get())
         self.data_holder.check_if_new_board()
         _parent.scan_frame_progress()

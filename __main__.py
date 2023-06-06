@@ -74,9 +74,11 @@ if __name__ == "__main__":
         "cmsfactory4.cmsfactorynet",
         "cmsfactory5.cmsfactorynet",
         "cmslab4.umncmslab",
+    
+        "cmsfactory2.cmsfactorynet",
+
     ]
     engine_GUI_computers = [
-        "cmsfactory2.cmsfactorynet",
     ]
    
     board_cfg = None

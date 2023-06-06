@@ -47,5 +47,10 @@ def main():
     main_window = GUIWindow(board_cfg)
     
 
+
+
+
+
+
 if __name__ == "__main__":
     main()

@@ -13,6 +13,14 @@ from PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
 from PythonFiles.Scenes.InspectionScenes.Inspection1 import Inspection1
 from PythonFiles.Scenes.AddUserScene import AddUserScene
 from PythonFiles.Scenes.PhotoScene import PhotoScene
+import logging
+import os
+
+
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/{}/GUILogs/visual_gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
+
+
 
 #################################################################################
 
@@ -90,7 +98,9 @@ class GUIWindow():
         master_frame.after(500, self.set_frame_login_frame)
 
         master_window.mainloop()
-    
+        
+
+
     #################################################
 
     def set_frame_login_frame(self):  
@@ -108,14 +118,12 @@ class GUIWindow():
     #################################################
 
     def set_frame_photo_frame(self):
-        self.photo_frame.update_frame(self)
         self.set_frame(self.photo_frame)
 
 
     #################################################
     
     def set_frame_scan_frame(self):
-
         self.scan_frame.is_current_scene = True
         self.set_frame(self.scan_frame)
         self.scan_frame.scan_QR_code(master_window)
@@ -161,62 +169,117 @@ class GUIWindow():
 
     #################################################
 
+
     # New function for clicking on the exit button
     def exit_function(self):
 
         # Creates a popup to confirm whether or not to exit out of the window
-        global popup
-        popup = tk.Tk()
+        self.popup = tk.Toplevel()
         # popup.wm_attributes('-toolwindow', 'True')
-        popup.title("Exit Confirmation Window") 
-        popup.geometry("300x150+25+100")
-        popup.eval("tk::PlaceWindow . center")
-       
+        self.popup.title("Exit Window") 
+        self.popup.geometry("300x150+500+300")
+        self.popup.grab_set()
+    
 
         # Creates frame in the new window
-        frm_popup = tk.Frame(popup)
+        frm_popup = tk.Frame(self.popup)
         frm_popup.pack()
 
         # Creates label in the frame
-        lbl_popup = tk.Label(frm_popup, text = "Are you sure you would like to exit?")
-        lbl_popup.grid(column = 0, row = 0, columnspan = 2, pady = 25)
+        lbl_popup = tk.Label(
+            frm_popup, 
+            text = "Are you sure you would like to exit?",
+            font = ('Arial', 13) 
+            )
+        lbl_popup.grid(column = 0, row = 0, columnspan = 2, pady = 25) 
 
         # Creates yes and no buttons for exiting
         btn_yes = tk.Button(
-             frm_popup,
-             text = "Yes", 
-             relief = tk.RAISED, 
-             command = lambda: self.destroy_function()
-             ) 
+            frm_popup,    
+            width = 12, 
+            height = 2,
+            text = "Yes", 
+            relief = tk.RAISED,
+            font = ('Arial', 12), 
+            command = lambda: self.destroy_function()
+            )
         btn_yes.grid(column = 0, row = 1)
 
         btn_no = tk.Button(
             frm_popup,
+            width = 12, 
+            height = 2,
             text = "No",
             relief = tk.RAISED,
+            font = ('Arial', 12),
             command = lambda: self.destroy_popup()
         )
         btn_no.grid(column = 1, row = 1)
+
+
+
 
     #################################################
 
     # Called when the no button is pressed to destroy popup and return you to the main window
     def destroy_popup(self):
-        popup.destroy()
+        try:
+            self.popup.destroy()
+        except:
+            print("GUIWindow: Unable to close the popup")
+            logging.error("GUIWindow: Unable to close the popup")
+    #################################################
+
+    def remove_all_widgets(self):
+        self.photo_frame.remove_widgets(self)
+        self.inspection_frame.remove_widgets(self)
+        self.add_user_frame.remove_widgets(self)
+
+
 
     #################################################
 
     # Called when the yes button is pressed to destroy both windows
-    def destroy_function(self):
+    def destroy_function(self, event=None):
+        try:
+            
+            self.photo_frame.remove_widgets(self)
+            
+            logging.info("GUIWindow: Exiting the GUI.")
 
-        # Destroys the popup and master window
-        popup.destroy()
-        master_window.destroy()
+            master_window.update()
+            self.popup.update()
 
-        # Ensures the application closes with the exit button
-        exit()
+            self.scan_frame.kill_processes()
 
-    #################################################
+            # Destroys the popup and master window
+            self.popup.destroy()
+            self.popup.quit()
+
+
+
+            logging.info("GUIWindow: Trying to quit master_window")
+            print("\nQuitting master window\n\n")
+            master_window.destroy()
+
+            logging.info("GUIWindow: Trying to destroy master_window")
+            print("Destroying master window\n")
+            master_window.quit()
+            
+
+            logging.info("GUIWindow: The application has exited successfully.")
+        except Exception as e:
+            print(e)
+            logging.debug("GUIWindow: " + repr(e))
+            logging.error("GUIWindow: The application has failed to close.")
+
+        exit() 
+
+
+
+
+
+    ################################################
 
     
 #################################################################################

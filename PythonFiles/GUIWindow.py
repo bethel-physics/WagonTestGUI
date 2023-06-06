@@ -565,7 +565,7 @@ class GUIWindow():
 
             if self.scan_frame.is_current_scene == True:
                 self.test_in_progress_frame.close_prgbar()
-                self.scan_frame.kill_processes()
+            self.scan_frame.kill_processes()
 
             # Destroys the popup and master window
             self.popup.destroy()

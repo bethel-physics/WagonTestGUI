@@ -15,12 +15,9 @@ import os
 
 #################################################################################
 
-
-logging.getLogger('PIL').setLevel(logging.WARNING)
 logger = logging.getLogger('HGCAL_GUI')
-
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/{}/GUILogs/visual_gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 
 # creating the Scan Frame's class (called ScanScene) to be instantiated in the GUIWindow
@@ -69,7 +66,7 @@ class ScanScene(tk.Frame):
 
         self.listener.start()
                
-        while 1 > 0:
+        while True:
 
             try:
                 self.master_window.update()
@@ -198,6 +195,9 @@ class ScanScene(tk.Frame):
 
     # Function for the submit button
     def btn_submit_action(self, _parent):
+        self.EXIT_CODE = 1
+        self.listener.terminate()
+        self.scanner.terminate()
         self.data_holder.set_serial_ID(self.ent_snum.get())
         self.data_holder.check_if_new_board()
         _parent.set_frame_photo_frame()
