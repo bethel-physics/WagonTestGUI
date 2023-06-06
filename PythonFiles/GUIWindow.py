@@ -179,6 +179,7 @@ class GUIWindow():
 
     def set_frame_login_frame(self):  
 
+        self.sidebar.update_sidebar(self)
         self.login_frame.update_frame(self)
         self.set_frame(self.login_frame)        
 
@@ -289,7 +290,7 @@ class GUIWindow():
     def set_frame_test_in_progress(self, queue):
         self.set_frame(self.test_in_progress_frame)
         self.sidebar.disable_all_btns()
-        self.test_in_progress_frame.begin_update(self.master_window, queue)
+        self.test_in_progress_frame.begin_update(self.master_window, queue, self)
         self.go_to_next_test()   
 
         logging.debug("GUIWindow: The frame has been set to test_in_progress_frame.")

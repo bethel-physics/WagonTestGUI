@@ -23,7 +23,6 @@ class TestInProgressScene(tk.Frame):
         
         super().__init__(master_frame, width = 850, height = 500)
 
-
         self.queue = queue
         self.data_holder = data_holder
         self.is_current_scene = False
@@ -132,7 +131,7 @@ class TestInProgressScene(tk.Frame):
 
     #################################################
 
-    def begin_update(self, master_window, queue):
+    def begin_update(self, master_window, queue, parent):
         logging.info("TestInProgressScene: Started console update loop.")
         
         # How long before the queue is being checked (if empty)
@@ -182,16 +181,24 @@ class TestInProgressScene(tk.Frame):
 
                     # If beyond the MAX_TIMEOUT range -> raise an exception
                     if (counter > MAX_TIMEOUT/refresh_break) and not information_received:
-                        logging.info("TestInProgressScene: Raising Exception -> Timeout Reached - {} seconds".format(Timeout_after))
-                        raise Exception("Process timed out after {} seconds".format(Timeout_after))
+                        logging.info("TestInProgressScene: Raising Exception -> Timeout Reached - 10 seconds")
+                        raise Exception("Process timed out after 10 seconds")
+                        time.sleep(1)
+                        break
         except:
             
             # Throw a message box that shows the error message
             # Logs the message
             time_sec = counter*refresh_break
-            logging.error('TestInProgressScene: Timeout Error', "Exception received -> Process timed out after {} seconds".format(Timeout_after))
+            logging.info('TestInProgressScene: Timeout Error', "Exception received -> Process timed out after 10 seconds")
 
-            messagebox.showerror('Timeout Error', "TestInProgressScene: Process timed out after {} seconds".format(Timeout_after))
+            messagebox.showerror('Timeout Error', "TestInProgressScene: Process timed out after 10 seconds")
+            
+            logging.info("TestInProgressScene: Trying to go back to the login frame.")
+            parent.set_frame_login_frame()
+        
+
+
 
     def close_prgbar(self):
         #logging.debug("TestInProgressScene: Closing the progressbar.")

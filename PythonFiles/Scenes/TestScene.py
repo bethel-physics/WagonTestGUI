@@ -152,8 +152,8 @@ class TestScene(tk.Frame):
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
         print("Confirm button sending test{}".format(self.test_idx))
-        test_client = REQClient('test{}'.format(self.test_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
         _parent.set_frame_test_in_progress(self.queue)
+        test_client = REQClient('test{}'.format(self.test_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
 
     #################################################
 
