@@ -289,11 +289,15 @@ class GUIWindow():
 
     def set_frame_test_in_progress(self, queue):
         self.set_frame(self.test_in_progress_frame)
-        self.sidebar.disable_all_btns()
-        self.test_in_progress_frame.begin_update(self.master_window, queue, self)
-        self.go_to_next_test()   
-
+        
         logging.debug("GUIWindow: The frame has been set to test_in_progress_frame.")
+        #self.sidebar.disable_all_btns()
+        passed = self.test_in_progress_frame.begin_update(self.master_window, queue, self)
+        if passed:
+            self.go_to_next_test()   
+        else:
+            return
+
     #################################################
 
     def check_if_test_passed(self):
@@ -419,6 +423,9 @@ class GUIWindow():
         _frame.tkraise()
 
         logging.info("GUIWindow: The frame has been raised.")
+
+        self.master_frame.update()
+        self.master_window.update()
 
     #################################################
 

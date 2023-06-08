@@ -146,7 +146,7 @@ class TestInProgressScene(tk.Frame):
         Timeout_after = 10
         MAX_TIMEOUT = Timeout_after / 2.5
         try:
-            logging.info("TestInProgressScene: Beginning try catch for receiving data through the pipeline.")
+            logging.info("TestInProgressScene: While-loop - Beginning try catch for receiving data through the pipeline.")
             
             information_received = False
             while 1>0:
@@ -192,11 +192,11 @@ class TestInProgressScene(tk.Frame):
             time_sec = counter*refresh_break
             logging.info('TestInProgressScene: Timeout Error', "Exception received -> Process timed out after 10 seconds")
 
-            messagebox.showerror('Timeout Error', "TestInProgressScene: Process timed out after 10 seconds")
-            
+            messagebox.showwarning('Timeout Error', "TestInProgressScene: Process timed out after 10 seconds")
             logging.info("TestInProgressScene: Trying to go back to the login frame.")
             parent.set_frame_login_frame()
-        
+            return False
+        return True    
 
 
 

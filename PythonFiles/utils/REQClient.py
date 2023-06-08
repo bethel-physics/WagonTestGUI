@@ -55,13 +55,15 @@ class REQClient():
         # Recording the number of tries to open the socket and receive a string
         tries = 0
 
-        while (len(self.message)< 1) and tries < 10:
+        while (len(self.message)< 1) and tries < 1000:
             try:
+                print("\nTrying to receive a message from the socket")
                 logging.debug("REQClient: Trying to receive a message from the socket receive")
                 self.message = socket.recv_string()
                 print("\n\n\nSelf.message: {}\n\n\n".format(self.message))
 
             except:
+                print("REQClient: couldn't get info - {}".format(tries))
                 logging.debug("REQClient: No Message received from the request.")
                 tries = tries + 1 
             #messagebox.showerror("No Message Received", "REQClient: No message received from the request.")
