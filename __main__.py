@@ -27,7 +27,12 @@ def task_GUI(conn, queue, board_cfg):
 # Creates a task of creating the SUBClient
 def task_SUBClient(conn, queue):
     # Creates the SUBSCRIBE Socket Client
-    sub_client = SUBClient(conn, queue)
+    try:
+        sub_client = SUBClient(conn, queue)
+    except Exception as e:
+        print("\n\n\n\n\nUh oh... an exception has been found...")
+        print("Exception: {}\n\n\n".format(e))
+        print("It looks like this has something to do with the SUBClient's instantiation\n\n") 
 
 def run(board_cfg):    
     # Creates a Pipe for the SUBClient to talk to the GUI Window

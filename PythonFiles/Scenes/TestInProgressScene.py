@@ -146,13 +146,18 @@ class TestInProgressScene(tk.Frame):
         Timeout_after = 10
         MAX_TIMEOUT = Timeout_after / 2.5
         try:
+            print("\n\nTestInProgressScene: Beginning the while loop\n\n") 
             logging.info("TestInProgressScene: While-loop - Beginning try catch for receiving data through the pipeline.")
             
             information_received = False
             while 1>0:
                     # try:
+                print("\nUpdating master_window")
                 master_window.update()
+                print("Queue: ")
+                print(queue)
                 if not queue.empty():    
+                    print("\n\nTestInProgressScene: the queue is not empty") 
                     information_received = True
                     logging.info("TestInProgressScene: Waiting for queue objects...")
                     text = queue.get()
@@ -173,6 +178,9 @@ class TestInProgressScene(tk.Frame):
                         break
                     
                 else:
+                
+                    print("\nTestInProgressScene: The queue is empty, going to sleep for {} seconds".format(refresh_break))
+
                     # Sleep before looking for more information
                     time.sleep(refresh_break)
 
@@ -181,6 +189,7 @@ class TestInProgressScene(tk.Frame):
 
                     # If beyond the MAX_TIMEOUT range -> raise an exception
                     if (counter > MAX_TIMEOUT/refresh_break) and not information_received:
+                        print("\n\nTestInProcessScene: Raising an exception now\n")
                         logging.info("TestInProgressScene: Raising Exception -> Timeout Reached - 10 seconds")
                         raise Exception("Process timed out after 10 seconds")
                         time.sleep(1)

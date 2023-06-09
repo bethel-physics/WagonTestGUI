@@ -55,7 +55,7 @@ class PhotoScene(tk.Frame):
         super().__init__(self.master_frame, width = 850, height = 500)
 
         logging.info("PhotoScene: Frame has been created.")
-        # Create a photoimage object of the QR Code
+        # Create a photoimage object of the Engine
         Engine_image = Image.open("{}/Images/EnginePhoto.png".format(PythonFiles.__path__[0]))
         Engine_image = Engine_image.resize((400, 300), Image.ANTIALIAS)
         Engine_PhotoImage = iTK.PhotoImage(Engine_image)

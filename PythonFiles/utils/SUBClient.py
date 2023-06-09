@@ -31,7 +31,18 @@ class SUBClient():
                 # Splits up every message that is received into topic and message
                 # the space around the semi-colon is necessary otherwise the topic and messaage
                 # will have extra spaces.
-                self.topic, self.message = listen_socket.recv_string().split(" ; ")
+                try:
+                    self.topic, self.message = listen_socket.recv_string().split(" ; ")
+                except Exception as e:
+                    print("\nThere was an error trying to get the topic and/or message from the socket\n")
+                    logging.info("SUBClient: There was an error trying to get the topic and/or message from the socket")
+                                     
+
+                poller = zmq.Poller()
+                poller.register(socket, zmq.POLLIN)
+                if not poller.poll(7*1000):
+                    raise Exception("The SUBClient has failed to receive a topic and message")
+
                 logging.debug("The received topic is: %s" % self.topic)
                 logging.debug("The received message is: %s" % self.message)
 
@@ -45,7 +56,6 @@ class SUBClient():
 
                 elif self.topic == "JSON":
                     
-
                     # Places the message in the queue. the queue.get() is in 
                     # TestInProgressScene's begin_update() method
                     queue.put("Results received successfully.")
@@ -56,6 +66,7 @@ class SUBClient():
                     logging.info("SUBClient: The JSON has been sent to the GUIWindow along the pipe.")
 
                 elif self.topic == "LCD":
+                    logging.info("SUBClient: The topic of LCD has been selected. This method is empty")
                     pass
 
                 else:
