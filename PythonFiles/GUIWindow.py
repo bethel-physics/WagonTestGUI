@@ -94,6 +94,7 @@ class GUIWindow():
         self.scan_frame = ScanScene(self, self.master_frame, self.data_holder)
         self.scan_frame.grid(row=0, column=0)
 
+
         # Generalize test frames to use testing config
         # Grab list of tests from config file and create one scene for each test
         # Tests are indexed starting at 1 and using the order of the list in the config
