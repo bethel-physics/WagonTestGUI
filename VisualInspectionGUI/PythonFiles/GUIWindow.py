@@ -37,7 +37,7 @@ class GUIWindow():
         # global makes master_window global and therefore accessible outside the function
         global master_window
         master_window = tk.Tk()
-        master_window.title("Bethel Interns' Window")
+        master_window.title("Visual Inspection Window")
 
         # Creates the size of the window and disables resizing
         master_window.geometry("850x500+25+100")

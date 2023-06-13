@@ -23,7 +23,6 @@ from PythonFiles.Scenes.TestInProgressScene import TestInProgressScene
 from PythonFiles.Data.DataHolder import DataHolder
 from PythonFiles.Scenes.SplashScene import SplashScene
 from PythonFiles.Scenes.TestInProgressScene import *
-from PythonFiles.Scenes.Inspection1 import Inspection1
 from PythonFiles.Scenes.AddUserScene import AddUserScene
 
 #################################################################################
@@ -87,16 +86,10 @@ class GUIWindow():
 
         self.login_frame = LoginScene(self, self.master_frame, self.data_holder)
         self.login_frame.grid(row=0, column=0)
-        
-        self.visual_frame = Inspection1(self, self.master_frame, self.data_holder)
-        self.visual_frame.grid(row=0, column=0)
- 
-        self.scan_frame = ScanScene(self, self.master_frame, self.data_holder)
+
+        self.scan_frame = ScanScene(self, self.master_frame, self.data_holder)        
         self.scan_frame.grid(row=0, column=0)
 
-        self.camera_frame = CameraScene(self, self.master_frame, self.data_holder, "OpenCV")
-        self.camera_frame.grid(row=0, column=0)
-        
         
 
         # Generalize test frames to use testing config
@@ -213,27 +206,18 @@ class GUIWindow():
 
     #################################################
 
-    def set_frame_visual_frame(self):
-        self.visual_frame.update_frame(self)
-        self.set_frame(self.visual_frame)
-
-        logging.debug("GUIWindow: The frame has been set to visual_frame.")
-
+    # Used to be the visual inspection method
 
     #################################################
 
     def scan_frame_progress(self):
-        if self.data_holder.data_dict['is_new_board'] == True:
-            self.set_frame_visual_frame()
-        elif self.data_holder.data_dict['is_new_board'] == False:
-            self.go_to_next_test()
+        self.go_to_next_test()
 
 
     #################################################
 
     # For example, when we set the frame to test2_frame, we want to send the results
     # of test1 because it just completed.
-
 
 
     def set_frame_test_summary(self):
@@ -264,7 +248,7 @@ class GUIWindow():
 
     def set_frame_test1(self):
         self.test1_frame.update_frame(self)
-        self.set_frame(self.test1_frame)
+        IIIself.set_frame(self.test1_frame)
 
         logging.debug("GUIWindow: The frame has been set to test1_frame.")
     #################################################

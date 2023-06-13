@@ -141,12 +141,16 @@ class TestSummaryScene(tk.Frame):
             key_label.grid(row=key_count , column=0)
              
 
+            # Correctly displays the booleans
+            # If not a string, show as a boolean true/false
             l_text = "UNDEFINED"
-            if (value):
-                l_text = "True"
+            if not isinstance(value, str):
+                if (value):
+                    l_text = "True"
+                else:
+                    l_text = "False"
             else:
-                l_text = "False"
-                
+                l_text = value    
 
             result_label = tk.Label(
                     self.frm_table, 

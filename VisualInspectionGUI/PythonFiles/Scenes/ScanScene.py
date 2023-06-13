@@ -180,6 +180,7 @@ class ScanScene(tk.Frame):
         frm_logout = tk.Frame(self)
         frm_logout.grid(column = 1, row = 1, sticky= 'se')
 
+       
         # Creating the logout button
         btn_logout = tk.Button(
             frm_logout,
@@ -187,7 +188,20 @@ class ScanScene(tk.Frame):
             text = "Logout",
             command = lambda: self.btn_logout_action(parent)
         )
-        btn_logout.pack(anchor = 'se', padx = 0, pady = 80)
+        btn_logout.pack(anchor = 'se', padx = 10, pady = 20)
+
+        # Creating the help button
+        btn_help = tk.Button(
+            frm_logout,
+            relief = tk.RAISED,
+            text = "Help",
+            command = lambda: self.help_action(parent)
+        )
+        btn_help.pack(anchor = 's', padx = 10, pady = 20)
+
+
+
+
         # Locks frame size to the master_frame size
         self.grid_propagate(0)
 

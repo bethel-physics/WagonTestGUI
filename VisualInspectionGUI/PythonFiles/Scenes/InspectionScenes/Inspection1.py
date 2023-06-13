@@ -184,6 +184,19 @@ class Inspection1(tk.Frame):
             command = lambda: self.btn_logout_action(parent))
         btn_logout.pack(anchor = 'se')
 
+        # Creating the help button
+        btn_help = tk.Button(
+            nav_frame,
+            relief = tk.RAISED,
+            text = "Help",
+            command = lambda: self.help_action(parent)
+        )
+        btn_help.pack(anchor = 's', padx = 10, pady = 10)
+
+
+
+
+
         # # # # # # # # # 
 
         
