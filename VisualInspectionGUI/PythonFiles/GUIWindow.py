@@ -13,6 +13,7 @@ from PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
 from PythonFiles.Scenes.InspectionScenes.Inspection1 import Inspection1
 from PythonFiles.Scenes.AddUserScene import AddUserScene
 from PythonFiles.Scenes.PhotoScene import PhotoScene
+from PythonFiles.Scenes.CameraScene import CameraScene
 import logging
 import os
 
@@ -85,6 +86,11 @@ class GUIWindow():
         self.splash_frame = SplashScene(self, master_frame)
         self.splash_frame.grid(row=0, column=0)
 
+        self.camera_frame = CameraScene(self, master_frame, self.data_holder, "OpenCV")
+        self.camera_frame.grid(row=0, column=0)
+        
+
+
         #################################################
         #              End Frame Creation               #
         #################################################
@@ -113,7 +119,12 @@ class GUIWindow():
         self.inspection_frame.update_frame(self)
         self.set_frame(self.inspection_frame)    
 
-
+    #################################################
+    def set_frame_camera_scene(self):
+        logging.debug("GUIWindow: Trying to set the frame to camera_frame.")
+        self.set_frame(self.camera_frame)
+        logging.debug("GUIWindow: Frame has been set to camera_frame.")
+     
 
     #################################################
 

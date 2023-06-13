@@ -50,13 +50,17 @@ class CameraScene(tk.Frame):
 
         # Adds the video capturing component to the canvas
         # Then packs the canvas to the frame
-        self.vid= MyVideoCapture(self.video_source)
-        self.canvas=tk.Canvas(self, width=self.vid.width, height =  self.vid.height)
-        self.canvas.pack()
+       
+        # TODO Uncomment this code to get the camera to work 
+        #self.vid= MyVideoCapture(self.video_source)
+        #self.canvas=tk.Canvas(self, width=self.vid.width, height =  self.vid.height)
+        #self.canvas.pack()
 
         # Frame for the buttons
         btn_frame=tk.Frame(self, background=self.from_rgb((117, 123, 129)))
-        btn_frame.place(x=0,y=0, anchor="nw", width=self.vid.width+4)
+        btn_frame.place(x=0,y=0, anchor="nw")
+        #TODO Uncomment this code to get the camera to work
+        #btn_frame.place(x=0,y=0, anchor="nw", width=self.vid.width+4)
 
         # Snapshot button
         self.btn_snapshot=tk.Button(btn_frame, text="Snapshot",width=20, command=self.snapshot, bg=self.from_rgb((52, 61, 70)), fg="white")
@@ -64,21 +68,26 @@ class CameraScene(tk.Frame):
 
         # Proses button
         # Empty command; could be linked with more features
-        self.btn_proses=tk.Button(btn_frame, text="Proses", width=10, command=None, bg=self.from_rgb((52, 61, 70)), fg="white")
+        self.btn_proses=tk.Button(btn_frame, text="VOID", width=10, command=None, bg=self.from_rgb((52, 61, 70)), fg="white")
         self.btn_proses.pack(side="left", padx=10, pady=10)
 
         # About button
         # Empty command; could be linked with more features
-        self.btn_about=tk.Button(btn_frame, text="About", width=10, command=None, bg=self.from_rgb((52, 61, 70)), fg="white")
+        self.btn_about=tk.Button(btn_frame, text="Submit", width=10, command=self.submit_button_action, bg=self.from_rgb((52, 61, 70)), fg="white")
         self.btn_about.pack(side="right", padx=10, pady=10)
 
         # How long in between photo-frames on the GUI
         self.delay=15
 
+        # TODO Uncomment this code to get the camera to work
         # Updates the video constantly on this slide
-        self.update()
+        #self.update()
 
+  
 
+    # Submits the photo and goes to the next screen
+    def submit_button_action(self):
+        self.parent.set_frame_photo_frame()
 
     # Takes a snapshot of the video
     # Saves in the same directory as the 
@@ -96,9 +105,13 @@ class CameraScene(tk.Frame):
             except:
                 logging.warning("CameraScene: Unable to write the snapshot to a file")
                 print("\nUnable to save photo to file {}".format(self.photo_name))
-
+                
+            
         else:
             print("\nUnable to take a snapshot.\n")
+
+        self.set_frame_photo_frame()
+
 
     # This is the key method to show the active camera on the GUI
     # Basically gets an image from the camera and updates the PIL Image Canvas

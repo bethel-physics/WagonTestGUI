@@ -66,7 +66,7 @@ class ScanScene(tk.Frame):
 
         self.listener.start()
                
-        while True:
+        while 1 > 0:
 
             try:
                 self.master_window.update()
@@ -195,12 +195,14 @@ class ScanScene(tk.Frame):
 
     # Function for the submit button
     def btn_submit_action(self, _parent):
-        self.EXIT_CODE = 1
+        
+        self.EXIT_CODE = 1 
         self.listener.terminate()
         self.scanner.terminate()
+
         self.data_holder.set_serial_ID(self.ent_snum.get())
         self.data_holder.check_if_new_board()
-        _parent.set_frame_photo_frame()
+        _parent.set_frame_camera_scene()
 
 
     #################################################

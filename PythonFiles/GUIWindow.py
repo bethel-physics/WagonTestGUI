@@ -94,6 +94,10 @@ class GUIWindow():
         self.scan_frame = ScanScene(self, self.master_frame, self.data_holder)
         self.scan_frame.grid(row=0, column=0)
 
+        self.camera_frame = CameraScene(self, self.master_frame, self.data_holder, "OpenCV")
+        self.camera_frame.grid(row=0, column=0)
+        
+        
 
         # Generalize test frames to use testing config
         # Grab list of tests from config file and create one scene for each test
@@ -164,9 +168,10 @@ class GUIWindow():
 
     def set_frame_test_choice_frame(self):
         
-        
+        print("GUIWindow: Setting frame to test_choice_frame. Empty method")        
+        logging.debug("GUIWindow: The frame has been set to test_choice_frame. Empty method.")
+    
 
-        logging.debug("GUIWindow: The frame has been set to test_choice_frame.")
 
     #################################################
 
