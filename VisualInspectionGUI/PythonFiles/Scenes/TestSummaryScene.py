@@ -48,14 +48,14 @@ class TestSummaryScene(tk.Frame):
 
 
        
-        self.create_results_table(parent)        
+        self.create_frame(parent)        
 
         # Fits the frame to set size rather than interior widgets
         self.grid_propagate(0)
 
     #################################################
     
-    def create_results_table(self, parent):
+    def create_frame(self, parent):
         logging.debug("TestSummaryScene: Destroying old widgets on the TestSummaryScene.")
         print("TestSummaryScene: Destroying old widgets on the TestSummaryScene.")
         try:
@@ -70,7 +70,8 @@ class TestSummaryScene(tk.Frame):
         logging.debug("TestSummaryScene: Table is being created with the results.")
         print("\n\nTestSummaryScene: Table is being created with the results.")
         
-        
+        self.blank_frame = tk.Frame(self)
+        self.blank_frame.grid(row = 0, column = 0, padx = 60)
 
         # Adds the title to the TestSummary Frame
         self.title = tk.Label(
@@ -128,7 +129,7 @@ class TestSummaryScene(tk.Frame):
         for key,value in self.data_holder.inspection_data.items():
             key_count = key_count + 1
             print("\nKey: {}, Value: {}".format(key,value))
-            
+        
             key_label = tk.Label(
                     self.frm_table, 
                     text = key, 
@@ -139,10 +140,17 @@ class TestSummaryScene(tk.Frame):
                     )
             key_label.grid(row=key_count , column=0)
              
-            
+
+            l_text = "UNDEFINED"
+            if (value):
+                l_text = "True"
+            else:
+                l_text = "False"
+                
+
             result_label = tk.Label(
                     self.frm_table, 
-                    text = value, 
+                    text = l_text, 
                     relief = 'ridge', 
                     width=25, 
                     height=1, 
@@ -151,8 +159,31 @@ class TestSummaryScene(tk.Frame):
             result_label.grid(row=key_count , column=1)
                     
             
+        # Creating frame for logout button
+        frm_logout = tk.Frame(self)
+        frm_logout.grid(column = 4, row = starting_row, sticky= 'se')
+        
+
+        # Creating the next board button
+        next_board_button = tk.Button(
+            frm_logout,
+            relief = tk.RAISED,
+            text = "Next Board",
+            command = lambda: self.btn_NextBoard_action(parent)
+        )
+        next_board_button.pack(anchor = 'ne', padx = 10, pady = 10)
  
+
+        # Creating the logout button
+        btn_logout = tk.Button(
+            frm_logout,
+            relief = tk.RAISED,
+            text = "Logout",
+            command = lambda: self.btn_logout_action(parent)
+        )
+        btn_logout.pack(anchor = 'se', padx = 10, pady = 20)
  
+    
         ## For the visual inspection component
         #self.inspection_data = { 
         #        'board_chipped_bent': False,
@@ -164,14 +195,20 @@ class TestSummaryScene(tk.Frame):
 
 
 
+    #################################################
 
+    def btn_NextBoard_action(self, parent):
+        parent.set_frame_scan_frame()
+
+    def btn_logout_action(self, parent):
+        parent.set_frame_login_frame() 
 
         
     
     #################################################
 
     def update_frame(self):
-        self.create_results_table(self.parent)
+        self.create_frame(self.parent)
 
 
 

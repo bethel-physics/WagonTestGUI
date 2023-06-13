@@ -110,8 +110,11 @@ class GUIWindow():
     #################################################
 
     def set_frame_login_frame(self):  
-
+        self.login_frame.update_frame(self)
         self.set_frame(self.login_frame)    
+        
+        logging.debug("GUIWindow: The frame has been set to login_frame.")
+        logging.debug("GUIWindow: Conclusion of the 'set_frame_login_frame(self)' method")
 
     #################################################
 
@@ -266,7 +269,6 @@ class GUIWindow():
             # Destroys the popup and master window
             self.popup.destroy()
             self.popup.quit()
-
 
 
             logging.info("GUIWindow: Trying to quit master_window")

@@ -210,6 +210,10 @@ class ScanScene(tk.Frame):
     # Function for the log out button
     def btn_logout_action(self, _parent):
 
+        self.EXIT_CODE = 1 
+        self.listener.terminate()
+        self.scanner.terminate()
+
          # Send user back to login frame
         _parent.set_frame_login_frame() 
 
