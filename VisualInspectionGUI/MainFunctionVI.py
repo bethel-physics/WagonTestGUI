@@ -29,6 +29,7 @@ def main():
         "cmsfactory4.cmsfactorynet",
         "cmsfactory5.cmsfactorynet",
         "cmslab4.umncmslab",
+        "127.0.1.1",
     ]   
     engine_GUI_computers = [ 
 
@@ -36,12 +37,11 @@ def main():
    
     board_cfg = None
 
-    if node in wagon_GUI_computers:
-        from TestConfigs.Wagon_cfg import masterCfg
+    from TestConfigs.Wagon_cfg import masterCfg
 
-        print("Hostname setup for wagon testing. Initializing Wagon Test GUI...")
+    print("Hostname setup for wagon testing. Initializing Wagon Test GUI...")
 
-        board_cfg = masterCfg
+    board_cfg = masterCfg
 
 
     main_window = GUIWindow(board_cfg)

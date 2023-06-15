@@ -60,6 +60,7 @@ class ScanScene(tk.Frame):
 
         self.ent_snum.config(state = 'normal')
 
+        print("\nScanScene: Beginning scan...\n")
         logging.info("ScanScene: Beginning scan...")
         self.scanner = scan()
         self.listener = mp.Process(target=listen, args=(serial, self.scanner))
