@@ -7,6 +7,8 @@ guiLogPath = "/home/{}/GUILogs/".format(os.getlogin())
 if not os.path.exists(guiLogPath):
     os.makedirs(guiLogPath)
 
+import sys
+sys.path.append("..")
 
 from PythonFiles.GUIWindow import GUIWindow
 import socket
