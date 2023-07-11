@@ -7,7 +7,7 @@ Instructions:
 3. Run the command "pip install opencv-python" 
 ------------------
 '''
-# import PythonFiles
+import PythonFiles
 import json, logging
 import tkinter as tk
 import cv2
@@ -33,12 +33,15 @@ logging.basicConfig(filename="/home/{}/GUILogs/visual_gui.log".format(os.getlogi
 class CameraScene(tk.Frame):
 
     def __init__(self, parent, master_frame, data_holder, video_source=0 ):
+        
+        self.master_frame = master_frame
+        
         logging.info("CameraScene: Beginning to instantiate the CameraScene.")
         print("\nCameraScene: Beginning to instantiate the CameraScene.")
 
         # Call to the super class's constructor
         # Super class is the tk.Frame class
-        super().__init__(master_frame, width=850, height=500)
+        super().__init__(master_frame, width = 1105, height = 650, background=self.from_rgb((117, 123, 129)))
 
         logging.info("\nCameraScene: Frame has been created.")
 
@@ -52,15 +55,15 @@ class CameraScene(tk.Frame):
         # Then packs the canvas to the frame
        
         # TODO Uncomment this code to get the camera to work 
-        #self.vid= MyVideoCapture(self.video_source)
-        #self.canvas=tk.Canvas(self, width=self.vid.width, height =  self.vid.height)
-        #self.canvas.pack()
+        self.vid= MyVideoCapture(self.video_source)
+        self.canvas=tk.Canvas(self, width=self.vid.width, height =  self.vid.height)
+        self.canvas.pack()
 
         # Frame for the buttons
         btn_frame=tk.Frame(self, background=self.from_rgb((117, 123, 129)))
         btn_frame.place(x=0,y=0, anchor="nw")
         #TODO Uncomment this code to get the camera to work
-        #btn_frame.place(x=0,y=0, anchor="nw", width=self.vid.width+4)
+        btn_frame.place(x=0,y=0, anchor="nw", width=800)
 
         # Snapshot button
         self.btn_snapshot=tk.Button(btn_frame, text="Snapshot",width=20, command=self.snapshot, bg=self.from_rgb((52, 61, 70)), fg="white")
@@ -71,17 +74,19 @@ class CameraScene(tk.Frame):
         self.btn_proses=tk.Button(btn_frame, text="VOID", width=10, command=None, bg=self.from_rgb((52, 61, 70)), fg="white")
         self.btn_proses.pack(side="left", padx=10, pady=10)
 
-        # About button
-        # Empty command; could be linked with more features
         self.btn_about=tk.Button(btn_frame, text="Submit", width=10, command=self.submit_button_action, bg=self.from_rgb((52, 61, 70)), fg="white")
         self.btn_about.pack(side="right", padx=10, pady=10)
+
+	# Prevents the frame from shrinking
+        self.pack_propagate(0)
+
 
         # How long in between photo-frames on the GUI
         self.delay=15
 
         # TODO Uncomment this code to get the camera to work
         # Updates the video constantly on this slide
-        #self.update()
+        self.update()
 
   
 
@@ -97,7 +102,10 @@ class CameraScene(tk.Frame):
         if ret:
             # Writes the image to a file with a name that includes the date
             # TODO Change this to be a more readable file name later
-            self.photo_name = "frame-"+time.strftime("%d-%m-%Y-%H-%M-%S") + ".jpg"
+            shortened_pn = "captured_image.png"
+            self.photo_name = "{}/Images/{}".format(PythonFiles.__path__[0], shortened_pn)
+            
+            self.parent.set_image_name(shortened_pn)
 
             try:
                 cv2.imwrite(self.photo_name, cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) )
@@ -110,7 +118,7 @@ class CameraScene(tk.Frame):
         else:
             print("\nUnable to take a snapshot.\n")
 
-        self.set_frame_photo_frame()
+        #self.parent.set_frame_photo_frame()
 
 
     # This is the key method to show the active camera on the GUI
@@ -121,11 +129,13 @@ class CameraScene(tk.Frame):
 
         if ret:
             # Updates the canvas on the GUI
-            self.photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(frame))
+            image=PIL.Image.fromarray(frame)
+            image = image.resize((1036,778))
+            self.photo = PIL.ImageTk.PhotoImage(image)
             self.canvas.create_image(0,0, image=self.photo, anchor=tk.NW)
 
             # Recursive method; waits "self.delay" before calling itself
-            self.window.after(self.delay,self.update)
+            self.after(self.delay,self.update)
 
     def from_rgb(self,rgb):
         return "#%02x%02x%02x" % rgb
@@ -137,7 +147,10 @@ class  MyVideoCapture:
     def __init__(self, video_source=0):
         # Instantiating a VideoCapture device from cv2 library
         self.vid = cv2.VideoCapture(video_source)
-        
+	
+        self.vid.set(cv2.CAP_PROP_FRAME_WIDTH, 2047)
+        self.vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 1536)       
+ 
         # Throw an exception if the video source cannot be opened.
         if not self.vid.isOpened():
             raise ValueError("VideoCapture: Unable to open the video source. Check camera.", video_source)
@@ -165,3 +178,5 @@ class  MyVideoCapture:
         if self.vid.isOpened():
             self.vid.release()
 
+    def remove_widgets(self, parent):
+        self.__del__()

@@ -16,7 +16,7 @@ from PythonFiles.Scenes.PhotoScene import PhotoScene
 from PythonFiles.Scenes.CameraScene import CameraScene
 import logging
 import os
-
+import PythonFiles
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
 logging.basicConfig(filename="/home/{}/GUILogs/visual_gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
@@ -40,7 +40,7 @@ class GUIWindow():
         master_window.title("Visual Inspection Window")
 
         # Creates the size of the window and disables resizing
-        master_window.geometry("850x500+25+100")
+        master_window.geometry("1105x650+25+100")
         
         # Following line prevents the window from being resizable
         # master_window.resizable(0,0)
@@ -49,7 +49,7 @@ class GUIWindow():
         # master_window.wm_attributes('-toolwindow', 'True')
 
         # Creates and packs a frame that exists on top of the master_frame
-        master_frame = tk.Frame(master_window, width=850, height= 500)
+        master_frame = tk.Frame(master_window, width = 1105, height = 650)
         master_frame.grid(column = 0, row = 0, columnspan = 4)
 
         # Object for taking care of instantiation of different test types
@@ -58,6 +58,9 @@ class GUIWindow():
         # Creates the "Storage System" for the data during testing
         self.data_holder = DataHolder(self.gui_cfg)
 
+        # Creates a static image for camera to replace
+        blank_image = "EnginePhoto.png"
+        self.set_image_name(blank_image)
 
         #################################################
         #   Creates all the different frames in layers  #
@@ -86,7 +89,7 @@ class GUIWindow():
         self.splash_frame = SplashScene(self, master_frame)
         self.splash_frame.grid(row=0, column=0)
 
-        self.camera_frame = CameraScene(self, master_frame, self.data_holder, "OpenCV")
+        self.camera_frame = CameraScene(self, master_frame, self.data_holder, 0)
         self.camera_frame.grid(row=0, column=0)
         
 
@@ -133,7 +136,7 @@ class GUIWindow():
 
     def set_frame_photo_frame(self):
         self.set_frame(self.photo_frame)
-
+        self.photo_frame.update()
 
     #################################################
     
@@ -250,13 +253,17 @@ class GUIWindow():
         self.add_user_frame.remove_widgets(self)
 
 
+    #################################################
+
+    def set_image_name(self, new_name):
+        self.image_name = new_name
 
     #################################################
 
     # Called when the yes button is pressed to destroy both windows
     def destroy_function(self, event=None):
         try:
-            
+            self.camera_frame.remove_widgets(self)
             self.photo_frame.remove_widgets(self)
             
             logging.info("GUIWindow: Exiting the GUI.")

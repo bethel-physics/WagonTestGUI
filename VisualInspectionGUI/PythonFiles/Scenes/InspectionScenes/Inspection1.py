@@ -30,7 +30,7 @@ class Inspection1(tk.Frame):
         font_scene_14 = ('Arial', 14)
 
         # Create a centralized window for information
-        frm_window = tk.Frame(self, width = 850, height = 500)
+        frm_window = tk.Frame(self, width = 1105, height = 650)
         frm_window.grid(column=0, row=0)
 
         # Create a label for the tester's name

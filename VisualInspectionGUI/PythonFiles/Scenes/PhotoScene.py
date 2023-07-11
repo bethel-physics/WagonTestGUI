@@ -10,6 +10,7 @@ from turtle import back
 from PIL import ImageTk as iTK
 from PIL import Image
 import PythonFiles
+from PythonFiles import Images
 import os
  
 
@@ -38,6 +39,7 @@ class PhotoScene(tk.Frame):
 
 
         self.master_frame = master_frame
+        self.parent = parent
 
         self.data_holder = data_holder
         self.is_current_scene = False
@@ -51,19 +53,22 @@ class PhotoScene(tk.Frame):
        # Creates the GUI itself
     def initialize_GUI(self, parent, master_frame):
         
-        
-        super().__init__(self.master_frame, width = 850, height = 500)
+        self.master_frame = master_frame
+        self.parent = parent
+
+        super().__init__(self.master_frame, width = 1105, height = 650)
 
         logging.info("PhotoScene: Frame has been created.")
         # Create a photoimage object of the Engine
-        Engine_image = Image.open("{}/Images/EnginePhoto.png".format(PythonFiles.__path__[0]))
-        Engine_image = Engine_image.resize((400, 300), Image.ANTIALIAS)
-        Engine_PhotoImage = iTK.PhotoImage(Engine_image)
-        Engine_label = tk.Label(self, image=Engine_PhotoImage)
-        Engine_label.image = Engine_PhotoImage
+        self.Engine_image = Image.open("{}/Images/{}".format(PythonFiles.__path__[0], self.parent.image_name))
+        self.Engine_image = self.Engine_image.resize((400, 300), Image.ANTIALIAS)
+        self.Engine_PhotoImage = iTK.PhotoImage(self.Engine_image)
+        self.Engine_label = tk.Label(self)
+        self.Engine_label.configure(image=self.Engine_PhotoImage)
+        self.Engine_label.image = self.Engine_PhotoImage
 
         # the .grid() adds it to the Frame
-        Engine_label.grid(column=1, row = 1)
+        self.Engine_label.grid(column=1, row = 1)
 
         Scan_Board_Prompt_Frame = Frame(self)
         Scan_Board_Prompt_Frame.grid(column=1, row = 0)
@@ -207,6 +212,23 @@ class PhotoScene(tk.Frame):
         for widget in self.winfo_children():
             widget.destroy()
 
+    def update(self):
+        self.Engine_image = Image.open("{}/Images/{}".format(PythonFiles.__path__[0], self.parent.image_name))
+        
 
+        print("\nIn PhotoScene 'update()' method\n")
+        # Create a photoimage object of the Engine
+        print("\n\n\nThe Image Path is: {} \n\n".format(self.parent.image_name))
+        self.Engine_image = self.Engine_image.resize((400, 300), Image.ANTIALIAS)
+        self.Engine_PhotoImage = iTK.PhotoImage(self.Engine_image)
+        self.Engine_label = tk.Label(self)
+        self.Engine_label.configure(image=self.Engine_PhotoImage)
+        self.Engine_label.image = self.Engine_PhotoImage
+
+        # the .grid() adds it to the Frame
+        self.Engine_label.grid(column=1, row = 1)
+
+
+ 
     def kill_processes(self):
         return
