@@ -290,14 +290,10 @@ class DataHolder():
         # Number of digital and physical tests
         self.total_test_num = 0
 
-        for i in range(self.gui_cfg.getNumTest()):
-            self.data_lists['test_results'].append(self.data_dict['test{}_pass'.format(i+1)])
-            self.data_lists['test_completion'].append(self.data_dict['test{}_completed'.format(i+1)])
-            self.total_test_num = self.total_test_num + 1
-
         self.ptest_criteria = {}
         self.ptest_names = self.gui_cfg.getPhysicalNames()
-
+        
+        # Adding the physical tests to the data_lists
         for i in range(self.gui_cfg.getNumPhysicalTest()):
             self.data_lists['physical_results'].append(self.data_dict['physical{}_pass'.format(i+1)])
             self.data_lists['physical_completion'].append(self.data_dict['physical{}_completed'.format(i+1)])
@@ -312,7 +308,16 @@ class DataHolder():
     
             self.total_test_num = self.total_test_num + 1
 
+
         print("\nptest_criteria: {}".format(self.ptest_criteria))
+
+        # Adding the digital tests to the data_lists
+        for i in range(self.gui_cfg.getNumTest()):
+            self.data_lists['test_results'].append(self.data_dict['test{}_pass'.format(i+1)])
+            self.data_lists['test_completion'].append(self.data_dict['test{}_completed'.format(i+1)])
+            self.total_test_num = self.total_test_num + 1
+
+
 
         self.gui_cfg.setTestIndex(1)
 
@@ -322,7 +327,7 @@ class DataHolder():
 
 
 
-            ################################################
+        ################################################
 
 #################################################################################
 

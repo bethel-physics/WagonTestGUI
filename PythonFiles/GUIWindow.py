@@ -102,15 +102,19 @@ class GUIWindow():
         physical_list = self.gui_cfg.getPhysicalTests()        
 
         offset = 0
-        for test_idx,test in enumerate(test_list):
-
-            self.test_frames.append(TestScene(self, self.master_frame, self.data_holder, test["name"], queue, test_idx))
+        
+        # For the physical tests
+        for test_idx,test in enumerate(physical_list):
+            self.test_frames.append(Inspection1(self, self.master_frame, self.data_holder, test_idx))
             self.test_frames[test_idx].grid(row=0, column=0)
             offset = offset + 1
 
-        for test_idx,test in enumerate(physical_list):
-            self.test_frames.append(Inspection1(self, self.master_frame, self.data_holder, test_idx))
+        # For the digital tests
+        for test_idx,test in enumerate(test_list):
+
+            self.test_frames.append(TestScene(self, self.master_frame, self.data_holder, test["name"], queue, test_idx))
             self.test_frames[test_idx + offset].grid(row=0, column=0)
+
             
         print("\ntest_frames len: ", len(self.test_frames))
 
@@ -217,13 +221,13 @@ class GUIWindow():
     #################################################
 
     def set_frame_test(self, test_idx):
-
+        print("test_idx", test_idx)
         self.data_holder.setTestIdx(test_idx)
 
-        print("\nset_frame_test: test_idx: ", test_idx, "\n\n")        
+        print("\n\n\n\n'set_frame_test': test_idx: ", test_idx, "\n\n\n\n\n")        
 
         selected_test_frame = self.test_frames[test_idx]
-        print("Setting frame to test {}".format(test_idx))
+        print("\nSetting frame to test {}\n".format(test_idx))
         selected_test_frame.update_frame(self)
         print("Frame updated!")
         

@@ -72,33 +72,7 @@ class SidebarScene(tk.Frame):
         
         logging.info("SidebarScene: The sidebar has been updated.")
 
-        # List for creating check marks with for loop
-        self.list_of_pass_fail = self.data_holder.data_lists['test_results']
-
-        # For loop to create checkmarks based on pass/fail
-        for index in range(len(self.list_of_pass_fail)):
-            print("Pass fail:", self.list_of_pass_fail)
-            if(self.list_of_pass_fail[index] == True):
-                # Create a photoimage object of the QR Code
-                Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
-                Green_Check_Image = Green_Check_Image.resize((50,50), Image.ANTIALIAS)
-                Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
-                GreenCheck_Label = tk.Label(self.viewingFrame, image=Green_Check_PhotoImage, width=50, height=50, bg = '#808080')
-                GreenCheck_Label.image = Green_Check_PhotoImage
-
-                GreenCheck_Label.grid(row=index + 2, column=1)
-
-            else:
-                # Create a photoimage object of the QR Code
-                Red_X_Image = Image.open("{}/Images/RedX.png".format(PythonFiles.__path__[0]))
-                Red_X_Image = Red_X_Image.resize((50,50), Image.ANTIALIAS)
-                Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
-                RedX_Label = tk.Label(self.viewingFrame, image=Red_X_PhotoImage, width=50, height=50, bg = '#808080')
-                RedX_Label.image = Red_X_PhotoImage
-
-                RedX_Label.grid(row=index + 2, column=1)
-
-        # Variables for easy button editing
+                # Variables for easy button editing
         btn_height = 3
         btn_width = 18
         btn_font = ('Arial', 10)
@@ -129,29 +103,16 @@ class SidebarScene(tk.Frame):
 
         self.test_btns = []
 
-        offset = 0
-        for i in range(self.data_holder.getNumTest()):
+        # Offset = number of buttons before the test buttons begin
+        original_offset = 2
+        
+        # How much offset from the physical board tests
+        physical_offset = 0
 
-            self.test_btns.append(tk.Button(
-                self.viewingFrame, 
-                pady = btn_pady,
-                text = '{}'.format(test_names[i]),
-                height = btn_height,
-                width = btn_width,
-                font = btn_font,
-                command = lambda i=i: self.btn_test_action(parent, i)
-                ))
-            self.test_btns[i].grid(column = 0, row = 2 + i)
+        #print("\nThere are {} physical tests\n".format(self.data_holder.getNumPhysicalTest()))
 
-            if self.data_holder.data_dict['test{}_pass'.format(i+1)] == True:
-                self.test_btns[i].config(state = 'disabled')
-            
-            offset = offset + 1
-
-        offset_physical = 0
-        print("\nThere are {} physical tests\n".format(self.data_holder.getNumPhysicalTest()))
-        for i in range(self.data_holder.getNumPhysicalTest()):
-            print("Adding physical button {} at row {}".format(i, 2+i+offset))
+        for i in range(self.data_holder.getNumPhysicalTest()): 
+            print("Physical Button should point to the {} test".format(i + physical_offset))
             self.test_btns.append(tk.Button(
                 self.viewingFrame, 
                 pady = btn_pady,
@@ -159,18 +120,42 @@ class SidebarScene(tk.Frame):
                 height = btn_height,
                 width = btn_width,
                 font = btn_font,
-                command = lambda i=i: self.btn_test_action(parent, i + offset - 1)
+                command = lambda i=i: self.btn_test_action(parent, i)
                 ))
-            self.test_btns[i+offset].grid(column = 0, row = 2 + i + offset)
+            self.test_btns[i+physical_offset].grid(column = 0, row = i + original_offset)
 
-            print(self.data_holder.data_dict)
+            #print(self.data_holder.data_dict)
 
-            if self.data_holder.data_dict['physical{}_pass'.format(i+1)] == True:
-                self.test_btns[i+offset].config(state = 'disabled')
-            offset_physical = offset_physical + 1
+            if self.data_holder.data_dict['physical{}_pass'.format(i+1+physical_offset)] == True:
+                self.test_btns[i+physical_offset].config(state = 'disabled')
+            
+            physical_offset = physical_offset + 1
 
-        offset = offset + offset_physical
 
+        #
+        ## For the digital buttons
+        #
+        digital_offset = 0
+
+        for i in range(self.data_holder.getNumTest()):
+            
+            #print("Digi Button should point to the {} test".format(i + physical_offset))
+            self.test_btns.append(tk.Button(
+                self.viewingFrame, 
+                pady = btn_pady,
+                text = '{}'.format(test_names[i]),
+                height = btn_height,
+                width = btn_width,
+                font = btn_font,
+                command = lambda i=i: self.btn_test_action(parent, i + physical_offset)
+                ))
+            self.test_btns[i+physical_offset].grid(column = 0, row = physical_offset + original_offset + i)
+
+            if self.data_holder.data_dict['test{}_pass'.format(i+1)] == True:
+                self.test_btns[i+physical_offset].config(state = 'disabled')
+            
+            digital_offset = digital_offset + 1
+        
         self.btn_summary = tk.Button(
             self.viewingFrame, 
             pady = btn_pady,
@@ -180,7 +165,60 @@ class SidebarScene(tk.Frame):
             font = btn_font,
             command = lambda: self.btn_summary_action(parent)
             )
-        self.btn_summary.grid(column = 0, row = offset + 2)
+        self.btn_summary.grid(column = 0, row = physical_offset + original_offset + digital_offset)
+
+
+        # List for creating check marks with for loop
+        self.list_of_pass_fail = self.data_holder.data_lists['test_results']
+
+        # For loop to create checkmarks based on pass/fail
+        for index in range(len(self.list_of_pass_fail)):
+            print("Pass fail:", self.list_of_pass_fail)
+            if(self.list_of_pass_fail[index] == True):
+                # Create a photoimage object of the QR Code
+                Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
+                Green_Check_Image = Green_Check_Image.resize((50,50), Image.ANTIALIAS)
+                Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
+                GreenCheck_Label = tk.Label(self.viewingFrame, image=Green_Check_PhotoImage, width=50, height=50, bg = '#808080')
+                GreenCheck_Label.image = Green_Check_PhotoImage
+
+                GreenCheck_Label.grid(row=index + original_offset + physical_offset, column=1)
+
+            else:
+                # Create a photoimage object of the QR Code
+                Red_X_Image = Image.open("{}/Images/RedX.png".format(PythonFiles.__path__[0]))
+                Red_X_Image = Red_X_Image.resize((50,50), Image.ANTIALIAS)
+                Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
+                RedX_Label = tk.Label(self.viewingFrame, image=Red_X_PhotoImage, width=50, height=50, bg = '#808080')
+                RedX_Label.image = Red_X_PhotoImage
+
+                RedX_Label.grid(row=index + original_offset + physical_offset, column=1)
+
+        self.physical_pass_fail = self.data_holder.data_lists['physical_results']
+        
+        # For loop to create checkmarks based on pass/fail
+        for index in range(len(self.physical_pass_fail)):
+            print("Pass fail:", self.physical_pass_fail)
+            if(self.physical_pass_fail[index] == True):
+                # Create a photoimage object of the QR Code
+                Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
+                Green_Check_Image = Green_Check_Image.resize((50,50), Image.ANTIALIAS)
+                Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
+                GreenCheck_Label = tk.Label(self.viewingFrame, image=Green_Check_PhotoImage, width=50, height=50, bg = '#808080')
+                GreenCheck_Label.image = Green_Check_PhotoImage
+
+                GreenCheck_Label.grid(row=index + original_offset, column=1)
+
+            else:
+                # Create a photoimage object of the QR Code
+                Red_X_Image = Image.open("{}/Images/RedX.png".format(PythonFiles.__path__[0]))
+                Red_X_Image = Red_X_Image.resize((50,50), Image.ANTIALIAS)
+                Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
+                RedX_Label = tk.Label(self.viewingFrame, image=Red_X_PhotoImage, width=50, height=50, bg = '#808080')
+                RedX_Label.image = Red_X_PhotoImage
+
+                RedX_Label.grid(row=index + original_offset, column=1)
+
 
 
         self.grid_propagate(0)
@@ -208,19 +246,8 @@ class SidebarScene(tk.Frame):
     #################################################
 
     def btn_test_action(self, _parent, test_idx):
+        print("\nSideBarScene.btn_test_action.test_idx: ", test_idx)
         _parent.set_frame_test(test_idx)
-
-    def btn_test1_action(self, _parent):
-        _parent.set_frame_test1()
-
-    def btn_test2_action(self, _parent):
-        _parent.set_frame_test2()
-
-    def btn_test3_action(self, _parent):
-        _parent.set_frame_test3()
-
-    def btn_test4_action(self, _parent):
-        _parent.set_frame_test4()
 
     def btn_summary_action(self, _parent):
         _parent.set_frame_test_summary()
