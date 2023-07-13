@@ -125,9 +125,11 @@ class SidebarScene(tk.Frame):
         self.btn_scan.grid(column = 0, row = 1)
 
         test_names = self.data_holder.getTestNames()
+        physical_names = self.data_holder.getPhysicalNames()
 
         self.test_btns = []
 
+        offset = 0
         for i in range(self.data_holder.getNumTest()):
 
             self.test_btns.append(tk.Button(
@@ -143,6 +145,31 @@ class SidebarScene(tk.Frame):
 
             if self.data_holder.data_dict['test{}_pass'.format(i+1)] == True:
                 self.test_btns[i].config(state = 'disabled')
+            
+            offset = offset + 1
+
+        offset_physical = 0
+        print("\nThere are {} physical tests\n".format(self.data_holder.getNumPhysicalTest()))
+        for i in range(self.data_holder.getNumPhysicalTest()):
+            print("Adding physical button {} at row {}".format(i, 2+i+offset))
+            self.test_btns.append(tk.Button(
+                self.viewingFrame, 
+                pady = btn_pady,
+                text = '{}'.format(physical_names[i]),
+                height = btn_height,
+                width = btn_width,
+                font = btn_font,
+                command = lambda i=i: self.btn_test_action(parent, i + offset - 1)
+                ))
+            self.test_btns[i+offset].grid(column = 0, row = 2 + i + offset)
+
+            print(self.data_holder.data_dict)
+
+            if self.data_holder.data_dict['physical{}_pass'.format(i+1)] == True:
+                self.test_btns[i+offset].config(state = 'disabled')
+            offset_physical = offset_physical + 1
+
+        offset = offset + offset_physical
 
         self.btn_summary = tk.Button(
             self.viewingFrame, 
@@ -153,7 +180,7 @@ class SidebarScene(tk.Frame):
             font = btn_font,
             command = lambda: self.btn_summary_action(parent)
             )
-        self.btn_summary.grid(column = 0, row = self.data_holder.getNumTest() + 2)
+        self.btn_summary.grid(column = 0, row = offset + 2)
 
 
         self.grid_propagate(0)

@@ -24,6 +24,7 @@ from PythonFiles.Data.DataHolder import DataHolder
 from PythonFiles.Scenes.SplashScene import SplashScene
 from PythonFiles.Scenes.TestInProgressScene import *
 from PythonFiles.Scenes.AddUserScene import AddUserScene
+from PythonFiles.Scenes.PhysicalScenes.Inspection1 import Inspection1
 
 #################################################################################
 
@@ -98,35 +99,20 @@ class GUIWindow():
         
         self.test_frames = []
         test_list = self.gui_cfg.getTests()
-        
+        physical_list = self.gui_cfg.getPhysicalTests()        
+
+        offset = 0
         for test_idx,test in enumerate(test_list):
 
             self.test_frames.append(TestScene(self, self.master_frame, self.data_holder, test["name"], queue, test_idx))
             self.test_frames[test_idx].grid(row=0, column=0)
+            offset = offset + 1
 
-        #self.test1_frame= Test1Scene(self, self.master_frame, self.data_holder, 
-        #                    "General Resistance Test",
-        #                    queue
-        #                    )
-        #self.test1_frame.grid(row=0, column=0)
-
-        #self.test2_frame= Test2Scene(self, self.master_frame, self.data_holder,
-        #                    "ID Resistor Test", 
-        #                    queue
-        #                    )
-        #self.test2_frame.grid(row=0, column=0)
-        #
-        #self.test3_frame= Test3Scene(self, self.master_frame, self.data_holder, 
-        #                    "I2C Comm. Test", 
-        #                    queue
-        #                    )
-        #self.test3_frame.grid(row=0, column=0)
-
-        #self.test4_frame= Test4Scene(self, self.master_frame, self.data_holder, 
-        #                    "Bit Rate Test", 
-        #                    queue
-        #                    )
-        #self.test4_frame.grid(row=0, column=0)
+        for test_idx,test in enumerate(physical_list):
+            self.test_frames.append(Inspection1(self, self.master_frame, self.data_holder, test_idx))
+            self.test_frames[test_idx + offset].grid(row=0, column=0)
+            
+        print("\ntest_frames len: ", len(self.test_frames))
 
         self.test_in_progress_frame = TestInProgressScene(self, self.master_frame, self.data_holder, queue, conn)
         self.test_in_progress_frame.grid(row=0, column=0)
@@ -233,6 +219,8 @@ class GUIWindow():
     def set_frame_test(self, test_idx):
 
         self.data_holder.setTestIdx(test_idx)
+
+        print("\nset_frame_test: test_idx: ", test_idx, "\n\n")        
 
         selected_test_frame = self.test_frames[test_idx]
         print("Setting frame to test {}".format(test_idx))

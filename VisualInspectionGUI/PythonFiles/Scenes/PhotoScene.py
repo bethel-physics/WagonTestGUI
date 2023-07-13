@@ -115,16 +115,16 @@ class PhotoScene(tk.Frame):
         #    sv=user_text: self.show_submit_button()
         #    )
 
-        # Rescan button creation
-        #self.btn_rescan = tk.Button(
-        #    Scan_Board_Prompt_Frame,
-        #    text="Rescan",
-        #    padx = 20,
-        #    pady =10,
-        #    relief = tk.RAISED,
-        #    command = lambda:  self.scan_QR_code(self.master_window)
-        #    )
-        #self.btn_rescan.pack(pady=30)
+        # Try again button creation
+        self.btn_rescan = tk.Button(
+            Scan_Board_Prompt_Frame,
+            text="Try Again",
+            padx = 20,
+            pady =10,
+            relief = tk.RAISED,
+            command = lambda:  self.try_again_button(parent)
+            )
+        self.btn_rescan.pack(pady=30)
 
         # Submit button creation
         self.btn_submit = tk.Button(
@@ -202,6 +202,11 @@ class PhotoScene(tk.Frame):
 
     #################################################
 
+    def try_again_button(self, _parent):
+        _parent.set_frame_camera_frame()
+
+
+    #################################################
     # Function to disable to the rescan button
     def hide_rescan_button(self):
         self.btn_rescan["state"] = "disabled"

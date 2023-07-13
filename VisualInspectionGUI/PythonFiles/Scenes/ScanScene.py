@@ -219,7 +219,7 @@ class ScanScene(tk.Frame):
 
         self.data_holder.set_serial_ID(self.ent_snum.get())
         self.data_holder.check_if_new_board()
-        _parent.set_frame_camera_scene()
+        _parent.set_frame_camera_frame()
 
 
     #################################################

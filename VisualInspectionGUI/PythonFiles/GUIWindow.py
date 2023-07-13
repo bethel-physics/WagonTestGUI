@@ -126,7 +126,7 @@ class GUIWindow():
         self.set_frame(self.inspection_frame)    
 
     #################################################
-    def set_frame_camera_scene(self):
+    def set_frame_camera_frame(self):
         logging.debug("GUIWindow: Trying to set the frame to camera_frame.")
         self.set_frame(self.camera_frame)
         logging.debug("GUIWindow: Frame has been set to camera_frame.")
