@@ -206,6 +206,16 @@ class ScanScene(tk.Frame):
         # Locks frame size to the master_frame size
         self.grid_propagate(0)
 
+
+    
+    #################################################
+
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    ################################################# 
+
     #################################################
 
     # Function for the submit button

@@ -209,6 +209,14 @@ class Inspection1(tk.Frame):
         
     #################################################
 
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    ################################################# 
+
+    #################################################
+
     # Rescan button takes the user back to scanning in a new board
     def btn_rescan_action(self, _parent):
         _parent.set_frame_scan_frame()

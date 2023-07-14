@@ -71,7 +71,15 @@ class CameraScene(tk.Frame):
 
         # Proses button
         # Empty command; could be linked with more features
-        self.btn_proses=tk.Button(btn_frame, text="VOID", width=10, command=None, bg=self.from_rgb((52, 61, 70)), fg="white")
+        self.btn_proses=tk.Button(
+            btn_frame, 
+            text="Help",
+            width=10, 
+            relief = tk.RAISED,
+            command= lambda: self.help_action(parent), 
+            bg=self.from_rgb((52, 61, 70)), 
+            fg="white"
+        )
         self.btn_proses.pack(side="left", padx=10, pady=10)
 
         self.btn_about=tk.Button(btn_frame, text="Submit", width=10, command=self.submit_button_action, bg=self.from_rgb((52, 61, 70)), fg="white")
@@ -89,6 +97,15 @@ class CameraScene(tk.Frame):
         self.update()
 
   
+
+    #################################################
+
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    ################################################# 
+
 
     # Submits the photo and goes to the next screen
     def submit_button_action(self):

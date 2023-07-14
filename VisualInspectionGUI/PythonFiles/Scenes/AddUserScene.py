@@ -96,6 +96,19 @@ class AddUserScene(tk.Frame):
         # rather than adjusting to the size of the widgets
         self.pack_propagate(0)
 
+
+
+    #################################################
+
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    ################################################# 
+
+
+
+
     #################################################
 
     # Creates the function for the submit button command

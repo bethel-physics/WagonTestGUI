@@ -202,6 +202,12 @@ class PhotoScene(tk.Frame):
 
     #################################################
 
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    #################################################
+
     def try_again_button(self, _parent):
         _parent.set_frame_camera_frame()
 

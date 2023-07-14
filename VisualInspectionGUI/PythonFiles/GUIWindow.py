@@ -3,6 +3,7 @@
 # Importing all neccessary modules
 from pickle import NONE
 import tkinter as tk
+from tkinter import ttk
 from turtle import bgcolor
 from PythonFiles.GUIConfig import GUIConfig
 from PythonFiles.Data.DataHolder import DataHolder
@@ -41,6 +42,11 @@ class GUIWindow():
 
         # Creates the size of the window and disables resizing
         master_window.geometry("1105x650+25+100")
+
+        # Variables necessary for the help popup
+        self.all_text = "No help available for this scene."
+        self.label_text = tk.StringVar()
+
         
         # Following line prevents the window from being resizable
         # master_window.resizable(0,0)
@@ -176,7 +182,7 @@ class GUIWindow():
             self.scan_frame.is_current_scene = False
             self.scan_frame.hide_submit_button()
             
-
+        self.set_help_text(_frame)
         #############################################################################
         #                        End Button Visibility Code                         #
         #############################################################################
@@ -257,6 +263,169 @@ class GUIWindow():
 
     def set_image_name(self, new_name):
         self.image_name = new_name
+
+    
+
+
+
+    #################################################
+
+
+    def help_popup(self, current_window):
+    
+        logging.debug("GUIWindow: The user has requested a help window")
+        logging.debug("Opening a help menu for {}".format(type(current_window)))
+        print("\n\nOpening a help menu for {}".format(type(current_window)))
+
+        # Creates a popup to confirm whether or not to exit out of the window
+        self.popup = tk.Toplevel()
+        # popup.wm_attributes('-toolwindow', 'True')
+        self.popup.title("Help Window") 
+        self.popup.geometry("650x650+500+300")
+        #self.popup.grab_set()
+    
+        self.mycanvas = tk.Canvas(self.popup, background="#808080", width=630, height =650)
+        self.viewingFrame = tk.Frame(self.mycanvas, width = 200, height = 200)
+        self.scroller = ttk.Scrollbar(self.popup, orient="vertical", command=self.mycanvas.yview)
+        self.mycanvas.configure(yscrollcommand=self.scroller.set)
+
+
+
+        self.canvas_window = self.mycanvas.create_window((4,4), window=self.viewingFrame, anchor='nw', tags="self.viewingFrame")
+
+
+        self.viewingFrame.bind("<Configure>", self.onFrameConfigure)
+        self.mycanvas.bind("<Configure>", self.onCanvasConfigure)
+
+        self.viewingFrame.bind('<Enter>', self.onEnter)
+        self.viewingFrame.bind('<Leave>', self.onLeave)
+
+        self.onFrameConfigure(None)
+
+
+        self.set_help_text(current_window)
+    
+        # Creates frame in the new window
+        #frm_popup = tk.Frame(self.mycanvas)
+        #frm_popup.pack()
+
+
+        # Creates label in the frame
+        lbl_popup = tk.Label(
+            self.viewingFrame,
+            textvariable = self.label_text,
+            font = ('Arial', 11)
+            )
+        lbl_popup.grid(column = 0, row = 0, pady = 5, padx = 50)
+
+
+        self.mycanvas.pack(side="right")
+        self.scroller.pack(side="left", fill="both", expand=True)
+
+
+        #btn_ok = tk.Button(
+        #    frm_popup,
+        #    width = 8,
+        #    height = 2,
+        #    text = "OK",
+        #    font = ('Arial', 8),
+        #    relief = tk.RAISED,
+        #    command = lambda: self.destroy_popup()
+        #)
+        #btn_ok.grid(column = 0, row = 0)
+
+
+    #############################################
+
+    def set_help_text(self, current_window):
+
+
+        # Help fo LoginScene required
+        if (type(current_window) == LoginScene):
+            file = open("{}/HGCAL_Help/LoginScene_help.txt".format(PythonFiles.__path__[0]))
+            self.all_text = file.read()
+
+        # Help for ScanScene required
+        elif (type(current_window) == ScanScene):
+            file = open("{}/HGCAL_Help/ScanScene_help.txt".format(PythonFiles.__path__[0]))
+            self.all_text = file.read()
+
+
+        # Help for AddUserScene required
+        elif (type(current_window) == AddUserScene):
+            file = open("{}/HGCAL_Help/AddUserScene_help.txt".format(PythonFiles.__path__[0]))
+            self.all_text = file.read()
+
+        # Help for SplashScene required
+        elif (type(current_window) == SplashScene):
+            file = open("{}/HGCAL_Help/SplashScene_help.txt".format(PythonFiles.__path__[0]))
+            self.all_text = file.read()
+
+
+        # Help for TestSummaryScene required
+        elif (type(current_window) == TestSummaryScene):
+            file = open("{}/HGCAL_Help/TestSummaryScene_help.txt".format(PythonFiles.__path__[0]))
+            self.all_text = file.read()
+
+
+        # Help for Inspection1Scene required
+        elif (type(current_window) == TestSummaryScene):
+            file = open("{}/HGCAL_Help/Inspection1Scene_help.txt".format(PythonFiles.__path__[0]))
+            self.all_text = file.read()
+
+
+        # self.all_text is a string
+        # self.label_text is a StringVar from the tkinter package
+
+
+
+        #print("\nall_text: ", self.all_text)
+
+
+        self.label_text.set(self.all_text)
+
+
+
+ #################################################
+
+    def onFrameConfigure(self, event):
+        '''Reset the scroll region to encompass the inner frame'''
+        self.mycanvas.configure(scrollregion=self.mycanvas.bbox("all"))                 #whenever the size of the frame changes, alter the scroll region respectively.
+
+    def onCanvasConfigure(self, event):
+        '''Reset the canvas window to encompass inner frame when required'''
+        canvas_width = event.width
+        self.mycanvas.itemconfig(self, width = canvas_width)            #whenever the size of the canvas changes alter the window region respectively.
+
+
+    #################################################
+    #################################################
+
+
+    def onMouseWheel(self, event):             # cross platform scroll wheel event
+        if event.num == 4:
+            self.mycanvas.yview_scroll( -1, "units" )
+        elif event.num == 5:
+            self.mycanvas.yview_scroll( 1, "units" )
+
+    def onEnter(self, event):                  # bind wheel events when the cursor enters the control
+        self.mycanvas.bind_all("<Button-4>", self.onMouseWheel)
+        self.mycanvas.bind_all("<Button-5>", self.onMouseWheel)
+
+    def onLeave(self, event):                  # unbind wheel events when the cursorl leaves the control
+        self.mycanvas.unbind_all("<Button-4>")
+        self.mycanvas.unbind_all("<Button-5>")
+
+
+
+
+    #################################################
+
+
+
+
+
+
 
     #################################################
 

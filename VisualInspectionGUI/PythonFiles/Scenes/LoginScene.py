@@ -96,13 +96,29 @@ class LoginScene(tk.Frame):
             )
         self.btn_add_user.pack(pady=70)
 
+        # Creating the help button
+        self.btn_help = tk.Button(
+            self,
+            relief = tk.RAISED,
+            text = "Help",
+            command = lambda: self.help_action(parent)
+        )   
+        self.btn_help.pack(anchor = 's', padx = 10, pady = 20) 
+
+
         # Forces frame to stay the size of the main_window
         # rather than adjusting to the size of the widgets
         self.pack_propagate(0)
 
     
 
+    #################################################
 
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    ################################################# 
 
 
     #################################################
