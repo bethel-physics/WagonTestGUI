@@ -14,7 +14,7 @@ class Inspection1(tk.Frame):
     #################################################
 
     def __init__(self, parent, master_frame, data_holder, test_idx):
-        super().__init__(master_frame, width=850, height=500)
+        super().__init__(master_frame, width=870, height=500)
 
         self.test_name = "SOMETHING STRING"
         self.data_holder = data_holder

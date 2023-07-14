@@ -100,7 +100,7 @@ class ScanScene(tk.Frame):
         
         self.master_frame = master_frame
         
-        super().__init__(self.master_frame, width = 850, height = 500)
+        super().__init__(self.master_frame, width=870, height = 500)
 
         logging.info("ScanScene: Frame has been created.")
         # Create a photoimage object of the QR Code
@@ -206,6 +206,13 @@ class ScanScene(tk.Frame):
         self.grid_propagate(0)
 
     #################################################
+
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    #################################################    
+
 
     # Function for the submit button
     def btn_submit_action(self, _parent):
