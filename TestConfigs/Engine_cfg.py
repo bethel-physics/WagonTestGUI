@@ -7,13 +7,6 @@ masterCfg = {
     # This should be the same order that you want the tests to be run in
     # Number of test will also be decide by this list so don't miss any
     "Test": [
-        # First Look
-        {
-            "name": "Visual Inspection",
-            "required": 1,
-            "desc_short": "Purely Visual Inspection",
-            "desc_long": "Inspect for obvious visual damage or other anomalies.",
-        },
         # Pre-power up
         {
             "name": "LDO Resistance",
@@ -77,18 +70,18 @@ masterCfg = {
             "desc_short": "Check components C807/C808/C809/C801",
             "desc_long": "C807/808/809/801: Should be 1.2V (goes to VTRX+)",
         },
+        {
+            "name": "lpGBT ",
+            "required": 1,
+            "desc_short": "Check components C807/C808/C809/C801",
+            "desc_long": "C807/808/809/801: Should be 1.2V (goes to VTRX+)",
+        },
         # Operations Tests
         {
             "name": "Fast Command",
             "required": 1,
             "desc_short": "Check fast command functionality",
             "desc_long": "Verify fast command operability by manipulating counters on encoder and decoder.",
-        },
-        {
-            "name": "lpGBT ",
-            "required": 1,
-            "desc_short": "Check components C807/C808/C809/C801",
-            "desc_long": "C807/808/809/801: Should be 1.2V (goes to VTRX+)",
         },
         {
             "name": "lpGBT IC/EC communication",
@@ -113,6 +106,16 @@ masterCfg = {
             "required": 1,
             "desc_short": "Check quality of the ADCs",
             "desc_long": "Measure known voltages/resistances. Check measured values for all 4 gains within tolerances",
+        },
+        {
+            "name": "I2C",
+            "required": 1,
+            "desc_short": "Engine can use I2C master",
+            "desc_long": "Check that engine can communicate as an I2C master",
+            "TestClass": "TestI2C", 
+            "TestPath": "/home/HGCAL_dev/test_scripts", 
+            "TestScript": "engine_test_suite.py"
+
         },
         {
             "name": "Uplink quality",
@@ -179,3 +182,6 @@ masterCfg = {
         "baseURL": "cgi-bin/EngineDB",
     },
 }
+
+required_tests = ["I2C"]
+masterCfg["Test"] = [x for x in masterCfg["Test"] if x["name"] in required_tests]
