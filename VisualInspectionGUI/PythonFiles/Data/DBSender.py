@@ -28,7 +28,7 @@ class DBSender():
         r = requests.get('http://cmslab3.spa.umn.edu/~cros0400/{}/get_usernames.py'.format(self.db_url))
         lines = r.text.split('\n')
 
-        print(lines)
+        #print(lines)
 
         begin = lines.index("Begin") + 1
         end = lines.index("End")
@@ -96,7 +96,7 @@ class DBSender():
         
         print('http://cmslab3.spa.umn.edu/~cros0400/{}/is_new_board.py'.format(self.db_url))
         r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/is_new_board.py'.format(self.db_url), data={"serial_number": str(sn)})
-        print(r.text)
+        #print(r.text)
         
         lines = r.text.split('\n')
        
@@ -135,7 +135,7 @@ class DBSender():
         datafile = open(datafile_name, "rb")        
 
         attach_data = {'attach1': datafile}
-        print("Read from json file:", results)
+        #print("Read from json file:", results)
         r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_test_json.py'.format(self.db_url), data = results, files = attach_data)
 
 

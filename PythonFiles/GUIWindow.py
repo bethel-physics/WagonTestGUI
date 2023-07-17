@@ -25,6 +25,7 @@ from PythonFiles.Scenes.SplashScene import SplashScene
 from PythonFiles.Scenes.TestInProgressScene import *
 from PythonFiles.Scenes.AddUserScene import AddUserScene
 from PythonFiles.Scenes.PhysicalScenes.Inspection1 import Inspection1
+import webbrowser
 
 #################################################################################
 
@@ -231,8 +232,6 @@ class GUIWindow():
     def set_frame_test(self, test_idx):
         print("test_idx", test_idx)
         self.data_holder.setTestIdx(test_idx)
-
-        print("\n\n\n\n'set_frame_test': test_idx: ", test_idx, "\n\n\n\n\n")        
 
         selected_test_frame = self.test_frames[test_idx]
         print("\nSetting frame to test {}\n".format(test_idx))
@@ -532,52 +531,9 @@ class GUIWindow():
     def set_help_text(self, current_window):
 
 
-        # Help fo LoginScene required
-        if (type(current_window) == LoginScene): 
-            file = open("{}/HGCAL_Help/LoginScene_help.txt".format(PythonFiles.__path__[0]))
-            self.all_text = file.read()
-        
-        # Help for ScanScene required
-        elif (type(current_window) == ScanScene):
-            file = open("{}/HGCAL_Help/ScanScene_help.txt".format(PythonFiles.__path__[0]))
-            self.all_text = file.read()
-
-        # Help for TestScene required
-        elif (type(current_window) == TestScene):
-            file = open("{}/HGCAL_Help/TestScene_help.txt".format(PythonFiles.__path__[0]))
-            self.all_text = file.read()
-
-        # Help for AddUserScene required
-        elif (type(current_window) == AddUserScene):
-            file = open("{}/HGCAL_Help/AddUserScene_help.txt".format(PythonFiles.__path__[0]))
-            self.all_text = file.read()
-
-        # Help for SplashScene required
-        elif (type(current_window) == SplashScene):
-            file = open("{}/HGCAL_Help/SplashScene_help.txt".format(PythonFiles.__path__[0]))
-            self.all_text = file.read()
-
-        # Help for TestInProgressScene required
-        elif (type(current_window) == TestInProgressScene):
-            file = open("{}/HGCAL_Help/TestInProgressScene_help.txt".format(PythonFiles.__path__[0]))
-            self.all_text = file.read()
-
-        # Help for TestSummaryScene required
-        elif (type(current_window) == TestSummaryScene):
-            file = open("{}/HGCAL_Help/TestSummaryScene_help.txt".format(PythonFiles.__path__[0]))
-            self.all_text = file.read()
-
-
-        # Help for Inspection1Scene required
-        elif (type(current_window) == TestSummaryScene):
-            file = open("{}/HGCAL_Help/Inspection1Scene_help.txt".format(PythonFiles.__path__[0]))
-            self.all_text = file.read()
-
-
-        # self.all_text is a string
-        # self.label_text is a StringVar from the tkinter package
-
-
+        # Help from file
+        file = open("{}/HGCAL_Help/{}_help.txt".format(PythonFiles.__path__[0], type(current_window).__name__))
+        self.all_text = file.read()
 
         #print("\nall_text: ", self.all_text)
 
@@ -619,6 +575,9 @@ class GUIWindow():
 
     #################################################
 
+    def report_bug(self, current_window):
+        url = 'https://github.com/UMN-CMS/HGCALTestGUI/issues'
+        webbrowser.open(url, new = 1)
 
     #################################################
     
@@ -658,6 +617,9 @@ class GUIWindow():
             command = lambda: self.destroy_popup()
             )
         btn_okay.grid(column = 0, row = 1)
+    
+
+
     # Called when the no button is pressed to destroy popup and return you to the main window
     def destroy_popup(self):
         try:
@@ -666,6 +628,8 @@ class GUIWindow():
             logging.debug("GUIWindow: The popup has been destroyed.")
         except:
             logging.error("GUIWindow: The popup has not been destroyed.")
+    
+
     # New function for clicking on the exit button
     def exit_function(self):
 

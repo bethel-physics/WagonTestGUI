@@ -112,7 +112,7 @@ class SidebarScene(tk.Frame):
         #print("\nThere are {} physical tests\n".format(self.data_holder.getNumPhysicalTest()))
 
         for i in range(self.data_holder.getNumPhysicalTest()): 
-            print("Physical Button should point to the {} test".format(i + physical_offset))
+            #print("Physical Button should point to the {} test".format(i + physical_offset))
             self.test_btns.append(tk.Button(
                 self.viewingFrame, 
                 pady = btn_pady,
@@ -167,13 +167,26 @@ class SidebarScene(tk.Frame):
             )
         self.btn_summary.grid(column = 0, row = physical_offset + original_offset + digital_offset)
 
+        
+        self.report_btn = tk.Button(
+            self.viewingFrame, 
+            pady = btn_pady,
+            text = 'Report Bug',
+            height = btn_height,
+            width = btn_width,
+            font = ('Kozuka Gothic Pr6N L', 8),
+            command = lambda: self.report_bug(parent)
+            )
+        self.report_btn.grid(column = 0, row = physical_offset + original_offset + digital_offset + 1)
+        
+
 
         # List for creating check marks with for loop
         self.list_of_pass_fail = self.data_holder.data_lists['test_results']
 
         # For loop to create checkmarks based on pass/fail
         for index in range(len(self.list_of_pass_fail)):
-            print("Pass fail:", self.list_of_pass_fail)
+            #print("Pass fail:", self.list_of_pass_fail)
             if(self.list_of_pass_fail[index] == True):
                 # Create a photoimage object of the QR Code
                 Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
@@ -198,7 +211,7 @@ class SidebarScene(tk.Frame):
         
         # For loop to create checkmarks based on pass/fail
         for index in range(len(self.physical_pass_fail)):
-            print("Pass fail:", self.physical_pass_fail)
+            #print("Pass fail:", self.physical_pass_fail)
             if(self.physical_pass_fail[index] == True):
                 # Create a photoimage object of the QR Code
                 Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
@@ -244,6 +257,9 @@ class SidebarScene(tk.Frame):
 
 
     #################################################
+
+    def report_bug(self, _parent):
+        _parent.report_bug(self)
 
     def btn_test_action(self, _parent, test_idx):
         print("\nSideBarScene.btn_test_action.test_idx: ", test_idx)

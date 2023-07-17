@@ -13,13 +13,13 @@ class DBSendClient():
 
     def send_request(self, message):
 
-        print("sending request: {}".format(message))
+        #print("sending request: {}".format(message))
 
         self.socket.send_string(message)
 
         response = json.loads(self.socket.recv())
 
-        print("Got reply: {}".format(response))
+        #print("Got reply: {}".format(response))
         print(type(response))
     
 
