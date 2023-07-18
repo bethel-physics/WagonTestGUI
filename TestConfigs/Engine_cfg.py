@@ -90,8 +90,6 @@ masterCfg = {
             "required": 1,
             "desc_short": "Engine can use I2C master",
             "desc_long": "Check that engine can communicate as an I2C master",
-            "TestClass": "TestI2C", 
-            "TestPath": "/home/HGCAL_dev/test_scripts", 
             "TestScript": "engine_test_suite.py",
 
         },
@@ -192,4 +190,4 @@ masterCfg = {
     },
 }
 
-masterCfg["Test"] = [dict(**x, TestPath= "/home/HGCAL_dev/test_scripts", TestScript= "engine_test_suite.py") for x in masterCfg["Test"] if "TestClass" in x]
+masterCfg["Test"] = [dict(**x, TestPath=base_path, TestScript= "engine_test_suite.py") for x in masterCfg["Test"] if "TestClass" in x]
