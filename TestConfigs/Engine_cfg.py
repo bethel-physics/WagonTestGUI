@@ -65,7 +65,7 @@ masterCfg = {
             "required": 1,
             "desc_short": "Check the the X_PWR voltage is correct.",
             "desc_long": "Measure using the tester, and should find approximately 1.2V.",
-            "TestClass" : ("Test_XPWR","run_xpwr_test"),
+            "TestClass" : ("TestXPWR","run_xpwr_test"),
         },
         {
             "name": "lpGBT setup",
@@ -122,7 +122,7 @@ masterCfg = {
             "TestClass" : ("TestDownlinks","run_ber_down_test"),
         },
         {
-            "name": "Fast Command Stread",
+            "name": "Fast Command quality",
             "required": 1,
             "desc_short": "Check the quality of the Fast Command path",
             "desc_long": "PRBS validation from and back to ZCU. Check bit error rate below threshold.",
