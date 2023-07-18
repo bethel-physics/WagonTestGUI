@@ -125,7 +125,7 @@ masterCfg = {
             "required": 1,
             "desc_short": "Check the quality of the downlinks",
             "desc_long": "Eye opening test. Check eye opening width and height below threshold.",
-            "TestClass" : ("TestDownlinks","run_ber_down_test"),
+            "TestClass" : "TestDownlinks",
         },
         {
             "name": "Fast Command quality",
