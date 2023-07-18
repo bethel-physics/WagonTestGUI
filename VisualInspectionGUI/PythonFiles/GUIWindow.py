@@ -134,15 +134,24 @@ class GUIWindow():
         self.set_frame(self.inspection_frame)    
 
     #################################################
-    
+   
+    def first_frame_camera_frame(self):
+
+        self.camera_index = 0
+        
+        # Trick for bypassing the increment in "next_frame_camera_frame"        
+        self.photo_index = -1
+
+        self.next_frame_camera_frame()
+ 
+
     def next_frame_camera_frame(self):
-    
+        self.photo_index += 1
         logging.debug("GUIWindow: Trying to go to the next camera_frame.")
         photo_list = self.data_holder.get_photo_list()
 
         if (self.camera_index < len(photo_list)):
-            set_frame_camera_frame(self.camera_index)
-            self.camera_index += 1        
+            self.set_frame_camera_frame(self.camera_index)
         else:
             self.set_frame_inspection_frame()
         
@@ -150,9 +159,10 @@ class GUIWindow():
      
 
     def return_frame_camera_frame(self):
-        logging.debug("GUIWindow: Trying to go back to the previous camera_frame.")
         self.camera_index -= 1
-        set_frame_camera_frame(self.camera_index)
+        logging.debug("GUIWindow: Trying to go back to the previous camera_frame.")
+        self.camera_index = self.photo_index
+        self.set_frame_camera_frame(self.camera_index)
 
 
     def set_frame_camera_frame(self, index):
@@ -164,12 +174,19 @@ class GUIWindow():
     #################################################
 
     def set_frame_photo_frame(self):
+        self.photo_index = self.camera_index
+        print("\nphoto_index = #", self.photo_index)
+        logging.debug("GUIWindow: Setting frame to photo frame #{}.".format(self.photo_index))
+        self.camera_index += 1
+        self.photo_frame.set_text(self.photo_index)
         self.set_frame(self.photo_frame)
         self.photo_frame.update()
 
     #################################################
     
     def set_frame_scan_frame(self):
+        self.camera_index = 0
+        self.photo_index = 0
         self.scan_frame.is_current_scene = True
         self.set_frame(self.scan_frame)
         self.scan_frame.scan_QR_code(master_window)

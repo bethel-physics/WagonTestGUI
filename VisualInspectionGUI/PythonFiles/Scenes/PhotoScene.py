@@ -207,6 +207,12 @@ class PhotoScene(tk.Frame):
 
 
     #################################################
+    
+    def set_text(self, index):
+        self.image_index = index
+
+
+    #################################################
 
     def try_again_button(self, _parent):
         _parent.return_frame_camera_frame()

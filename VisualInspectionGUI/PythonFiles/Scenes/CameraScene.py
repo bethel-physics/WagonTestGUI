@@ -56,21 +56,19 @@ class CameraScene(tk.Frame):
        
         # TODO Uncomment this code to get the camera to work 
         self.vid= MyVideoCapture(self.video_source)
-        self.canvas=tk.Canvas(self, width=self.vid.width, height =  self.vid.height)
-        self.canvas.pack()
+        #self.canvas=tk.Canvas(self, width=self.vid.width, height =  self.vid.height)
+        self.canvas=tk.Canvas(self, width=800, height = 600 )
 
         # Frame for the buttons
-        btn_frame=tk.Frame(self, background=self.from_rgb((117, 123, 129)))
-        btn_frame.place(x=0,y=0, anchor="nw")
-        #TODO Uncomment this code to get the camera to work
-        btn_frame.place(x=0,y=0, anchor="nw", width=800)
+        btn_frame=tk.Frame(self, background=self.from_rgb((117, 123, 129)), width = 800)
+        #btn_frame.place(x=0,y=0, anchor="nw", width=800)
+        btn_frame.pack(anchor="nw")
 
         # Snapshot button
         self.btn_snapshot=tk.Button(btn_frame, text="Snapshot",width=20, command=self.snapshot, bg=self.from_rgb((52, 61, 70)), fg="white")
         self.btn_snapshot.pack(side="left", padx=10, pady=10)
 
-        # Proses button
-        # Empty command; could be linked with more features
+        # Help button
         self.btn_proses=tk.Button(
             btn_frame, 
             text="Help",
@@ -82,15 +80,33 @@ class CameraScene(tk.Frame):
         )
         self.btn_proses.pack(side="left", padx=10, pady=10)
 
-        self.btn_about=tk.Button(btn_frame, text="Submit", width=10, command=self.submit_button_action, bg=self.from_rgb((52, 61, 70)), fg="white")
+        self.btn_about=tk.Button(
+            btn_frame,
+            text="Submit", 
+            width=10, 
+            command= lambda: self.submit_button_action(), 
+            bg=self.from_rgb((52, 61, 70)), 
+            fg="white"
+        )
         self.btn_about.pack(side="right", padx=10, pady=10)
 
+        self.desc_label_text = tk.StringVar()
+        self.desc_label_text.set("Photo Type")
+
+        self.desc_label = tk.Label(
+            master= btn_frame,
+            textvariable = self.desc_label_text,
+            font = ('Arial', 18)
+        )
+        self.desc_label.pack(side="right", padx=50, pady=10)
+
+        self.canvas.pack()
 	# Prevents the frame from shrinking
         self.pack_propagate(0)
 
 
         # How long in between photo-frames on the GUI
-        self.delay=15
+        self.delay=10
 
         # TODO Uncomment this code to get the camera to work
         # Updates the video constantly on this slide
@@ -106,7 +122,12 @@ class CameraScene(tk.Frame):
     #################################################
 
     def set_text(self, index):
-        # TODO
+        self.current_index = index
+
+        updated_title = self.data_holder.get_photo_list()[index]["name"]        
+        print("updated_title: ", updated_title)
+
+        self.desc_label_text.set(updated_title)
 
 
         pass
@@ -126,9 +147,9 @@ class CameraScene(tk.Frame):
         if ret:
             # Writes the image to a file with a name that includes the date
             # TODO Change this to be a more readable file name later
-            shortened_pn = "captured_image.png"
+            shortened_pn = "captured_image{}.png".format(self.current_index)
             self.photo_name = "{}/Images/{}".format(PythonFiles.__path__[0], shortened_pn)
-            
+            print("self.photo_name: ", self.photo_name)
 
             try:
                 cv2.imwrite(self.photo_name, cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) )
@@ -154,7 +175,7 @@ class CameraScene(tk.Frame):
         if ret:
             # Updates the canvas on the GUI
             image=PIL.Image.fromarray(frame)
-            image = image.resize((1036,778))
+            image = image.resize((800,600))
             self.photo = PIL.ImageTk.PhotoImage(image)
             self.canvas.create_image(0,0, image=self.photo, anchor=tk.NW)
 
