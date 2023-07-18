@@ -76,11 +76,14 @@ class PhotoScene(tk.Frame):
         Blank_Frame = Frame(self)
         Blank_Frame.grid(column = 0, row = 1, padx = 100, pady = 10)
 
+        self.photo_title = tk.StringVar()
+        self.photo_title.set("Photo Title")
+
         # creates a Label Variable, different customization options
         lbl_scan = tk.Label(
             master= Scan_Board_Prompt_Frame,
-            text = "Insert Photo of Board",
-            font = ('Arial', 18)
+            textvariable = self.photo_title,
+            font = ('Arial', 14)
         )
         lbl_scan.pack(padx = 50, pady = 50)
 
@@ -210,6 +213,15 @@ class PhotoScene(tk.Frame):
     
     def set_text(self, index):
         self.image_index = index
+
+        title = self.data_holder.get_photo_list()[index]["name"]
+        descr = self.data_holder.get_photo_list()[index]["desc_short"]
+
+        updated_title = title + "\n--------------------\n" + descr
+
+        self.photo_title.set(updated_title)
+
+        
 
 
     #################################################

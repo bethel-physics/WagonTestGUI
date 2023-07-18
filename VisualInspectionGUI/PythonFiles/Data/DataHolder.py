@@ -63,6 +63,9 @@ class DataHolder():
 
     #################################################
 
+    def num_photo(self):
+        return len(self.photo_list)
+
     def get_photo_list(self):
         return self.photo_list
 

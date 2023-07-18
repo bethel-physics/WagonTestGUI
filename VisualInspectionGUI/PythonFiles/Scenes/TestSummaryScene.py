@@ -81,19 +81,35 @@ class TestSummaryScene(tk.Frame):
                 font=('Arial',18,'bold')
                 )
         self.title.grid(row= 0, column= 1, pady = 20)
+
+        
+        for i, photo in enumerate(self.data_holder.get_photo_list()):
+            
+            # Create a photoimage object of the Engine
+            Engine_image = Image.open("{}/Images/captured_image{}.png".format(PythonFiles.__path__[0], i))
+            Engine_image = Engine_image.resize((200, 150), Image.ANTIALIAS)
+            Engine_PhotoImage = iTK.PhotoImage(Engine_image)
+            Engine_label = tk.Label(self, image=Engine_PhotoImage)
+            Engine_label.image = Engine_PhotoImage
+
+            # the .grid() adds it to the Frame
+            Engine_label.grid(column=0 + i, row = 1)
+
+
+
         
 
         logging.debug("TestSummaryScene: Creating the engine image.")
         
-        # Create a photoimage object of the Engine
-        Engine_image = Image.open("{}/Images/EnginePhoto.png".format(PythonFiles.__path__[0]))
-        Engine_image = Engine_image.resize((200, 150), Image.ANTIALIAS)
-        Engine_PhotoImage = iTK.PhotoImage(Engine_image)
-        Engine_label = tk.Label(self, image=Engine_PhotoImage)
-        Engine_label.image = Engine_PhotoImage
+        ## Create a photoimage object of the Engine
+        #Engine_image = Image.open("{}/Images/EnginePhoto.png".format(PythonFiles.__path__[0]))
+        #Engine_image = Engine_image.resize((200, 150), Image.ANTIALIAS)
+        #Engine_PhotoImage = iTK.PhotoImage(Engine_image)
+        #Engine_label = tk.Label(self, image=Engine_PhotoImage)
+        #Engine_label.image = Engine_PhotoImage
 
-        # the .grid() adds it to the Frame
-        Engine_label.grid(column=1, row = 1)
+        ## the .grid() adds it to the Frame
+        #Engine_label.grid(column=1, row = 1)
 
 
 

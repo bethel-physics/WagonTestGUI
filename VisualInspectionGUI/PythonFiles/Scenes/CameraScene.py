@@ -90,15 +90,29 @@ class CameraScene(tk.Frame):
         )
         self.btn_about.pack(side="right", padx=10, pady=10)
 
+        self.long_desc_label_text = tk.StringVar()
+        self.long_desc_label_text.set("Photo Description")
+
+        self.long_desc_label = tk.Label(
+            master= btn_frame,
+            textvariable = self.long_desc_label_text,
+            font = ('Arial', 10),
+            bg=self.from_rgb((117, 123, 129)) 
+        )
+        self.long_desc_label.pack(side="right", padx=(20, 90), pady=10)
+        
+
+
         self.desc_label_text = tk.StringVar()
         self.desc_label_text.set("Photo Type")
 
         self.desc_label = tk.Label(
             master= btn_frame,
             textvariable = self.desc_label_text,
-            font = ('Arial', 18)
+            font = ('Arial', 19),
+            bg=self.from_rgb((117, 123, 129)) 
         )
-        self.desc_label.pack(side="right", padx=50, pady=10)
+        self.desc_label.pack(side="right", padx=(90, 20), pady=10)
 
         self.canvas.pack()
 	# Prevents the frame from shrinking
@@ -125,10 +139,11 @@ class CameraScene(tk.Frame):
         self.current_index = index
 
         updated_title = self.data_holder.get_photo_list()[index]["name"]        
+        updated_description = self.data_holder.get_photo_list()[index]["desc_short"]
         print("updated_title: ", updated_title)
 
         self.desc_label_text.set(updated_title)
-
+        self.long_desc_label_text.set(updated_description)
 
         pass
 
