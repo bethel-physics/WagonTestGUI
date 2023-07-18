@@ -1,7 +1,13 @@
 base_path = "/home/HGCAL_dev/test_scripts"
 
 masterCfg = {
-    "GUIType": "Wagon",
+
+    "GUIType": "Engine",
+
+
+    # Order of tests matters here
+    # This should be the same order that you want the tests to be run in
+    # Number of test will also be decide by this list so don't miss any
     "Test": [
         {
             "name": "Power-Ground Resistance",
@@ -143,6 +149,24 @@ masterCfg = {
             "TestClass" : "TestCrossover"
         },
     ],
+
+
+    "PhysicalTest": [
+        {
+            "name": "SAMPLE test", 
+            "required": 1, 
+            "desc_short": "Some short description", 
+            "desc_long": "Really long description for later purposes.",
+            "criteria": {
+                "first testing criteria",
+                "second testing criteria",
+                "third testing criteria",                
+            },
+
+        }, 
+
+    ],
+
     # Example of information needed for tests (from Wagon config)
     # Use template dictionary above
     # FOLLOW THE FORMAT EXPICITLY PLEASE :)

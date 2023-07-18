@@ -138,6 +138,9 @@ class DBSender():
         #print("Read from json file:", results)
         r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_test_json.py'.format(self.db_url), data = results, files = attach_data)
 
+    def add_board_image(self, sn, image_file):
+        r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_board_image.py'.format(self.db_url), data = {'serial_num': sn}, files = {'image_file': image_file})
+        print(r.text, "please")
 
  # Returns a list of all different types of tests
     def get_test_list(self):

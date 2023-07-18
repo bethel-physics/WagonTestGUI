@@ -170,8 +170,8 @@ class PhotoScene(tk.Frame):
     def btn_submit_action(self, _parent):
         
         #TODO Do something with the dataholder here with the photo
-        
-        _parent.set_frame_inspection_frame()
+        self.data_holder.send_image(img_idx=0)
+        _parent.next_frame_camera_frame()
 
 
     #################################################
@@ -209,7 +209,7 @@ class PhotoScene(tk.Frame):
     #################################################
 
     def try_again_button(self, _parent):
-        _parent.set_frame_camera_frame()
+        _parent.return_frame_camera_frame()
 
 
     #################################################

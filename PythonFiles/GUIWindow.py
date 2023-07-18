@@ -293,53 +293,29 @@ class GUIWindow():
         logging.debug("GUIWindow: The method check_if_test_passed(self) has been called. This method is empty.")
     #################################################
 
+    def return_to_current_test(self):
+        self.current_test_index -= 1
+        self.set_frame_test(self.current_test_index)
+
+
     def go_to_next_test(self):
         
-        # Array of potentially uncompleted tests
-        test_completed_list = self.data_holder.data_lists['test_completion']
-        
+        total_num_tests = self.data_holder.total_test_num
+        num_digital = self.data_holder.getNumTest()
+        num_physical = self.data_holder.getNumPhysicalTest()
 
-        test_incomplete = False
-        
+        print("\nTotal num of tests: {}, Digital: {}, Physical: {}\n".format(total_num_tests, num_digital, num_physical))
+        print("self.current_test_index: ", self.current_test_index)
 
-        logging.info("GUIWindow: Testing which tests have been completed.")
-        # Checks tells the function which frame to set based on what frame is currently up
-        for index, test in enumerate(test_completed_list):            
-
-            if test == True and index >=  self.current_test_index:
-                print("Test", index + 1, "== True")
-                if self.completed_window_alive == False:
-                    self.completed_window_popup()
-                else:
-                    pass
-            elif test == True:
-                pass
-            else:
-                test_incomplete = True
-                print(self.current_test_index)
-                self.set_frame_test(self.current_test_index)
-                self.current_test_index += 1
-                break
-                #if (index ==0):
-                #    self.set_frame_test()
-                #    self.current_test_index = 1
-                #elif (index == 1):
-                #    self.set_frame_test2()
-                #    self.current_test_index = 2
-                #elif (index == 2):
-                #    self.set_frame_test3()
-                #    self.current_test_index = 3
-                #elif (index == 3):
-                #    self.set_frame_test4()
-                #    self.current_test_index = 4
-                #break
-        
-
-
-        # Tests if all the tests have been completed
-        # if true, brings user to Test Summary Frame rather than the next test
-        if (not test_incomplete):
+        if (self.current_test_index < total_num_tests):
+            print(self.current_test_index)
+            self.set_frame_test(self.current_test_index)
+            self.current_test_index += 1
+        else:
             self.set_frame_test_summary()
+            
+
+
 
     def reset_board(self):
         self.current_test_index = 0

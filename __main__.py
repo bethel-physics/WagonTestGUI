@@ -79,7 +79,6 @@ if __name__ == "__main__":
     print(socket.gethostname())
     wagon_GUI_computers = [
         "cmsfactory1.cmsfactorynet",
-        "cmsfactory4.cmsfactorynet",
         "cmsfactory5.cmsfactorynet",
         "cmslab4.umncmslab",
     
@@ -87,6 +86,7 @@ if __name__ == "__main__":
 
     ]
     engine_GUI_computers = [
+        "cmsfactory4.cmsfactorynet",
     ]
    
     board_cfg = None
@@ -98,7 +98,7 @@ if __name__ == "__main__":
 
         board_cfg = masterCfg
     
-    if node in engine_GUI_computers:
+    if any(node in y for y in engine_GUI_computers):
         from TestConfigs.Engine_cfg import masterCfg
 
         print("Hostname setup for engine testing. Initializing Engine Test GUI...")

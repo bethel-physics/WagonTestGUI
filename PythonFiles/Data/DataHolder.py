@@ -195,7 +195,7 @@ class DataHolder():
 
         test_names = self.gui_cfg.getTestNames()
 
-        current_test_idx = self.gui_cfg.getTestIndex()
+        current_test_idx = self.gui_cfg.getTestIndex() - self.gui_cfg.getNumPhysicalTest()
         print("current_test_idx: {}".format(current_test_idx))
 
         with open("{}/JSONFiles/Current_{}_JSON.json".format(PythonFiles.__path__[0], test_names[current_test_idx].replace(" ", "").replace("/", "")), "w") as file:

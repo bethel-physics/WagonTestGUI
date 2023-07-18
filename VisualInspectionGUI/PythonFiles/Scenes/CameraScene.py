@@ -103,6 +103,13 @@ class CameraScene(tk.Frame):
     def help_action(self, _parent):
         _parent.help_popup(self)
 
+    #################################################
+
+    def set_text(self, index):
+        # TODO
+
+
+        pass
 
     ################################################# 
 
@@ -122,15 +129,15 @@ class CameraScene(tk.Frame):
             shortened_pn = "captured_image.png"
             self.photo_name = "{}/Images/{}".format(PythonFiles.__path__[0], shortened_pn)
             
-            self.parent.set_image_name(shortened_pn)
 
             try:
                 cv2.imwrite(self.photo_name, cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) )
-                # self.data_holder.
-            except:
+                self.data_holder.image_data.append(self.photo_name)
+                self.parent.set_image_name(shortened_pn)
+            except Exception as e:
                 logging.warning("CameraScene: Unable to write the snapshot to a file")
                 print("\nUnable to save photo to file {}".format(self.photo_name))
-                
+                print("\nYour exception: ", e)
             
         else:
             print("\nUnable to take a snapshot.\n")

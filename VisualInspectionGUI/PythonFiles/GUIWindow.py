@@ -99,6 +99,8 @@ class GUIWindow():
         self.camera_frame.grid(row=0, column=0)
         
 
+        self.camera_index = 0
+        self.photo_index = 0
 
         #################################################
         #              End Frame Creation               #
@@ -132,11 +134,32 @@ class GUIWindow():
         self.set_frame(self.inspection_frame)    
 
     #################################################
-    def set_frame_camera_frame(self):
-        logging.debug("GUIWindow: Trying to set the frame to camera_frame.")
-        self.set_frame(self.camera_frame)
-        logging.debug("GUIWindow: Frame has been set to camera_frame.")
+    
+    def next_frame_camera_frame(self):
+    
+        logging.debug("GUIWindow: Trying to go to the next camera_frame.")
+        photo_list = self.data_holder.get_photo_list()
+
+        if (self.camera_index < len(photo_list)):
+            set_frame_camera_frame(self.camera_index)
+            self.camera_index += 1        
+        else:
+            self.set_frame_inspection_frame()
+        
+        logging.debug("GUIWindow: Frame has been set to the next camera_frame.")
      
+
+    def return_frame_camera_frame(self):
+        logging.debug("GUIWindow: Trying to go back to the previous camera_frame.")
+        self.camera_index -= 1
+        set_frame_camera_frame(self.camera_index)
+
+
+    def set_frame_camera_frame(self, index):
+        print("GUIWindow: Going to camera frame #{}".format(index))
+        logging.debug("GUIWindow: Going to camera frame #{}".format(index))
+        self.camera_frame.set_text(index)
+        self.set_frame(self.camera_frame)
 
     #################################################
 

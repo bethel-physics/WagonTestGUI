@@ -32,7 +32,7 @@ class TestSummaryScene(tk.Frame):
     
         # Call to the super class's constructor
         # Super class is the tk.Frame class
-        super().__init__(master_frame, width=850, height=500)
+        super().__init__(master_frame, width = 1105, height = 650)
 
         logging.info("TestSummaryScene: Frame has been created.")
 
@@ -71,7 +71,7 @@ class TestSummaryScene(tk.Frame):
         print("\n\nTestSummaryScene: Table is being created with the results.")
         
         self.blank_frame = tk.Frame(self)
-        self.blank_frame.grid(row = 0, column = 0, padx = 60)
+        self.blank_frame.grid(row = 0, column = 0, padx = 80, pady = 20)
 
         # Adds the title to the TestSummary Frame
         self.title = tk.Label(
