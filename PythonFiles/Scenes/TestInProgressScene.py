@@ -159,7 +159,7 @@ class TestInProgressScene(tk.Frame):
                 #print("Queue: ")
                 #print(queue)
                 if not queue.empty():    
-                    print("\n\nTestInProgressScene: the queue is not empty") 
+                    #print("\n\nTestInProgressScene: the queue is not empty") 
                     information_received = True
                     logging.info("TestInProgressScene: Waiting for queue objects...")
                     text = queue.get()
