@@ -71,7 +71,7 @@ masterCfg = {
             "required": 1,
             "desc_short": "Check the the X_PWR voltage is correct.",
             "desc_long": "Measure using the tester, and should find approximately 1.2V.",
-            "TestClass" : ("TestXPWR","run_xpwr_test"),
+            "TestClass" : "TestXPWR",
         },
         {
             "name": "lpGBT setup",
