@@ -104,28 +104,27 @@ masterCfg = {
             "required": 1,
             "desc_short": "Check the quality of the GPIOs",
             "desc_long": "Read and write to all GPIO channels and verify levels. Write nominal configuration and then toggle each line one-by-one and verify change in both lpGBT status and voltage level",
-            "TestClass" : "TestGPIO"
+            "TestClass" : "TestGpio"
         },
         {
             "name": "ADC functionality",
             "required": 1,
             "desc_short": "Check quality of the ADCs",
             "desc_long": "Measure known voltages/resistances. Check measured values for all 4 gains within tolerances, (only need to do all 4 gains for one measurement).",
-            "TestClass" : "TestADC"
+            "TestClass" : "TestAdc"
         },
         {
             "name": "Uplink quality",
             "required": 1,
             "desc_short": "Check the quality of the uplinks",
             "desc_long": "PRBS validation from lpGBTs. Check bit error rate below threshold.",
-            "TestClass" : "TestUplinks"
+            "TestClass" : "TestUplink"
         },
         {
             "name": "Downlink quality",
             "required": 1,
             "desc_short": "Check the quality of the downlinks",
             "desc_long": "Eye opening test. Check eye opening width and height below threshold.",
-            "TestClass" : "TestDownlinks",
         },
         {
             "name": "Fast Command quality",
@@ -146,7 +145,6 @@ masterCfg = {
             "required": 1,
             "desc_short": "Check the quality of the crossover links",
             "desc_long": "PRBS validation from and back to ZCU. Check bit error rate below threshold.",
-            "TestClass" : "TestCrossover"
         },
     ],
 
