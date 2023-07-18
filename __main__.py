@@ -1,5 +1,8 @@
 #!/TestingEnv/bin/python
 
+# Including information about both Engine and Wagon GUIs
+
+
 # Need to make the log file path before any imports
 import os
 guiLogPath = "/home/{}/GUILogs/".format(os.getlogin())
@@ -24,7 +27,12 @@ def task_GUI(conn, queue, board_cfg):
 # Creates a task of creating the SUBClient
 def task_SUBClient(conn, queue):
     # Creates the SUBSCRIBE Socket Client
-    sub_client = SUBClient(conn, queue)
+    try:
+        sub_client = SUBClient(conn, queue)
+    except Exception as e:
+        print("\n\n\n\n\nUh oh... an exception has been found...")
+        print("Exception: {}\n\n\n".format(e))
+        print("It looks like this has something to do with the SUBClient's instantiation\n\n") 
 
 def run(board_cfg):    
     # Creates a Pipe for the SUBClient to talk to the GUI Window
@@ -71,13 +79,14 @@ if __name__ == "__main__":
     print(socket.gethostname())
     wagon_GUI_computers = [
         "cmsfactory1.cmsfactorynet",
-        "cmsfactory2.cmsfactorynet",
-        "cmsfactory4.cmsfactorynet",
         "cmsfactory5.cmsfactorynet",
         "cmslab4.umncmslab",
+    
+        "cmsfactory2.cmsfactorynet",
+
     ]
     engine_GUI_computers = [
-
+        "cmsfactory4.cmsfactorynet",
     ]
    
     board_cfg = None
@@ -88,5 +97,13 @@ if __name__ == "__main__":
         print("Hostname setup for wagon testing. Initializing Wagon Test GUI...")
 
         board_cfg = masterCfg
+    
+    if any(node in y for y in engine_GUI_computers):
+        from TestConfigs.Engine_cfg import masterCfg
+
+        print("Hostname setup for engine testing. Initializing Engine Test GUI...")
+
+        board_cfg = masterCfg
+
 
     run(board_cfg)

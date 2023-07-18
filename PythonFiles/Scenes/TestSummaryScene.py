@@ -12,6 +12,7 @@ import os
 
 #################################################################################
 
+logger = logging.getLogger('HGCAL_GUI')
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
 logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
@@ -30,7 +31,7 @@ class TestSummaryScene(tk.Frame):
         
         # Call to the super class's constructor
         # Super class is the tk.Frame class
-        super().__init__(master_frame, width=850, height=500)
+        super().__init__(master_frame, width=870, height=500)
 
         logging.info("TestSummaryScene: Frame has been created.")
 

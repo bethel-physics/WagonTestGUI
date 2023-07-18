@@ -15,6 +15,7 @@ import os
 
 #################################################################################
 
+logger = logging.getLogger('HGCAL_GUI')
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
 logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
@@ -99,7 +100,7 @@ class ScanScene(tk.Frame):
         
         self.master_frame = master_frame
         
-        super().__init__(self.master_frame, width = 850, height = 500)
+        super().__init__(self.master_frame, width=870, height = 500)
 
         logging.info("ScanScene: Frame has been created.")
         # Create a photoimage object of the QR Code
@@ -186,14 +187,40 @@ class ScanScene(tk.Frame):
             text = "Logout",
             command = lambda: self.btn_logout_action(parent)
         )
-        btn_logout.pack(anchor = 'se', padx = 0, pady = 80)
+        btn_logout.pack(anchor = 'se', padx = 10, pady = 20)
+
+        # Creating the help button
+        btn_help = tk.Button(
+            frm_logout,
+            relief = tk.RAISED,
+            text = "Help",
+            command = lambda: self.help_action(parent)
+        )
+        btn_help.pack(anchor = 's', padx = 10, pady = 20)
+
+
+        
+
+
         # Locks frame size to the master_frame size
         self.grid_propagate(0)
 
     #################################################
 
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    #################################################    
+
+
     # Function for the submit button
     def btn_submit_action(self, _parent):
+        
+        self.EXIT_CODE = 1 
+        self.listener.terminate()
+        self.scanner.terminate()
+
         self.data_holder.set_serial_ID(self.ent_snum.get())
         self.data_holder.check_if_new_board()
         _parent.scan_frame_progress()
@@ -203,6 +230,10 @@ class ScanScene(tk.Frame):
 
     # Function for the log out button
     def btn_logout_action(self, _parent):
+
+        self.EXIT_CODE = 1 
+        self.listener.terminate()
+        self.scanner.terminate()
 
          # Send user back to login frame
         _parent.set_frame_login_frame() 

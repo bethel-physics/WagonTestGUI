@@ -24,9 +24,31 @@ class GUIConfig():
     def getNumTest(self):
         return len(self.board_cfg["Test"])
 
+    # Get the number of tests that require physical input
+    def getNumPhysicalTest(self):
+        return len(self.board_cfg["PhysicalTest"])
+
+    # Returns the information necessary for physical test
+    # Formatted as a dictionary
+    def getPhysicalTestRequirements(self, num):
+        index = 0
+        for ptest in self.board_cfg["PhysicalTest"]:
+            if index == num:
+                return ptest
+            count = count + 1
+
+        print("\n\nCannot find a physical test with num = {}. Please try again.\n".format(num))
+        return None
+
+
+
     # Get number of tests to define order of scenes and sidebar
     def getTests(self):
         return self.board_cfg["Test"]
+
+    # Get number of physical tests to define order of scenes and sidebar
+    def getPhysicalTests(self):
+        return self.board_cfg["PhysicalTest"]
 
     # Get database info for getting and posting test results
     def getDBInfo(self, key=None):
@@ -46,6 +68,8 @@ class GUIConfig():
     def getTestIndex(self):
         return self.current_idx
 
+    def getPhysicalNames(self):
+        return [test["name"] for test in self.board_cfg["PhysicalTest"]]
 
     def getTestNames(self):
         return [test["name"] for test in self.board_cfg["Test"]]

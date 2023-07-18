@@ -1,13 +1,19 @@
-#################################################################################
+################################################################################
 
 # Importing necessary modules
 import tkinter as tk
-import tkinter.font as font
 from PIL import ImageTk as iTK
 from PIL import Image
+import logging
+logging.getLogger('PIL').setLevel(logging.WARNING)
+import PythonFiles
+import os
 
 #################################################################################
 
+logger = logging.getLogger('HGCAL_GUI')
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 class SplashScene(tk.Frame):
 
@@ -19,10 +25,11 @@ class SplashScene(tk.Frame):
     #################################################
     
     def initialize_GUI(self, parent, master_frame):
-        super().__init__(master_frame, width = 850, height = 500)
+        super().__init__(master_frame, width = 1105, height = 650)
 
+        logging.info("SplashScene: Frame has been initialized.")
         # Creating Bethel Logo
-        img_bethel_logo = Image.open("./PythonFiles/Images/Bethel_Logo.png")
+        img_bethel_logo = Image.open("{}/Images/Bethel_Logo.png".format(PythonFiles.__path__[0]))
         img_bethel_logo = img_bethel_logo.resize((250,100), Image.ANTIALIAS)
         phimg_bethel_logo = iTK.PhotoImage(img_bethel_logo)
         lbl_bethel_logo = tk.Label(self, image=phimg_bethel_logo, width=250, height=100)
@@ -31,7 +38,7 @@ class SplashScene(tk.Frame):
         lbl_bethel_logo.grid(row=0, column= 0, padx = 50, pady = 100)
 
         # Creating UMN Logo
-        img_umn_logo = Image.open("./PythonFiles/Images/UMN_Logo.png")
+        img_umn_logo = Image.open('{}/Images/UMN_Logo.png'.format(PythonFiles.__path__[0]))
         img_umn_logo = img_umn_logo.resize((250,100), Image.ANTIALIAS)
         phimg_umn_logo = iTK.PhotoImage(img_umn_logo)
         lbl_umn_logo = tk.Label(self, image=phimg_umn_logo, width=250, height=100)
@@ -51,5 +58,13 @@ class SplashScene(tk.Frame):
 
     #################################################
 
+
+    #################################################
+
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    ################################################# 
 
 #################################################################################

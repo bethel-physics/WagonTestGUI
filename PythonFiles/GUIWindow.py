@@ -23,8 +23,9 @@ from PythonFiles.Scenes.TestInProgressScene import TestInProgressScene
 from PythonFiles.Data.DataHolder import DataHolder
 from PythonFiles.Scenes.SplashScene import SplashScene
 from PythonFiles.Scenes.TestInProgressScene import *
-from PythonFiles.Scenes.Inspection1 import Inspection1
 from PythonFiles.Scenes.AddUserScene import AddUserScene
+from PythonFiles.Scenes.PhysicalScenes.Inspection1 import Inspection1
+import webbrowser
 
 #################################################################################
 
@@ -41,6 +42,8 @@ class GUIWindow():
     #################################################
 
     def __init__(self, conn, queue, board_cfg):
+        
+
         self.conn = conn
         self.queue = queue
         self.retry_attempt = False
@@ -53,18 +56,26 @@ class GUIWindow():
         self.master_window = tk.Tk()
         self.master_window.title("HGCAL Test Window")
         # Creates the size of the window and disables resizing
-        self.master_window.geometry("1063x500+25+100")
-        self.master_window.resizable(0,0)
+        self.master_window.geometry("1300x700+25+100")
+
+        
+        # Variables necessary for the help popup
+        self.all_text = "No help available for this scene."
+        self.label_text = tk.StringVar()
+
+        
+        # Should be resizable with following code commented out
+        #self.master_window.resizable(0,0)
 
         # Removes the tkinter logo from the window
         # self.master_window.wm_attributes('-toolwindow', 'True')
 
         # Creates and packs a frame that exists on top of the master_frame
-        self.master_frame = tk.Frame(self.master_window, width=850, height= 500)
+        self.master_frame = tk.Frame(self.master_window, width=870, height= 650)
         self.master_frame.grid(column = 1, row = 0, columnspan = 4)
 
         # Creates a frame to house the sidebar on self.master_window
-        sidebar_frame = tk.Frame(self.master_window, width = 213, height = 500)
+        sidebar_frame = tk.Frame(self.master_window, width = 213, height = 650)
         sidebar_frame.grid(column = 0 , row = 0)
 
         # Creates the "Storage System" for the data during testing
@@ -85,12 +96,11 @@ class GUIWindow():
 
         self.login_frame = LoginScene(self, self.master_frame, self.data_holder)
         self.login_frame.grid(row=0, column=0)
-        
-        self.visual_frame = Inspection1(self, self.master_frame, self.data_holder)
-        self.visual_frame.grid(row=0, column=0)
- 
-        self.scan_frame = ScanScene(self, self.master_frame, self.data_holder)
+
+        self.scan_frame = ScanScene(self, self.master_frame, self.data_holder)        
         self.scan_frame.grid(row=0, column=0)
+
+        
 
         # Generalize test frames to use testing config
         # Grab list of tests from config file and create one scene for each test
@@ -98,35 +108,24 @@ class GUIWindow():
         
         self.test_frames = []
         test_list = self.gui_cfg.getTests()
+        physical_list = self.gui_cfg.getPhysicalTests()        
+
+        offset = 0
         
+        # For the physical tests
+        for test_idx,test in enumerate(physical_list):
+            self.test_frames.append(Inspection1(self, self.master_frame, self.data_holder, test_idx))
+            self.test_frames[test_idx].grid(row=0, column=0)
+            offset = offset + 1
+
+        # For the digital tests
         for test_idx,test in enumerate(test_list):
 
             self.test_frames.append(TestScene(self, self.master_frame, self.data_holder, test["name"], queue, test_idx))
-            self.test_frames[test_idx].grid(row=0, column=0)
+            self.test_frames[test_idx + offset].grid(row=0, column=0)
 
-        #self.test1_frame= Test1Scene(self, self.master_frame, self.data_holder, 
-        #                    "General Resistance Test",
-        #                    queue
-        #                    )
-        #self.test1_frame.grid(row=0, column=0)
-
-        #self.test2_frame= Test2Scene(self, self.master_frame, self.data_holder,
-        #                    "ID Resistor Test", 
-        #                    queue
-        #                    )
-        #self.test2_frame.grid(row=0, column=0)
-        #
-        #self.test3_frame= Test3Scene(self, self.master_frame, self.data_holder, 
-        #                    "I2C Comm. Test", 
-        #                    queue
-        #                    )
-        #self.test3_frame.grid(row=0, column=0)
-
-        #self.test4_frame= Test4Scene(self, self.master_frame, self.data_holder, 
-        #                    "Bit Rate Test", 
-        #                    queue
-        #                    )
-        #self.test4_frame.grid(row=0, column=0)
+            
+        print("\ntest_frames len: ", len(self.test_frames))
 
         self.test_in_progress_frame = TestInProgressScene(self, self.master_frame, self.data_holder, queue, conn)
         self.test_in_progress_frame.grid(row=0, column=0)
@@ -161,9 +160,10 @@ class GUIWindow():
 
     def set_frame_test_choice_frame(self):
         
-        
+        print("GUIWindow: Setting frame to test_choice_frame. Empty method")        
+        logging.debug("GUIWindow: The frame has been set to test_choice_frame. Empty method.")
+    
 
-        logging.debug("GUIWindow: The frame has been set to test_choice_frame.")
 
     #################################################
 
@@ -177,6 +177,7 @@ class GUIWindow():
 
     def set_frame_login_frame(self):  
 
+        self.sidebar.update_sidebar(self)
         self.login_frame.update_frame(self)
         self.set_frame(self.login_frame)        
 
@@ -204,27 +205,18 @@ class GUIWindow():
 
     #################################################
 
-    def set_frame_visual_frame(self):
-        self.visual_frame.update_frame(self)
-        self.set_frame(self.visual_frame)
-
-        logging.debug("GUIWindow: The frame has been set to visual_frame.")
-
+    # Used to be the visual inspection method
 
     #################################################
 
     def scan_frame_progress(self):
-        if self.data_holder.data_dict['is_new_board'] == True:
-            self.set_frame_visual_frame()
-        elif self.data_holder.data_dict['is_new_board'] == False:
-            self.go_to_next_test()
+        self.go_to_next_test()
 
 
     #################################################
 
     # For example, when we set the frame to test2_frame, we want to send the results
     # of test1 because it just completed.
-
 
 
     def set_frame_test_summary(self):
@@ -238,11 +230,11 @@ class GUIWindow():
     #################################################
 
     def set_frame_test(self, test_idx):
-
+        print("test_idx", test_idx)
         self.data_holder.setTestIdx(test_idx)
 
         selected_test_frame = self.test_frames[test_idx]
-        print("Setting frame to test {}".format(test_idx))
+        print("\nSetting frame to test {}\n".format(test_idx))
         selected_test_frame.update_frame(self)
         print("Frame updated!")
         
@@ -255,7 +247,7 @@ class GUIWindow():
 
     def set_frame_test1(self):
         self.test1_frame.update_frame(self)
-        self.set_frame(self.test1_frame)
+        IIIself.set_frame(self.test1_frame)
 
         logging.debug("GUIWindow: The frame has been set to test1_frame.")
     #################################################
@@ -286,64 +278,44 @@ class GUIWindow():
 
     def set_frame_test_in_progress(self, queue):
         self.set_frame(self.test_in_progress_frame)
-        self.sidebar.disable_all_btns()
-        self.test_in_progress_frame.begin_update(self.master_window, queue)
-        self.go_to_next_test()   
-
+        
         logging.debug("GUIWindow: The frame has been set to test_in_progress_frame.")
+        #self.sidebar.disable_all_btns()
+        passed = self.test_in_progress_frame.begin_update(self.master_window, queue, self)
+        if passed:
+            self.go_to_next_test()   
+        else:
+            return
+
     #################################################
 
     def check_if_test_passed(self):
         logging.debug("GUIWindow: The method check_if_test_passed(self) has been called. This method is empty.")
     #################################################
 
+    def return_to_current_test(self):
+        self.current_test_index -= 1
+        self.set_frame_test(self.current_test_index)
+
+
     def go_to_next_test(self):
         
-        # Array of potentially uncompleted tests
-        test_completed_list = self.data_holder.data_lists['test_completion']
-        
+        total_num_tests = self.data_holder.total_test_num
+        num_digital = self.data_holder.getNumTest()
+        num_physical = self.data_holder.getNumPhysicalTest()
 
-        test_incomplete = False
-        
+        print("\nTotal num of tests: {}, Digital: {}, Physical: {}\n".format(total_num_tests, num_digital, num_physical))
+        print("self.current_test_index: ", self.current_test_index)
 
-        logging.info("GUIWindow: Testing which tests have been completed.")
-        # Checks tells the function which frame to set based on what frame is currently up
-        for index, test in enumerate(test_completed_list):            
-
-            if test == True and index >=  self.current_test_index:
-                print("Test", index + 1, "== True")
-                if self.completed_window_alive == False:
-                    self.completed_window_popup()
-                else:
-                    pass
-            elif test == True:
-                pass
-            else:
-                test_incomplete = True
-                print(self.current_test_index)
-                self.set_frame_test(self.current_test_index)
-                self.current_test_index += 1
-                break
-                #if (index ==0):
-                #    self.set_frame_test()
-                #    self.current_test_index = 1
-                #elif (index == 1):
-                #    self.set_frame_test2()
-                #    self.current_test_index = 2
-                #elif (index == 2):
-                #    self.set_frame_test3()
-                #    self.current_test_index = 3
-                #elif (index == 3):
-                #    self.set_frame_test4()
-                #    self.current_test_index = 4
-                #break
-        
-
-
-        # Tests if all the tests have been completed
-        # if true, brings user to Test Summary Frame rather than the next test
-        if (not test_incomplete):
+        if (self.current_test_index < total_num_tests):
+            print(self.current_test_index)
+            self.set_frame_test(self.current_test_index)
+            self.current_test_index += 1
+        else:
             self.set_frame_test_summary()
+            
+
+
 
     def reset_board(self):
         self.current_test_index = 0
@@ -417,6 +389,11 @@ class GUIWindow():
 
         logging.info("GUIWindow: The frame has been raised.")
 
+        self.set_help_text(_frame)
+
+        self.master_frame.update()
+        self.master_window.update()
+
     #################################################
 
 
@@ -456,6 +433,128 @@ class GUIWindow():
         )
         btn_ok.grid(column = 0, row = 1, columnspan=2)
 
+
+
+    #################################################
+
+
+    def help_popup(self, current_window):
+        
+        logging.debug("GUIWindow: The user has requested a help window")
+        logging.debug("Opening a help menu for {}".format(type(current_window)))
+
+        # Creates a popup to confirm whether or not to exit out of the window
+        self.popup = tk.Toplevel()
+        # popup.wm_attributes('-toolwindow', 'True')
+        self.popup.title("Help Window") 
+        self.popup.geometry("650x650+500+300")
+        #self.popup.grab_set()
+       
+        self.mycanvas = tk.Canvas(self.popup, background="#808080", width=630, height =650)
+        self.viewingFrame = tk.Frame(self.mycanvas, width = 200, height = 200)
+        self.scroller = ttk.Scrollbar(self.popup, orient="vertical", command=self.mycanvas.yview)
+        self.mycanvas.configure(yscrollcommand=self.scroller.set)
+
+
+
+        self.canvas_window = self.mycanvas.create_window((4,4), window=self.viewingFrame, anchor='nw', tags="self.viewingFrame")
+
+
+        self.viewingFrame.bind("<Configure>", self.onFrameConfigure)
+        self.mycanvas.bind("<Configure>", self.onCanvasConfigure)
+
+        self.viewingFrame.bind('<Enter>', self.onEnter)
+        self.viewingFrame.bind('<Leave>', self.onLeave)
+
+        self.onFrameConfigure(None)
+ 
+        
+        self.set_help_text(current_window)
+        
+        # Creates frame in the new window
+        #frm_popup = tk.Frame(self.mycanvas)
+        #frm_popup.pack()
+
+   
+        # Creates label in the frame
+        lbl_popup = tk.Label(
+            self.viewingFrame, 
+            textvariable = self.label_text,
+            font = ('Arial', 11)
+            )
+        lbl_popup.grid(column = 0, row = 0, pady = 5, padx = 50)
+
+
+        self.mycanvas.pack(side="right")
+        self.scroller.pack(side="left", fill="both", expand=True)
+      
+
+        #btn_ok = tk.Button(
+        #    frm_popup,
+        #    width = 8,
+        #    height = 2,
+        #    text = "OK",
+        #    font = ('Arial', 8),
+        #    relief = tk.RAISED,
+        #    command = lambda: self.destroy_popup()
+        #)
+        #btn_ok.grid(column = 0, row = 0)
+
+
+    #############################################
+
+
+    def set_help_text(self, current_window):
+
+
+        # Help from file
+        file = open("{}/HGCAL_Help/{}_help.txt".format(PythonFiles.__path__[0], type(current_window).__name__))
+        self.all_text = file.read()
+
+        #print("\nall_text: ", self.all_text)
+
+     
+        self.label_text.set(self.all_text)
+
+    #################################################
+
+    def onFrameConfigure(self, event):
+        '''Reset the scroll region to encompass the inner frame'''
+        self.mycanvas.configure(scrollregion=self.mycanvas.bbox("all"))                 #whenever the size of the frame changes, alter the scroll region respectively.
+
+    def onCanvasConfigure(self, event):
+        '''Reset the canvas window to encompass inner frame when required'''
+        canvas_width = event.width
+        self.mycanvas.itemconfig(self, width = canvas_width)            #whenever the size of the canvas changes alter the window region respectively.
+
+
+    #################################################
+    #################################################
+
+
+    def onMouseWheel(self, event):             # cross platform scroll wheel event
+        if event.num == 4:
+            self.mycanvas.yview_scroll( -1, "units" )
+        elif event.num == 5:
+            self.mycanvas.yview_scroll( 1, "units" )
+    
+    def onEnter(self, event):                  # bind wheel events when the cursor enters the control
+        self.mycanvas.bind_all("<Button-4>", self.onMouseWheel)
+        self.mycanvas.bind_all("<Button-5>", self.onMouseWheel)
+
+    def onLeave(self, event):                  # unbind wheel events when the cursorl leaves the control
+        self.mycanvas.unbind_all("<Button-4>")
+        self.mycanvas.unbind_all("<Button-5>")
+
+
+
+
+    #################################################
+
+    def report_bug(self, current_window):
+        url = 'https://github.com/UMN-CMS/HGCALTestGUI/issues'
+        webbrowser.open(url, new = 1)
+
     #################################################
     
     # Called when a test is skipped because it has been previously passed
@@ -494,6 +593,9 @@ class GUIWindow():
             command = lambda: self.destroy_popup()
             )
         btn_okay.grid(column = 0, row = 1)
+    
+
+
     # Called when the no button is pressed to destroy popup and return you to the main window
     def destroy_popup(self):
         try:
@@ -502,6 +604,8 @@ class GUIWindow():
             logging.debug("GUIWindow: The popup has been destroyed.")
         except:
             logging.error("GUIWindow: The popup has not been destroyed.")
+    
+
     # New function for clicking on the exit button
     def exit_function(self):
 
@@ -563,7 +667,7 @@ class GUIWindow():
 
             if self.scan_frame.is_current_scene == True:
                 self.test_in_progress_frame.close_prgbar()
-                self.scan_frame.kill_processes()
+            self.scan_frame.kill_processes()
 
             # Destroys the popup and master window
             self.popup.destroy()

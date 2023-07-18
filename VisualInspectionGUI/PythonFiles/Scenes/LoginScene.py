@@ -2,8 +2,14 @@
 
 # importing necessary modules
 import tkinter as tk
+import logging
+import PythonFiles
+import os
 
 #################################################################################
+
+FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 
 # Creates a class that is called by the GUIWindow. 
@@ -17,18 +23,24 @@ class LoginScene(tk.Frame):
     #################################################
 
     def __init__(self, parent, master_frame, data_holder):
-        super().__init__(master_frame, width=850, height=500)
 
+        super().__init__(master_frame, width = 1105, height = 650)
         self.data_holder = data_holder
+        self.update_frame(parent)
+
+
+    def update_frame(self, parent):
+
+        for widget in self.winfo_children():
+            widget.destroy()
+
+
+        logging.info("LoginScene: Frame has been created.")
 
 
         # Creating a list of users for dropdown menu
         # Eventually need to add a way for a database to have control over this list
-        User_List = [
-            "Bob Johnson",
-            "Spencer Higgins",
-            "Amanda Holmes"
-        ]
+        User_List = self.data_holder.get_all_users()
 
         # Creating the title for the window
         lbl_title = tk.Label(
@@ -84,9 +96,30 @@ class LoginScene(tk.Frame):
             )
         self.btn_add_user.pack(pady=70)
 
+        # Creating the help button
+        self.btn_help = tk.Button(
+            self,
+            relief = tk.RAISED,
+            text = "Help",
+            command = lambda: self.help_action(parent)
+        )   
+        self.btn_help.pack(anchor = 's', padx = 10, pady = 20) 
+
+
         # Forces frame to stay the size of the main_window
         # rather than adjusting to the size of the widgets
         self.pack_propagate(0)
+
+    
+
+    #################################################
+
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    ################################################# 
+
 
     #################################################
 
@@ -95,7 +128,7 @@ class LoginScene(tk.Frame):
     # passes in GUIWindow
     def btn_submit_action(self, _parent):
             # Sets the user_ID in the data_holder to the selected user
-        self.data_holder.user_ID = self.user_selected.get()
+        self.data_holder.set_user_ID(self.user_selected.get())
         # Changes frame to scan_frame
         _parent.set_frame_scan_frame()
 
@@ -106,15 +139,16 @@ class LoginScene(tk.Frame):
 
     # To be given commands later, for now it is a dummy function
     def btn_add_user_action(self, _parent):
-        pass
+        _parent.set_frame_add_user_frame()
     
     #################################################
 
     # A function to pack the submit button
     def show_submit_button(self):
+        logging.info("LoginScene: User has been selected.")
         self.btn_submit.config(state = 'active')
     
     #################################################
 
-
+    
 #################################################################################
