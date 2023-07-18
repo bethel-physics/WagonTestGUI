@@ -49,4 +49,8 @@ class GUIConfig():
 
     def getTestNames(self):
         return [test["name"] for test in self.board_cfg["Test"]]
+
+    # Returns a dictionary of each photo required
+    def getPhotoList(self):
+        return self.board_cfg['Photo']
         

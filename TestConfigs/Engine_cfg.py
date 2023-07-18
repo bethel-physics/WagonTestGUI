@@ -1,6 +1,6 @@
 masterCfg = {
 
-    "GUIType": "Wagon",
+    "GUIType": "Engine",
 
 
     # Order of tests matters here
@@ -136,6 +136,24 @@ masterCfg = {
             "desc_long": "PRBS validation from and back to ZCU. Check bit error rate below threshold.",
         },
     ],
+
+
+    "PhysicalTest": [
+        {
+            "name": "SAMPLE test", 
+            "required": 1, 
+            "desc_short": "Some short description", 
+            "desc_long": "Really long description for later purposes.",
+            "criteria": {
+                "first testing criteria",
+                "second testing criteria",
+                "third testing criteria",                
+            },
+
+        }, 
+
+    ],
+
     # Example of information needed for tests (from Wagon config)
     # Use template dictionary above
     # FOLLOW THE FORMAT EXPICITLY PLEASE :)

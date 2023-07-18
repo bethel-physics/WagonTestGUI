@@ -43,6 +43,8 @@ class DataHolder():
                 'inspection_comments': "_"
                 }
 
+        self.image_data = []
+
         self.data_lists = {
                 'test_results': [],
                 'test_completion': [] 
@@ -56,7 +58,14 @@ class DataHolder():
 
         self.current_test_idx = self.gui_cfg.getTestIndex()
 
+        self.photo_list = self.gui_cfg.getPhotoList()
+
+
     #################################################
+
+    def get_photo_list(self):
+        return self.photo_list
+
 
     def add_new_user_name(self, user_ID, passwd):
         self.data_dict['user_ID'] = user_ID
@@ -121,7 +130,8 @@ class DataHolder():
         self.data_dict['current_serial_ID'] = sn
         logging.info("DataHolder: Serial Number has been set.")
 
-    
+    def send_image(self, img_idx=0):
+        self.data_sender.add_board_image(self.data_dict["current_serial_ID"], open(self.image_data[img_idx], "rb"))
 
     def test_new_board(self, sn):
         logging.info("DataHolder: Checking if serial is a new board")

@@ -236,8 +236,10 @@ class Inspection1(tk.Frame):
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
         
+        _parent.go_to_next_test()
+        
         self.update_data_holder()
-        _parent.set_frame_test_summary()
+        
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # #
         #   ++ GOAL CODE ++                                 #

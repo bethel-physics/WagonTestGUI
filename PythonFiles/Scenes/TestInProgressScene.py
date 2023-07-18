@@ -1,4 +1,4 @@
-#################################################################################
+################################################################################
 
 # Imports all the necessary modules
 import tkinter as tk
@@ -33,7 +33,7 @@ class TestInProgressScene(tk.Frame):
 
     # A function for the stop button
     def btn_stop_action(self, _parent):
-
+        self.window_closed = True
         _parent.go_to_next_test()
 
         
@@ -114,14 +114,14 @@ class TestInProgressScene(tk.Frame):
     # A function for the stop button
     def btn_stop_action(self, _parent):
 
-        _parent.go_to_next_test()
+        _parent.return_to_current_test()
 
 
 
     # Goes to the next scene after the progress scene is complete
     def go_to_next_frame(self, _parent):
         _parent.go_to_next_test()
-
+        self.window_closed = True
         
 
     # Used to bring the user back to the test that just failed
@@ -142,6 +142,8 @@ class TestInProgressScene(tk.Frame):
         # Time waiting (sec) = counter * refresh_break
         counter = 0
 
+        self.window_closed = False
+
         # Maximum timeout in seconds
         Timeout_after = 10
         MAX_TIMEOUT = Timeout_after / 2.5
@@ -151,11 +153,11 @@ class TestInProgressScene(tk.Frame):
             
             information_received = False
             while 1>0:
-                    # try:
-                print("\nUpdating master_window")
+                #try:
+                #print("\nUpdating master_window")
                 master_window.update()
-                print("Queue: ")
-                print(queue)
+                #print("Queue: ")
+                #print(queue)
                 if not queue.empty():    
                     print("\n\nTestInProgressScene: the queue is not empty") 
                     information_received = True
@@ -169,33 +171,43 @@ class TestInProgressScene(tk.Frame):
                     if text == "Results received successfully.":
                     
                         message =  self.conn.recv()
-                        
+                        print(message)   
                         self.data_holder.update_from_json_string(message) 
                         
                         logging.info("TestInProgressScene: JSON Received.")
-                        master_window.update()
-                        time.sleep(1)
+                        try:
+                            master_window.update()
+                        except Exception as e:
+                            print("\nTestInProgressScene: Unable to update master_window\n")
+                            print("Exception: ", e)
+
+                        time.sleep(0.2)
                         break
+
+                if self.window_closed == True:
+                    break
                     
-                else:
-                
-                    print("\nTestInProgressScene: The queue is empty, going to sleep for {} seconds".format(refresh_break))
+                #else:
+                #
+                #    print("TestInProgressScene: The queue is empty, going to sleep for {} seconds".format(refresh_break))
 
-                    # Sleep before looking for more information
-                    time.sleep(refresh_break)
+                #    # Sleep before looking for more information
+                #    time.sleep(refresh_break)
 
-                    # Increment the counter of time spent sleeping
-                    counter = counter + 1
+                #    # Increment the counter of time spent sleeping
+                #    counter = counter + 1
 
-                    # If beyond the MAX_TIMEOUT range -> raise an exception
-                    if (counter > MAX_TIMEOUT/refresh_break) and not information_received:
-                        print("\n\nTestInProcessScene: Raising an exception now\n")
-                        logging.info("TestInProgressScene: Raising Exception -> Timeout Reached - 10 seconds")
-                        raise Exception("Process timed out after 10 seconds")
-                        time.sleep(1)
-                        break
-        except:
+                #    # If beyond the MAX_TIMEOUT range -> raise an exception
+                #    if (counter > MAX_TIMEOUT/refresh_break) and not information_received:
+                #        print("\n\nTestInProcessScene: Raising an exception now\n")
+                #        logging.info("TestInProgressScene: Raising Exception -> Timeout Reached - 10 seconds")
+                #        raise ValueError("Process timed out after 10 seconds")
+                #        time.sleep(1)
+                #        break
+        except ValueError as e:
             
+            print("\n\nException:  ", e)
+
             # Throw a message box that shows the error message
             # Logs the message
             time_sec = counter*refresh_break
@@ -205,6 +217,11 @@ class TestInProgressScene(tk.Frame):
             logging.info("TestInProgressScene: Trying to go back to the login frame.")
             parent.set_frame_login_frame()
             return False
+        
+        except Exception as e:
+            
+            print("\n\nException:  ", e, "\n\n")
+
         return True    
 
 
