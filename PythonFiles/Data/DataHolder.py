@@ -1,6 +1,5 @@
 ################################################################################
 import json, logging, socket, PythonFiles, copy, os
-from PythonFiles.Data.DBSendClient import DBSendClient
 from PythonFiles.Data.DBSender import DBSender
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'

@@ -3,6 +3,7 @@
 import PythonFiles
 import json, logging
 import tkinter as tk
+from tkinter import ttk
 from PIL import ImageTk as iTK
 from PIL import Image
 from matplotlib.pyplot import table
@@ -78,7 +79,7 @@ class TestSummaryScene(tk.Frame):
                 text = "Serial Number: " + str(self.data_holder.data_dict['current_serial_ID']),
                 font=('Arial', 14)
                 )
-        self.lbl_snum.grid(column = 2, row = 0, pady = 20)
+        self.lbl_snum.grid(column = 2, row = 0, pady = 20, padx = 5)
 
         # Adds Tester Name to the TestSummary Frame
         self.lbl_tester = tk.Label(
@@ -86,24 +87,52 @@ class TestSummaryScene(tk.Frame):
                 text = "Tester: " + self.data_holder.data_dict['user_ID'],
                 font=('Arial', 14)
                 )
-        self.lbl_tester.grid(column = 0, row = 0, pady = 20)
+        self.lbl_tester.grid(column = 3, row = 0, pady = 20, padx = 5)
        
-        
-        # Creates the "table" as a frame object
-        self.frm_table = tk.Frame(self)
-        self.frm_table.grid(row = 1, column= 0, columnspan = 4, rowspan = 4)
-        
+
+
+        #self.scrollerFrame = tk.Frame(self, background = "White", width = 900, height = 900)
+    
+
+
+        ##########
+
+        self.mycanvas = tk.Canvas(self, background="#808080")
+        self.viewingFrame = tk.Frame(self.mycanvas, background = "#808080", width = 802, height = 400)
+        self.scroller = ttk.Scrollbar(self, orient="vertical", command=self.mycanvas.yview)
+        self.mycanvas.configure(yscrollcommand=self.scroller.set)
+
+        self.mycanvas.grid(row = 3, column = 1, columnspan = 4)
+        self.scroller.grid(row = 3, column = 0, sticky='NS')
+
+
+        self.canvas_window = self.mycanvas.create_window((4,4), window=self.viewingFrame, anchor='nw', tags="self.viewingFrame")
+
+
+
+
+        self.viewingFrame.bind("<Configure>", self.onFrameConfigure)
+        self.mycanvas.bind("<Configure>", self.onCanvasConfigure)
+
+        self.viewingFrame.bind('<Enter>', self.onEnter)
+        self.viewingFrame.bind('<Leave>', self.onLeave)
+
+        self.onFrameConfigure(None)
+
+
+
+    
         # Setting weights of columns so the column 4 is half the size of columns 0-3
         for i in range(self.data_holder.getNumTest()):
-            self.frm_table.columnconfigure(i, weight = 2)
-        self.frm_table.columnconfigure(self.data_holder.getNumTest(), weight = 1)
+            self.viewingFrame.columnconfigure(i, weight = 2)
+        self.viewingFrame.columnconfigure(self.data_holder.getNumTest(), weight = 1)
         
 
         
         # Adds the labels to the top of the table
         for index in range(len(self.list_of_table_labels)):
             _label = tk.Label(
-                    self.frm_table, 
+                    self.viewingFrame, 
                     text = self.list_of_table_labels[index], 
                     relief = 'ridge', 
                     width=25, 
@@ -116,11 +145,11 @@ class TestSummaryScene(tk.Frame):
         # Adds the test names to the first column
         for index in range(len(self.list_of_tests)):
             _label= tk.Label(
-                    self.frm_table, 
+                    self.viewingFrame, 
                     text = self.list_of_tests[index], 
                     relief = 'ridge', 
                     width=25, 
-                    height=5, 
+                    height=3, 
                     font=('Arial', 11)
                     )
             _label.grid(row=index + 1, column=0)
@@ -132,10 +161,10 @@ class TestSummaryScene(tk.Frame):
             
             # Instantiates a Label
             _label = tk.Label(
-                        self.frm_table,
+                        self.viewingFrame,
                         relief = 'ridge', 
                         width=25, 
-                        height=5, 
+                        height=3, 
                         font=('Arial',11)
                         )
 
@@ -161,7 +190,7 @@ class TestSummaryScene(tk.Frame):
                 Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
                 Green_Check_Image = Green_Check_Image.resize((75,75), Image.ANTIALIAS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
-                GreenCheck_Label = tk.Label(self.frm_table, image=Green_Check_PhotoImage, width=75, height=75)
+                GreenCheck_Label = tk.Label(self.viewingFrame, image=Green_Check_PhotoImage, width=75, height=75)
                 GreenCheck_Label.image = Green_Check_PhotoImage
 
                 GreenCheck_Label.grid(row=index + 1, column=2)
@@ -171,17 +200,63 @@ class TestSummaryScene(tk.Frame):
                 Red_X_Image = Image.open("{}/Images/RedX.png".format(PythonFiles.__path__[0]))
                 Red_X_Image = Red_X_Image.resize((75,75), Image.ANTIALIAS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
-                RedX_Label = tk.Label(self.frm_table, image=Red_X_PhotoImage, width=75, height=75)
+                RedX_Label = tk.Label(self.viewingFrame, image=Red_X_PhotoImage, width=75, height=75)
                 RedX_Label.image = Red_X_PhotoImage
 
                 RedX_Label.grid(row=index + 1, column=2)
 
 
         self.create_retest_more_info_btns(parent)
-       
-        self.grid_propagate(0)
+        
+
+        #self.viewingFrame.update_idletasks()
+        #self.mycanvas.update_idletasks()        
+
+        new_width = self.viewingFrame.winfo_reqwidth()
+        new_height = self.viewingFrame.winfo_reqheight()
+        
+        print("\nnew_width: {}, new_height: {}\n".format(new_width, new_height))
+
+
+        self.mycanvas.configure(width = new_width, height = new_height)      
+
+        #self.scrollerFrame.grid(row = 2, column = 1, columnspan = 4)
+ 
+        #self.scrollerFrame.grid_propagate(0)
 
         logging.debug("TestSummaryScene: Table finished update.")     
+
+    #################################################
+    #################################################
+
+    def onFrameConfigure(self, event):
+        '''Reset the scroll region to encompass the inner frame'''
+        self.mycanvas.configure(scrollregion=self.mycanvas.bbox("all"))                 #whenever the size of the frame changes, alter the scroll region respectively.
+
+    def onCanvasConfigure(self, event):
+        '''Reset the canvas window to encompass inner frame when required'''
+        canvas_width = event.width
+        self.mycanvas.itemconfig(self, width = canvas_width)            #whenever the size of the canvas changes alter the window region respectively.
+
+
+    def onMouseWheel(self, event):                                                  # cross platform scroll wheel event
+        if event.num == 4:
+            self.mycanvas.yview_scroll( -1, "units" )
+        elif event.num == 5:
+            self.mycanvas.yview_scroll( 1, "units" )
+
+    def onEnter(self, event):                                                       # bind wheel events when the cursor enters the control
+        self.mycanvas.bind_all("<Button-4>", self.onMouseWheel)
+        self.mycanvas.bind_all("<Button-5>", self.onMouseWheel)
+
+    def onLeave(self, event):                                                       # unbind wheel events when the cursorl leaves the control
+        self.mycanvas.unbind_all("<Button-4>")
+        self.mycanvas.unbind_all("<Button-5>")
+
+
+
+    #################################################
+    
 
     #################################################
 
@@ -195,14 +270,14 @@ class TestSummaryScene(tk.Frame):
         more_infos = []
 
         for i in range(self.data_holder.getNumTest()):
-            rows.append(tk.Frame(self.frm_table))
+            rows.append(tk.Frame(self.viewingFrame))
             rows[i].grid(column = 3, row = i + 1)
 
             retests.append(tk.Button(
                     rows[i], 
                     text = "RETEST",
                     padx= 5,
-                    pady=5,  
+                    pady=3,  
                     command = lambda i=i: self.btn_retest_action(parent, i)
                     ))
             retests[i].grid(column = 1, row = 0, padx=5, pady=5)
@@ -211,19 +286,19 @@ class TestSummaryScene(tk.Frame):
                     rows[i], 
                     text = "MORE INFO", 
                     padx= 5,
-                    pady=5, 
+                    pady=3, 
                     command = lambda i=i: self.btn_more_info_action(parent, i)
                     ))
             more_infos[i].grid(column=0, row = 0)
 
 
         btn_next_test = tk.Button(
-                self.frm_table, 
+                self.viewingFrame, 
                 text = "NEXT BOARD",
                 font = ('Arial', 15), 
                 command = lambda: self.btn_next_test_action(parent)
                 )
-        btn_next_test.grid(column = 3, row = self.data_holder.getNumTest() + 1)
+        btn_next_test.grid(column = 3, row = self.data_holder.getNumTest() + 3)
 
         logging.debug("TestSummaryScene: Buttons finshed being created.")
 

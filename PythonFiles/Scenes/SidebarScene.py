@@ -28,6 +28,9 @@ class SidebarScene(tk.Frame):
 
         super().__init__( sidebar_frame, width=213, height = 650, bg = '#808080', padx = 10, pady=10)
         
+
+        ############        
+        
         self.mycanvas = tk.Canvas(self, background="#808080", width=213, height =650)
         self.viewingFrame = tk.Frame(self.mycanvas, background = "#808080", width = 213, height = 650)
         self.scroller = ttk.Scrollbar(self, orient="vertical", command=self.mycanvas.yview)
