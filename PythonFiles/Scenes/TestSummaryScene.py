@@ -97,8 +97,8 @@ class TestSummaryScene(tk.Frame):
 
         ##########
 
-        self.mycanvas = tk.Canvas(self, background="#808080")
-        self.viewingFrame = tk.Frame(self.mycanvas, background = "#808080", width = 802, height = 400)
+        self.mycanvas = tk.Canvas(self)
+        self.viewingFrame = tk.Frame(self.mycanvas, width = 802, height = 400)
         self.scroller = ttk.Scrollbar(self, orient="vertical", command=self.mycanvas.yview)
         self.mycanvas.configure(yscrollcommand=self.scroller.set)
 

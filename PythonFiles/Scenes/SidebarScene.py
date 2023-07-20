@@ -114,25 +114,25 @@ class SidebarScene(tk.Frame):
 
         #print("\nThere are {} physical tests\n".format(self.data_holder.getNumPhysicalTest()))
 
-        for i in range(self.data_holder.getNumPhysicalTest()): 
-            #print("Physical Button should point to the {} test".format(i + physical_offset))
-            self.test_btns.append(tk.Button(
-                self.viewingFrame, 
-                pady = btn_pady,
-                text = '{}'.format(physical_names[i]),
-                height = btn_height,
-                width = btn_width,
-                font = btn_font,
-                command = lambda i=i: self.btn_test_action(parent, i)
-                ))
-            self.test_btns[i+physical_offset].grid(column = 0, row = i + original_offset)
+        #for i in range(self.data_holder.getNumPhysicalTest()): 
+        #    #print("Physical Button should point to the {} test".format(i + physical_offset))
+        #    self.test_btns.append(tk.Button(
+        #        self.viewingFrame, 
+        #        pady = btn_pady,
+        #        text = '{}'.format(physical_names[i]),
+        #        height = btn_height,
+        #        width = btn_width,
+        #        font = btn_font,
+        #        command = lambda i=i: self.btn_test_action(parent, i)
+        #        ))
+        #    self.test_btns[i+physical_offset].grid(column = 0, row = i + original_offset)
 
-            #print(self.data_holder.data_dict)
+        #    #print(self.data_holder.data_dict)
 
-            if self.data_holder.data_dict['physical{}_pass'.format(i+1+physical_offset)] == True:
-                self.test_btns[i+physical_offset].config(state = 'disabled')
-            
-            physical_offset = physical_offset + 1
+        #    if self.data_holder.data_dict['physical{}_pass'.format(i+1+physical_offset)] == True:
+        #        self.test_btns[i+physical_offset].config(state = 'disabled')
+        #    
+        #    physical_offset = physical_offset + 1
 
 
         #
@@ -210,30 +210,30 @@ class SidebarScene(tk.Frame):
 
                 RedX_Label.grid(row=index + original_offset + physical_offset, column=1)
 
-        self.physical_pass_fail = self.data_holder.data_lists['physical_results']
-        
-        # For loop to create checkmarks based on pass/fail
-        for index in range(len(self.physical_pass_fail)):
-            #print("Pass fail:", self.physical_pass_fail)
-            if(self.physical_pass_fail[index] == True):
-                # Create a photoimage object of the QR Code
-                Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
-                Green_Check_Image = Green_Check_Image.resize((50,50), Image.ANTIALIAS)
-                Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
-                GreenCheck_Label = tk.Label(self.viewingFrame, image=Green_Check_PhotoImage, width=50, height=50, bg = '#808080')
-                GreenCheck_Label.image = Green_Check_PhotoImage
+        #self.physical_pass_fail = self.data_holder.data_lists['physical_results']
+        #
+        ## For loop to create checkmarks based on pass/fail
+        #for index in range(len(self.physical_pass_fail)):
+        #    #print("Pass fail:", self.physical_pass_fail)
+        #    if(self.physical_pass_fail[index] == True):
+        #        # Create a photoimage object of the QR Code
+        #        Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
+        #        Green_Check_Image = Green_Check_Image.resize((50,50), Image.ANTIALIAS)
+        #        Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
+        #        GreenCheck_Label = tk.Label(self.viewingFrame, image=Green_Check_PhotoImage, width=50, height=50, bg = '#808080')
+        #        GreenCheck_Label.image = Green_Check_PhotoImage
 
-                GreenCheck_Label.grid(row=index + original_offset, column=1)
+        #        GreenCheck_Label.grid(row=index + original_offset, column=1)
 
-            else:
-                # Create a photoimage object of the QR Code
-                Red_X_Image = Image.open("{}/Images/RedX.png".format(PythonFiles.__path__[0]))
-                Red_X_Image = Red_X_Image.resize((50,50), Image.ANTIALIAS)
-                Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
-                RedX_Label = tk.Label(self.viewingFrame, image=Red_X_PhotoImage, width=50, height=50, bg = '#808080')
-                RedX_Label.image = Red_X_PhotoImage
+        #    else:
+        #        # Create a photoimage object of the QR Code
+        #        Red_X_Image = Image.open("{}/Images/RedX.png".format(PythonFiles.__path__[0]))
+        #        Red_X_Image = Red_X_Image.resize((50,50), Image.ANTIALIAS)
+        #        Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
+        #        RedX_Label = tk.Label(self.viewingFrame, image=Red_X_PhotoImage, width=50, height=50, bg = '#808080')
+        #        RedX_Label.image = Red_X_PhotoImage
 
-                RedX_Label.grid(row=index + original_offset, column=1)
+        #        RedX_Label.grid(row=index + original_offset, column=1)
 
 
 

@@ -267,9 +267,9 @@ class DataHolder():
             self.data_dict["test{}_pass".format(i+1)] = False
 
 
-        for i in range(self.gui_cfg.getNumPhysicalTest()):
-            self.data_dict["physical{}_completed".format(i+1)] = False
-            self.data_dict["physical{}_pass".format(i+1)] = False
+        #for i in range(self.gui_cfg.getNumPhysicalTest()):
+        #    self.data_dict["physical{}_completed".format(i+1)] = False
+        #    self.data_dict["physical{}_pass".format(i+1)] = False
 
         self.inspection_data = {
                 'board_chipped_bent': False,
@@ -282,33 +282,33 @@ class DataHolder():
         self.data_lists = {
                 'test_results': [],
                 'test_completion': [], 
-                'physical_results': [],
-                'physical_completion': []
+                #'physical_results': [],
+                #'physical_completion': []
                 }
         
         # Number of digital and physical tests
         self.total_test_num = 0
 
-        self.ptest_criteria = {}
-        self.ptest_names = self.gui_cfg.getPhysicalNames()
+        #self.ptest_criteria = {}
+        #self.ptest_names = self.gui_cfg.getPhysicalNames()
         
-        # Adding the physical tests to the data_lists
-        for i in range(self.gui_cfg.getNumPhysicalTest()):
-            self.data_lists['physical_results'].append(self.data_dict['physical{}_pass'.format(i+1)])
-            self.data_lists['physical_completion'].append(self.data_dict['physical{}_completed'.format(i+1)])
-        
-            temp_dict = {
-                "{}".format(i+1) : self.gui_cfg.getPhysicalTestRequirements(i), 
-            }
+        ## Adding the physical tests to the data_lists
+        #for i in range(self.gui_cfg.getNumPhysicalTest()):
+        #    self.data_lists['physical_results'].append(self.data_dict['physical{}_pass'.format(i+1)])
+        #    self.data_lists['physical_completion'].append(self.data_dict['physical{}_completed'.format(i+1)])
+        #
+        #    temp_dict = {
+        #        "{}".format(i+1) : self.gui_cfg.getPhysicalTestRequirements(i), 
+        #    }
 
-            
-            self.ptest_criteria.update(temp_dict)
+        #    
+        #    self.ptest_criteria.update(temp_dict)
 
     
-            self.total_test_num = self.total_test_num + 1
+        #    self.total_test_num = self.total_test_num + 1
 
 
-        print("\nptest_criteria: {}".format(self.ptest_criteria))
+        #print("\nptest_criteria: {}".format(self.ptest_criteria))
 
         # Adding the digital tests to the data_lists
         for i in range(self.gui_cfg.getNumTest()):
