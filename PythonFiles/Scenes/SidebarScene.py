@@ -102,7 +102,7 @@ class SidebarScene(tk.Frame):
         self.btn_scan.grid(column = 0, row = 1)
 
         test_names = self.data_holder.getTestNames()
-        physical_names = self.data_holder.getPhysicalNames()
+        #physical_names = self.data_holder.getPhysicalNames()
 
         self.test_btns = []
 
@@ -186,6 +186,9 @@ class SidebarScene(tk.Frame):
 
         # List for creating check marks with for loop
         self.list_of_pass_fail = self.data_holder.data_lists['test_results']
+
+        print("\n\n\n{}\n\n\n".format(self.list_of_pass_fail))
+
 
         # For loop to create checkmarks based on pass/fail
         for index in range(len(self.list_of_pass_fail)):

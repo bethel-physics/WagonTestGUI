@@ -62,7 +62,9 @@ class GUIWindow():
         # Variables necessary for the help popup
         self.all_text = "No help available for this scene."
         self.label_text = tk.StringVar()
-
+        
+        # Running all tests in succession?
+        self.run_all_tests_bool = False
         
         # Should be resizable with following code commented out
         #self.master_window.resizable(0,0)
@@ -158,6 +160,21 @@ class GUIWindow():
 
     #################################################
 
+    def run_all_tests(self, test_idx):
+        self.running_all_idx = test_idx
+        self.run_all_tests_bool = True
+
+        try:
+            test_client = REQClient('test{}'.format(self.running_all_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
+            self.set_frame_test_in_progress(self.queue)
+        except Exception as e:
+            messagebox.showerror('Exception', e)
+
+        print("Confirm button sending test{}".format(self.running_all_idx))
+
+        
+
+
     def set_frame_test_choice_frame(self):
         
         print("GUIWindow: Setting frame to test_choice_frame. Empty method")        
@@ -234,7 +251,7 @@ class GUIWindow():
         self.data_holder.setTestIdx(test_idx)
 
         selected_test_frame = self.test_frames[test_idx]
-        print("\nSetting frame to test {}\n".format(test_idx))
+        print("Setting frame to test {}".format(test_idx))
         selected_test_frame.update_frame(self)
         print("Frame updated!")
         
@@ -243,37 +260,6 @@ class GUIWindow():
 
         logging.debug("GUIWindow: The frame has been set to test {}.".format(test_idx))
 
-    #################################################
-
-    def set_frame_test1(self):
-        self.test1_frame.update_frame(self)
-        IIIself.set_frame(self.test1_frame)
-
-        logging.debug("GUIWindow: The frame has been set to test1_frame.")
-    #################################################
-
-    def set_frame_test2(self):
-        self.test2_frame.update_frame(self)
-        self.set_frame(self.test2_frame)
-
-
-        logging.debug("GUIWindow: The frame has been set to test2_frame.")
-    #################################################
-
-    def set_frame_test3(self):
-        self.test3_frame.update_frame(self)
-        self.set_frame(self.test3_frame)
-        
-
-        logging.debug("GUIWindow: The frame has been set to test3_frame.")
-    #################################################
-
-    def set_frame_test4(self):
-        self.test4_frame.update_frame(self)
-        self.set_frame(self.test4_frame)
-
-
-        logging.debug("GUIWindow: The frame has been set to test4_frame.")
     #################################################
 
     def set_frame_test_in_progress(self, queue):
@@ -297,24 +283,51 @@ class GUIWindow():
         self.current_test_index -= 1
         self.set_frame_test(self.current_test_index)
 
+        self.data_holder.setTestIdx(test_idx)
 
     def go_to_next_test(self):
-        
+            
+        # Updates the sidebar every time the frame is set
+        self.sidebar.update_sidebar(self)
+
         total_num_tests = self.data_holder.total_test_num
         num_digital = self.data_holder.getNumTest()
-        num_physical = self.data_holder.getNumPhysicalTest()
+        #num_physical = self.data_holder.getNumPhysicalTest()
+        
 
-        print("\nTotal num of tests: {}, Digital: {}, Physical: {}\n".format(total_num_tests, num_digital, num_physical))
-        print("self.current_test_index: ", self.current_test_index)
+        print("Total num of tests: {}, Digital: {}\n".format(total_num_tests, num_digital))
 
-        if (self.current_test_index < total_num_tests):
-            print(self.current_test_index)
-            self.set_frame_test(self.current_test_index)
-            self.current_test_index += 1
+        if not self.run_all_tests_bool:        
+
+            print("self.current_test_index: ", self.current_test_index)
+
+            if (self.current_test_index < total_num_tests):
+                print(self.current_test_index)
+                self.set_frame_test(self.current_test_index)
+                self.current_test_index += 1
+            else:
+                self.set_frame_test_summary()
+            
         else:
-            self.set_frame_test_summary()
+            self.running_all_idx += 1
+        
+            if (self.running_all_idx < total_num_tests):
+
+                self.data_holder.setTestIdx(self.current_test_index)
+                self.current_test_index += 1
+                
+                try:
+                    test_client = REQClient('test{}'.format(self.running_all_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
+                    self.set_frame_test_in_progress(self.queue)
+                except Exception as e:
+                    messagebox.showerror('Exception', e)
+
+                print("Confirm button sending test{}".format(self.running_all_idx))
             
 
+            else: 
+                self.run_all_tests_bool = False
+                self.set_frame_test_summary()
 
 
     def reset_board(self):

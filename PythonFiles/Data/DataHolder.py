@@ -38,8 +38,8 @@ class DataHolder():
 
     #################################################
 
-    def get_physical_criteria(self, num):
-        return self.ptest_criteria[num]
+    #def get_physical_criteria(self, num):
+    #    return self.ptest_criteria[num]
 
     #################################################
 
@@ -194,7 +194,7 @@ class DataHolder():
 
         test_names = self.gui_cfg.getTestNames()
 
-        current_test_idx = self.gui_cfg.getTestIndex() - self.gui_cfg.getNumPhysicalTest()
+        current_test_idx = self.gui_cfg.getTestIndex() # - self.gui_cfg.getNumPhysicalTest()
         print("current_test_idx: {}".format(current_test_idx))
 
         with open("{}/JSONFiles/Current_{}_JSON.json".format(PythonFiles.__path__[0], test_names[current_test_idx].replace(" ", "").replace("/", "")), "w") as file:
@@ -251,11 +251,11 @@ class DataHolder():
     def getTestNames(self):
         return self.gui_cfg.getTestNames()
 
-    def getNumPhysicalTest(self):
-        return self.gui_cfg.getNumPhysicalTest()
+    #def getNumPhysicalTest(self):
+    #    return self.gui_cfg.getNumPhysicalTest()
 
-    def getPhysicalNames(self):
-        return self.gui_cfg.getPhysicalNames()
+    #def getPhysicalNames(self):
+    #    return self.gui_cfg.getPhysicalNames()
 
     ################################################
 

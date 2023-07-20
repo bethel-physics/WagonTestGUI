@@ -113,6 +113,18 @@ class TestScene(tk.Frame):
         btn_confirm.pack(side = 'top')
         btn_confirm['font'] = font.Font(family = 'Arial', size = 13)
 
+        if (self.test_idx == 0):
+
+            # Create a button for confirming test
+            run_all_btn = tk.Button(
+                frm_window, 
+                text = "Run All Tests", 
+                relief = tk.RAISED, 
+                command = lambda:self.run_all_action(parent)
+                )
+            run_all_btn.pack(pady = 20)
+            run_all_btn['font'] = font.Font(family = 'Arial', size = 13)
+
         # Create frame for logout button
         frm_logout = tk.Frame(self)
         frm_logout.grid(column = 2, row = 1, padx = 5, sticky = 'e')
@@ -155,6 +167,14 @@ class TestScene(tk.Frame):
     def help_action(self, _parent):
         _parent.help_popup(self)
  
+
+    def run_all_action(self, _parent):
+       
+        _parent.run_all_tests(self.test_idx) 
+        
+
+    
+
     #################################################
 
     # Rescan button takes the user back to scanning in a new board
