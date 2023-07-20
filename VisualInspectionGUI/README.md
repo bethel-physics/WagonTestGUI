@@ -17,6 +17,14 @@ apt install -y python3-picamera2
 pip3 install opencv-contrib-python==4.5.3.56 
 ```
 
+### Extra Camera Installation
+If you are using a Raspberry Pi Camera Module 3, you will need to make extra installations in order to run the code. Documentation links are found below:
+
+- [The Picamera2 Library](https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf?_gl=1*seefj*_ga*MTQ0NTI3MzQ3OC4xNjg5ODYwNjkw*_ga_22FD70LWDS*MTY4OTg2MjM2Ny4xLjEuMTY4OTg2MzMyOS4wLjAuMA..)
+- [libcamera Documentation](https://www.raspberrypi.com/documentation/computers/camera_software.html#getting-started)
+- [Updating Raspberry Pi OS](https://www.raspberrypi.com/documentation/computers/os.html#using-apt)
+
+
 
 
 ## Running the GUI
@@ -24,4 +32,4 @@ After all of the packages have been installed and the camera is plugged into the
 ```
 cd ~/path/to/VisualInspectionGUI
 python3 MainFunctionVI.py
-```
+
