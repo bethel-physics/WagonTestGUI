@@ -187,7 +187,6 @@ class SidebarScene(tk.Frame):
         # List for creating check marks with for loop
         self.list_of_pass_fail = self.data_holder.data_lists['test_results']
 
-        print("\n\n\n{}\n\n\n".format(self.list_of_pass_fail))
 
 
         # For loop to create checkmarks based on pass/fail
