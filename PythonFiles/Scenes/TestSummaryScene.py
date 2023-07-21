@@ -34,6 +34,8 @@ class TestSummaryScene(tk.Frame):
         # Super class is the tk.Frame class
         super().__init__(master_frame, width=870, height=500)
 
+        self.sn_text = tk.StringVar()
+
         logging.info("TestSummaryScene: Frame has been created.")
 
         self.data_holder = data_holder
@@ -54,6 +56,16 @@ class TestSummaryScene(tk.Frame):
                 )
         self.title.grid(row= 0, column= 1, pady = 20)
 
+
+        self.sn_text.set("Serial Number: " + str(self.data_holder.data_dict['current_serial_ID']))       
+
+        # Adds Board Serial Number to the TestSummaryFrame
+        self.lbl_snum = tk.Label(
+                self, 
+                textvariable = self.sn_text,
+                font=('Arial', 14)
+                )
+        self.lbl_snum.grid(column = 2, row = 0, pady = 20, padx = 5)
         # Fits the frame to set size rather than interior widgets
         self.grid_propagate(0)
 
@@ -72,14 +84,8 @@ class TestSummaryScene(tk.Frame):
         self.list_of_completed_tests = self.data_holder.data_lists['test_completion']
         self.list_of_pass_fail = self.data_holder.data_lists['test_results']
 
+        self.sn_text.set("Serial Number: " + str(self.data_holder.data_dict['current_serial_ID']))       
 
-        # Adds Board Serial Number to the TestSummaryFrame
-        self.lbl_snum = tk.Label(
-                self, 
-                text = "Serial Number: " + str(self.data_holder.data_dict['current_serial_ID']),
-                font=('Arial', 14)
-                )
-        self.lbl_snum.grid(column = 2, row = 0, pady = 20, padx = 5)
 
         # Adds Tester Name to the TestSummary Frame
         self.lbl_tester = tk.Label(

@@ -204,6 +204,7 @@ masterCfg = {
     # Information for sending and receiving data to/from the database
     # Needs to be different based on board type
     "DBInfo": {
+        "use_database": True,
         "name": "EngineDB",
         "reader": "EngineDBReadUser",
         "inserter": "EngineDBInserter",

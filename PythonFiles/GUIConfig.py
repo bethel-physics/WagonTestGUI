@@ -57,6 +57,9 @@ class GUIConfig():
         else:
             return self.board_cfg["DBInfo"][key]
 
+    def get_if_use_DB(self):
+        return self.board_cfg['DBInfo']['use_database']
+
     def getGUIType(self):
         print(self.board_cfg)
         return self.board_cfg["GUIType"]
