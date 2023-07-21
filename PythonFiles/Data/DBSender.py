@@ -6,7 +6,6 @@ import socket
 
 class DBSender():
 
-    # Empty constructor
     def __init__(self, gui_cfg):
         self.gui_cfg = gui_cfg
 
@@ -68,7 +67,8 @@ class DBSender():
 
         # If not using database...        
         else:
-            pass
+            
+            return ['User1', 'User2', 'User3']
 
 
         
@@ -96,7 +96,13 @@ class DBSender():
         # If not using the database...
         else:
 
-            pass
+            blank_completion = []
+            for i in enumerate(self.gui_cfg.getNumTest()):
+                blank_completion.append('False')
+
+            return blank_completion
+
+
 
 
     # Returns a list of booleans
@@ -125,7 +131,12 @@ class DBSender():
         
         # If not using database...
         else:
-            pass
+            
+            blank_results = []
+            for i in enumerate(self.gui_cfg.getNumTest()):
+                blank_results.append('False')
+
+            return blank_results
 
     
     
@@ -162,7 +173,7 @@ class DBSender():
                     return False
 
         else:
-            pass
+            return True
 
 
 
@@ -231,5 +242,10 @@ class DBSender():
             return tests
 
         else:
-            pass
+            
+            blank_tests = []
+            for i in enumerate(self.gui_cfg.getNumTest()):
+                blank_tests.append("Test{}".format(i))
+
+            return blank_tests
 
