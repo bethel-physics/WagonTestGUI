@@ -35,7 +35,10 @@ class DataHolder():
     def get_total_test_num(self):
         return self.total_test_num
      
-
+    
+    def get_use_scanner(self):
+        return self.gui_cfg.getUseScanner()
+    
     #################################################
 
     #def get_physical_criteria(self, num):

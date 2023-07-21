@@ -283,7 +283,7 @@ class GUIWindow():
         self.current_test_index -= 1
         self.set_frame_test(self.current_test_index)
 
-        self.data_holder.setTestIdx(test_idx)
+        self.data_holder.setTestIdx(self.current_test_index)
 
     def go_to_next_test(self):
             

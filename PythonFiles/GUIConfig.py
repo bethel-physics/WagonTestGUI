@@ -40,6 +40,8 @@ class GUIConfig():
         print("\n\nCannot find a physical test with num = {}. Please try again.\n".format(num))
         return None
 
+    def getUseScanner(self):
+        return self.board_cfg["UsingScanner"]
 
 
     # Get number of tests to define order of scenes and sidebar

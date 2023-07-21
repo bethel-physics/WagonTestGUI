@@ -32,7 +32,11 @@ class ScanScene(tk.Frame):
 
     # Runs upon creation
     def __init__(self, parent, master_frame, data_holder):
+        
         self.data_holder = data_holder
+
+        self.use_scanner = self.data_holder.get_use_scanner()
+
         self.is_current_scene = False
         
         self.EXIT_CODE = 0
@@ -45,55 +49,57 @@ class ScanScene(tk.Frame):
     # Needs to be updated to run the read_barcode function in the original GUI
     def scan_QR_code(self, master_window):
         
-        self.ent_snum.config(state = 'normal')
-        self.ent_snum.delete(0,END)
-        self.master_window = master_window
-        self.hide_rescan_button()
+        if self.use_scanner:
 
-        sys.path.insert(1,'/home/hgcal/WagonTest/Scanner/python')
+            self.ent_snum.config(state = 'normal')
+            self.ent_snum.delete(0,END)
+            self.master_window = master_window
+            self.hide_rescan_button()
 
-        from ..Scanner.python.get_barcodes import scan, listen, parse_xml
+            sys.path.insert(1,'/home/hgcal/WagonTest/Scanner/python')
 
-        manager = mp.Manager()
-        serial = manager.list()
-        print(serial)
+            from ..Scanner.python.get_barcodes import scan, listen, parse_xml
 
-        self.ent_snum.config(state = 'normal')
+            manager = mp.Manager()
+            serial = manager.list()
+            print(serial)
 
-        logging.info("ScanScene: Beginning scan...")
-        self.scanner = scan()
-        self.listener = mp.Process(target=listen, args=(serial, self.scanner))
+            self.ent_snum.config(state = 'normal')
 
-        self.listener.start()
-               
-        while 1 > 0:
+            logging.info("ScanScene: Beginning scan...")
+            self.scanner = scan()
+            self.listener = mp.Process(target=listen, args=(serial, self.scanner))
 
-            try:
-                self.master_window.update()
-            except:
-                pass
-            if not len(serial) == 0:
-                self.data_holder.set_serial_ID( parse_xml(serial[0]))
+            self.listener.start()
+                
+            while 1 > 0:
 
-                self.listener.terminate()
-                self.scanner.terminate()
-               
-                self.ent_snum.delete(0,END)
-                self.ent_snum.insert(0, str(self.data_holder.get_serial_ID()))
-                self.ent_snum.config(state = 'disabled')
-                self.show_rescan_button()
-                break
+                try:
+                    self.master_window.update()
+                except:
+                    pass
+                if not len(serial) == 0:
+                    self.data_holder.set_serial_ID( parse_xml(serial[0]))
 
-            elif self.EXIT_CODE:
-                logging.info("ScanScene: Exit code received. Terminating processes.")
-                self.listener.terminate()
-                self.scanner.terminate()
-                logging.info("ScanScene: Processes terminated successfully.")
-                break
-            else:
-                time.sleep(.01)
-            
-        logging.info("ScanScene: Scan complete.")
+                    self.listener.terminate()
+                    self.scanner.terminate()
+                
+                    self.ent_snum.delete(0,END)
+                    self.ent_snum.insert(0, str(self.data_holder.get_serial_ID()))
+                    self.ent_snum.config(state = 'disabled')
+                    self.show_rescan_button()
+                    break
+
+                elif self.EXIT_CODE:
+                    logging.info("ScanScene: Exit code received. Terminating processes.")
+                    self.listener.terminate()
+                    self.scanner.terminate()
+                    logging.info("ScanScene: Processes terminated successfully.")
+                    break
+                else:
+                    time.sleep(.01)
+                
+            logging.info("ScanScene: Scan complete.")
 
     # Creates the GUI itself
     def initialize_GUI(self, parent, master_frame):
@@ -218,8 +224,10 @@ class ScanScene(tk.Frame):
     def btn_submit_action(self, _parent):
         
         self.EXIT_CODE = 1 
-        self.listener.terminate()
-        self.scanner.terminate()
+
+        if self.use_scanner:
+            self.listener.terminate()
+            self.scanner.terminate()
 
         self.data_holder.set_serial_ID(self.ent_snum.get())
         self.data_holder.check_if_new_board()
@@ -232,8 +240,10 @@ class ScanScene(tk.Frame):
     def btn_logout_action(self, _parent):
 
         self.EXIT_CODE = 1 
-        self.listener.terminate()
-        self.scanner.terminate()
+        
+        if self.use_scanner:
+            self.listener.terminate()
+            self.scanner.terminate()
 
          # Send user back to login frame
         _parent.set_frame_login_frame() 
@@ -267,8 +277,9 @@ class ScanScene(tk.Frame):
     def kill_processes(self):
         logging.info("ScanScene: Terminating scanner proceses.")
         try:
-            self.scanner.kill()
-            self.listener.terminate()
+            if self.use_scanner:
+                self.scanner.kill()
+                self.listener.terminate()
             self.EXIT_CODE = 1
         except:
             logging.info("ScanScene: Processes could not be terminated.")

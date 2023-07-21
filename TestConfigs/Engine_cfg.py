@@ -4,6 +4,8 @@ masterCfg = {
 
     "GUIType": "Engine",
 
+    "UsingScanner": False,
+
 
     # Order of tests matters here
     # This should be the same order that you want the tests to be run in
@@ -204,7 +206,7 @@ masterCfg = {
     # Information for sending and receiving data to/from the database
     # Needs to be different based on board type
     "DBInfo": {
-        "use_database": True,
+        "use_database": False,
         "name": "EngineDB",
         "reader": "EngineDBReadUser",
         "inserter": "EngineDBInserter",
