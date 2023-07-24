@@ -167,7 +167,7 @@ class ScanScene(tk.Frame):
             padx = 20,
             pady =10,
             relief = tk.RAISED,
-            command = lambda:  self.scan_QR_code(self.master_window)
+            command = lambda:  self.scan_QR_code(self.master_frame)
             )
         self.btn_rescan.pack(pady=30)
 

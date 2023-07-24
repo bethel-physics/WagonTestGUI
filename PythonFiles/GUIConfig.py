@@ -63,7 +63,7 @@ class GUIConfig():
         return self.board_cfg['DBInfo']['use_database']
 
     def getGUIType(self):
-        print(self.board_cfg)
+        #print(self.board_cfg)
         return self.board_cfg["GUIType"]
 
     def setTestIndex(self, idx):
@@ -74,8 +74,13 @@ class GUIConfig():
         return self.current_idx
 
     def getPhysicalNames(self):
-        return [test["name"] for test in self.board_cfg["PhysicalTest"]]
+        try:
+            return [test["name"] for test in self.board_cfg["PhysicalTest"]]
+        except:
+            return []
 
     def getTestNames(self):
-        return [test["name"] for test in self.board_cfg["Test"]]
-        
+        try:
+            return [test["name"] for test in self.board_cfg["Test"]]
+        except:
+            return []

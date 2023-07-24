@@ -19,6 +19,8 @@ class Inspection1(tk.Frame):
         self.test_name = "SOMETHING STRING"
         self.data_holder = data_holder
         
+        self.test_idx = test_idx
+
         self.update_frame(parent)
 
     #################################################
@@ -222,6 +224,10 @@ class Inspection1(tk.Frame):
     #################################################
 
     def update_data_holder(self):
+            
+        # Automatically passes the physical tests after completion
+        self.data_holder.data_lists['physical_results'][self.test_idx] = True
+
         self.data_holder.inspection_data['board_chipped_bent'] = self.board_chipped_bent.get()
         self.data_holder.inspection_data['wagon_connection_pin_bent'] = self.wagon_connection_pin_bent.get()
         self.data_holder.inspection_data['engine_connection_pin_bent'] = self.engine_connection_pin_bent.get()
@@ -236,9 +242,10 @@ class Inspection1(tk.Frame):
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
         
+        self.update_data_holder()
+        
         _parent.go_to_next_test()
         
-        self.update_data_holder()
         
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # #

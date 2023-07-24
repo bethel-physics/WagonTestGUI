@@ -157,7 +157,7 @@ class DBSender():
         if (self.use_database):
 
             r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/is_new_board.py'.format(self.db_url), data={"serial_number": str(sn)})
-            #print(r.text)
+            print(r.text)
             
             lines = r.text.split('\n')
        

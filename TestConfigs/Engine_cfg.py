@@ -4,7 +4,7 @@ masterCfg = {
 
     "GUIType": "Engine",
 
-    "UsingScanner": False,
+    "UsingScanner": True,
 
 
     # Order of tests matters here
@@ -152,18 +152,18 @@ masterCfg = {
 
 
     "PhysicalTest": [
-        {
-            "name": "SAMPLE test", 
-            "required": 1, 
-            "desc_short": "Some short description", 
-            "desc_long": "Really long description for later purposes.",
-            "criteria": {
-                "first testing criteria",
-                "second testing criteria",
-                "third testing criteria",                
-            },
+        #{
+        #    "name": "SAMPLE test", 
+        #    "required": 1, 
+        #    "desc_short": "Some short description", 
+        #    "desc_long": "Really long description for later purposes.",
+        #    "criteria": {
+        #        "first testing criteria",
+        #        "second testing criteria",
+        #        "third testing criteria",                
+        #    },
 
-        }, 
+        #}, 
 
     ],
 
@@ -206,7 +206,7 @@ masterCfg = {
     # Information for sending and receiving data to/from the database
     # Needs to be different based on board type
     "DBInfo": {
-        "use_database": False,
+        "use_database": True,
         "name": "EngineDB",
         "reader": "EngineDBReadUser",
         "inserter": "EngineDBInserter",

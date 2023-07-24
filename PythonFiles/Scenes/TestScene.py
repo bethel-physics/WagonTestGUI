@@ -28,7 +28,7 @@ class TestScene(tk.Frame):
         self.test_name = test_name
         self.data_holder = data_holder
         self.test_idx = test_idx
-        print("Making test scene with index".format(self.test_idx))
+        #print("Making test scene with index".format(self.test_idx))
         
         self.update_frame(parent)
 
