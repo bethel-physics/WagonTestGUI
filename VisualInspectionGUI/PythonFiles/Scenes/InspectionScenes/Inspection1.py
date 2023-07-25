@@ -14,7 +14,7 @@ class Inspection1(tk.Frame):
     #################################################
 
     def __init__(self, parent, master_frame, data_holder):
-        super().__init__(master_frame, width = 1105, height = 650)
+        super().__init__(master_frame, width = 1105, height = 850)
 
         self.test_name = "SOMETHING STRING"
         self.data_holder = data_holder
@@ -30,7 +30,7 @@ class Inspection1(tk.Frame):
         font_scene_14 = ('Arial', 14)
 
         # Create a centralized window for information
-        frm_window = tk.Frame(self, width = 1105, height = 650)
+        frm_window = tk.Frame(self, width = 1105, height = 850)
         frm_window.grid(column=0, row=0)
 
         # Create a label for the tester's name

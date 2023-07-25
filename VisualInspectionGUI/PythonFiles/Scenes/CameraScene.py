@@ -13,6 +13,7 @@ from picamera2 import Picamera2, Preview
 import tkinter as tk
 import cv2
 import PIL.Image, PIL.ImageTk
+from PIL import ImageTk as iTK
 import time
 import os
 
@@ -37,6 +38,8 @@ class CameraScene(tk.Frame):
 
     def __init__(self, parent, master_frame, data_holder, video_source=0 ):
         
+        self.photo_packed = False        
+        
         self.master_frame = master_frame
         
         logging.info("CameraScene: Beginning to instantiate the CameraScene.")
@@ -44,15 +47,12 @@ class CameraScene(tk.Frame):
 
         # Call to the super class's constructor
         # Super class is the tk.Frame class
-        super().__init__(master_frame, width = 1105, height = 650)
+        super().__init__(master_frame, width = 1105, height = 850)
 
         logging.info("\nCameraScene: Frame has been created.")
 
         self.data_holder = data_holder
         self.parent = parent
-
-        #self.canvas=tk.Canvas(self, width=self.vid.width, height =  self.vid.height)
-        self.canvas=tk.Canvas(self, width=800, height = 600 )
 
 
         # Frame for the buttons
@@ -106,7 +106,6 @@ class CameraScene(tk.Frame):
         )
         self.desc_label.pack(side="right", padx=(90, 20), pady=10)
 
-        self.canvas.pack()
 	# Prevents the frame from shrinking
         self.pack_propagate(0)
 
@@ -114,11 +113,28 @@ class CameraScene(tk.Frame):
         # How long in between photo-frames on the GUI
         self.delay=10
 
+        self.camera_created = False
+        
+
+
+
 
     def update_preview(self):
+        
+        if self.camera_created == False:
+       
+            self.camera_config = camera.create_still_configuration(main={"size": (2304, 1296)}, lores={'size': (854, 480)}, display='lores')
 
-        camera.start_preview(True, x = 500, y = 200, width = 1200, height = 800)
-        camera.start()
+            camera.configure(self.camera_config)
+
+            camera.start_preview(True, x = 900, y = 200, width = 854, height = 480)
+
+            camera.start()
+
+            self.camera_created = True
+        
+
+
         #camera.set_controls( {"AfMode" : controls.AfModeEnum.Manual} )
 
   
@@ -151,13 +167,31 @@ class CameraScene(tk.Frame):
         self.photo_name = "{}/Images/{}".format(PythonFiles.__path__[0], shortened_pn)
         print("self.photo_name: ", self.photo_name)
 
-        # Sets the camera to a slower framerate, higher resolution
-        capture_config = camera.create_still_configuration()
+        
+        
+        print("begining cpa")        
+        image = camera.switch_mode_and_capture_image(shortened_pn)
+        print("after")
 
-        # Automatically switches back to faster framerate
-        camera.switch_mode_and_capture_image(self.photo_name)
+        image.save(self.photo_name)
 
+        
+        self.Engine_image = PIL.Image.open(self.photo_name)
+        self.Engine_image = self.Engine_image.resize((1067, 600), PIL.Image.ANTIALIAS)
+        self.Engine_PhotoImage = iTK.PhotoImage(self.Engine_image)
 
+        # the .grid() adds it to the Frame
+        if self.photo_packed is False:
+            self.Engine_label = tk.Label(self)
+            self.Engine_label.configure(image=self.Engine_PhotoImage)
+            self.Engine_label.image = self.Engine_PhotoImage
+            
+            self.Engine_label.pack()
+            self.photo_packed = True
+        else:
+            self.Engine_label.configure(image=self.Engine_PhotoImage)
+            self.Engine_label.image = self.Engine_PhotoImage
+            print("\nreset image\n")
 
         self.data_holder.image_data.append(self.photo_name)
         self.parent.set_image_name(shortened_pn)
@@ -165,7 +199,13 @@ class CameraScene(tk.Frame):
 
     # Submits the photo and goes to the next screen
     def submit_button_action(self):
-        camera.stop_preview()
+        try:
+            camera.stop_preview()
+            camera.stop()
+            self.camera_created = False
+        except:
+            print("CameraScene: Unable to stop preview")
+            logging.debug("CameraScene: Unable to stop preview")
         self.parent.set_frame_photo_frame()
 
 

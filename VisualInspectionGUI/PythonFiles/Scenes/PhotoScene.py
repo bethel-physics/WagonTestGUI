@@ -56,7 +56,7 @@ class PhotoScene(tk.Frame):
         self.master_frame = master_frame
         self.parent = parent
 
-        super().__init__(self.master_frame, width = 1105, height = 650)
+        super().__init__(self.master_frame, width = 1105, height = 850)
 
         logging.info("PhotoScene: Frame has been created.")
         # Create a photoimage object of the Engine
@@ -248,7 +248,7 @@ class PhotoScene(tk.Frame):
         print("\nIn PhotoScene 'update()' method\n")
         # Create a photoimage object of the Engine
         print("\n\n\nThe Image Path is: {} \n\n".format(self.parent.image_name))
-        self.Engine_image = self.Engine_image.resize((400, 300), Image.ANTIALIAS)
+        self.Engine_image = self.Engine_image.resize((712, 400), Image.ANTIALIAS)
         self.Engine_PhotoImage = iTK.PhotoImage(self.Engine_image)
         self.Engine_label = tk.Label(self)
         self.Engine_label.configure(image=self.Engine_PhotoImage)

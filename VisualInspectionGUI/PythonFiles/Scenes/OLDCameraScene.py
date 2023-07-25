@@ -41,7 +41,7 @@ class CameraScene(tk.Frame):
 
         # Call to the super class's constructor
         # Super class is the tk.Frame class
-        super().__init__(master_frame, width = 1105, height = 650, background=self.from_rgb((117, 123, 129)))
+        super().__init__(master_frame, width = 1105, height = 850, background=self.from_rgb((117, 123, 129)))
 
         logging.info("\nCameraScene: Frame has been created.")
 

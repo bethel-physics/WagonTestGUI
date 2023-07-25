@@ -32,7 +32,7 @@ class TestSummaryScene(tk.Frame):
     
         # Call to the super class's constructor
         # Super class is the tk.Frame class
-        super().__init__(master_frame, width = 1105, height = 650)
+        super().__init__(master_frame, width = 1105, height = 850)
 
         logging.info("TestSummaryScene: Frame has been created.")
 
@@ -85,16 +85,22 @@ class TestSummaryScene(tk.Frame):
         
         for i, photo in enumerate(self.data_holder.get_photo_list()):
             
-            # Create a photoimage object of the Engine
-            Engine_image = Image.open("{}/Images/captured_image{}.png".format(PythonFiles.__path__[0], i))
-            Engine_image = Engine_image.resize((200, 150), Image.ANTIALIAS)
-            Engine_PhotoImage = iTK.PhotoImage(Engine_image)
-            Engine_label = tk.Label(self, image=Engine_PhotoImage)
-            Engine_label.image = Engine_PhotoImage
+            try:
+                # Create a photoimage object of the Engine
+                Engine_image = Image.open("{}/Images/captured_image{}.png".format(PythonFiles.__path__[0], i))
+                Engine_image = Engine_image.resize((222, 125), Image.ANTIALIAS)
+                Engine_PhotoImage = iTK.PhotoImage(Engine_image)
+                Engine_label = tk.Label(self, image=Engine_PhotoImage)
+                Engine_label.image = Engine_PhotoImage
 
-            # the .grid() adds it to the Frame
-            Engine_label.grid(column=0 + i, row = 1)
+                # the .grid() adds it to the Frame
+                Engine_label.grid(column=0 + i, row = 1)
 
+            except Exception as e:
+                print("TestSummaryScene: Could not find captured_image.")
+                logging.debug("TestSummaryScene: Could not find captured_image.")
+                logging.debug("Exception: {}".format(e))
+                next
 
 
         
