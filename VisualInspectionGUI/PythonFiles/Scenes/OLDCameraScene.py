@@ -9,15 +9,12 @@ Instructions:
 '''
 import PythonFiles
 import json, logging
-from picamera2 import Picamera2, Preview
 import tkinter as tk
 import cv2
 import PIL.Image, PIL.ImageTk
 import time
 import os
 
-global camera 
-camera = Picamera2()
 
 #################################################################################
 
@@ -44,24 +41,31 @@ class CameraScene(tk.Frame):
 
         # Call to the super class's constructor
         # Super class is the tk.Frame class
-        super().__init__(master_frame, width = 1105, height = 650)
+        super().__init__(master_frame, width = 1105, height = 650, background=self.from_rgb((117, 123, 129)))
 
         logging.info("\nCameraScene: Frame has been created.")
 
         self.data_holder = data_holder
         self.parent = parent
 
+        # Creates instance variable of parameter video_source
+        self.video_source=video_source
+
+        # Adds the video capturing component to the canvas
+        # Then packs the canvas to the frame
+       
+        # TODO Uncomment this code to get the camera to work 
+        self.vid= MyVideoCapture(self.video_source)
         #self.canvas=tk.Canvas(self, width=self.vid.width, height =  self.vid.height)
         self.canvas=tk.Canvas(self, width=800, height = 600 )
 
-
         # Frame for the buttons
-        btn_frame=tk.Frame(self, width = 800)
+        btn_frame=tk.Frame(self, background=self.from_rgb((117, 123, 129)), width = 800)
         #btn_frame.place(x=0,y=0, anchor="nw", width=800)
         btn_frame.pack(anchor="nw")
 
         # Snapshot button
-        self.btn_snapshot=tk.Button(btn_frame, text="Snapshot",width=20, command=self.snapshot, fg="white")
+        self.btn_snapshot=tk.Button(btn_frame, text="Snapshot",width=20, command=self.snapshot, bg=self.from_rgb((52, 61, 70)), fg="white")
         self.btn_snapshot.pack(side="left", padx=10, pady=10)
 
         # Help button
@@ -70,7 +74,8 @@ class CameraScene(tk.Frame):
             text="Help",
             width=10, 
             relief = tk.RAISED,
-            command= lambda: self.help_action(parent),  
+            command= lambda: self.help_action(parent), 
+            bg=self.from_rgb((52, 61, 70)), 
             fg="white"
         )
         self.btn_proses.pack(side="left", padx=10, pady=10)
@@ -80,6 +85,7 @@ class CameraScene(tk.Frame):
             text="Submit", 
             width=10, 
             command= lambda: self.submit_button_action(), 
+            bg=self.from_rgb((52, 61, 70)), 
             fg="white"
         )
         self.btn_about.pack(side="right", padx=10, pady=10)
@@ -91,6 +97,7 @@ class CameraScene(tk.Frame):
             master= btn_frame,
             textvariable = self.long_desc_label_text,
             font = ('Arial', 10),
+            bg=self.from_rgb((117, 123, 129)) 
         )
         self.long_desc_label.pack(side="right", padx=(20, 90), pady=10)
         
@@ -103,6 +110,7 @@ class CameraScene(tk.Frame):
             master= btn_frame,
             textvariable = self.desc_label_text,
             font = ('Arial', 19),
+            bg=self.from_rgb((117, 123, 129)) 
         )
         self.desc_label.pack(side="right", padx=(90, 20), pady=10)
 
@@ -114,12 +122,9 @@ class CameraScene(tk.Frame):
         # How long in between photo-frames on the GUI
         self.delay=10
 
-
-    def update_preview(self):
-
-        camera.start_preview(True, x = 500, y = 200, width = 1200, height = 800)
-        camera.start()
-        #camera.set_controls( {"AfMode" : controls.AfModeEnum.Manual} )
+        # TODO Uncomment this code to get the camera to work
+        # Updates the video constantly on this slide
+        self.update()
 
   
 
@@ -144,36 +149,94 @@ class CameraScene(tk.Frame):
 
     ################################################# 
 
-    def snapshot(self):
-        # Writes the image to a file with a name that includes the date
-        # TODO Change this to be a more readable file name later
-        shortened_pn = "captured_image{}.png".format(self.current_index)
-        self.photo_name = "{}/Images/{}".format(PythonFiles.__path__[0], shortened_pn)
-        print("self.photo_name: ", self.photo_name)
-
-        # Sets the camera to a slower framerate, higher resolution
-        capture_config = camera.create_still_configuration()
-
-        # Automatically switches back to faster framerate
-        camera.switch_mode_and_capture_image(self.photo_name)
-
-
-
-        self.data_holder.image_data.append(self.photo_name)
-        self.parent.set_image_name(shortened_pn)
-
 
     # Submits the photo and goes to the next screen
     def submit_button_action(self):
-        camera.stop_preview()
         self.parent.set_frame_photo_frame()
 
+    # Takes a snapshot of the video
+    # Saves in the same directory as the 
+    def snapshot(self):
+        ret, frame=self.vid.get_frame()
 
+        if ret:
+            # Writes the image to a file with a name that includes the date
+            # TODO Change this to be a more readable file name later
+            shortened_pn = "captured_image{}.png".format(self.current_index)
+            self.photo_name = "{}/Images/{}".format(PythonFiles.__path__[0], shortened_pn)
+            print("self.photo_name: ", self.photo_name)
+
+            try:
+                cv2.imwrite(self.photo_name, cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) )
+                self.data_holder.image_data.append(self.photo_name)
+                self.parent.set_image_name(shortened_pn)
+            except Exception as e:
+                logging.warning("CameraScene: Unable to write the snapshot to a file")
+                print("\nUnable to save photo to file {}".format(self.photo_name))
+                print("\nYour exception: ", e)
+            
+        else:
+            print("\nUnable to take a snapshot.\n")
+
+        #self.parent.set_frame_photo_frame()
+
+
+    # This is the key method to show the active camera on the GUI
+    # Basically gets an image from the camera and updates the PIL Image Canvas
+    # Updates the canvas after "self.delay" milliseconds
+    def update(self):
+        ret, frame=self.vid.get_frame()
+
+        if ret:
+            # Updates the canvas on the GUI
+            image=PIL.Image.fromarray(frame)
+            image = image.resize((800,600))
+            self.photo = PIL.ImageTk.PhotoImage(image)
+            self.canvas.create_image(0,0, image=self.photo, anchor=tk.NW)
+
+            # Recursive method; waits "self.delay" before calling itself
+            self.after(self.delay,self.update)
+
+    def from_rgb(self,rgb):
+        return "#%02x%02x%02x" % rgb
+
+# Class responsible for the video capturing feature
+# Requires the import of cv2
+class  MyVideoCapture:
+    """docstring for  MyVideoCapture"""
+    def __init__(self, video_source=0):
+        # Instantiating a VideoCapture device from cv2 library
+        self.vid = cv2.VideoCapture(video_source)
+	
+        self.vid.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
+        self.vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)       
+ 
+        # Throw an exception if the video source cannot be opened.
+        if not self.vid.isOpened():
+            raise ValueError("VideoCapture: Unable to open the video source. Check camera.", video_source)
+
+        # Getting the camera width and height to correctly display resolution
+        # Important component for a correct display
+        self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
+        self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
+
+    # Gets the VideoCapture video
+    # Called by the update() method
+    def get_frame(self):
+        if self.vid.isOpened():
+            ret, frame = self.vid.read()
+            if ret:
+                return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+            else:
+                return (ret, None)
+        else:
+            return (ret,None)		
+    
     # Closes the video camera with the "release()" command
     # Important for closing gracefully
     def __del__(self):
-        pass
+        if self.vid.isOpened():
+            self.vid.release()
 
     def remove_widgets(self, parent):
-        camera.close()
         self.__del__()

@@ -169,6 +169,7 @@ class GUIWindow():
         print("GUIWindow: Going to camera frame #{}".format(index))
         logging.debug("GUIWindow: Going to camera frame #{}".format(index))
         self.camera_frame.set_text(index)
+        self.camera_frame.update_preview()
         self.set_frame(self.camera_frame)
 
     #################################################
