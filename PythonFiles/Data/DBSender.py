@@ -36,7 +36,7 @@ class DBSender():
         if (self.use_database):
 
             try:
-                r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_tester2.py'.format(self.db_url), data= {'person_name':user_ID, 'password': passwd})
+                r = requests.post('{}/add_tester2.py'.format(self.db_url), data= {'person_name':user_ID, 'password': passwd})
             except Exception as e:
                 print("Unable to add the user to the database. Username: {}. Check to see if your password is correct.".format(user_ID))
 
@@ -49,7 +49,7 @@ class DBSender():
     # Returns an acceptable list of usernames from the database
     def get_usernames(self):
         if (self.use_database):
-            r = requests.get('http://cmslab3.spa.umn.edu/~cros0400/{}/get_usernames.py'.format(self.db_url))
+            r = requests.get('{}/get_usernames.py'.format(self.db_url))
             lines = r.text.split('\n')
 
             #print(lines)
@@ -78,7 +78,7 @@ class DBSender():
     def get_test_completion_staus(self, serial_number):
         
         if (self.use_database):
-            r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/get_test_completion_status.py'.format(self.db_url), data= serial_number)
+            r = requests.post('{}/get_test_completion_status.py'.format(self.db_url), data= serial_number)
             
             lines = r.text.split('\n')
             begin = lines.index("Begin") + 1 
@@ -111,7 +111,7 @@ class DBSender():
         
         if (self.use_database):
    
-            r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/get_previous_test_results.py'.format(self.db_url), data={'serial_number': str(serial_number)})
+            r = requests.post('{}/get_previous_test_results.py'.format(self.db_url), data={'serial_number': str(serial_number)})
             
             lines = r.text.split('\n')
 
@@ -146,7 +146,7 @@ class DBSender():
         
         if (self.use_database):
         
-            r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_module2.py'.format(self.db_url), data={"serial_number": str(sn)})
+            r = requests.post('{}/add_module2.py'.format(self.db_url), data={"serial_number": str(sn)})
     
         else:
             
@@ -156,7 +156,7 @@ class DBSender():
         
         if (self.use_database):
 
-            r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/is_new_board.py'.format(self.db_url), data={"serial_number": str(sn)})
+            r = requests.post('{}/is_new_board.py'.format(self.db_url), data={"serial_number": str(sn)})
             print(r.text)
             
             lines = r.text.split('\n')
@@ -184,7 +184,7 @@ class DBSender():
         
         if (self.use_database):
 
-            r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_board_info2.py'.format(self.db_url), data = info)
+            r = requests.post('{}/add_board_info2.py'.format(self.db_url), data = info)
         
         else:
             pass    
@@ -192,7 +192,7 @@ class DBSender():
     def add_initial_tests(self, results):
         if (self.use_database):
     
-            r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_init_test.py'.format(self.db_url), data = results)
+            r = requests.post('{}/add_init_test.py'.format(self.db_url), data = results)
         
         else:
             pass        
@@ -200,7 +200,7 @@ class DBSender():
     def add_general_test(self, results, files):
         if (self.use_database):
     
-            r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_test2.py'.format(self.db_url), data = results, files=files)
+            r = requests.post('{}/add_test2.py'.format(self.db_url), data = results, files=files)
 
         else:
             pass
@@ -216,7 +216,7 @@ class DBSender():
         #print("Read from json file:", results)
 
         if (self.use_database):
-            r = requests.post('http://cmslab3.spa.umn.edu/~cros0400/{}/add_test_json.py'.format(self.db_url), data = results, files = attach_data)
+            r = requests.post('{}/add_test_json.py'.format(self.db_url), data = results, files = attach_data)
 
         else:
             pass
@@ -224,7 +224,7 @@ class DBSender():
  # Returns a list of all different types of tests
     def get_test_list(self):
         if (self.use_database):
-            r = requests.get('http://cmslab3.spa.umn.edu/~cros0400/{}/get_test_types.py'.format(self.db_url))
+            r = requests.get('{}/get_test_types.py'.format(self.db_url))
 
             lines = r.text.split('\n')
 

@@ -211,7 +211,7 @@ masterCfg = {
         "reader": "EngineDBReadUser",
         "inserter": "EngineDBInserter",
         "admin": "EngineDBInserter",
-        "baseURL": "cgi-bin/EngineDB",
+        "baseURL": "http://cmslab3.spa.umn.edu/~cros0400/cgi-bin/EngineDB",
     },
 }
 
