@@ -120,7 +120,9 @@ class CameraScene(tk.Frame):
 
 
     def update_preview(self):
-        
+
+        # Prevents the camera from being started twice
+        # If the camera is started twice, throws exceptions
         if self.camera_created == False:
        
             self.camera_config = camera.create_still_configuration(main={"size": (2304, 1296)}, lores={'size': (854, 480)}, display='lores')
@@ -141,11 +143,13 @@ class CameraScene(tk.Frame):
 
     #################################################
 
+    # Tells GUIWindow to open up the help popup
     def help_action(self, _parent):
         _parent.help_popup(self)
 
     #################################################
 
+    # Updates the description for the image from the config file
     def set_text(self, index):
         self.current_index = index
 
@@ -156,10 +160,9 @@ class CameraScene(tk.Frame):
         self.desc_label_text.set(updated_title)
         self.long_desc_label_text.set(updated_description)
 
-        pass
-
     ################################################# 
 
+    # Saves a picture of the currently shown camera
     def snapshot(self):
         # Writes the image to a file with a name that includes the date
         # TODO Change this to be a more readable file name later
@@ -168,19 +171,20 @@ class CameraScene(tk.Frame):
         print("self.photo_name: ", self.photo_name)
 
         
-        
-        print("begining cpa")        
+        # Cannot be called unless camera is already started        
         image = camera.switch_mode_and_capture_image(shortened_pn)
-        print("after")
 
+        # Saves the image to a file
         image.save(self.photo_name)
 
-        
+        # Displays the image
+        # Ensure that the camera aspect ratio matches the aspect ratio here
+        # This may require some fine-tuning
         self.Engine_image = PIL.Image.open(self.photo_name)
         self.Engine_image = self.Engine_image.resize((1067, 600), PIL.Image.ANTIALIAS)
         self.Engine_PhotoImage = iTK.PhotoImage(self.Engine_image)
 
-        # the .grid() adds it to the Frame
+        # Check to see if it should just replace the old image
         if self.photo_packed is False:
             self.Engine_label = tk.Label(self)
             self.Engine_label.configure(image=self.Engine_PhotoImage)
