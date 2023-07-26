@@ -82,7 +82,9 @@ class TestSummaryScene(tk.Frame):
                 )
         self.title.grid(row= 0, column= 1, pady = 20)
 
-        
+
+        # Tries to add all of the images to the final screen
+        # TODO This is not scalable as it just appends the images horizontally
         for i, photo in enumerate(self.data_holder.get_photo_list()):
             
             try:
@@ -104,21 +106,8 @@ class TestSummaryScene(tk.Frame):
 
 
         
-
         logging.debug("TestSummaryScene: Creating the engine image.")
         
-        ## Create a photoimage object of the Engine
-        #Engine_image = Image.open("{}/Images/EnginePhoto.png".format(PythonFiles.__path__[0]))
-        #Engine_image = Engine_image.resize((200, 150), Image.ANTIALIAS)
-        #Engine_PhotoImage = iTK.PhotoImage(Engine_image)
-        #Engine_label = tk.Label(self, image=Engine_PhotoImage)
-        #Engine_label.image = Engine_PhotoImage
-
-        ## the .grid() adds it to the Frame
-        #Engine_label.grid(column=1, row = 1)
-
-
-
 
 
        # Adds Board Serial Number to the TestSummaryFrame
@@ -210,15 +199,6 @@ class TestSummaryScene(tk.Frame):
         btn_logout.pack(anchor = 'se', padx = 10, pady = 20)
  
     
-        ## For the visual inspection component
-        #self.inspection_data = { 
-        #        'board_chipped_bent': False,
-        #        'wagon_connection_pin_bent': False,
-        #        'engine_connection_pin_bent': False,
-        #        'visual_scratches': False,
-        #        'inspection_comments': "_" 
-        #        }
-
 
 
     #################################################
