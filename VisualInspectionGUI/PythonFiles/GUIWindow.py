@@ -307,8 +307,6 @@ class GUIWindow():
 
     
 
-
-
     #################################################
 
 
@@ -405,7 +403,6 @@ class GUIWindow():
 
 
     #################################################
-    #################################################
 
 
     def onMouseWheel(self, event):             # cross platform scroll wheel event
@@ -422,17 +419,8 @@ class GUIWindow():
         self.mycanvas.unbind_all("<Button-4>")
         self.mycanvas.unbind_all("<Button-5>")
 
-
-
-
-    #################################################
-
-
-
-
-
-
-
+    
+    
     #################################################
 
     # Called when the yes button is pressed to destroy both windows
