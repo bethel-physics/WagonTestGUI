@@ -174,14 +174,6 @@ class GUIWindow():
 
         
 
-
-    def set_frame_test_choice_frame(self):
-        
-        print("GUIWindow: Setting frame to test_choice_frame. Empty method")        
-        logging.debug("GUIWindow: The frame has been set to test_choice_frame. Empty method.")
-    
-
-
     #################################################
 
     def set_frame_add_user_frame(self):
@@ -277,6 +269,7 @@ class GUIWindow():
 
     def check_if_test_passed(self):
         logging.debug("GUIWindow: The method check_if_test_passed(self) has been called. This method is empty.")
+
     #################################################
 
     def return_to_current_test(self):
@@ -382,21 +375,6 @@ class GUIWindow():
         
         logging.debug("GUIWindow: Sidebar buttons have been updated.")
 
-        # Brings up the test_failed popup if the test is false, continues on if not
-        # Also tests the current test index so that in the event you are retrying a test it will not prompt 
-        # the user about the previous test failing
-        #if _frame == self.test2_frame and self.current_test_index == 1:
-        #   if self.data_holder.data_dict['test1_pass'] == False:
-        #        TestFailedPopup(self, self.test1_frame, self.data_holder)
-        #if _frame == self.test3_frame and self.current_test_index == 2:
-        #    if self.data_holder.data_dict['test2_pass'] == False:
-        #        TestFailedPopup(self, self.test2_frame, self.data_holder)
-        #if _frame == self.test4_frame and self.current_test_index == 3:
-        #    if self.data_holder.data_dict['test3_pass'] == False:
-        #        TestFailedPopup(self, self.test3_frame, self.data_holder)
-        #if _frame == self.test_summary_frame and self.current_test_index == 4:
-        #    if self.data_holder.data_dict['test4_pass'] == False:
-        #        TestFailedPopup(self, self.test4_frame, self.data_holder)
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
 
@@ -450,7 +428,7 @@ class GUIWindow():
 
     #################################################
 
-
+    # Creates the popup window to show the text for current scene
     def help_popup(self, current_window):
         
         logging.debug("GUIWindow: The user has requested a help window")
@@ -461,6 +439,8 @@ class GUIWindow():
         # popup.wm_attributes('-toolwindow', 'True')
         self.popup.title("Help Window") 
         self.popup.geometry("650x650+500+300")
+        
+        # "grab_set()" makes sure that you cannot do anything else while this window is open
         #self.popup.grab_set()
        
         self.mycanvas = tk.Canvas(self.popup, background="#808080", width=630, height =650)

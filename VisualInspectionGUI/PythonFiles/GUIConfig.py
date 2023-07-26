@@ -43,6 +43,9 @@ class GUIConfig():
         self.current_idx = idx
 
 
+    def getCheckDict(self, inspect_num, ):
+        return self.board_cfg["InspectionTest"][idx]['checkboxes']
+
     def getTestIndex(self):
         return self.current_idx
 

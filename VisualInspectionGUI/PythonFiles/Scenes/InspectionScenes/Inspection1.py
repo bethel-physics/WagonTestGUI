@@ -67,6 +67,13 @@ class Inspection1(tk.Frame):
         ent_snum.grid(row=0, column=3, pady=15)
         ent_snum.config(state = "disabled")
 
+        # TODO Index can change for different InspectionScenes
+        inspection_index = 0
+        check_dictionary = self.data_holder.get_check_dict(0)
+        if len(check_dictionary) > 0:
+            for items in self.data_holder.get_check_dict(0):
+
+
 
         self.board_chipped_bent = tk.BooleanVar()
         self.wagon_connection_pin_bent = tk.BooleanVar()

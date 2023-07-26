@@ -2,6 +2,8 @@
 # Class to handle creation of different types of GUIs based on which board we want to test
 # This class will hold all of the frame information and order them accordingly
 
+
+# Responsible for interfacing with the configuration file
 class GUIConfig():
 
     # Loads in a config file with board type name
@@ -20,6 +22,7 @@ class GUIConfig():
 
         print("Instance of {} GUI created.".format(self.getGUIType()))
 
+
     # Get number of tests to define order of scenes and sidebar
     def getNumTest(self):
         return len(self.board_cfg["Test"])
@@ -35,7 +38,6 @@ class GUIConfig():
         for ptest in self.board_cfg["PhysicalTest"]:
             if index == num:
                 return ptest
-            count = count + 1
 
         print("\n\nCannot find a physical test with num = {}. Please try again.\n".format(num))
         return None
@@ -58,7 +60,8 @@ class GUIConfig():
             return self.board_cfg["DBInfo"]
         else:
             return self.board_cfg["DBInfo"][key]
-
+    
+    # Returns true if the database should be used
     def get_if_use_DB(self):
         return self.board_cfg['DBInfo']['use_database']
 
@@ -66,13 +69,20 @@ class GUIConfig():
         #print(self.board_cfg)
         return self.board_cfg["GUIType"]
 
+    ################################
+    
+    # Necessary to be stored for the current test
+    # This allows for more advanced test navigation
+
     def setTestIndex(self, idx):
         self.current_idx = idx
-
 
     def getTestIndex(self):
         return self.current_idx
 
+    ################################
+    
+    # Returns the names for the physical tests from config
     def getPhysicalNames(self):
         try:
             return [test["name"] for test in self.board_cfg["PhysicalTest"]]
@@ -83,4 +93,6 @@ class GUIConfig():
         try:
             return [test["name"] for test in self.board_cfg["Test"]]
         except:
+            print("Unable to return test names. Check to see if test['name'] is empty")
+            logging.debug("Unable to return test names. Check to see if test['name'] is empty")
             return []

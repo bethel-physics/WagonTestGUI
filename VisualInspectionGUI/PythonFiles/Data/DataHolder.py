@@ -45,6 +45,14 @@ class DataHolder():
 
         self.image_data = []
 
+        # All of the checkbox logic
+        # Dictionaries stored by inspection index
+        self.all_checkboxes = []
+        
+        for index in enumerate(self.gui_cfg.numInspections())
+            self.all_checkboxes.append(self.gui_cfg.getCheckDict(index))
+        
+        
         self.data_lists = {
                 'test_results': [],
                 'test_completion': [] 
@@ -68,6 +76,9 @@ class DataHolder():
 
     def get_photo_list(self):
         return self.photo_list
+
+    def get_check_dict(self, idx):
+        return self.all_check_boxes[idx]
 
 
     def add_new_user_name(self, user_ID, passwd):
