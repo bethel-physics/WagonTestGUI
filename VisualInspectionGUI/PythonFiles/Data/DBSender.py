@@ -71,6 +71,8 @@ class DBSender():
             return ['User1', 'User2', 'User3']
 
 
+    def add_board_image(self, serial, image):
+        pass
         
 
     # Returns a list of booleans

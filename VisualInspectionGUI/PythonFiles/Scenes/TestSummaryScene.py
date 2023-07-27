@@ -137,43 +137,66 @@ class TestSummaryScene(tk.Frame):
         key_count = 0
         
         # Loop through all of the keys in the data_holder.inspection_data dictionary
-        for key,value in self.data_holder.inspection_data.items():
+        for index,box in enumerate(self.data_holder.all_checkboxes[0]):
             key_count = key_count + 1
-            print("\nKey: {}, Value: {}".format(key,value))
+            print("\nIndex: {}, Box: {}".format(index, box))
         
             key_label = tk.Label(
                     self.frm_table, 
-                    text = key, 
+                    text = box['text'], 
                     relief = 'ridge', 
-                    width=25, 
+                    width=40, 
                     height=1, 
                     font=('Arial', 11, "bold")
                     )
-            key_label.grid(row=key_count , column=0)
+            key_label.grid(row=key_count , column=0, padx = 2)
              
 
             # Correctly displays the booleans
             # If not a string, show as a boolean true/false
             l_text = "UNDEFINED"
-            if not isinstance(value, str):
-                if (value):
+            if not isinstance(box['value'], str):
+                if (box['value']):
                     l_text = "True"
                 else:
                     l_text = "False"
             else:
-                l_text = value    
+                l_text = value['value']    
 
             result_label = tk.Label(
                     self.frm_table, 
                     text = l_text, 
                     relief = 'ridge', 
-                    width=25, 
+                    width=40, 
                     height=1, 
                     font=('Arial', 11, "bold")
                     )
-            result_label.grid(row=key_count , column=1)
+            result_label.grid(row=key_count, column=1)
                     
-            
+        comment_index = 0
+        comment_title_text = "Comments:"
+        comment_title = tk.Label(
+               self.frm_table, 
+               text = comment_title_text, 
+               relief = 'ridge', 
+               width=40, 
+               height=2, 
+               font=('Arial', 11, "bold")
+               )
+        comment_title.grid(row=key_count + 1, column=0)
+
+        comment_text = str(self.data_holder.get_comment_dict(comment_index))
+        comment_label = tk.Label(
+               self.frm_table, 
+               text = comment_text, 
+               relief = 'ridge', 
+               width=40, 
+               height=2, 
+               font=('Arial', 11, "bold")
+               )
+        comment_label.grid(row=key_count + 1, column=1)
+
+ 
         # Creating frame for logout button
         frm_logout = tk.Frame(self)
         frm_logout.grid(column = 4, row = starting_row, sticky= 'se')

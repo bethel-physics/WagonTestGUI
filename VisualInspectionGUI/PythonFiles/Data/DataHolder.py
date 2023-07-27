@@ -1,6 +1,5 @@
 ################################################################################
 import json, logging, socket, PythonFiles, copy, os
-from PythonFiles.Data.DBSendClient import DBSendClient
 from PythonFiles.Data.DBSender import DBSender
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
@@ -49,9 +48,15 @@ class DataHolder():
         # Dictionaries stored by inspection index
         self.all_checkboxes = []
         
-        for index in enumerate(self.gui_cfg.numInspections())
+        for index in range(self.gui_cfg.getNumInspections()):
             self.all_checkboxes.append(self.gui_cfg.getCheckDict(index))
         
+        # All of the comments logic
+        # Dictionaries stored by inspection index
+        self.all_comments = []
+        
+        for index in range(self.gui_cfg.getNumInspections()):
+            self.all_comments.append(self.gui_cfg.getCommentDict(index))
         
         self.data_lists = {
                 'test_results': [],
@@ -78,8 +83,10 @@ class DataHolder():
         return self.photo_list
 
     def get_check_dict(self, idx):
-        return self.all_check_boxes[idx]
+        return self.all_checkboxes[idx]
 
+    def get_comment_dict(self, idx):
+        return self.all_comments[idx]
 
     def add_new_user_name(self, user_ID, passwd):
         self.data_dict['user_ID'] = user_ID
@@ -222,8 +229,10 @@ class DataHolder():
 
     # Prints all the variable values inside data_holder
     def print(self):    
-        print("data_dict: \n", self.data_dict, "\ninspection_data: \n", self.inspection_data)
-    
+        print("data_dict: \n", self.data_dict, "\ninspection_data: \n", self.inspection_data, "\nimage_data:\n", self.image_data, "\nall_checkboxes: \n", self.all_checkboxes, "\nall_comments: \n", self.all_comments, '\n\n')
+           
+
+ 
     #################################################
     
     def update_from_json_string(self, imported_json_string):

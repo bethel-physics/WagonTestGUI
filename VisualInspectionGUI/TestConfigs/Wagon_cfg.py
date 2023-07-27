@@ -2,6 +2,8 @@ masterCfg = {
 
         "GUIType": "Wagon",
 
+        "UsingScanner": True,
+
         # Order of tests matters here
         # This should be the same order that you want the tests to be run in
         # Number of test will also be decide by this list so don't miss any
@@ -12,6 +14,27 @@ masterCfg = {
             {"name": "Bit Error Rate Test", "required": 1, "desc_short": "Determine quality of data transmission", "desc_long": "Needs to be completed after I2C check in order to set up wagon wheel"},
         ],
 
+
+        "PhysicalTest": [
+            #{
+            #    "name": "SAMPLE test", 
+            #    "required": 1, 
+            #    "desc_short": "Some short description", 
+            #    "desc_long": "Really long description for later purposes.",
+            #    "criteria": {
+            #        "first testing criteria",
+            #        "second testing criteria",
+            #        "third testing criteria",                
+            #    },
+        
+            #}, 
+        
+        ],  
+
+
+
+
+
         "Photo": [
             {"name": "Top", "desc_short": "Top side of the board"},
             {"name": "Bottom", "desc_short": "Bottom side of the board"},
@@ -21,6 +44,7 @@ masterCfg = {
         # Information for sending and receiving data to/from the database
         # Needs to be different based on board type
         "DBInfo": {
+            "use_database": True,
             "name": "WagonDB",
             "reader": "WagonDBReadUser",
             "inserter": "WagonDBInserter",

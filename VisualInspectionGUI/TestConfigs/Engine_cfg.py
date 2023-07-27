@@ -191,10 +191,10 @@ masterCfg = {
             "comments": "No Comment",
 
 
-        }
+        },
 
 
-    ]
+    ],
 
     # Example of information needed for tests (from Wagon config)
     # Use template dictionary above
@@ -232,6 +232,14 @@ masterCfg = {
         "Devin",
         "HGCAL_dev",
     ],
+
+
+    "Photo": [
+        {"name": "Top", "desc_short": "Top side of the board"},
+        {"name": "Bottom", "desc_short": "Bottom side of the board"},
+    ],
+
+
     # Information for sending and receiving data to/from the database
     # Needs to be different based on board type
     "DBInfo": {
