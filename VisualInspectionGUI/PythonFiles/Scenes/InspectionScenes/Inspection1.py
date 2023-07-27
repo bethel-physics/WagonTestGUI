@@ -262,8 +262,8 @@ class Inspection1(tk.Frame):
         for i, items in enumerate(self.tk_bools):
             self.data_holder.get_check_dict(0)[i]['value'] = items.get()           
 
-
-        self.data_holder.inspection_data['inspection_comments'] = self.comment_box.get()
+       
+        self.data_holder.set_comment_dict(0, self.comment_box.get())  
         self.data_holder.add_inspection_to_comments()
         self.data_holder.print()
 

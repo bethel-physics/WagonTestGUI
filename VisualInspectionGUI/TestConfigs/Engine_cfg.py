@@ -176,18 +176,30 @@ masterCfg = {
                 {
                     "text": "Is the board bent?",
                     "value": False,
+                    "requirement": True,
                 },
                 {
                     "text": "Are all components present?",
                     "value": False,
+                    "requirement": True,
                 },
                 {
                     "text": "Are there any chips on the board?",
                     "value": False,
+                    "requirement": True,
                 },
                 
 
             ],
+            "user_entry": [
+                {
+                    "text": "Enter a voltage between 0.5 and 1.2",
+                    "value": 0,
+                    "requirement": 1.0,
+                }
+
+            ],
+
             "comments": "No Comment",
 
 

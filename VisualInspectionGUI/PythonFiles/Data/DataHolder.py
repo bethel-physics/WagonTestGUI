@@ -88,6 +88,9 @@ class DataHolder():
     def get_comment_dict(self, idx):
         return self.all_comments[idx]
 
+    def set_comment_dict(self, idx, val):
+        self.all_comments[idx] = val 
+
     def add_new_user_name(self, user_ID, passwd):
         self.data_dict['user_ID'] = user_ID
         
