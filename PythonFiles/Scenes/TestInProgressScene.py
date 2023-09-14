@@ -181,7 +181,7 @@ class TestInProgressScene(tk.Frame):
                             print("\nTestInProgressScene: Unable to update master_window\n")
                             print("Exception: ", e)
 
-                        time.sleep(0.2)
+                        time.sleep(0.02)
                         break
 
                 if self.window_closed == True:

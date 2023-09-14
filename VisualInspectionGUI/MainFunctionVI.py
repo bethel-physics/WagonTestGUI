@@ -39,7 +39,7 @@ def main():
    
     board_cfg = None
 
-    from TestConfigs.Wagon_cfg import masterCfg
+    from TestConfigs.Engine_cfg import masterCfg
 
     print("Hostname setup for wagon testing. Initializing Wagon Test GUI...")
 

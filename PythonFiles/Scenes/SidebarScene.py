@@ -28,6 +28,9 @@ class SidebarScene(tk.Frame):
 
         super().__init__( sidebar_frame, width=213, height = 650, bg = '#808080', padx = 10, pady=10)
         
+
+        ############        
+        
         self.mycanvas = tk.Canvas(self, background="#808080", width=213, height =650)
         self.viewingFrame = tk.Frame(self.mycanvas, background = "#808080", width = 213, height = 650)
         self.scroller = ttk.Scrollbar(self, orient="vertical", command=self.mycanvas.yview)
@@ -63,8 +66,9 @@ class SidebarScene(tk.Frame):
 
     def onCanvasConfigure(self, event):
         '''Reset the canvas window to encompass inner frame when required'''
-        canvas_width = event.width
-        self.mycanvas.itemconfig(self, width = canvas_width)            #whenever the size of the canvas changes alter the window region respectively.
+        pass
+        #canvas_width = event.width
+        #self.mycanvas.itemconfig(self, width = canvas_width)            #whenever the size of the canvas changes alter the window region respectively.
 
 
     #################################################
@@ -109,7 +113,7 @@ class SidebarScene(tk.Frame):
         # How much offset from the physical board tests
         physical_offset = 0
 
-        #print("\nThere are {} physical tests\n".format(self.data_holder.getNumPhysicalTest()))
+        print("\nThere are {} physical tests\n".format(self.data_holder.getNumPhysicalTest()))
 
         for i in range(self.data_holder.getNumPhysicalTest()): 
             #print("Physical Button should point to the {} test".format(i + physical_offset))
@@ -183,6 +187,8 @@ class SidebarScene(tk.Frame):
 
         # List for creating check marks with for loop
         self.list_of_pass_fail = self.data_holder.data_lists['test_results']
+
+
 
         # For loop to create checkmarks based on pass/fail
         for index in range(len(self.list_of_pass_fail)):

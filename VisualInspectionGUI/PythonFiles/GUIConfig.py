@@ -12,6 +12,10 @@ class GUIConfig():
 
         self.configure()
 
+    # Return true if GUI should use the database
+    def get_if_use_DB(self):
+        return self.board_cfg['DBInfo']['use_database']
+
 
     # Create the GUI instance based off testing information
     def configure(self):
@@ -42,6 +46,14 @@ class GUIConfig():
     def setTestIndex(self, idx):
         self.current_idx = idx
 
+    def getNumInspections(self):
+        return len(self.board_cfg['InspectionTest'])
+
+    def getCheckDict(self, inspect_num):
+        return self.board_cfg["InspectionTest"][inspect_num]['checkboxes']
+
+    def getCommentDict(self, inspect_num):
+         return self.board_cfg["InspectionTest"][inspect_num]['comments']
 
     def getTestIndex(self):
         return self.current_idx

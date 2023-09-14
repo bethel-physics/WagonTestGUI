@@ -56,7 +56,7 @@ class PhotoScene(tk.Frame):
         self.master_frame = master_frame
         self.parent = parent
 
-        super().__init__(self.master_frame, width = 1105, height = 650)
+        super().__init__(self.master_frame, width = 1105, height = 850)
 
         logging.info("PhotoScene: Frame has been created.")
         # Create a photoimage object of the Engine
@@ -76,11 +76,14 @@ class PhotoScene(tk.Frame):
         Blank_Frame = Frame(self)
         Blank_Frame.grid(column = 0, row = 1, padx = 100, pady = 10)
 
+        self.photo_title = tk.StringVar()
+        self.photo_title.set("Photo Title")
+
         # creates a Label Variable, different customization options
         lbl_scan = tk.Label(
             master= Scan_Board_Prompt_Frame,
-            text = "Insert Photo of Board",
-            font = ('Arial', 18)
+            textvariable = self.photo_title,
+            font = ('Arial', 14)
         )
         lbl_scan.pack(padx = 50, pady = 50)
 
@@ -211,6 +214,15 @@ class PhotoScene(tk.Frame):
     def set_text(self, index):
         self.image_index = index
 
+        title = self.data_holder.get_photo_list()[index]["name"]
+        descr = self.data_holder.get_photo_list()[index]["desc_short"]
+
+        updated_title = title + "\n--------------------\n" + descr
+
+        self.photo_title.set(updated_title)
+
+        
+
 
     #################################################
 
@@ -236,7 +248,7 @@ class PhotoScene(tk.Frame):
         print("\nIn PhotoScene 'update()' method\n")
         # Create a photoimage object of the Engine
         print("\n\n\nThe Image Path is: {} \n\n".format(self.parent.image_name))
-        self.Engine_image = self.Engine_image.resize((400, 300), Image.ANTIALIAS)
+        self.Engine_image = self.Engine_image.resize((712, 400), Image.ANTIALIAS)
         self.Engine_PhotoImage = iTK.PhotoImage(self.Engine_image)
         self.Engine_label = tk.Label(self)
         self.Engine_label.configure(image=self.Engine_PhotoImage)

@@ -41,7 +41,7 @@ class GUIWindow():
         master_window.title("Visual Inspection Window")
 
         # Creates the size of the window and disables resizing
-        master_window.geometry("1105x650+25+100")
+        master_window.geometry("1350x850+25+100")
 
         # Variables necessary for the help popup
         self.all_text = "No help available for this scene."
@@ -55,7 +55,7 @@ class GUIWindow():
         # master_window.wm_attributes('-toolwindow', 'True')
 
         # Creates and packs a frame that exists on top of the master_frame
-        master_frame = tk.Frame(master_window, width = 1105, height = 650)
+        master_frame = tk.Frame(master_window, width = 1105, height = 850)
         master_frame.grid(column = 0, row = 0, columnspan = 4)
 
         # Object for taking care of instantiation of different test types
@@ -169,6 +169,7 @@ class GUIWindow():
         print("GUIWindow: Going to camera frame #{}".format(index))
         logging.debug("GUIWindow: Going to camera frame #{}".format(index))
         self.camera_frame.set_text(index)
+        self.camera_frame.update_preview()
         self.set_frame(self.camera_frame)
 
     #################################################
@@ -306,8 +307,6 @@ class GUIWindow():
 
     
 
-
-
     #################################################
 
 
@@ -404,7 +403,6 @@ class GUIWindow():
 
 
     #################################################
-    #################################################
 
 
     def onMouseWheel(self, event):             # cross platform scroll wheel event
@@ -421,17 +419,8 @@ class GUIWindow():
         self.mycanvas.unbind_all("<Button-4>")
         self.mycanvas.unbind_all("<Button-5>")
 
-
-
-
-    #################################################
-
-
-
-
-
-
-
+    
+    
     #################################################
 
     # Called when the yes button is pressed to destroy both windows

@@ -1,6 +1,5 @@
 ################################################################################
 import json, logging, socket, PythonFiles, copy, os
-from PythonFiles.Data.DBSendClient import DBSendClient
 from PythonFiles.Data.DBSender import DBSender
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
@@ -36,7 +35,10 @@ class DataHolder():
     def get_total_test_num(self):
         return self.total_test_num
      
-
+    
+    def get_use_scanner(self):
+        return self.gui_cfg.getUseScanner()
+    
     #################################################
 
     def get_physical_criteria(self, num):

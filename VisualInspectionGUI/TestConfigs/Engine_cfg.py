@@ -1,100 +1,79 @@
+base_path = "/home/HGCAL_dev/test_scripts"
+
 masterCfg = {
 
-    "GUIType": "Wagon",
+    "GUIType": "Engine",
+
+    "UsingScanner": True,
 
 
     # Order of tests matters here
     # This should be the same order that you want the tests to be run in
     # Number of test will also be decide by this list so don't miss any
     "Test": [
-        # First Look
         {
-            "name": "Visual Inspection",
+            "name": "Power-Ground Resistance",
             "required": 1,
-            "desc_short": "Purely Visual Inspection",
-            "desc_long": "Inspect for obvious visual damage or other anomalies.",
-        },
-        # Pre-power up
-        {
-            "name": "LDO Resistance",
-            "required": 1,
-            "desc_short": "Measure resistance of LDO resistors.",
-            "desc_long": "LDO output resistors: R912 and R907: should be 500kOhm",
+            "desc_short": "Measure resistance between power and ground",
+            "desc_long": "Check that the power and grounds are not shorted at the terminal, or between the inputs.",
         },
         {
-            "name": "Short Check",
+            "name": "1.5V Input Check",
             "required": 1,
-            "desc_short": "Check for obvious shorts",
-            "desc_long": "Check that there is resistance between power and ground.",
-        },
-        # Power Up Sequence
-        {
-            "name": "Voltage/Current Check",
-            "required": 1,
-            "desc_short": "Check the voltage and current",
-            "desc_long": "Check that the voltage and current on the power supply are at correct values.",
-        },
-        # Component Checks
-        {
-            "name": "R911",
-            "required": 1,
-            "desc_short": "Check component R911 or TP901",
-            "desc_long": "R911 or TP901: output voltage of the LDO: should be close to 1.20V",
+            "desc_short": "Check that the 1.5V input is not shorted.",
+            "desc_long": "Check that resistance between across C906 or C908 is non-zero.",
         },
         {
-            "name": "C906/C908",
+            "name": "10V Input Check",
             "required": 1,
-            "desc_short": "Check component C906 and C908",
-            "desc_long": "C906/908: should be equal to the input voltage of the LDO: O(1.3–1.8V), depending on how the power supply was configured",
+            "desc_short": "Check that the 10V input is not shorted.",
+            "desc_long": "Check that resistance between across C907 or C909 is non-zero.",
         },
         {
-            "name": "C909/C907/C901",
+            "name": "1.2V Output Check",
             "required": 1,
-            "desc_short": "Check component C909, C907, and C901",
-            "desc_long": "C909/907/901: should be equal to the input voltage for the linPOL: O(10V)",
+            "desc_short": "Check that the 1.2V output is not shorted.",
+            "desc_long": "Check that resistance between across C904 or C904 or TP901 is non-zero.",
         },
         {
-            "name": "R905/R903/C902/C903",
+            "name": "RX 2.5V Output Check",
             "required": 1,
-            "desc_short": "Check components R905/R903/C902/C903",
-            "desc_long": "R905/906 and C902/903: outputs of the linPOL, should both be at 2.5V",
+            "desc_short": "Check that the RX 2.5V output is not shorted.",
+            "desc_long": "Check that resistance across C902 is non-zero."
         },
         {
-            "name": "TP902",
+            "name": "TX 2.5V Output Check",
             "required": 1,
-            "desc_short": "Probe TP902",
-            "desc_long": "TP902: test point for linpol output power (TX channel)",
+            "desc_short": "Check that the TX 2.5V output is not shorted.",
+            "desc_long": "Check that resistance across either C903 or TP902 is non-zero."
+        },
+        # Power on Tests
+        {
+            "name": "LDO Output",
+            "required": 1,
+            "desc_short": "Check that the LDO output voltage is around 1.2V",
+            "desc_long": "Measure the votlage across either R911 or TP901 and verify that it is appropriate."
         },
         {
-            "name": "R916",
+            "name": "LinPol RX Check",
             "required": 1,
-            "desc_short": "Check component R916",
-            "desc_long": "R916: between the TX and RX outputs of the linPOL. Should be 0V",
+            "desc_short": "Check that the RX voltage from the linppol is operating correctly",
+            "desc_long": "Check that voltages across either R905 or R902 is 2.5V."
         },
         {
-            "name": "C807/C808/C809/C801",
+            "name": "LinPol TX Check",
             "required": 1,
-            "desc_short": "Check components C807/C808/C809/C801",
-            "desc_long": "C807/808/809/801: Should be 1.2V (goes to VTRX+)",
+            "desc_short": "Check that the TX voltage from the linppol is operating correctly",
+            "desc_long": "Measure the voltage across either TP902 or R906 or C903 is 2.5V."
         },
-        # Operations Tests
+
+        #Operations Tests
         {
-            "name": "Fast Command",
+            "name": "X_PWR",
             "required": 1,
-            "desc_short": "Check fast command functionality",
-            "desc_long": "Verify fast command operability by manipulating counters on encoder and decoder.",
-        },
-        {
-            "name": "lpGBT ",
-            "required": 1,
-            "desc_short": "Check components C807/C808/C809/C801",
-            "desc_long": "C807/808/809/801: Should be 1.2V (goes to VTRX+)",
-        },
-        {
-            "name": "lpGBT IC/EC communication",
-            "required": 1,
-            "desc_short": "Check operability of lpGBT IC/EC communication",
-            "desc_long": "Read and write to lpBGT registers via ICEC. Check DAQ lpGBT read of registers via IC. Check Trigger lpGBTs: successful read registers via EC. Ensure write and readback to user ID registers (0x004 - 0x007)",
+            "desc_short": "Check the the X_PWR voltage is correct.",
+            "desc_long": "Measure using the tester, and should find approximately 1.2V.",
+            "TestClass" : "TestXPWR",
         },
         {
             "name": "lpGBT setup",
@@ -103,22 +82,45 @@ masterCfg = {
             "desc_long": "Perform nominal setup from BE. Do setup, link trick, setup. Check PUSMStatus (0x1d9) reports READY (0x13) for all 3 lpGBTs. Check lpGBTs locked to BE All 3 RX equal within 200 Hz. Check All 3 RX-DV equal within 200 Hz",
         },
         {
+            "name": "EClock Rates",
+            "required": 1,
+            "desc_short": "Ensure EClock rates are correct",
+            "desc_long": "Check that all EClocks are running at 320MHz.",
+        },
+        {
+            "name": "lpGBT IC/EC communication",
+            "required": 1,
+            "desc_short": "Check operability of lpGBT IC/EC communication",
+            "desc_long": "Read and write to lpBGT registers via ICEC. Check DAQ lpGBT read of registers via IC. Check Trigger lpGBTs: successful read registers via EC. Ensure write and readback to user ID registers (0x004 - 0x007)",
+        },
+        {
+            "name": "I2C",
+            "required": 1,
+            "desc_short": "Engine can use I2C master",
+            "desc_long": "Check that engine can communicate as an I2C master",
+            "TestScript": "engine_test_suite.py",
+
+        },
+        {
             "name": "GPIO functionality",
             "required": 1,
             "desc_short": "Check the quality of the GPIOs",
             "desc_long": "Read and write to all GPIO channels and verify levels. Write nominal configuration and then toggle each line one-by-one and verify change in both lpGBT status and voltage level",
+            "TestClass" : "TestGpio"
         },
         {
             "name": "ADC functionality",
             "required": 1,
             "desc_short": "Check quality of the ADCs",
-            "desc_long": "Measure known voltages/resistances. Check measured values for all 4 gains within tolerances",
+            "desc_long": "Measure known voltages/resistances. Check measured values for all 4 gains within tolerances, (only need to do all 4 gains for one measurement).",
+            "TestClass" : "TestAdc"
         },
         {
             "name": "Uplink quality",
             "required": 1,
             "desc_short": "Check the quality of the uplinks",
             "desc_long": "PRBS validation from lpGBTs. Check bit error rate below threshold.",
+            "TestClass" : "TestUplink"
         },
         {
             "name": "Downlink quality",
@@ -127,12 +129,85 @@ masterCfg = {
             "desc_long": "Eye opening test. Check eye opening width and height below threshold.",
         },
         {
+            "name": "Fast Command quality",
+            "required": 1,
+            "desc_short": "Check the quality of the Fast Command path",
+            "desc_long": "PRBS validation from and back to ZCU. Check bit error rate below threshold.",
+            "TestClass" : "TestFC"
+        },
+        {
             "name": "Elink quality",
             "required": 1,
             "desc_short": "Check the quality of the elinks",
             "desc_long": "PRBS validation from and back to ZCU. Check bit error rate below threshold.",
+            "TestClass" : "TestElinkUp"
+        },
+        {
+            "name": "Crossover link quality",
+            "required": 1,
+            "desc_short": "Check the quality of the crossover links",
+            "desc_long": "PRBS validation from and back to ZCU. Check bit error rate below threshold.",
         },
     ],
+
+
+    "PhysicalTest": [
+        #{
+        #    "name": "SAMPLE test", 
+        #    "required": 1, 
+        #    "desc_short": "Some short description", 
+        #    "desc_long": "Really long description for later purposes.",
+        #    "criteria": {
+        #        "first testing criteria",
+        #        "second testing criteria",
+        #        "third testing criteria",                
+        #    },
+
+        #}, 
+
+    ],
+
+    "InspectionTest": [
+        
+        {
+            "name": "Inspection1",
+            "required": 1,
+            "checkboxes": [
+                {
+                    "text": "Is the board bent?",
+                    "value": False,
+                    "requirement": True,
+                },
+                {
+                    "text": "Are all components present?",
+                    "value": False,
+                    "requirement": True,
+                },
+                {
+                    "text": "Are there any chips on the board?",
+                    "value": False,
+                    "requirement": True,
+                },
+                
+
+            ],
+            "user_entry": [
+                {
+                    "text": "Enter a voltage between 0.5 and 1.2",
+                    "value": 0,
+                    "requirement": 1.0,
+                }
+
+            ],
+
+            "comments": "No Comment",
+
+
+        },
+
+
+    ],
+
     # Example of information needed for tests (from Wagon config)
     # Use template dictionary above
     # FOLLOW THE FORMAT EXPICITLY PLEASE :)
@@ -169,13 +244,24 @@ masterCfg = {
         "Devin",
         "HGCAL_dev",
     ],
+
+
+    "Photo": [
+        {"name": "Top", "desc_short": "Top side of the board"},
+        {"name": "Bottom", "desc_short": "Bottom side of the board"},
+    ],
+
+
     # Information for sending and receiving data to/from the database
     # Needs to be different based on board type
     "DBInfo": {
+        "use_database": True,
         "name": "EngineDB",
         "reader": "EngineDBReadUser",
         "inserter": "EngineDBInserter",
         "admin": "EngineDBInserter",
-        "baseURL": "cgi-bin/EngineDB",
+        "baseURL": "http://cmslab3.spa.umn.edu/~cros0400/cgi-bin/EngineDB",
     },
 }
+
+masterCfg["Test"] = [dict(**x, TestPath=base_path, TestScript= "engine_test_suite.py") for x in masterCfg["Test"] if "TestClass" in x]
