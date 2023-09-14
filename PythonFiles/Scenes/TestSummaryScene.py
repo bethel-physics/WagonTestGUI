@@ -194,7 +194,7 @@ class TestSummaryScene(tk.Frame):
             if(self.list_of_pass_fail[index]):
                 # Create a photoimage object of the QR Code
                 Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
-                Green_Check_Image = Green_Check_Image.resize((75,75), Image.ANTIALIAS)
+                Green_Check_Image = Green_Check_Image.resize((75,75), Image.LANCZOS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
                 GreenCheck_Label = tk.Label(self.viewingFrame, image=Green_Check_PhotoImage, width=75, height=75)
                 GreenCheck_Label.image = Green_Check_PhotoImage
@@ -204,7 +204,7 @@ class TestSummaryScene(tk.Frame):
             else:
                 # Create a photoimage object of the QR Code
                 Red_X_Image = Image.open("{}/Images/RedX.png".format(PythonFiles.__path__[0]))
-                Red_X_Image = Red_X_Image.resize((75,75), Image.ANTIALIAS)
+                Red_X_Image = Red_X_Image.resize((75,75), Image.LANCZOS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
                 RedX_Label = tk.Label(self.viewingFrame, image=Red_X_PhotoImage, width=75, height=75)
                 RedX_Label.image = Red_X_PhotoImage
