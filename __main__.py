@@ -81,9 +81,7 @@ if __name__ == "__main__":
         "cmsfactory1.cmsfactorynet",
         "cmsfactory5.cmsfactorynet",
         "cmslab4.umncmslab",
-    
         "cmsfactory2.cmsfactorynet",
-
     ]
     engine_GUI_computers = [
         "cmsfactory4.cmsfactorynet",
@@ -91,7 +89,7 @@ if __name__ == "__main__":
    
     board_cfg = None
 
-    if node in wagon_GUI_computers:
+    if any(node in y for y in  wagon_GUI_computers):
         from TestConfigs.Wagon_cfg import masterCfg
 
         print("Hostname setup for wagon testing. Initializing Wagon Test GUI...")
