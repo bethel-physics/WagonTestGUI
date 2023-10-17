@@ -1,6 +1,8 @@
 ################################################################################
 import json, logging, socket, PythonFiles, copy, os
+import requests
 from PythonFiles.Data.DBSender import DBSender
+from PythonFiles.update_config import update_config
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
 logging.basicConfig(filename="/home/{}/GUILogs/visual_gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
@@ -24,7 +26,9 @@ class DataHolder():
                 'test_stand': str(socket.gethostname()),
                 'current_serial_ID': "-1BAD",
                 'comments': "_",
-                'is_new_board': False,
+                'prev_results': None,
+                'test_names': None,
+                'checkin_id': None,
                 'tests_run': [str(i + 1) for i in range(self.getNumTest())],
                 }
         for i in range(self.gui_cfg.getNumTest()):
@@ -109,30 +113,57 @@ class DataHolder():
 
 
     def check_if_new_board(self):
-        # Send request for query
+        logging.info("DataHolder: Checking if serial is a new board")
         print("testing if new board")
-        self.data_dict['is_new_board'] = self.test_new_board(self.get_serial_ID())        
-        print("result received:", self.data_dict['is_new_board'])
-        if self.data_dict['is_new_board'] == False:
-            prev_results = self.data_sender.get_previous_test_results(self.get_serial_ID())
-            #message = "get_previous_test_results;{'serial_number': {}}".format(self.get_serial_ID())
-            #prev_results = self.dbclient.send_request(message)
-            for result in prev_results:
-                test_id = result[0]
-                pass_fail = result[1]
-                if pass_fail == 0:
-                    pass_fail = False
-                elif pass_fail == 1:
-                    pass_fail = True
-                for index, test in enumerate(self.data_dict['tests_run']):
-                    if test_id == test:
-                        for i in range(self.gui_cfg.getNumTest()):
-                            if index == i: 
-                                self.data_dict['test{}_pass'.format(i+1)] = pass_fail
-                                self.data_dict['test{}_completed'.format(i+1)] = pass_fail
-                        
+
+        sn = self.get_serial_ID()
+        user = self.data_dict['user_ID']
+        comments = 'Checked in during Visual Inspection'
+        is_new_board = self.data_sender.is_new_board(sn)
+        print(is_new_board)
+        
+        if is_new_board == True:
+            in_id = self.data_sender.add_new_board(sn, user, comments)
+            if in_id:
+                print('Board added to Database')
+                self.data_dict['test_names'] = None
+                self.data_dict['prev_results'] = 'This is a new board, it has been checked in. Check In ID:' + in_id
+
         else:
-            pass
+            prev_results, test_names = self.data_sender.get_previous_test_results(sn)
+            if prev_results:
+                self.data_dict['test_names'] = test_names
+                self.data_dict['prev_results'] = prev_results
+            else:
+                self.data_dict['test_names'] = None
+                self.data_dict['prev_results'] = 'No tests have been run on this board.'
+            
+            
+
+#        # Send request for query
+#        self.data_dict['is_new_board'] = self.test_new_board(self.get_serial_ID())        
+#        print("result received:", self.data_dict['is_new_board'])
+#        if self.data_dict['is_new_board'] == False:
+#            prev_results = self.data_sender.get_previous_test_results(self.get_serial_ID())
+#            #message = "get_previous_test_results;{'serial_number': {}}".format(self.get_serial_ID())
+#            #prev_results = self.dbclient.send_request(message)
+#            for result in prev_results:
+#                test_id = result[0]
+#                pass_fail = result[1]
+#                if pass_fail == 0:
+#                    pass_fail = False
+#                elif pass_fail == 1:
+#                    pass_fail = True
+#                for index, test in enumerate(self.data_dict['tests_run']):
+#                    if test_id == test:
+#                        for i in range(self.gui_cfg.getNumTest()):
+#                            if index == i: 
+#                                self.data_dict['test{}_pass'.format(i+1)] = pass_fail
+#                                self.data_dict['test{}_completed'.format(i+1)] = pass_fail
+#                        
+#        else:
+#            pass
+
 
     #################################################
 
@@ -147,11 +178,15 @@ class DataHolder():
     ##################################################
 
     def set_serial_ID(self, sn):
-        self.data_sender.add_new_board(sn)
+        #self.data_sender.add_new_board(sn)
         #message = "add_new_board;{'sn': {}}".format(sn)
         #self.dbclient.send_request(message)
                     
         self.data_dict['current_serial_ID'] = sn
+        new_cfg = update_config(sn)
+        self.gui_cfg = new_cfg
+        self.data_holder_new_test()
+        self.data_sender = DBSender(self.gui_cfg)
         logging.info("DataHolder: Serial Number has been set.")
 
     def send_image(self, img_idx=0):
@@ -310,9 +345,12 @@ class DataHolder():
         self.data_dict = {
                 'user_ID': self.data_dict['user_ID'],
                 'test_stand': str(socket.gethostname()),
-                'current_serial_ID': "-1BAD",
+                'current_serial_ID': self.data_dict['current_serial_ID'],
                 'comments': "_",
                 'is_new_board': False,
+                'prev_results': None,
+                'test_names': None,
+                'checkin_id': None,
                 'tests_run': [str(i + 1) for i in range(self.getNumTest())],
                 }
         for i in range(self.gui_cfg.getNumTest()):

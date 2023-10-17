@@ -48,6 +48,6 @@ masterCfg = {
             "name": "WagonDB",
             "reader": "WagonDBReadUser",
             "inserter": "WagonDBInserter",
-            "baseURL": "cgi-bin/WagonDB"
+            "baseURL": "http://cmslab3.spa.umn.edu/~cros0400/cgi-bin/WagonDB",
             }
         }

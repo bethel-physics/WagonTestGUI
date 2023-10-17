@@ -172,14 +172,14 @@ class DBSender():
             begin = lines.index("Begin") + 1
             end = lines.index("End")
 
-            sn = None
+            in_id = None
 
             for i in range(begin, end):
-                sn = lines[i]
+                in_id = lines[i]
         except:
-            sn = None
+            in_id = None
 
-        return sn
+        return in_id
 
 
     def is_new_board(self, sn):

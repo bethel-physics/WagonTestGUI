@@ -88,15 +88,15 @@ class TestSummaryScene(tk.Frame):
         for i, photo in enumerate(self.data_holder.get_photo_list()):
             
             try:
-                # Create a photoimage object of the Engine
-                Engine_image = Image.open("{}/Images/captured_image{}.png".format(PythonFiles.__path__[0], i))
-                Engine_image = Engine_image.resize((222, 125), Image.ANTIALIAS)
-                Engine_PhotoImage = iTK.PhotoImage(Engine_image)
-                Engine_label = tk.Label(self, image=Engine_PhotoImage)
-                Engine_label.image = Engine_PhotoImage
+                # Create a photoimage object of the Board
+                Board_image = Image.open("{}/Images/captured_image{}.png".format(PythonFiles.__path__[0], i))
+                Board_image = Board_image.resize((222, 125), Image.LANCZOS)
+                Board_PhotoImage = iTK.PhotoImage(Board_image)
+                Board_label = tk.Label(self, image=Board_PhotoImage)
+                Board_label.image = Board_PhotoImage
 
                 # the .grid() adds it to the Frame
-                Engine_label.grid(column=0 + i, row = 1)
+                Board_label.grid(column=0 + i, row = 1)
 
             except Exception as e:
                 print("TestSummaryScene: Could not find captured_image.")
@@ -106,7 +106,7 @@ class TestSummaryScene(tk.Frame):
 
 
         
-        logging.debug("TestSummaryScene: Creating the engine image.")
+        logging.debug("TestSummaryScene: Creating the board image.")
         
 
 

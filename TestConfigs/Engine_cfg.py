@@ -16,55 +16,64 @@ masterCfg = {
             "required": 1,
             "desc_short": "Measure resistance between power and ground",
             "desc_long": "Check that the power and grounds are not shorted at the terminal, or between the inputs.",
+            "TestClass" : "TestPowerGround",
         },
         {
             "name": "1.5V Input Check",
             "required": 1,
             "desc_short": "Check that the 1.5V input is not shorted.",
             "desc_long": "Check that resistance between across C906 or C908 is non-zero.",
+            "TestClass" : "Test1.5VInput",
         },
         {
             "name": "10V Input Check",
             "required": 1,
             "desc_short": "Check that the 10V input is not shorted.",
             "desc_long": "Check that resistance between across C907 or C909 is non-zero.",
+            "TestClass" : "Test10VInput",
         },
         {
             "name": "1.2V Output Check",
             "required": 1,
             "desc_short": "Check that the 1.2V output is not shorted.",
             "desc_long": "Check that resistance between across C904 or C904 or TP901 is non-zero.",
+            "TestClass" : "Test1.2VOutput",
         },
         {
             "name": "RX 2.5V Output Check",
             "required": 1,
             "desc_short": "Check that the RX 2.5V output is not shorted.",
-            "desc_long": "Check that resistance across C902 is non-zero."
+            "desc_long": "Check that resistance across C902 is non-zero.",
+            "TestClass" : "TestRX2.5VOutput",
         },
         {
             "name": "TX 2.5V Output Check",
             "required": 1,
             "desc_short": "Check that the TX 2.5V output is not shorted.",
-            "desc_long": "Check that resistance across either C903 or TP902 is non-zero."
+            "desc_long": "Check that resistance across either C903 or TP902 is non-zero.",
+            "TestClass" : "TestTX2.5VOutput",
         },
         # Power on Tests
         {
             "name": "LDO Output",
             "required": 1,
             "desc_short": "Check that the LDO output voltage is around 1.2V",
-            "desc_long": "Measure the votlage across either R911 or TP901 and verify that it is appropriate."
+            "desc_long": "Measure the votlage across either R911 or TP901 and verify that it is appropriate.",
+            "TestClass" : "TestLDOOutput",
         },
         {
             "name": "LinPol RX Check",
             "required": 1,
             "desc_short": "Check that the RX voltage from the linppol is operating correctly",
-            "desc_long": "Check that voltages across either R905 or R902 is 2.5V."
+            "desc_long": "Check that voltages across either R905 or R902 is 2.5V.",
+            "TestClass" : "TestLinPolRX",
         },
         {
             "name": "LinPol TX Check",
             "required": 1,
             "desc_short": "Check that the TX voltage from the linppol is operating correctly",
-            "desc_long": "Measure the voltage across either TP902 or R906 or C903 is 2.5V."
+            "desc_long": "Measure the voltage across either TP902 or R906 or C903 is 2.5V.",
+            "TestClass" : "TestLinPolTX",
         },
 
         #Operations Tests
@@ -80,25 +89,29 @@ masterCfg = {
             "required": 1,
             "desc_short": "Ensure setup can be performed",
             "desc_long": "Perform nominal setup from BE. Do setup, link trick, setup. Check PUSMStatus (0x1d9) reports READY (0x13) for all 3 lpGBTs. Check lpGBTs locked to BE All 3 RX equal within 200 Hz. Check All 3 RX-DV equal within 200 Hz",
+            "TestClass" : "TestlpGBTsetup",
         },
         {
             "name": "EClock Rates",
             "required": 1,
             "desc_short": "Ensure EClock rates are correct",
             "desc_long": "Check that all EClocks are running at 320MHz.",
+            "TestClass" : "TestEClock",
         },
         {
             "name": "lpGBT IC/EC communication",
             "required": 1,
             "desc_short": "Check operability of lpGBT IC/EC communication",
             "desc_long": "Read and write to lpBGT registers via ICEC. Check DAQ lpGBT read of registers via IC. Check Trigger lpGBTs: successful read registers via EC. Ensure write and readback to user ID registers (0x004 - 0x007)",
+            "TestClass" : "TestlpGBTcom",
         },
         {
             "name": "I2C",
             "required": 1,
             "desc_short": "Engine can use I2C master",
             "desc_long": "Check that engine can communicate as an I2C master",
-            "TestScript": "engine_test_suite.py",
+            #"TestScript": "engine_test_suite.py",
+            "TestClass" : "TestI2C",
 
         },
         {
@@ -127,6 +140,7 @@ masterCfg = {
             "required": 1,
             "desc_short": "Check the quality of the downlinks",
             "desc_long": "Eye opening test. Check eye opening width and height below threshold.",
+            "TestClass" : "TestDownlink",
         },
         {
             "name": "Fast Command quality",
@@ -147,6 +161,7 @@ masterCfg = {
             "required": 1,
             "desc_short": "Check the quality of the crossover links",
             "desc_long": "PRBS validation from and back to ZCU. Check bit error rate below threshold.",
+            "TestClass" : "TestCrossover",
         },
     ],
 

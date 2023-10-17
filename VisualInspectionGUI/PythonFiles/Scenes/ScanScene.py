@@ -229,8 +229,8 @@ class ScanScene(tk.Frame):
 
         self.data_holder.set_serial_ID(self.ent_snum.get())
         self.data_holder.check_if_new_board()
-        _parent.first_frame_camera_frame()
-
+        _parent.update_config()
+        _parent.set_frame_postscan()
 
     #################################################
 
@@ -245,6 +245,7 @@ class ScanScene(tk.Frame):
 
          # Send user back to login frame
         _parent.set_frame_login_frame() 
+        master_frame.after(500, self.set_frame_login_frame)
 
     #################################################
 

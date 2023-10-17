@@ -72,7 +72,7 @@ class SidebarScene(tk.Frame):
 
 
     #################################################
-    def update_sidebar(self, parent):
+    def update_sidebar(self, _parent):
         
         logging.info("SidebarScene: The sidebar has been updated.")
 
@@ -104,6 +104,9 @@ class SidebarScene(tk.Frame):
 
         test_names = self.data_holder.getTestNames()
         physical_names = self.data_holder.getPhysicalNames()
+        print('\n\n\n\n\n\n\n\n')
+        print(test_names)
+        print(physical_names)
 
         self.test_btns = []
 
@@ -124,7 +127,7 @@ class SidebarScene(tk.Frame):
                 height = btn_height,
                 width = btn_width,
                 font = btn_font,
-                command = lambda i=i: self.btn_test_action(parent, i)
+                command = lambda i=i: self.btn_test_action(_parent, i)
                 ))
             self.test_btns[i+physical_offset].grid(column = 0, row = i + original_offset)
 
@@ -151,7 +154,7 @@ class SidebarScene(tk.Frame):
                 height = btn_height,
                 width = btn_width,
                 font = btn_font,
-                command = lambda i=i: self.btn_test_action(parent, i + physical_offset)
+                command = lambda i=i: self.btn_test_action(_parent, i + physical_offset)
                 ))
             self.test_btns[i+physical_offset].grid(column = 0, row = physical_offset + original_offset + i)
 
@@ -167,7 +170,7 @@ class SidebarScene(tk.Frame):
             height = btn_height,
             width = btn_width,
             font = btn_font,
-            command = lambda: self.btn_summary_action(parent)
+            command = lambda: self.btn_summary_action(_parent)
             )
         self.btn_summary.grid(column = 0, row = physical_offset + original_offset + digital_offset)
 
@@ -179,7 +182,7 @@ class SidebarScene(tk.Frame):
             height = btn_height,
             width = btn_width,
             font = ('Kozuka Gothic Pr6N L', 8),
-            command = lambda: self.report_bug(parent)
+            command = lambda: self.report_bug(_parent)
             )
         self.report_btn.grid(column = 0, row = physical_offset + original_offset + digital_offset + 1)
         

@@ -16,6 +16,7 @@ import socket
 # Imports the GUIWindow
 from PythonFiles.GUIWindow import GUIWindow
 from PythonFiles.utils.SUBClient import SUBClient
+from PythonFiles.update_config import update_config
 import sys
 import logging
 
@@ -67,6 +68,31 @@ def run(board_cfg):
         print("Terminate is unnecessary.")
         pass
 
+
+def board_config(sn):
+
+    board_cfg = None
+    
+    if sn == None:
+        if any(node in y for y in  wagon_GUI_computers):
+            from TestConfigs.Wagon_cfg import masterCfg
+
+            print("Hostname setup for wagon testing. Initializing Wagon Test GUI...")
+
+            board_cfg = masterCfg
+        
+        if any(node in y for y in engine_GUI_computers):
+            from TestConfigs.Engine_cfg import masterCfg
+
+            print("Hostname setup for engine testing. Initializing Engine Test GUI...")
+
+            board_cfg = masterCfg
+
+
+        run(board_cfg)
+
+    else:
+        update_config(sn)
 def main(args):
     pass
 
@@ -86,22 +112,6 @@ if __name__ == "__main__":
     engine_GUI_computers = [
         "cmsfactory4.cmsfactorynet",
     ]
+
+    board_config(None)
    
-    board_cfg = None
-
-    if any(node in y for y in  wagon_GUI_computers):
-        from TestConfigs.Wagon_cfg import masterCfg
-
-        print("Hostname setup for wagon testing. Initializing Wagon Test GUI...")
-
-        board_cfg = masterCfg
-    
-    if any(node in y for y in engine_GUI_computers):
-        from TestConfigs.Engine_cfg import masterCfg
-
-        print("Hostname setup for engine testing. Initializing Engine Test GUI...")
-
-        board_cfg = masterCfg
-
-
-    run(board_cfg)

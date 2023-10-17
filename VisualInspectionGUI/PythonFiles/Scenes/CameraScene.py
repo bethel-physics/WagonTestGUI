@@ -181,7 +181,7 @@ class CameraScene(tk.Frame):
         # Ensure that the camera aspect ratio matches the aspect ratio here
         # This may require some fine-tuning
         self.Engine_image = PIL.Image.open(self.photo_name)
-        self.Engine_image = self.Engine_image.resize((1067, 600), PIL.Image.ANTIALIAS)
+        self.Engine_image = self.Engine_image.resize((1067, 600), PIL.Image.LANCZOS)
         self.Engine_PhotoImage = iTK.PhotoImage(self.Engine_image)
 
         # Check to see if it should just replace the old image

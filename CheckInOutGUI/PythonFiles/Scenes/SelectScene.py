@@ -37,10 +37,6 @@ class SelectScene(tk.Frame):
 
         logging.info("SelectScene: Frame has been created.")
 
-
-        # Creating a list for dropdown menu
-        checklist = ['Check In', 'Check Out']
-
         # Creating the title for the window
         lbl_title = tk.Label(
             self, 
@@ -49,39 +45,54 @@ class SelectScene(tk.Frame):
             )
         lbl_title.pack(pady=75)
 
-        # Creating intial value in dropdown menu
-        self.check_selected = tk.StringVar(self)
-        self.check_selected.set("") # default value is empty
+        self.btn_in = tk.Button(
+                self,
+                relief = tk.RAISED,
+                text = 'Check In',
+                command = lambda: self.btn_submit_action(parent, 'Check In')
+        )
+        self.btn_in.pack()
+        self.btn_out = tk.Button(
+                self,
+                relief = tk.RAISED,
+                text = 'Check Out',
+                command = lambda: self.btn_submit_action(parent, 'Check Out')
+        )
+        self.btn_out.pack()
 
-        # Creating the dropdown menu itself
-        self.opt_check_dropdown = tk.OptionMenu(
-            self, 
-            self.check_selected, # Tells option menu to use the created initial value
-            *checklist # Tells the dropdown menu to use every index in the list
-            ) 
-        self.opt_check_dropdown.pack(pady=15)
-        self.opt_check_dropdown.config(width = 20, font = ('Arial', 13))
-        self.opt_check_dropdown['menu'].configure(font = ('Arial', 12))
-
-        # Traces when the user selects an option in the dropdown menu
-        # When an option is selected, it calls the show_submit_button function
-        self.check_selected.trace(
-            'w', 
-            lambda *args: self.show_submit_button()
-            )
-
-        # Creating the submit button
-        # It does not get enabled until the user selects an option menu option
-        self.btn_submit = tk.Button(
-            self, 
-            text="Submit",
-            padx = 50,
-            pady = 10, 
-            relief=tk.RAISED, 
-            command= lambda:  self.btn_submit_action(parent)
-            )
-        self.btn_submit.pack()
-        self.btn_submit.config(state = 'disabled')
+#        # Creating intial value in dropdown menu
+#        self.check_selected = tk.StringVar(self)
+#        self.check_selected.set("") # default value is empty
+#
+#        # Creating the dropdown menu itself
+#        self.opt_check_dropdown = tk.OptionMenu(
+#            self, 
+#            self.check_selected, # Tells option menu to use the created initial value
+#            *checklist # Tells the dropdown menu to use every index in the list
+#            ) 
+#        self.opt_check_dropdown.pack(pady=15)
+#        self.opt_check_dropdown.config(width = 20, font = ('Arial', 13))
+#        self.opt_check_dropdown['menu'].configure(font = ('Arial', 12))
+#
+#        # Traces when the user selects an option in the dropdown menu
+#        # When an option is selected, it calls the show_submit_button function
+#        self.check_selected.trace(
+#            'w', 
+#            lambda *args: self.show_submit_button()
+#            )
+#
+#        # Creating the submit button
+#        # It does not get enabled until the user selects an option menu option
+#        self.btn_submit = tk.Button(
+#            self, 
+#            text="Submit",
+#            padx = 50,
+#            pady = 10, 
+#            relief=tk.RAISED, 
+#            command= lambda:  self.btn_submit_action(parent)
+#            )
+#        self.btn_submit.pack()
+#        self.btn_submit.config(state = 'disabled')
 
         # Creating the help button
         self.btn_help = tk.Button(
@@ -113,9 +124,9 @@ class SelectScene(tk.Frame):
     # Creates the function for the submit button command
     # @params "_parent" is also a parent like "parent", but it is a different "parent",
     # passes in GUIWindow
-    def btn_submit_action(self, _parent):
+    def btn_submit_action(self, _parent, check_id):
             # Sets the check_ID in the data_holder to the selected user
-        self.data_holder.set_check_ID(self.check_selected.get())
+        self.data_holder.set_check_ID(check_id)
         # Changes frame to scan_frame
         _parent.set_frame_scan_frame()
 

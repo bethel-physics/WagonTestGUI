@@ -24,7 +24,9 @@ from PythonFiles.Data.DataHolder import DataHolder
 from PythonFiles.Scenes.SplashScene import SplashScene
 from PythonFiles.Scenes.TestInProgressScene import *
 from PythonFiles.Scenes.AddUserScene import AddUserScene
+from PythonFiles.Scenes.PostScanScene import PostScanScene
 from PythonFiles.Scenes.PhysicalScenes.Inspection1 import Inspection1
+from PythonFiles.update_config import update_config
 import webbrowser
 
 #################################################################################
@@ -43,7 +45,6 @@ class GUIWindow():
 
     def __init__(self, conn, queue, board_cfg):
         
-
         self.conn = conn
         self.queue = queue
         self.retry_attempt = False
@@ -82,6 +83,7 @@ class GUIWindow():
 
         # Creates the "Storage System" for the data during testing
         self.data_holder = DataHolder(self.gui_cfg)
+        self.data_holder.data_dict['queue'] = queue
 
         # Creates all the widgets on the sidebar
         self.sidebar = SidebarScene(self, sidebar_frame, self.data_holder)
@@ -99,36 +101,14 @@ class GUIWindow():
         self.login_frame = LoginScene(self, self.master_frame, self.data_holder)
         self.login_frame.grid(row=0, column=0)
 
+        self.post_scan_frame = PostScanScene(self, self.master_frame, self.data_holder)
+        self.post_scan_frame.grid(row=0, column=0)
+
         self.scan_frame = ScanScene(self, self.master_frame, self.data_holder)        
         self.scan_frame.grid(row=0, column=0)
 
-        
-
-        # Generalize test frames to use testing config
-        # Grab list of tests from config file and create one scene for each test
-        # Tests are indexed starting at 1 and using the order of the list in the config
-        
-        self.test_frames = []
-        test_list = self.gui_cfg.getTests()
-        physical_list = self.gui_cfg.getPhysicalTests()        
-
-        offset = 0
-        
-        # For the physical tests
-        for test_idx,test in enumerate(physical_list):
-            self.test_frames.append(Inspection1(self, self.master_frame, self.data_holder, test_idx))
-            self.test_frames[test_idx].grid(row=0, column=0)
-            offset = offset + 1
-
-        # For the digital tests
-        for test_idx,test in enumerate(test_list):
-
-            self.test_frames.append(TestScene(self, self.master_frame, self.data_holder, test["name"], queue, test_idx))
-            self.test_frames[test_idx + offset].grid(row=0, column=0)
-
+        #self.create_test_frames(queue)
             
-        print("\ntest_frames len: ", len(self.test_frames))
-
         self.test_in_progress_frame = TestInProgressScene(self, self.master_frame, self.data_holder, queue, conn)
         self.test_in_progress_frame.grid(row=0, column=0)
 
@@ -159,6 +139,42 @@ class GUIWindow():
         
 
     #################################################
+
+    def create_test_frames(self, queue):
+        # Generalize test frames to use testing config
+        # Grab list of tests from config file and create one scene for each test
+        # Tests are indexed starting at 1 and using the order of the list in the config
+        
+        self.test_frames = []
+        test_list = self.gui_cfg.getTests()
+        physical_list = self.gui_cfg.getPhysicalTests()        
+
+        offset = 0
+        
+        # For the physical tests
+        for test_idx,test in enumerate(physical_list):
+            self.test_frames.append(Inspection1(self, self.master_frame, self.data_holder, test_idx))
+            self.test_frames[test_idx].grid(row=0, column=0)
+            offset = offset + 1
+
+        # For the digital tests
+        for test_idx,test in enumerate(test_list):
+
+            self.test_frames.append(TestScene(self, self.master_frame, self.data_holder, test["name"], queue, test_idx))
+            self.test_frames[test_idx + offset].grid(row=0, column=0)
+
+        print("\ntest_frames len: ", len(self.test_frames))
+
+
+    #################################################
+
+    def update_config(self):
+        sn = self.data_holder.get_serial_ID()
+        new_cfg = update_config(sn)
+        self.gui_cfg = new_cfg
+
+    #################################################
+
 
     def run_all_tests(self, test_idx):
         self.running_all_idx = test_idx
@@ -214,6 +230,13 @@ class GUIWindow():
 
     #################################################
 
+    def set_frame_postscan(self):
+
+        self.post_scan_frame.update_frame()
+        self.set_frame(self.post_scan_frame)
+
+    #################################################
+
     # Used to be the visual inspection method
 
     #################################################
@@ -244,8 +267,8 @@ class GUIWindow():
 
         selected_test_frame = self.test_frames[test_idx]
         print("Setting frame to test {}".format(test_idx))
-        selected_test_frame.update_frame(self)
-        print("Frame updated!")
+        #selected_test_frame.update_frame(self)
+        #print("Frame updated!")
         
         self.set_frame(selected_test_frame)
         print("Frame set!")

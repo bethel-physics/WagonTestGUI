@@ -14,7 +14,9 @@ from PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
 from PythonFiles.Scenes.InspectionScenes.Inspection1 import Inspection1
 from PythonFiles.Scenes.AddUserScene import AddUserScene
 from PythonFiles.Scenes.PhotoScene import PhotoScene
-from PythonFiles.Scenes.CameraScene import CameraScene
+from PythonFiles.Scenes.PostScanScene import PostScanScene
+from PythonFiles.update_config import update_config
+#from PythonFiles.Scenes.CameraScene import CameraScene
 import logging
 import os
 import PythonFiles
@@ -76,6 +78,9 @@ class GUIWindow():
         self.test_summary_frame = TestSummaryScene(self, master_frame, self.data_holder)
         self.test_summary_frame.grid(row=0, column=0)
 
+        self.post_scan_frame = PostScanScene(self, master_frame, self.data_holder)
+        self.post_scan_frame.grid(row=0, column=0)
+
         self.login_frame = LoginScene(self, master_frame, self.data_holder)
         self.login_frame.grid(row=0, column=0)
     
@@ -95,8 +100,8 @@ class GUIWindow():
         self.splash_frame = SplashScene(self, master_frame)
         self.splash_frame.grid(row=0, column=0)
 
-        self.camera_frame = CameraScene(self, master_frame, self.data_holder, 0)
-        self.camera_frame.grid(row=0, column=0)
+#        self.camera_frame = CameraScene(self, master_frame, self.data_holder, 0)
+#        self.camera_frame.grid(row=0, column=0)
         
 
         self.camera_index = 0
@@ -117,6 +122,13 @@ class GUIWindow():
         master_window.mainloop()
         
 
+
+    #################################################
+
+    def update_config(self):
+        sn = self.data_holder.get_serial_ID()
+        new_cfg = update_config(sn)
+        self.gui_cfg = new_cfg
 
     #################################################
 
@@ -193,6 +205,12 @@ class GUIWindow():
         self.scan_frame.scan_QR_code(master_window)
    
      #################################################
+    def set_frame_postscan(self):
+
+        self.post_scan_frame.update_frame()
+        self.set_frame(self.post_scan_frame)
+
+    #################################################
 
     def set_frame_splash_frame(self):
 
