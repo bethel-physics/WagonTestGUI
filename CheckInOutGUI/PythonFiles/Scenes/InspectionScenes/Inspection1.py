@@ -14,7 +14,7 @@ class Inspection1(tk.Frame):
     #################################################
 
     def __init__(self, parent, master_frame, data_holder):
-        super().__init__(master_frame, width=850, height=500)
+        super().__init__(master_frame, width = 1105, height = 850)
 
         self.test_name = "SOMETHING STRING"
         self.data_holder = data_holder
@@ -30,7 +30,7 @@ class Inspection1(tk.Frame):
         font_scene_14 = ('Arial', 14)
 
         # Create a centralized window for information
-        frm_window = tk.Frame(self, width = 850, height = 500)
+        frm_window = tk.Frame(self, width = 1105, height = 850)
         frm_window.grid(column=0, row=0)
 
         # Create a label for the tester's name
@@ -67,63 +67,87 @@ class Inspection1(tk.Frame):
         ent_snum.grid(row=0, column=3, pady=15)
         ent_snum.config(state = "disabled")
 
+        # TODO Index can change for different InspectionScenes
+        inspection_index = 0
+        check_dictionary = self.data_holder.get_check_dict(inspection_index)
 
-        self.board_chipped_bent = tk.BooleanVar()
-        self.wagon_connection_pin_bent = tk.BooleanVar()
-        self.engine_connection_pin_bent = tk.BooleanVar()
-        self.visual_scratches = tk.BooleanVar()
+        self.tk_bools = []
+
+        if len(check_dictionary) > 0:
+            for idx, item in enumerate(self.data_holder.get_check_dict(0)):
         
-
-
-        # Beginning of the CheckButtons
+                new_bool = tk.BooleanVar()
+                self.tk_bools.append(new_bool)
         
-        # Checkbutton1
-        c1 = tk.Checkbutton(
-            frm_window, 
-            font = font_scene_14,
-            text='Board Chipped/Bent',
-            variable= self.board_chipped_bent, 
-            onvalue=1, 
-            offvalue=0 
-            # command=print_selection
-            )
-        c1.grid(row = 1, column= 1, sticky='w', columnspan=2)
-        
-        # Checkbutton2
-        c2 = tk.Checkbutton(
-            frm_window, 
-            font = font_scene_14,
-            text='Wagon Connection Pin Bent',
-            variable= self.wagon_connection_pin_bent, 
-            onvalue=True, 
-            offvalue=False 
-            # command=print_selection
-            )
-        c2.grid(row = 2, column= 1, sticky='w', columnspan=2)
+                # Checkbutton1
+                c1 = tk.Checkbutton(
+                    frm_window, 
+                    font = font_scene_14,
+                    text=item['text'],
+                    variable= new_bool, 
+                    onvalue= True, 
+                    offvalue= False 
+                    # command=print_selection
+                    )
+                c1.grid(row = 1 + idx, column= 1, sticky='w', columnspan=2)
 
-        # Checkbutton3
-        c3 = tk.Checkbutton(
-            frm_window, 
-            font = font_scene_14,
-            text='Engine Connection Pin Bent',
-            variable= self.engine_connection_pin_bent, 
-            onvalue=True, 
-            offvalue=False 
-            # command=print_selection
-            )
-        c3.grid(row = 3, column= 1, sticky='w', columnspan=2)
 
-        # Checkbutton4
-        c4 = tk.Checkbutton(
-            frm_window, 
-            font = font_scene_14,
-            text='Visual Scratches',
-            variable= self.visual_scratches, 
-            onvalue=True, 
-            offvalue=False 
-            # command=print_selection
-        )
-        c4.grid(row = 4, column= 1, sticky='w', columnspan=2)
+        #self.board_chipped_bent = tk.BooleanVar()
+        #self.wagon_connection_pin_bent = tk.BooleanVar()
+        #self.engine_connection_pin_bent = tk.BooleanVar()
+        #self.visual_scratches = tk.BooleanVar()
+        #
+
+
+        ## Beginning of the CheckButtons
+        #
+        ## Checkbutton1
+        #c1 = tk.Checkbutton(
+        #    frm_window, 
+        #    font = font_scene_14,
+        #    text='Board Chipped/Bent',
+        #    variable= self.board_chipped_bent, 
+        #    onvalue=1, 
+        #    offvalue=0 
+        #    # command=print_selection
+        #    )
+        #c1.grid(row = 1, column= 1, sticky='w', columnspan=2)
+        #
+        ## Checkbutton2
+        #c2 = tk.Checkbutton(
+        #    frm_window, 
+        #    font = font_scene_14,
+        #    text='Wagon Connection Pin Bent',
+        #    variable= self.wagon_connection_pin_bent, 
+        #    onvalue=True, 
+        #    offvalue=False 
+        #    # command=print_selection
+        #    )
+        #c2.grid(row = 2, column= 1, sticky='w', columnspan=2)
+
+        ## Checkbutton3
+        #c3 = tk.Checkbutton(
+        #    frm_window, 
+        #    font = font_scene_14,
+        #    text='Engine Connection Pin Bent',
+        #    variable= self.engine_connection_pin_bent, 
+        #    onvalue=True, 
+        #    offvalue=False 
+        #    # command=print_selection
+        #    )
+        #c3.grid(row = 3, column= 1, sticky='w', columnspan=2)
+
+        ## Checkbutton4
+        #c4 = tk.Checkbutton(
+        #    frm_window, 
+        #    font = font_scene_14,
+        #    text='Visual Scratches',
+        #    variable= self.visual_scratches, 
+        #    onvalue=True, 
+        #    offvalue=False 
+        #    # command=print_selection
+        #)
+        #c4.grid(row = 4, column= 1, sticky='w', columnspan=2)
 
 
 
@@ -149,8 +173,6 @@ class Inspection1(tk.Frame):
 
 
 
-
-
     
 
         # Create a button for confirming test
@@ -162,9 +184,6 @@ class Inspection1(tk.Frame):
             )
         btn_confirm.grid(row = 9, column= 1, pady= 50)
         btn_confirm['font'] = font.Font(family = 'Arial', size = 13)
-
-
-
 
 
 
@@ -189,6 +208,19 @@ class Inspection1(tk.Frame):
             command = lambda: self.btn_logout_action(parent))
         btn_logout.pack(anchor = 'se')
 
+        # Creating the help button
+        btn_help = tk.Button(
+            nav_frame,
+            relief = tk.RAISED,
+            text = "Help",
+            command = lambda: self.help_action(parent)
+        )
+        btn_help.pack(anchor = 's', padx = 10, pady = 10)
+
+
+
+
+
         # # # # # # # # # 
 
         
@@ -199,6 +231,14 @@ class Inspection1(tk.Frame):
         frm_window.grid_propagate(0)
         self.grid_propagate(0)
         
+    #################################################
+
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    ################################################# 
+
     #################################################
 
     # Rescan button takes the user back to scanning in a new board
@@ -214,11 +254,16 @@ class Inspection1(tk.Frame):
     #################################################
 
     def update_data_holder(self):
-        self.data_holder.inspection_data['board_chipped_bent'] = self.board_chipped_bent.get()
-        self.data_holder.inspection_data['wagon_connection_pin_bent'] = self.wagon_connection_pin_bent.get()
-        self.data_holder.inspection_data['engine_connection_pin_bent'] = self.engine_connection_pin_bent.get()
-        self.data_holder.inspection_data['visual_scratches'] = self.visual_scratches.get()
-        self.data_holder.inspection_data['inspection_comments'] = self.comment_box.get()
+        #self.data_holder.inspection_data['board_chipped_bent'] = self.board_chipped_bent.get()
+        #self.data_holder.inspection_data['wagon_connection_pin_bent'] = self.wagon_connection_pin_bent.get()
+        #self.data_holder.inspection_data['engine_connection_pin_bent'] = self.engine_connection_pin_bent.get()
+        #self.data_holder.inspection_data['visual_scratches'] = self.visual_scratches.get()
+        
+        for i, items in enumerate(self.tk_bools):
+            self.data_holder.get_check_dict(0)[i]['value'] = items.get()           
+
+       
+        self.data_holder.set_comment_dict(0, self.comment_box.get())  
         self.data_holder.add_inspection_to_comments()
         self.data_holder.print()
 
@@ -229,7 +274,7 @@ class Inspection1(tk.Frame):
     def btn_confirm_action(self, _parent):
         
         self.update_data_holder()
-        _parent.go_to_next_test()
+        _parent.set_frame_test_summary()
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # #
         #   ++ GOAL CODE ++                                 #
@@ -249,3 +294,11 @@ class Inspection1(tk.Frame):
         _parent.set_frame_login_frame()
 
     #################################################
+
+
+    def remove_widgets(self, _parent):
+        for widget in self.winfo_children():
+            widget.destroy()
+
+
+

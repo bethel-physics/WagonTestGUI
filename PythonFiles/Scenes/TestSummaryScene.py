@@ -1,18 +1,21 @@
 #################################################################################
 
-import WagonTestGUI
+import PythonFiles
 import json, logging
 import tkinter as tk
+from tkinter import ttk
 from PIL import ImageTk as iTK
 from PIL import Image
 from matplotlib.pyplot import table
 from pyparsing import col
-import WagonTestGUI
+import PythonFiles
+import os
 
 #################################################################################
 
+logger = logging.getLogger('HGCAL_GUI')
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 # Frame that shows all of the final test results
 # @param parent -> References a GUIWindow object
@@ -29,18 +32,18 @@ class TestSummaryScene(tk.Frame):
         
         # Call to the super class's constructor
         # Super class is the tk.Frame class
-        super().__init__(master_frame, width=850, height=500)
+        super().__init__(master_frame, width=870, height=500)
+
+        self.sn_text = tk.StringVar()
 
         logging.info("TestSummaryScene: Frame has been created.")
 
         self.data_holder = data_holder
 
         # Setting weights of columns so the column 4 is half the size of columns 0-3
-        self.columnconfigure(0, weight = 2)
-        self.columnconfigure(1, weight = 2)
-        self.columnconfigure(2, weight = 2)
-        self.columnconfigure(3, weight = 2)
-        self.columnconfigure(4, weight = 1)
+        for i in range(self.data_holder.getNumTest()):
+            self.columnconfigure(i, weight = 2)
+        self.columnconfigure(self.data_holder.getNumTest(), weight = 1)
         # Instantiates an updated table with the current data
         self.create_updated_table(parent)
 
@@ -53,6 +56,16 @@ class TestSummaryScene(tk.Frame):
                 )
         self.title.grid(row= 0, column= 1, pady = 20)
 
+
+        self.sn_text.set("Serial Number: " + str(self.data_holder.data_dict['current_serial_ID']))       
+
+        # Adds Board Serial Number to the TestSummaryFrame
+        self.lbl_snum = tk.Label(
+                self, 
+                textvariable = self.sn_text,
+                font=('Arial', 14)
+                )
+        self.lbl_snum.grid(column = 2, row = 0, pady = 20, padx = 5)
         # Fits the frame to set size rather than interior widgets
         self.grid_propagate(0)
 
@@ -66,19 +79,13 @@ class TestSummaryScene(tk.Frame):
 
         logging.debug("TestSummaryScene: Table is being updated.")        
         
-        self.list_of_tests = ["General Resistance Test", "ID Resistor Test", "I2C Comm. Test", "Bit Rate Test"]
+        self.list_of_tests = self.data_holder.getTestNames()
         self.list_of_table_labels = ["Test Name", "Test Status", "Pass/Fail"]
         self.list_of_completed_tests = self.data_holder.data_lists['test_completion']
         self.list_of_pass_fail = self.data_holder.data_lists['test_results']
 
+        self.sn_text.set("Serial Number: " + str(self.data_holder.data_dict['current_serial_ID']))       
 
-        # Adds Board Serial Number to the TestSummaryFrame
-        self.lbl_snum = tk.Label(
-                self, 
-                text = "Serial Number: " + str(self.data_holder.data_dict['current_serial_ID']),
-                font=('Arial', 14)
-                )
-        self.lbl_snum.grid(column = 2, row = 0, pady = 20)
 
         # Adds Tester Name to the TestSummary Frame
         self.lbl_tester = tk.Label(
@@ -86,26 +93,52 @@ class TestSummaryScene(tk.Frame):
                 text = "Tester: " + self.data_holder.data_dict['user_ID'],
                 font=('Arial', 14)
                 )
-        self.lbl_tester.grid(column = 0, row = 0, pady = 20)
+        self.lbl_tester.grid(column = 3, row = 0, pady = 20, padx = 5)
        
-        
-        # Creates the "table" as a frame object
-        self.frm_table = tk.Frame(self)
-        self.frm_table.grid(row = 1, column= 0, columnspan = 4, rowspan = 4)
-        
+
+
+        #self.scrollerFrame = tk.Frame(self, background = "White", width = 900, height = 900)
+    
+
+
+        ##########
+
+        self.mycanvas = tk.Canvas(self)
+        self.viewingFrame = tk.Frame(self.mycanvas, width = 802, height = 400)
+        self.scroller = ttk.Scrollbar(self, orient="vertical", command=self.mycanvas.yview)
+        self.mycanvas.configure(yscrollcommand=self.scroller.set)
+
+        self.mycanvas.grid(row = 3, column = 1, columnspan = 4)
+        self.scroller.grid(row = 3, column = 0, sticky='NS')
+
+
+        self.canvas_window = self.mycanvas.create_window((4,4), window=self.viewingFrame, anchor='nw', tags="self.viewingFrame")
+
+
+
+
+        self.viewingFrame.bind("<Configure>", self.onFrameConfigure)
+        self.mycanvas.bind("<Configure>", self.onCanvasConfigure)
+
+        self.viewingFrame.bind('<Enter>', self.onEnter)
+        self.viewingFrame.bind('<Leave>', self.onLeave)
+
+        self.onFrameConfigure(None)
+
+
+
+    
         # Setting weights of columns so the column 4 is half the size of columns 0-3
-        self.frm_table.columnconfigure(0, weight = 2)
-        self.frm_table.columnconfigure(1, weight = 2)
-        self.frm_table.columnconfigure(2, weight = 2)
-        self.frm_table.columnconfigure(3, weight = 1)
-        self.frm_table.columnconfigure(4, weight = 1)
+        for i in range(self.data_holder.getNumTest()):
+            self.viewingFrame.columnconfigure(i, weight = 2)
+        self.viewingFrame.columnconfigure(self.data_holder.getNumTest(), weight = 1)
         
 
         
         # Adds the labels to the top of the table
         for index in range(len(self.list_of_table_labels)):
             _label = tk.Label(
-                    self.frm_table, 
+                    self.viewingFrame, 
                     text = self.list_of_table_labels[index], 
                     relief = 'ridge', 
                     width=25, 
@@ -118,11 +151,11 @@ class TestSummaryScene(tk.Frame):
         # Adds the test names to the first column
         for index in range(len(self.list_of_tests)):
             _label= tk.Label(
-                    self.frm_table, 
+                    self.viewingFrame, 
                     text = self.list_of_tests[index], 
                     relief = 'ridge', 
                     width=25, 
-                    height=5, 
+                    height=3, 
                     font=('Arial', 11)
                     )
             _label.grid(row=index + 1, column=0)
@@ -134,10 +167,10 @@ class TestSummaryScene(tk.Frame):
             
             # Instantiates a Label
             _label = tk.Label(
-                        self.frm_table,
+                        self.viewingFrame,
                         relief = 'ridge', 
                         width=25, 
-                        height=5, 
+                        height=3, 
                         font=('Arial',11)
                         )
 
@@ -160,30 +193,76 @@ class TestSummaryScene(tk.Frame):
         for index in range(len(self.list_of_pass_fail)):
             if(self.list_of_pass_fail[index]):
                 # Create a photoimage object of the QR Code
-                Green_Check_Image = Image.open("{}/PythonFiles/Images/GreenCheckMark.png".format(WagonTestGUI.__path__[0]))
-                Green_Check_Image = Green_Check_Image.resize((75,75), Image.ANTIALIAS)
+                Green_Check_Image = Image.open("{}/Images/GreenCheckMark.png".format(PythonFiles.__path__[0]))
+                Green_Check_Image = Green_Check_Image.resize((75,75), Image.LANCZOS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
-                GreenCheck_Label = tk.Label(self.frm_table, image=Green_Check_PhotoImage, width=75, height=75)
+                GreenCheck_Label = tk.Label(self.viewingFrame, image=Green_Check_PhotoImage, width=75, height=75)
                 GreenCheck_Label.image = Green_Check_PhotoImage
 
                 GreenCheck_Label.grid(row=index + 1, column=2)
 
             else:
                 # Create a photoimage object of the QR Code
-                Red_X_Image = Image.open("{}/PythonFiles/Images/RedX.png".format(WagonTestGUI.__path__[0]))
-                Red_X_Image = Red_X_Image.resize((75,75), Image.ANTIALIAS)
+                Red_X_Image = Image.open("{}/Images/RedX.png".format(PythonFiles.__path__[0]))
+                Red_X_Image = Red_X_Image.resize((75,75), Image.LANCZOS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
-                RedX_Label = tk.Label(self.frm_table, image=Red_X_PhotoImage, width=75, height=75)
+                RedX_Label = tk.Label(self.viewingFrame, image=Red_X_PhotoImage, width=75, height=75)
                 RedX_Label.image = Red_X_PhotoImage
 
                 RedX_Label.grid(row=index + 1, column=2)
 
 
         self.create_retest_more_info_btns(parent)
-       
-        self.grid_propagate(0)
+        
+
+        #self.viewingFrame.update_idletasks()
+        #self.mycanvas.update_idletasks()        
+
+        new_width = self.viewingFrame.winfo_reqwidth()
+        new_height = self.viewingFrame.winfo_reqheight()
+        
+        print("\nnew_width: {}, new_height: {}\n".format(new_width, new_height))
+
+
+        self.mycanvas.configure(width = new_width, height = new_height)      
+
+        #self.scrollerFrame.grid(row = 2, column = 1, columnspan = 4)
+ 
+        #self.scrollerFrame.grid_propagate(0)
 
         logging.debug("TestSummaryScene: Table finished update.")     
+
+    #################################################
+    #################################################
+
+    def onFrameConfigure(self, event):
+        '''Reset the scroll region to encompass the inner frame'''
+        self.mycanvas.configure(scrollregion=self.mycanvas.bbox("all"))                 #whenever the size of the frame changes, alter the scroll region respectively.
+
+    def onCanvasConfigure(self, event):
+        '''Reset the canvas window to encompass inner frame when required'''
+        canvas_width = event.width
+        self.mycanvas.itemconfig(self, width = canvas_width)            #whenever the size of the canvas changes alter the window region respectively.
+
+
+    def onMouseWheel(self, event):                                                  # cross platform scroll wheel event
+        if event.num == 4:
+            self.mycanvas.yview_scroll( -1, "units" )
+        elif event.num == 5:
+            self.mycanvas.yview_scroll( 1, "units" )
+
+    def onEnter(self, event):                                                       # bind wheel events when the cursor enters the control
+        self.mycanvas.bind_all("<Button-4>", self.onMouseWheel)
+        self.mycanvas.bind_all("<Button-5>", self.onMouseWheel)
+
+    def onLeave(self, event):                                                       # unbind wheel events when the cursorl leaves the control
+        self.mycanvas.unbind_all("<Button-4>")
+        self.mycanvas.unbind_all("<Button-5>")
+
+
+
+    #################################################
+    
 
     #################################################
 
@@ -192,111 +271,40 @@ class TestSummaryScene(tk.Frame):
 
         logging.debug("TestSummaryScene: Buttons are being created.")
 
-        row1 = tk.Frame(self.frm_table)
-        row1.grid(column = 3, row = 1)
-        
-        btn_retest1 = tk.Button(
-                row1, 
-                text = "RETEST",
-                padx= 5,
-                pady=5,  
-                command = lambda: self.btn_retest1_action(parent)
-                )
-        btn_retest1.grid(column = 1, row = 0, padx=5, pady=5)
+        rows = []
+        retests = []
+        more_infos = []
 
-        btn_more_info1 = tk.Button(
-                row1, 
-                text = "MORE INFO", 
-                padx= 5,
-                pady=5, 
-                command = lambda: self.btn_more_info1_action(parent)
-                )
-        btn_more_info1.grid(column=0, row = 0)
+        for i in range(self.data_holder.getNumTest()):
+            rows.append(tk.Frame(self.viewingFrame))
+            rows[i].grid(column = 3, row = i + 1)
 
+            retests.append(tk.Button(
+                    rows[i], 
+                    text = "RETEST",
+                    padx= 5,
+                    pady=3,  
+                    command = lambda i=i: self.btn_retest_action(parent, i)
+                    ))
+            retests[i].grid(column = 1, row = 0, padx=5, pady=5)
 
-
-
-        row2 = tk.Frame(self.frm_table)
-        row2.grid(column = 3, row = 2)
-        
-        btn_retest2 = tk.Button(
-                row2, 
-                text = "RETEST",
-                padx= 5,
-                pady=5,  
-                command = lambda: self.btn_retest2_action(parent)
-                )
-        btn_retest2.grid(column = 1, row = 0, padx=5, pady=5)
-
-        btn_more_info2 = tk.Button(
-                row2, 
-                text = "MORE INFO", 
-                padx= 5,
-                pady=5, 
-                command = lambda: self.btn_more_info2_action(parent)
-                )
-        btn_more_info2.grid(column=0, row = 0)
-
-
-
-
-        row3 = tk.Frame(self.frm_table)
-        row3.grid(column = 3, row = 3)
-        
-        btn_retest3 = tk.Button(
-                row3, 
-                text = "RETEST",
-                padx= 5,
-                pady=5,  
-                command = lambda: self.btn_retest3_action(parent)
-                )
-        btn_retest3.grid(column = 1, row = 0, padx=5, pady=5)
-
-        btn_more_info3 = tk.Button(
-                row3, 
-                text = "MORE INFO", 
-                padx= 5,
-                pady=5, 
-                command = lambda: self.btn_more_info3_action(parent)
-                )
-        btn_more_info3.grid(column=0, row = 0)
-
-        
-        
-        
-    
-        
-        row4 = tk.Frame(self.frm_table)
-        row4.grid(column = 3, row = 4)
-        
-        btn_retest4 = tk.Button(
-                row4, 
-                text = "RETEST",
-                padx= 5,
-                pady=5, 
-                command = lambda: self.btn_retest4_action(parent)
-                )
-        btn_retest4.grid(column = 1, row = 0, padx=5, pady=5)
-
-        btn_more_info4 = tk.Button(
-                row4, 
-                text = "MORE INFO", 
-                padx= 5,
-                pady=5, 
-                command = lambda: self.btn_more_info4_action(parent)
-                )
-        btn_more_info4.grid(column=0, row = 0)
-
-
+            more_infos.append(tk.Button(
+                    rows[i], 
+                    text = "MORE INFO", 
+                    padx= 5,
+                    pady=3, 
+                    command = lambda i=i: self.btn_more_info_action(parent, i)
+                    ))
+            more_infos[i].grid(column=0, row = 0)
 
 
         btn_next_test = tk.Button(
-                self.frm_table, 
+                self.viewingFrame, 
                 text = "NEXT BOARD",
                 font = ('Arial', 15), 
                 command = lambda: self.btn_next_test_action(parent)
                 )
-        btn_next_test.grid(column = 3, row = 5)
+        btn_next_test.grid(column = 3, row = self.data_holder.getNumTest() + 3)
 
         logging.debug("TestSummaryScene: Buttons finshed being created.")
 
@@ -351,6 +359,9 @@ class TestSummaryScene(tk.Frame):
     #################################################
 
     # All of the different methods for what the retest buttons should do
+    def btn_retest_action(self, _parent, test_idx):
+        _parent.set_frame_test(test_idx)
+
     def btn_retest1_action(self, _parent):
         _parent.set_frame(_parent.test1_frame)
  
@@ -365,23 +376,28 @@ class TestSummaryScene(tk.Frame):
 
     #################################################
 
+    def btn_more_info_action(self, _parent, test_idx):
+        names = self.data_holder.getTestNames()
+        self.create_JSON_popup("{}/JSONFiles/Current_{}_JSON.json".format(PythonFiles.__path__[0], names[test_idx].replace(" ", "").replace("/", "")))
+
     def btn_more_info1_action(self, _parent):
-        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_GenRes_JSON.json".format(WagonTestGUI.__path__[0]))
+        self.create_JSON_popup("{}/JSONFiles/Current_GenRes_JSON.json".format(PythonFiles.__path__[0]))
 
     def btn_more_info2_action(self, _parent):
-        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_IDRes_JSON.json".format(WagonTestGUI.__path__[0]))
+        self.create_JSON_popup("{}/JSONFiles/Current_IDRes_JSON.json".format(PythonFiles.__path__[0]))
 
     def btn_more_info3_action(self, _parent):
-        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_IIC_JSON.json".format(WagonTestGUI.__path__[0]))
+        self.create_JSON_popup("{}/JSONFiles/Current_IIC_JSON.json".format(PythonFiles.__path__[0]))
     
     def btn_more_info4_action(self, _parent):
-        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_BERT_JSON.json".format(WagonTestGUI.__path__[0]))
+        self.create_JSON_popup("{}/JSONFiles/Current_BERT_JSON.json".format(PythonFiles.__path__[0]))
 
     #################################################
 
     # Next test button action
     def btn_next_test_action(self, _parent):
         self.data_holder.data_holder_new_test()
+        self.lbl_snum.destroy()
         _parent.reset_board()
         logging.info("TestSummaryScene: Starting a new test.")
         

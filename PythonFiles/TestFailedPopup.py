@@ -2,12 +2,13 @@
 
 import tkinter as tk
 import logging
-import WagonTestGUI
+import PythonFiles
+import os
     
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/WagonTestGUI/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 
 class TestFailedPopup():

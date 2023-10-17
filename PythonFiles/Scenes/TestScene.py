@@ -2,28 +2,33 @@
 
 # Importing Necessary Modules
 import tkinter as tk
+from tkinter import messagebox
 import tkinter.font as font
 import logging
-import WagonTestGUI
+logging.getLogger('PIL').setLevel(logging.WARNING)
+import PythonFiles
+import os
 
 # Importing Necessary Files
-from WagonTestGUI.PythonFiles.utils.REQClient import REQClient
+from PythonFiles.utils.REQClient import REQClient
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 # Creating class for the window
 class TestScene(tk.Frame):
 
     #################################################
 
-    def __init__(self, parent, master_frame, data_holder, test_name, queue):
-        super().__init__(master_frame, width=850, height=500)
+    def __init__(self, parent, master_frame, data_holder, test_name, queue, test_idx):
+        super().__init__(master_frame, width=870, height=500, padx = 5, pady = 5)
         self.queue = queue
         self.test_name = test_name
         self.data_holder = data_holder
+        self.test_idx = test_idx
+        #print("Making test scene with index".format(self.test_idx))
         
         self.update_frame(parent)
 
@@ -35,8 +40,8 @@ class TestScene(tk.Frame):
         font_scene = ('Arial', 15)
 
         # Create a centralized window for information
-        frm_window = tk.Frame(self, width = 850, height = 500)
-        frm_window.grid(column=1, row=1, padx = 223, pady = 100)
+        frm_window = tk.Frame(self, width=870, height = 480)
+        frm_window.grid(column=1, row=0, padx = 223, pady = 100)
 
         # Create a label for the tester's name
         lbl_tester = tk.Label(
@@ -108,9 +113,21 @@ class TestScene(tk.Frame):
         btn_confirm.pack(side = 'top')
         btn_confirm['font'] = font.Font(family = 'Arial', size = 13)
 
+        if (self.test_idx == 0):
+
+            # Create a button for confirming test
+            run_all_btn = tk.Button(
+                frm_window, 
+                text = "Run All Tests", 
+                relief = tk.RAISED, 
+                command = lambda:self.run_all_action(parent)
+                )
+            run_all_btn.pack(pady = 20)
+            run_all_btn['font'] = font.Font(family = 'Arial', size = 13)
+
         # Create frame for logout button
         frm_logout = tk.Frame(self)
-        frm_logout.grid(column = 2, row = 2, sticky = 'n')
+        frm_logout.grid(column = 2, row = 1, padx = 5, sticky = 'e')
 
         # Create a logout button
         btn_logout = tk.Button(
@@ -122,7 +139,7 @@ class TestScene(tk.Frame):
 
         # Create a frame for the back button
         frm_back = tk.Frame(self)
-        frm_back.grid(column = 2, row = 0, sticky = 'n')
+        frm_back.grid(column = 2, row = 0, sticky = 'n', padx = 5)
 
         # Create a rescan button
         btn_rescan = tk.Button(
@@ -132,11 +149,32 @@ class TestScene(tk.Frame):
             command = lambda: self.btn_rescan_action(parent))
         btn_rescan.pack(anchor = 'n')
 
-
+        # Creating the help button
+        btn_help = tk.Button(
+            frm_back,
+            relief = tk.RAISED,
+            text = "Help",
+            command = lambda: self.help_action(parent)
+        )
+        btn_help.pack(anchor = 's', padx = 10, pady = 10)
         
 
         self.grid_propagate(0)
+       
+
+    #################################################
+
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+ 
+
+    def run_all_action(self, _parent):
+       
+        _parent.run_all_tests(self.test_idx) 
         
+
+    
+
     #################################################
 
     # Rescan button takes the user back to scanning in a new board
@@ -147,12 +185,21 @@ class TestScene(tk.Frame):
 
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
-        pass
+        try:
+            test_client = REQClient('test{}'.format(self.test_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
+        except Exception as e:
+            messagebox.showerror('Exception', e)
 
+        print("Confirm button sending test{}".format(self.test_idx))
+        _parent.set_frame_test_in_progress(self.queue)
+        
+
+    
     #################################################
 
     # functionality for the logout button
     def btn_logout_action(self, _parent):
+        logging.info("TestScene: Successfully logged out from the TestScene.")
         _parent.set_frame_login_frame()
 
     #################################################

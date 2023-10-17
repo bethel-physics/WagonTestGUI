@@ -1,19 +1,20 @@
 # Importing necessary modules
 import zmq, logging
-import WagonTestGUI
+import PythonFiles
+import os
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/SUBClient.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.INFO)
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.INFO)
 
 
 # Creating a class for the SUBSCRIBE socket-type Client
 class SUBClient():
 
     def __init__(self, conn, queue):
-        with open("{}/PythonFiles/utils/server_ip.txt".format(WagonTestGUI.__path__[0]), "r") as openfile:
-            grabbed_ip = openfile.read()
+        with open("{}/utils/server_ip.txt".format(PythonFiles.__path__[0]), "r") as openfile:
+            grabbed_ip = openfile.read()[:-1]
         logging.info("SUBClient has started") 
-        # Insantiates variables       
+        # Instantiates variables       
         self.conn = conn
         self.message = ""
         # Creates the zmq.Context object
@@ -30,7 +31,22 @@ class SUBClient():
                 # Splits up every message that is received into topic and message
                 # the space around the semi-colon is necessary otherwise the topic and messaage
                 # will have extra spaces.
-                self.topic, self.message = listen_socket.recv_string().split(" ; ")
+                try:
+                    print("Waiting")
+                    self.topic, self.message = listen_socket.recv_string().split(" ; ")
+                    print(self.topic, self.message)
+                except Exception as e:
+                    print("\nThere was an error trying to get the topic and/or message from the socket\n")
+                    logging.info("SUBClient: There was an error trying to get the topic and/or message from the socket")
+                                     
+
+                poller = zmq.Poller()
+                poller.register(listen_socket, zmq.POLLIN)
+                #if not poller.poll(7*1000):
+                #    print("Poller being bad")
+                #    
+                #    raise Exception("The SUBClient has failed to receive a topic and message")
+
                 logging.debug("The received topic is: %s" % self.topic)
                 logging.debug("The received message is: %s" % self.message)
 
@@ -44,7 +60,6 @@ class SUBClient():
 
                 elif self.topic == "JSON":
                     
-
                     # Places the message in the queue. the queue.get() is in 
                     # TestInProgressScene's begin_update() method
                     queue.put("Results received successfully.")
@@ -54,7 +69,9 @@ class SUBClient():
                     self.conn.send(self.message)
                     logging.info("SUBClient: The JSON has been sent to the GUIWindow along the pipe.")
 
-
+                elif self.topic == "LCD":
+                    logging.info("SUBClient: The topic of LCD has been selected. This method is empty")
+                    pass
 
                 else:
                     logging.error("SUBClient: Invalid topic sent. Must be 'print' or 'JSON'.")
@@ -64,5 +81,6 @@ class SUBClient():
                     queue.put("SUBClient: An error has occurred. Check logs for more details.")
 
         except Exception as e:
+            print("Outer Try: {}".format(e))
             logging.debug(e)
             logging.critical("SUBClient: SUBClient has crashed. Please restart the software.")

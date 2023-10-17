@@ -9,13 +9,15 @@ from tkinter import *
 from turtle import back
 from PIL import ImageTk as iTK
 from PIL import Image
-import WagonTestGUI
+import PythonFiles
+import os
  
 
 #################################################################################
 
+logger = logging.getLogger('HGCAL_GUI')
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 
 # creating the Scan Frame's class (called ScanScene) to be instantiated in the GUIWindow
@@ -30,7 +32,11 @@ class ScanScene(tk.Frame):
 
     # Runs upon creation
     def __init__(self, parent, master_frame, data_holder):
+        
         self.data_holder = data_holder
+
+        self.use_scanner = self.data_holder.get_use_scanner()
+
         self.is_current_scene = False
         
         self.EXIT_CODE = 0
@@ -43,65 +49,68 @@ class ScanScene(tk.Frame):
     # Needs to be updated to run the read_barcode function in the original GUI
     def scan_QR_code(self, master_window):
         
-        self.ent_snum.config(state = 'normal')
-        self.ent_snum.delete(0,END)
-        self.master_window = master_window
-        self.hide_rescan_button()
+        if self.use_scanner:
 
-        sys.path.insert(1,'/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/Scanner/python')
+            self.ent_snum.config(state = 'normal')
+            self.ent_snum.delete(0,END)
+            self.master_window = master_window
+            self.hide_rescan_button()
 
-        from ..Scanner.python.get_barcodes import scan, listen, parse_xml
+            sys.path.insert(1,'/home/hgcal/WagonTest/Scanner/python')
 
-        manager = mp.Manager()
-        serial = manager.list()
+            from ..Scanner.python.get_barcodes import scan, listen, parse_xml
 
-        self.ent_snum.config(state = 'normal')
+            manager = mp.Manager()
+            serial = manager.list()
+            print(serial)
 
-        logging.info("ScanScene: Beginning scan...")
-        self.scanner = scan()
-        self.listener = mp.Process(target=listen, args=(serial, self.scanner))
+            self.ent_snum.config(state = 'normal')
 
-        self.listener.start()
-               
-        while 1 > 0:
+            logging.info("ScanScene: Beginning scan...")
+            self.scanner = scan()
+            self.listener = mp.Process(target=listen, args=(serial, self.scanner))
 
-            try:
-                self.master_window.update()
-            except:
-                pass
-            if not len(serial) == 0:
-                self.data_holder.set_serial_ID( parse_xml(serial[0]))
+            self.listener.start()
+                
+            while 1 > 0:
 
-                self.listener.terminate()
-                self.scanner.terminate()
-               
-                self.ent_snum.delete(0,END)
-                self.ent_snum.insert(0, str(self.data_holder.get_serial_ID()))
-                self.ent_snum.config(state = 'disabled')
-                self.show_rescan_button()
-                break
+                try:
+                    self.master_window.update()
+                except:
+                    pass
+                if not len(serial) == 0:
+                    self.data_holder.set_serial_ID( parse_xml(serial[0]))
 
-            elif self.EXIT_CODE:
-                logging.info("ScanScene: Exit code received. Terminating processes.")
-                self.listener.terminate()
-                self.scanner.terminate()
-                logging.info("ScanScene: Processes terminated successfully.")
-                break
-            else:
-                time.sleep(.01)
-            
-        logging.info("ScanScene: Scan complete.")
+                    self.listener.terminate()
+                    self.scanner.terminate()
+                
+                    self.ent_snum.delete(0,END)
+                    self.ent_snum.insert(0, str(self.data_holder.get_serial_ID()))
+                    self.ent_snum.config(state = 'disabled')
+                    self.show_rescan_button()
+                    break
+
+                elif self.EXIT_CODE:
+                    logging.info("ScanScene: Exit code received. Terminating processes.")
+                    self.listener.terminate()
+                    self.scanner.terminate()
+                    logging.info("ScanScene: Processes terminated successfully.")
+                    break
+                else:
+                    time.sleep(.01)
+                
+            logging.info("ScanScene: Scan complete.")
 
     # Creates the GUI itself
     def initialize_GUI(self, parent, master_frame):
         
         self.master_frame = master_frame
         
-        super().__init__(self.master_frame, width = 850, height = 500)
+        super().__init__(self.master_frame, width=870, height = 500)
 
         logging.info("ScanScene: Frame has been created.")
         # Create a photoimage object of the QR Code
-        QR_image = Image.open("{}/PythonFiles/Images/QRimage.png".format(WagonTestGUI.__path__[0]))
+        QR_image = Image.open("{}/Images/QRimage.png".format(PythonFiles.__path__[0]))
         QR_PhotoImage = iTK.PhotoImage(QR_image)
         QR_label = tk.Label(self, image=QR_PhotoImage)
         QR_label.image = QR_PhotoImage
@@ -158,7 +167,7 @@ class ScanScene(tk.Frame):
             padx = 20,
             pady =10,
             relief = tk.RAISED,
-            command = lambda:  self.scan_QR_code(self.master_window)
+            command = lambda:  self.scan_QR_code(self.master_frame)
             )
         self.btn_rescan.pack(pady=30)
 
@@ -184,23 +193,59 @@ class ScanScene(tk.Frame):
             text = "Logout",
             command = lambda: self.btn_logout_action(parent)
         )
-        btn_logout.pack(anchor = 'se', padx = 0, pady = 80)
+        btn_logout.pack(anchor = 'se', padx = 10, pady = 20)
+
+        # Creating the help button
+        btn_help = tk.Button(
+            frm_logout,
+            relief = tk.RAISED,
+            text = "Help",
+            command = lambda: self.help_action(parent)
+        )
+        btn_help.pack(anchor = 's', padx = 10, pady = 20)
+
+
+        
+
+
         # Locks frame size to the master_frame size
         self.grid_propagate(0)
 
     #################################################
 
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+
+
+    #################################################    
+
+
     # Function for the submit button
     def btn_submit_action(self, _parent):
+        
+        self.EXIT_CODE = 1 
+
+#        if self.use_scanner:
+#            self.listener.terminate()
+#            self.scanner.terminate()
+
         self.data_holder.set_serial_ID(self.ent_snum.get())
-        self.data_holder.check_if_new_board()
-        _parent.scan_frame_progress()
+        self.data_holder.check_if_new_board() 
+        _parent.update_config()
+        _parent.create_test_frames(self.data_holder.data_dict['queue'])
+        _parent.set_frame_postscan()
 
 
     #################################################
 
     # Function for the log out button
     def btn_logout_action(self, _parent):
+
+        self.EXIT_CODE = 1 
+        
+        if self.use_scanner:
+            self.listener.terminate()
+            self.scanner.terminate()
 
          # Send user back to login frame
         _parent.set_frame_login_frame() 
@@ -234,8 +279,9 @@ class ScanScene(tk.Frame):
     def kill_processes(self):
         logging.info("ScanScene: Terminating scanner proceses.")
         try:
-            self.scanner.kill()
-            self.listener.terminate()
+            if self.use_scanner:
+                self.scanner.kill()
+                self.listener.terminate()
             self.EXIT_CODE = 1
         except:
             logging.info("ScanScene: Processes could not be terminated.")

@@ -4,12 +4,13 @@
 # importing necessary modules
 import tkinter as tk
 import logging
-import WagonTestGUI
+import PythonFiles
+import os
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 
 # Creates a class that is called by the GUIWindow. 
@@ -24,7 +25,7 @@ class AddUserScene(tk.Frame):
     #################################################
 
     def __init__(self, parent, master_frame, data_holder):
-        super().__init__(master_frame, width=850, height=500)
+        super().__init__(master_frame, width=870, height=500)
         logging.info("AddUserScene: Frame has been created.")
         self.data_holder = data_holder
         self.update_frame(parent)

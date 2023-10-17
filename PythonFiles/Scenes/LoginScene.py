@@ -3,12 +3,13 @@
 # importing necessary modules
 import tkinter as tk
 import logging
-import WagonTestGUI
+import PythonFiles
+import os
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 
 # Creates a class that is called by the GUIWindow. 
@@ -23,7 +24,7 @@ class LoginScene(tk.Frame):
 
     def __init__(self, parent, master_frame, data_holder):
 
-        super().__init__(master_frame, width=850, height=500)
+        super().__init__(master_frame, width=870, height=500)
         self.data_holder = data_holder
         self.update_frame(parent)
 
@@ -93,7 +94,19 @@ class LoginScene(tk.Frame):
             relief=tk.RAISED, 
             command= lambda:  self.btn_add_user_action(parent)
             )
-        self.btn_add_user.pack(pady=70)
+        self.btn_add_user.pack(pady=40)
+
+
+
+        # Creating the help button
+        self.btn_help = tk.Button(
+            self,
+            relief = tk.RAISED,
+            text = "Help",
+            command = lambda: self.help_action(parent)
+        )
+        self.btn_help.pack(anchor = 's', padx = 10, pady = 20)
+
 
         # Forces frame to stay the size of the main_window
         # rather than adjusting to the size of the widgets
@@ -101,6 +114,12 @@ class LoginScene(tk.Frame):
 
     
 
+
+    #################################################
+
+
+    def help_action(self, _parent):
+        _parent.help_popup(self)
 
 
 
@@ -114,9 +133,9 @@ class LoginScene(tk.Frame):
         self.data_holder.set_user_ID(self.user_selected.get())
         # Changes frame to scan_frame
         _parent.set_frame_scan_frame()
+        logging.info("LoginScene: Submit button was selected. End of method")
 
-
-        self.data_holder.print()
+        # self.data_holder.print()
 
     #################################################
 

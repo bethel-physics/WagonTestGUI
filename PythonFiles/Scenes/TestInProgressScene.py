@@ -1,23 +1,27 @@
-#################################################################################
+################################################################################
 
 # Imports all the necessary modules
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from xml.dom.expatbuilder import parseFragmentString
 import time
 import logging
-import WagonTestGUI
+logging.getLogger('PIL').setLevel(logging.WARNING)
+import PythonFiles
+import os
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
     def __init__(self, parent, master_frame, data_holder, queue, _conn):
-        super().__init__(master_frame, width = 850, height = 500)
-
+        logging.info("TestInProgressScene: Beginning the initialization of the TestInProgressScene.")
+        
+        super().__init__(master_frame, width=870, height = 500)
 
         self.queue = queue
         self.data_holder = data_holder
@@ -29,7 +33,7 @@ class TestInProgressScene(tk.Frame):
 
     # A function for the stop button
     def btn_stop_action(self, _parent):
-
+        self.window_closed = True
         _parent.go_to_next_test()
 
         
@@ -110,14 +114,14 @@ class TestInProgressScene(tk.Frame):
     # A function for the stop button
     def btn_stop_action(self, _parent):
 
-        _parent.go_to_next_test()
+        _parent.return_to_current_test()
 
 
 
     # Goes to the next scene after the progress scene is complete
     def go_to_next_frame(self, _parent):
         _parent.go_to_next_test()
-
+        self.window_closed = True
         
 
     # Used to bring the user back to the test that just failed
@@ -127,37 +131,103 @@ class TestInProgressScene(tk.Frame):
 
     #################################################
 
-    def begin_update(self, master_window, queue):
+    def begin_update(self, master_window, queue, parent):
         logging.info("TestInProgressScene: Started console update loop.")
-        # try:
-        while 1>0:
-                # try:
-            master_window.update()
-            if not queue.empty():    
-                logging.info("TestInProgressScene: Waiting for queue objects...")
-                text = queue.get()
-                print(text)
-                ent_console.insert(tk.END, text)
-                ent_console.insert(tk.END, "\n")
-                ent_console.see('end')
+        
+        # How long before the queue is being checked (if empty)
+        # units of seconds
+        refresh_break = 0.01
 
-                if text == "Results received successfully.":
-                
-                    message =  self.conn.recv()
+        # Time spent in the waiting phase; in units of refresh_break
+        # Time waiting (sec) = counter * refresh_break
+        counter = 0
+
+        self.window_closed = False
+
+        # Maximum timeout in seconds
+        Timeout_after = 10
+        MAX_TIMEOUT = Timeout_after / 2.5
+        try:
+            print("\n\nTestInProgressScene: Beginning the while loop\n\n") 
+            logging.info("TestInProgressScene: While-loop - Beginning try catch for receiving data through the pipeline.")
+            
+            information_received = False
+            while 1>0:
+                #try:
+                #print("\nUpdating master_window")
+                master_window.update()
+                #print("Queue: ")
+                #print(queue)
+                if not queue.empty():    
+                    #print("\n\nTestInProgressScene: the queue is not empty") 
+                    information_received = True
+                    logging.info("TestInProgressScene: Waiting for queue objects...")
+                    text = queue.get()
+                    print(text)
+                    ent_console.insert(tk.END, text)
+                    ent_console.insert(tk.END, "\n")
+                    ent_console.see('end')
+
+                    if text == "Results received successfully.":
                     
-                    print("\n\nmessage:",message , "\n\n")
-                    self.data_holder.update_from_json_string(message) 
-                    
-                    logging.info("TestInProgressScene: JSON Received.")
-                    master_window.update()
-                    time.sleep(1)
+                        message =  self.conn.recv()
+                        print(message)   
+                        self.data_holder.update_from_json_string(message) 
+                        
+                        logging.info("TestInProgressScene: JSON Received.")
+                        try:
+                            master_window.update()
+                        except Exception as e:
+                            print("\nTestInProgressScene: Unable to update master_window\n")
+                            print("Exception: ", e)
+
+                        time.sleep(0.02)
+                        break
+
+                if self.window_closed == True:
                     break
-                
-            else:
-                time.sleep(.01)
+                    
+                #else:
+                #
+                #    print("TestInProgressScene: The queue is empty, going to sleep for {} seconds".format(refresh_break))
+
+                #    # Sleep before looking for more information
+                #    time.sleep(refresh_break)
+
+                #    # Increment the counter of time spent sleeping
+                #    counter = counter + 1
+
+                #    # If beyond the MAX_TIMEOUT range -> raise an exception
+                #    if (counter > MAX_TIMEOUT/refresh_break) and not information_received:
+                #        print("\n\nTestInProcessScene: Raising an exception now\n")
+                #        logging.info("TestInProgressScene: Raising Exception -> Timeout Reached - 10 seconds")
+                #        raise ValueError("Process timed out after 10 seconds")
+                #        time.sleep(1)
+                #        break
+        except ValueError as e:
+            
+            print("\n\nException:  ", e)
+
+            # Throw a message box that shows the error message
+            # Logs the message
+            time_sec = counter*refresh_break
+            logging.info('TestInProgressScene: Timeout Error', "Exception received -> Process timed out after 10 seconds")
+
+            messagebox.showwarning('Timeout Error', "TestInProgressScene: Process timed out after 10 seconds")
+            logging.info("TestInProgressScene: Trying to go back to the login frame.")
+            parent.set_frame_login_frame()
+            return False
+        
+        except Exception as e:
+            
+            print("\n\nException:  ", e, "\n\n")
+
+        return True    
+
+
 
     def close_prgbar(self):
-        logging.debug("TestInProgressScene: Closing the progressbar.")
-        self.prgbar_progress.stop()
-        self.prgbar_progress.destroy()
+        #logging.debug("TestInProgressScene: Closing the progressbar.")
+        #self.prgbar_progress.stop()
+        #self.prgbar_progress.destroy()
         logging.debug("TestInProgressScene: Progressbar succesfully closed.")
