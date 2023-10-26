@@ -98,6 +98,11 @@ def main(args):
 
 if __name__ == "__main__":
 
+    if sys.argv[1] is not None:
+        config_path = sys.argv[1]
+        print(config_path)
+        exit(0)
+
     curpath = os.path.abspath(os.curdir)
     print( "Current path is: %s" % (curpath))
 
