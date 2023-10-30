@@ -10,13 +10,19 @@ logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), f
 # Creating a class for the SUBSCRIBE socket-type Client
 class SUBClient():
 
-    def __init__(self, conn, queue):
+    def __init__(self, conn, queue, gui_cfg):
         with open("{}/utils/server_ip.txt".format(PythonFiles.__path__[0]), "r") as openfile:
             grabbed_ip = openfile.read()[:-1]
         logging.info("SUBClient has started") 
         # Instantiates variables       
         self.conn = conn
         self.message = ""
+
+        self.SUB_ZMQ(conn, queue, gui_cfg)
+
+    # Responsible for listening for ZMQ messages from teststand
+    def SUB_ZMQ(self, conn, queue, gui_cfg):
+        grabbed_ip = gui_cfg["TestHandler"]["remoteip"]
         # Creates the zmq.Context object
         cxt = zmq.Context()
         # Creates the socket as the SUBSCRIBE type

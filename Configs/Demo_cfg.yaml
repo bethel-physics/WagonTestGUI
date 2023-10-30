@@ -7,7 +7,24 @@ GUIType: Demo
 UsingScanner: false
 
 # How the tests will be run (local, ssh, or ZMQ)
-TestHandler: Local
+# Uncomment the test handler which you would like to use
+#
+# Note that for SSH, the username and hostname must be specified.
+# It is assumed that you have set up SSH key access for this username
+# On the specified host.
+#
+# ZMQ will use the built-in request server and client.
+# The IP address of the GUI node and testing node must be specified separately
+# Additionally, SSH key access removes the need to start the server
+# on the tester by hand. Path and server file name needed for remote
+# server start up
+TestHandler: {name: Local, remoteip: localhost}
+#TestHandler: {name: SSH, username: <username>, hostname: <hostname>, remoteip: <remoteip>}
+#TestHandler: {name: ZMQ, localip: <localip>, remoteip: <remoteip>, username: <username>, serverpath: <serverpath>, serverscript: <serverscript>}
+
+
+# Let the GUI know if you want to check serial numbers for multiple board types at a single testing location
+SerialCheckSafe: false
 
 # Order of tests matters here
 # This should be the same order that you want the tests to be run in
@@ -19,11 +36,12 @@ Test:
   required: true 
   desc_short: Count to ten
   desc_long: Simple for loop with waits to simulate a tests running locally
-  TestClass: count 
-  TestPath: DemoTests 
+  TestClass: counting
+  TestPath: Tests
   TestScript: demo_count.py
 
-
+# Tests which require a physical measurement
+# The pass fail criteria for these tests are specified here
 PhysicalTest: 
 - name: SAMPLE test 
   required: true 
@@ -38,7 +56,7 @@ PhysicalTest:
 # Information for sending and receiving data to/from the database
 # Needs to be different based on board type
 DBInfo: 
-  use_database: true
+  use_database: false
   name: WagonDB
   reader: WagonDBReadUser
   inserter: WagonDBInserter

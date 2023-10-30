@@ -22,9 +22,10 @@ class TestScene(tk.Frame):
 
     #################################################
 
-    def __init__(self, parent, master_frame, data_holder, test_name, queue, test_idx):
+    def __init__(self, parent, master_frame, data_holder, test_name, queue, conn_trigger, test_idx):
         super().__init__(master_frame, width=870, height=500, padx = 5, pady = 5)
         self.queue = queue
+        self.conn_trigger = conn_trigger
         self.test_name = test_name
         self.data_holder = data_holder
         self.test_idx = test_idx
@@ -185,12 +186,14 @@ class TestScene(tk.Frame):
 
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
-        try:
-            test_client = REQClient('test{}'.format(self.test_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
-        except Exception as e:
-            messagebox.showerror('Exception', e)
+        self.gui_cfg = self.data_holder.getGUIcfg()
+      
+        #try:
+        test_client = REQClient(self.gui_cfg, 'test{}'.format(self.test_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'], self.conn_trigger)
+        #except Exception as e:
+        #    messagebox.showerror('Exception', e)
 
-        print("Confirm button sending test{}".format(self.test_idx))
+        #print("Confirm button sending test{}".format(self.test_idx))
         _parent.set_frame_test_in_progress(self.queue)
         
 

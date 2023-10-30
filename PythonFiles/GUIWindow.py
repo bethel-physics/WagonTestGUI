@@ -43,9 +43,10 @@ class GUIWindow():
 
     #################################################
 
-    def __init__(self, conn, queue, board_cfg):
+    def __init__(self, conn, conn_trigger, queue, board_cfg):
         
         self.conn = conn
+        self.conn_trigger = conn_trigger
         self.queue = queue
         self.retry_attempt = False
         self.completed_window_alive = False
@@ -160,7 +161,7 @@ class GUIWindow():
         # For the digital tests
         for test_idx,test in enumerate(test_list):
 
-            self.test_frames.append(TestScene(self, self.master_frame, self.data_holder, test["name"], queue, test_idx))
+            self.test_frames.append(TestScene(self, self.master_frame, self.data_holder, test["name"], queue, self.conn_trigger, test_idx))
             self.test_frames[test_idx + offset].grid(row=0, column=0)
 
         print("\ntest_frames len: ", len(self.test_frames))
@@ -170,6 +171,8 @@ class GUIWindow():
 
     def update_config(self):
         sn = self.data_holder.get_serial_ID()
+        if not self.gui_cfg.getSerialCheckSafe():
+            return
         new_cfg = update_config(sn)
         self.gui_cfg = new_cfg
 
@@ -311,11 +314,7 @@ class GUIWindow():
         #num_physical = self.data_holder.getNumPhysicalTest()
         
 
-        print("Total num of tests: {}, Digital: {}\n".format(total_num_tests, num_digital))
-
         if not self.run_all_tests_bool:        
-
-            print("self.current_test_index: ", self.current_test_index)
 
             if (self.current_test_index < total_num_tests):
                 print(self.current_test_index)

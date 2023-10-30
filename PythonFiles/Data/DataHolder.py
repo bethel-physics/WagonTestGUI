@@ -117,7 +117,7 @@ class DataHolder():
         for item in self.get_all_users():
             if self.data_dict['user_ID'] == item:
                 is_new_user_ID = False
-        print("\n\n\n\n\n\nIs the user new?:{}\n\n\n\n\n\n".format(is_new_user_ID))
+        #print("\n\n\n\n\n\nIs the user new?:{}\n\n\n\n\n\n".format(is_new_user_ID))
 
         if is_new_user_ID:
             self.data_sender.add_new_user_ID(self.data_dict['user_ID'], passwd)        
@@ -130,18 +130,18 @@ class DataHolder():
 
     def check_if_new_board(self):
         logging.info("DataHolder: Checking if serial is a new board")
-        print("testing if new board")
+        #print("testing if new board")
 
         sn = self.get_serial_ID()
         user = self.data_dict['user_ID']
         comments = 'Checked in during general testing'
         is_new_board = self.data_sender.is_new_board(sn)
-        print(is_new_board)
+        #print(is_new_board)
         
         if is_new_board == True:
             in_id = self.data_sender.add_new_board(sn, user, comments)
             if in_id:
-                print('Board added to Database')
+                #print('Board added to Database')
                 self.data_dict['test_names'] = None
                 self.data_dict['prev_results'] = 'This is a new board, it has been checked in. Check In ID:' + in_id
 
@@ -199,8 +199,9 @@ class DataHolder():
         #self.dbclient.send_request(message)
                     
         self.data_dict['current_serial_ID'] = sn
-        new_cfg = update_config(sn)
-        self.gui_cfg = new_cfg
+        if self.gui_cfg.getSerialCheckSafe():
+            new_cfg = update_config(sn)
+            self.gui_cfg = new_cfg
         self.data_holder_new_test()
         self.data_sender = DBSender(self.gui_cfg)
         logging.info("DataHolder: Serial Number has been set.")
@@ -293,7 +294,7 @@ class DataHolder():
 
         test_names = self.gui_cfg.getTestNames()
 
-        current_test_idx = self.gui_cfg.getTestIndex()
+        current_test_idx = self.gui_cfg.getTestIndex() -1
         print("current_test_idx: {}".format(current_test_idx))
 
         with open("{}/JSONFiles/Current_{}_JSON.json".format(PythonFiles.__path__[0], test_names[current_test_idx].replace(" ", "").replace("/", "")), "w") as file:
@@ -307,8 +308,9 @@ class DataHolder():
         for i in range(self.gui_cfg.getNumTest()):
             self.data_lists['test_results'][i] = self.data_dict['test{}_pass'.format(i+1)]
             self.data_lists['test_completion'][i] = self.data_dict['test{}_completed'.format(i+1)]
-
-        self.send_to_DB(current_test_idx)
+        
+        if self.gui_cfg.get_if_use_DB():
+            self.send_to_DB(current_test_idx)
 
         logging.info("DataHolder: Test results have been saved")
 
@@ -355,6 +357,11 @@ class DataHolder():
 
     def getPhysicalNames(self):
         return self.gui_cfg.getPhysicalNames()
+
+    ################################################
+
+    def getGUIcfg(self):
+        return self.gui_cfg
 
     ################################################
 
@@ -413,10 +420,8 @@ class DataHolder():
             self.ptest_criteria.update(temp_dict)
 
             self.total_test_num = self.total_test_num + 1
-
-        print('\nptest_criteria: {}'.format(self.ptest_criteria))
         
-        print(self.data_dict)
+        #print(self.data_dict)
         for i in range(self.gui_cfg.getNumTest()):
             self.data_lists['test_results'].append(self.data_dict['test{}_pass'.format(i+1)])
             self.data_lists['test_completion'].append(self.data_dict['test{}_completed'.format(i+1)])
