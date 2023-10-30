@@ -22,7 +22,15 @@ class counting(Test):
         # Note that tests are run on initialization of the Test object
         Test.__init__(self, self.run_count, self.info_dict, conn)
 
+    def initialization(self):
+
+        # Do some initialization of test setup
+        time.sleep(3)
+
     def run_count(self, **kwargs):
+
+        self.initialization()
+
         self.conn.send("Beginning count test:")
 
         try: 

@@ -39,6 +39,13 @@ Test:
   TestClass: counting
   TestPath: Tests
   TestScript: demo_count.py
+- name: Counting
+  required: true 
+  desc_short: Count to ten
+  desc_long: Simple for loop with waits to simulate a tests running locally
+  TestClass: counting
+  TestPath: Tests
+  TestScript: demo_count.py
 
 # Tests which require a physical measurement
 # The pass fail criteria for these tests are specified here

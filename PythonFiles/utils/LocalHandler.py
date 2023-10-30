@@ -22,24 +22,28 @@ class LocalHandler:
     def __init__(self, gui_cfg, conn_trigger):
 
         conn_test, conn_pub = mp.Pipe()
-  
+        process_PUB = mp.Process(target = self.task_PUB, args=(conn_pub,))
+        process_PUB.start()
+
         # Listen for test request
         while True:
+            print("waiting for trigger request")
             request = json.loads(conn_trigger.recv())
             if request is not None:
-                break
 
-        desired_test = request["desired_test"]
-        test_info = {"serial": request["serial"], "tester": request["tester"]}
+                desired_test = request["desired_test"]
+                test_info = {"serial": request["serial"], "tester": request["tester"]}
 
-        process_PUB = mp.Process(target = self.task_PUB, args=(conn_pub,))
-        process_test = mp.Process(target = self.task_test, args=(conn_test, gui_cfg, desired_test, test_info))
+                process_test = mp.Process(target = self.task_test, args=(conn_test, gui_cfg, desired_test, test_info))
 
-        process_PUB.start()
-        process_test.start()
+                print("start")
+                process_test.start()
 
-        # Hold until test finish
-        process_test.join()
+                # Hold until test finish
+                print("join")
+                process_test.join()
+
+                process_test.close()
 
         try:
             conn_pub.close()
@@ -68,6 +72,7 @@ class LocalHandler:
         # the json files of results.
         try:
             while 1 > 0:
+                print("Ready for next request")
                 prints = conn_pub.recv()
                 logging.info("Print statement received.")
                 logging.info("Testing if print statement is 'Done.'")
@@ -85,7 +90,7 @@ class LocalHandler:
                     pub_socket.send_string(str(json))
                     logging.info("JSON sent.")
                     # Breaks the loop once it sends the JSON so the server will shut down
-                    break
+                    #break
                 else:
                     prints = "print ; " + prints
                     logging.info(prints)
@@ -98,8 +103,8 @@ class LocalHandler:
             logging.critical("PUBServer has crashed.")
 
         # Closes the server once the loop is broken so that there is no hang-up in the code
-        print("PUBServer Closing")    
-        pub_socket.close()
+        #print("PUBServer Closing")    
+        #pub_socket.close()
 
 
     def task_test(self, conn_test, gui_cfg, desired_test, test_info):   
@@ -111,4 +116,6 @@ class LocalHandler:
         test_class = getattr(mod, test_meta["TestClass"])
 
         test_class(conn_test, board_sn=test_info["serial"], tester=test_info["tester"])
+
+        exit(0)
 

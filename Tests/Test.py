@@ -38,6 +38,8 @@ class Test():
 
         self.send_results()
 
+        print("All finished")
+
     # Dump results in JSON format for uploading to the database
     def dump_results(self):
         # This used to conn.send("Dumping Results.") but that was clogging the pipe for the results.
