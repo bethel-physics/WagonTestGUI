@@ -22,28 +22,31 @@ class LocalHandler:
     def __init__(self, gui_cfg, conn_trigger):
 
         conn_test, conn_pub = mp.Pipe()
-        process_PUB = mp.Process(target = self.task_PUB, args=(conn_pub,))
-        process_PUB.start()
 
         # Listen for test request
         while True:
+            print("New PUB proc")
             print("waiting for trigger request")
             request = json.loads(conn_trigger.recv())
+            process_PUB = mp.Process(target = self.task_PUB, args=(conn_pub,))
+            process_PUB.start()
+
             if request is not None:
 
                 desired_test = request["desired_test"]
                 test_info = {"serial": request["serial"], "tester": request["tester"]}
 
+                print("New test proc")
                 process_test = mp.Process(target = self.task_test, args=(conn_test, gui_cfg, desired_test, test_info))
-
-                print("start")
                 process_test.start()
 
                 # Hold until test finish
-                print("join")
+                print("Joining test proc")
                 process_test.join()
 
-                process_test.close()
+                print("Terminate PUB proc")
+                process_PUB.terminate()
+
 
         try:
             conn_pub.close()
@@ -117,5 +120,4 @@ class LocalHandler:
 
         test_class(conn_test, board_sn=test_info["serial"], tester=test_info["tester"])
 
-        exit(0)
 

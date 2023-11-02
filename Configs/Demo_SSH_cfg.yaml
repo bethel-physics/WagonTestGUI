@@ -1,4 +1,9 @@
 ---
+#-----------------------------------------------
+#  Note: Demo will not work out of the box
+#  Need to follow installation procedure in
+#  README.md
+#-----------------------------------------------
 
 # Specify which board you want to test here
 GUIType: Demo
@@ -18,8 +23,8 @@ UsingScanner: false
 # Additionally, SSH key access removes the need to start the server
 # on the tester by hand. Path and server file name needed for remote
 # server start up
-TestHandler: {name: Local, remoteip: localhost}
-#TestHandler: {name: SSH, username: <username>, hostname: <hostname>, remoteip: <remoteip>}
+#TestHandler: {name: Local, remoteip: localhost}
+TestHandler: {name: SSH, username: <username>, hostname: <hostname>, remoteip: <remoteip>}
 #TestHandler: {name: ZMQ, localip: <localip>, remoteip: <remoteip>, username: <username>, serverpath: <serverpath>, serverscript: <serverscript>}
 
 
@@ -32,13 +37,6 @@ SerialCheckSafe: false
 # TestClass, TestScript, and TestPath fields will be used to write the REPserver script
 # TestPath should be in reference to the testing home directory
 Test: 
-- name: Counting
-  required: true 
-  desc_short: Count to ten
-  desc_long: Simple for loop with waits to simulate a tests running locally
-  TestClass: counting
-  TestPath: Tests
-  TestScript: demo_count.py
 - name: Counting
   required: true 
   desc_short: Count to ten

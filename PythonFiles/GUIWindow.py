@@ -134,7 +134,7 @@ class GUIWindow():
         # Sets the current frame to the splash frame
         self.set_frame_splash_frame()
         self.master_frame.update() 
-        self.master_frame.after(50, self.set_frame_login_frame)
+        self.master_frame.after(100, self.set_frame_login_frame)
 
         self.master_window.mainloop()
         
@@ -184,7 +184,8 @@ class GUIWindow():
         self.run_all_tests_bool = True
 
         try:
-            test_client = REQClient('test{}'.format(self.running_all_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
+            test_client = REQClient(self.gui_cfg, 'test{}'.format(self.running_all_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'], self.conn_trigger)
+            #test_client = REQClient('test{}'.format(self.running_all_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
             self.set_frame_test_in_progress(self.queue)
         except Exception as e:
             messagebox.showerror('Exception', e)
@@ -698,7 +699,6 @@ class GUIWindow():
             logging.error("GUIWindow: The application has failed to close.")
             if self.retry_attempt == False:    
                 logging.info("GUIWindow: Retrying...")
-                #self.destroy_function()
                 self.retry_attempt = True
 
 

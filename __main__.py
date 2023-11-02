@@ -41,6 +41,10 @@ def task_LocalHandler(gui_cfg, conn_trigger):
 
     LocalHandler(gui_cfg, conn_trigger)
 
+def task_SSHHandler(gui_cfg):
+
+    SSHHandler(gui_cfg)
+
 def run(board_cfg):    
     # Creates a Pipe for the SUBClient to talk to the GUI Window
     conn_SUB, conn_GUI = mp.Pipe()
@@ -56,7 +60,10 @@ def run(board_cfg):
     # Turns creating the GUI and creating the SUBClient tasks into processes
     if board_cfg["TestHandler"]["name"] == "Local":
         process_GUI = mp.Process(target = task_GUI, args=(conn_GUI, conn_trigger_GUI, queue, board_cfg))
-        process_Handler = mp.Process(target = task_LocalHandler, args=(board_cfg, conn_trigger_Handler,))
+        process_Handler = mp.Process(target = task_LocalHandler, args=(board_cfg, conn_trigger_Handler))
+    elif board_cfg["TestHandler"]["name"] == "SSH":
+        process_GUI = mp.Process(target = task_GUI, args=(conn_GUI, conn_trigger_GUI, queue, board_cfg))
+        process_Handler = mp.Process(target = task_LocalHandler, args=(board_cfg, conn_trigger_Handler))
     else: 
         process_GUI = mp.Process(target = task_GUI, args=(conn_GUI, None, queue, board_cfg))
     process_SUBClient = mp.Process(target = task_SUBClient, args = (conn_SUB, queue, board_cfg))
@@ -81,7 +88,7 @@ def run(board_cfg):
     try:
         # Cleans up the SUBClient process
         process_SUBClient.terminate()
-        process_Handler.terminate()
+        process_Handler.kill()
     except:
         print("Terminate is unnecessary.")
         pass
