@@ -1,7 +1,8 @@
 #####################################################################
 #                                                                   #
 #  This is the code for a client to send a request to a server to   #
-#                   run specific test scripts.                      #
+#  run specific test scripts. You can additionally specify running  #
+#  tests locally or via ssh.                                        #
 #                                                                   #
 #####################################################################
 
@@ -10,7 +11,12 @@
 # Importing necessary modules
 import zmq, logging
 import PythonFiles
+import multiprocessing as mp
 import os
+import json
+import time
+
+from PythonFiles.utils.LocalHandler import LocalHandler
 
 #################################################################################
 
@@ -28,32 +34,68 @@ class REQClient():
     ################################################
 
     # Ensures nothing happens on instantiantion
-    def __init__(self, desired_test, serial, tester):
+    def __init__(self, gui_cfg, desired_test, serial, tester, conn_trigger):
         with open("{}/utils/server_ip.txt".format(PythonFiles.__path__[0]),"r") as openfile:
             grabbed_ip = openfile.read()[:-1]
         self.message = ""
-        self.serial = serial
-        self.tester = tester
+
+        test_handler_name = gui_cfg.getTestHandler()["name"]
+
+        # Run the ZMQ server on test stand and make requests via ZMQ client
+        if test_handler_name == "ZMQ":
+
+            self.ZMQClient(gui_cfg, desired_test, serial, tester)
+        
+        # Run tests only on the current computer
+        elif test_handler_name == "Local":
+
+            self.LocalClient(conn_trigger, desired_test, serial, tester)
+
+        # Run tests on another machine via SHH (key required)
+        elif test_handler_name == "SSH":
+
+            self.SSHClient(gui_cfg, desired_test, serial, tester)
+
+
+    # Handling tests run on the local machine
+    # A separate ZMQ server is used to send information to terminal
+    # within GUI
+    def LocalClient(self, conn_trigger, desired_test, serial, tester):
+
+        desired_test = int(desired_test[4:])
+
+        trigger_dict = {"desired_test": desired_test, "serial": serial, "tester": tester}
+        trigger_message = json.dumps(trigger_dict)
+
+        conn_trigger.send(trigger_message)
+
+    def SSHClient(self, gui_cfg, desired_test, serial, tester):
+
+        pass
+
+    def ZMQClient(self, gui_cfg, desired_test, serial, tester):
         sending_msg = desired_test + ";" + serial + ";" + tester
         # Establishing variable for use
         self.desired_test = desired_test
         # Necessary for zmqClient    
         context = zmq.Context()
 
-        # Creates a socket to talk to the server
-        # print("Connecting to the testing server...")
-        socket = context.socket(zmq.REQ)
-        socket.connect("tcp://{ip_address}:5555".format(ip_address = grabbed_ip))
+        try: 
+            remote_ip = gui_cfg.getTestHandler()["remoteip"]
+
+            # Creates a socket to talk to the server
+            # print("Connecting to the testing server...")
+            socket = context.socket(zmq.REQ)
+            socket.connect("tcp://{ip_address}:5555".format(ip_address = remote_ip))
+        except:
+            print("No remote_ip specified, please modify config")
 
         debug_msg = "REQClient: Sending request to REPServer for: " + self.desired_test
         logging.debug(debug_msg)
         
-        print("Before send")
         # Tell the server what test to run
         socket.send_string(sending_msg)
         
-        print("After send")
-
         # Timeout feature for the socket
         # The poller is responsible for stopping the socket send after a certain time
         # Poller is in milliseconds
@@ -62,8 +104,6 @@ class REQClient():
         #if not poller.poll(6*1000):   
         #    raise IOError("Timeout processing the REQClient request from socket")
             
-
-        print("After poller")
 
         logging.debug("REQClient: Request sent. Waiting for confirmation receipt...")
         # Get the reply

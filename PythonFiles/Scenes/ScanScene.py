@@ -230,7 +230,8 @@ class ScanScene(tk.Frame):
 #            self.scanner.terminate()
 
         self.data_holder.set_serial_ID(self.ent_snum.get())
-        self.data_holder.check_if_new_board() 
+        if self.data_holder.getGUIcfg().get_if_use_DB():
+            self.data_holder.check_if_new_board() 
         _parent.update_config()
         _parent.create_test_frames(self.data_holder.data_dict['queue'])
         _parent.set_frame_postscan()

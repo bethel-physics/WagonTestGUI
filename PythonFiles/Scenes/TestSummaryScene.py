@@ -84,6 +84,9 @@ class TestSummaryScene(tk.Frame):
         self.list_of_completed_tests = self.data_holder.data_lists['test_completion']
         self.list_of_pass_fail = self.data_holder.data_lists['test_results']
 
+        print(self.list_of_completed_tests)
+        print(self.list_of_pass_fail)
+
         self.sn_text.set("Serial Number: " + str(self.data_holder.data_dict['current_serial_ID']))       
 
 

@@ -218,9 +218,9 @@ class TestInProgressScene(tk.Frame):
             parent.set_frame_login_frame()
             return False
         
-        except Exception as e:
+        #except Exception as e:
             
-            print("\n\nException:  ", e, "\n\n")
+        #    print("\n\nException:  ", e, "\n\n")
 
         return True    
 
