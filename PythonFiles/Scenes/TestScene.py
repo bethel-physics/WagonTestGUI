@@ -22,11 +22,13 @@ class TestScene(tk.Frame):
 
     #################################################
 
-    def __init__(self, parent, master_frame, data_holder, test_name, queue, conn_trigger, test_idx):
+    def __init__(self, parent, master_frame, data_holder, test_name, test_description_short, test_description_long, queue, conn_trigger, test_idx):
         super().__init__(master_frame, width=870, height=500, padx = 5, pady = 5)
         self.queue = queue
         self.conn_trigger = conn_trigger
         self.test_name = test_name
+        self.test_description_short = test_description_short
+        self.test_description_long = test_description_long
         self.data_holder = data_holder
         self.test_idx = test_idx
         #print("Making test scene with index".format(self.test_idx))
@@ -103,6 +105,26 @@ class TestScene(tk.Frame):
             font = font_scene
             )
         lbl_confirm.pack(side = 'top')
+
+        self.lbl_desc_short = tk.Label(
+            frm_window,
+            text = self.test_description_short,
+            wraplength = 500,
+            justify="left",
+            font = font_scene
+            )
+
+        self.lbl_desc_short.pack(side = 'top')
+
+        self.lbl_desc = tk.Label(
+            frm_window,
+            text = self.test_description_long,
+            wraplength = 500,
+            justify="left",
+            font = font_scene
+            )
+
+        self.lbl_desc.pack(side = 'top')
 
         # Create a button for confirming test
         btn_confirm = tk.Button(
