@@ -161,7 +161,7 @@ class GUIWindow():
         # For the digital tests
         for test_idx,test in enumerate(test_list):
 
-            self.test_frames.append(TestScene(self, self.master_frame, self.data_holder, test["name"], queue, self.conn_trigger, test_idx))
+            self.test_frames.append(TestScene(self, self.master_frame, self.data_holder, test["name"], test["desc_short"], test["desc_long"], queue, self.conn_trigger, test_idx))
             self.test_frames[test_idx + offset].grid(row=0, column=0)
 
         print("\ntest_frames len: ", len(self.test_frames))
