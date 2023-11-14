@@ -21,6 +21,7 @@ from PythonFiles.utils.LocalHandler import LocalHandler
 import sys
 import logging
 import yaml
+from pathlib import Path
 
 # Creates a task of creating the GUIWindow
 def task_GUI(conn, conn_trigger, queue, board_cfg):
@@ -152,12 +153,12 @@ if __name__ == "__main__":
     ]
 
     if any((node in x for x in wagon_GUI_computers)):
-        board_cfg = import_yaml("./Configs/Wagon_cfg.yaml")
+        board_cfg = import_yaml(Path(__file__).parent / "Configs/Wagon_cfg.yaml")
 
         run(board_cfg)
 
     elif any((node in x for x in wagon_GUI_computers)):
-        board_cfg = import_yaml("./Configs/Engine_cfg.yaml")
+        board_cfg = import_yaml(Path(__file__).parent / "Configs/Engine_cfg.yaml")
 
         run(board_cfg)
 
