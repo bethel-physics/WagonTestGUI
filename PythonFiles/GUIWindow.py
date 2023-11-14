@@ -333,7 +333,8 @@ class GUIWindow():
                 self.current_test_index += 1
                 
                 try:
-                    test_client = REQClient(self.gui_cfg, 'test{}'.format(self.running_all_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'], conn_trigger)
+                    gui_cfg = self.data_holder.getGUIcfg()
+                    test_client = REQClient(gui_cfg, 'test{}'.format(self.running_all_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'], conn_trigger)
                     self.set_frame_test_in_progress(self.queue)
                 except Exception as e:
                     messagebox.showerror('Exception', e)
