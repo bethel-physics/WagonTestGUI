@@ -151,7 +151,17 @@ if __name__ == "__main__":
         "cmsfactory4.cmsfactorynet",
     ]
 
-    if config_path is not None:
+    if any((node in x for x in wagon_GUI_computers)):
+        board_cfg = import_yaml("./Configs/Wagon_cfg.yaml")
+
+        run(board_cfg)
+
+    elif any((node in x for x in wagon_GUI_computers)):
+        board_cfg = import_yaml("./Configs/Engine_cfg.yaml")
+
+        run(board_cfg)
+
+    elif config_path is not None:
         board_cfg = import_yaml(config_path)
 
         run(board_cfg)
