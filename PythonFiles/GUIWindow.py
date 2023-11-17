@@ -3,7 +3,6 @@
 # Importing all neccessary modules
 from pickle import NONE
 import tkinter as tk
-print(tk.TkVersion)
 #from turtle import bgcolor
 import multiprocessing as mp
 import logging
@@ -32,9 +31,10 @@ import webbrowser
 #################################################################################
 
 
-
-FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
+module_logger = logging.getLogger(__name__)
+#FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+#logging.basicConfig(filename=guiLogPath, filemode = 'a', format=FORMAT, level=logging.DEBUG)
+module_logger.info("Test Logging from GUIWindow")
     
 
 # Create a class for creating the basic GUI Window to be called by the main function to

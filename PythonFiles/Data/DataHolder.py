@@ -4,8 +4,10 @@ import requests
 from PythonFiles.Data.DBSender import DBSender
 from PythonFiles.update_config import update_config
 
-FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/{}/GUILogs/visual_gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
+logger = logging.getLogger('HGCALTestGUI.PythonFiles.Data.DataHolder')
+
+#FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+#logging.basicConfig(filename="/home/{}/GUILogs/visual_gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 class DataHolder():
 
@@ -129,7 +131,7 @@ class DataHolder():
 
 
     def check_if_new_board(self):
-        logging.info("DataHolder: Checking if serial is a new board")
+        logger.info("DataHolder: Checking if serial is a new board")
         #print("testing if new board")
 
         sn = self.get_serial_ID()
@@ -189,7 +191,7 @@ class DataHolder():
         print("\n\n\n\n\nuser_ID", user_ID)
  
         self.data_dict['user_ID'] = user_ID 
-        logging.debug("DataHolder: User ID has been set.")
+        logger.debug("DataHolder: User ID has been set.")
 
     ##################################################
 
@@ -204,10 +206,10 @@ class DataHolder():
             self.gui_cfg = new_cfg
         self.data_holder_new_test()
         self.data_sender = DBSender(self.gui_cfg)
-        logging.info("DataHolder: Serial Number has been set.")
+        logger.info("DataHolder: Serial Number has been set.")
 
     def test_new_board(self, sn):
-        logging.info("DataHolder: Checking if serial is a new board")
+        logger.info("DataHolder: Checking if serial is a new board")
         return self.data_sender.is_new_board(sn)
         #message = "is_new_board;{'sn': {}}".format(sn)
         #return self.dbclient.send_request(message)
@@ -240,7 +242,7 @@ class DataHolder():
                 json.dump(info_dict, outfile)
             self.data_sender.add_test_json("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]))
             #message = "add_test_json;{'json_file': {}/JSONFiles/storage.json, ''}"
-        logging.info("DataHolder: All results sent to database.")
+        logger.info("DataHolder: All results sent to database.")
     #################################################
 
     def send_to_DB(self, test_run):
@@ -267,7 +269,7 @@ class DataHolder():
         self.data_sender.add_test_json("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]), file_path_list[index])
         #message = "add_test_json;{'json_file': {}, 'datafile_name': {}}".format("{}/JSONFiles/storage.json".format(PythonFiles.__path__[0]), file_path_list[index])
         #self.dbclient.send_request(message)
-        logging.info("DataHolder: Test results sent to database.")
+        logger.info("DataHolder: Test results sent to database.")
 
     #################################################
    
@@ -312,7 +314,7 @@ class DataHolder():
         if self.gui_cfg.get_if_use_DB():
             self.send_to_DB(current_test_idx)
 
-        logging.info("DataHolder: Test results have been saved")
+        logger.info("DataHolder: Test results have been saved")
 
     ################################################
 
@@ -428,7 +430,7 @@ class DataHolder():
 
             self.total_test_num = self.total_test_num + 1
 
-        logging.info("DataHolder: DataHolder Information has been reset for a new test.")        
+        logger.info("DataHolder: DataHolder Information has been reset for a new test.")        
 
         self.gui_cfg.setTestIndex(1)
 
