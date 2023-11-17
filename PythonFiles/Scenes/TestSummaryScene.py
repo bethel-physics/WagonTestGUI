@@ -13,9 +13,9 @@ import os
 
 #################################################################################
 
-logger = logging.getLogger('HGCAL_GUI')
-FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
+logger = logging.getLogger('HGCALTestGUI.PythonFiles.Scenes.TestSummaryScene')
+#FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+#logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 # Frame that shows all of the final test results
 # @param parent -> References a GUIWindow object
@@ -36,7 +36,7 @@ class TestSummaryScene(tk.Frame):
 
         self.sn_text = tk.StringVar()
 
-        logging.info("TestSummaryScene: Frame has been created.")
+        logger.info("TestSummaryScene: Frame has been created.")
 
         self.data_holder = data_holder
 
@@ -77,7 +77,7 @@ class TestSummaryScene(tk.Frame):
     
     def create_updated_table(self, parent):
 
-        logging.debug("TestSummaryScene: Table is being updated.")        
+        logger.debug("TestSummaryScene: Table is being updated.")        
         
         self.list_of_tests = self.data_holder.getTestNames()
         self.list_of_table_labels = ["Test Name", "Test Status", "Pass/Fail"]
@@ -233,7 +233,7 @@ class TestSummaryScene(tk.Frame):
  
         #self.scrollerFrame.grid_propagate(0)
 
-        logging.debug("TestSummaryScene: Table finished update.")     
+        logger.debug("TestSummaryScene: Table finished update.")     
 
     #################################################
     #################################################
@@ -309,7 +309,7 @@ class TestSummaryScene(tk.Frame):
                 )
         btn_next_test.grid(column = 3, row = self.data_holder.getNumTest() + 3)
 
-        logging.debug("TestSummaryScene: Buttons finshed being created.")
+        logger.debug("TestSummaryScene: Buttons finshed being created.")
 
     #################################################
 
@@ -354,8 +354,8 @@ class TestSummaryScene(tk.Frame):
             
             current_JSON_file.close()   
         except Exception as e:
-            logging.debug(e)
-            logging.warning("TestSummaryScene: More Info popup has failed to be created.")
+            logger.debug(e)
+            logger.warning("TestSummaryScene: More Info popup has failed to be created.")
 
             
 
@@ -402,7 +402,7 @@ class TestSummaryScene(tk.Frame):
         self.data_holder.data_holder_new_test()
         self.lbl_snum.destroy()
         _parent.reset_board()
-        logging.info("TestSummaryScene: Starting a new test.")
+        logger.info("TestSummaryScene: Starting a new test.")
         
     #################################################
 

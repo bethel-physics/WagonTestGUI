@@ -14,8 +14,9 @@ from PythonFiles.utils.REQClient import REQClient
 
 #################################################################################
 
-FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
+logger = logging.getLogger('HGCALTestGUI.PythonFiles.Scenes.TestScene')
+#FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+#logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 # Creating class for the window
 class TestScene(tk.Frame):
@@ -38,7 +39,7 @@ class TestScene(tk.Frame):
     #################################################
 
     def update_frame(self, parent):
-        logging.debug("ParentTestClass: A test frame has been updated.")
+        logger.debug("ParentTestClass: A test frame has been updated.")
         # Creates a font to be more easily referenced later in the code
         font_scene = ('Arial', 15)
 
@@ -224,7 +225,7 @@ class TestScene(tk.Frame):
 
     # functionality for the logout button
     def btn_logout_action(self, _parent):
-        logging.info("TestScene: Successfully logged out from the TestScene.")
+        logger.info("TestScene: Successfully logged out from the TestScene.")
         _parent.set_frame_login_frame()
 
     #################################################
@@ -235,7 +236,7 @@ class TestScene(tk.Frame):
 
 class Test1Scene(TestScene):
     
-    logging.info("Test1Scene: Frame has successfully been created.")
+    logger.info("Test1Scene: Frame has successfully been created.")
 
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
@@ -250,7 +251,7 @@ class Test1Scene(TestScene):
 
 class Test2Scene(TestScene):
 
-    logging.info("Test2Scene: Frame has successfully been created.")
+    logger.info("Test2Scene: Frame has successfully been created.")
 
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
@@ -266,7 +267,7 @@ class Test2Scene(TestScene):
 
 class Test3Scene(TestScene):
 
-    logging.info("Test3Scene: Frame has successfully been created.")
+    logger.info("Test3Scene: Frame has successfully been created.")
 
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
@@ -282,7 +283,7 @@ class Test3Scene(TestScene):
 
 class Test4Scene(TestScene):
 
-    logging.info("Test4Scene: Frame has successfully been created.")
+    logger.info("Test4Scene: Frame has successfully been created.")
 
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):

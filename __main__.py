@@ -5,10 +5,15 @@
 
 # Need to make the log file path before any imports
 import os
-guiLogPath = "/home/{}/GUILogs/".format(os.getlogin())
+from pathlib import Path
+from PythonFiles.utils.helper import get_logging_path
 
-if not os.path.exists(guiLogPath):
-    os.makedirs(guiLogPath)
+guiLogPath = "{}".format(get_logging_path())
+guiLogDir = "/".join(guiLogPath.split("/")[:-1])
+print("Writing log file to {}".format(guiLogPath))
+
+if not os.path.exists(guiLogDir):
+    os.makedirs(guiLogDir)
 
 # Importing necessary modules
 import multiprocessing as mp
@@ -22,6 +27,25 @@ import sys
 import logging
 import yaml
 from pathlib import Path
+
+# create logger with 'HGCALTestGUI'
+logger = logging.getLogger('HGCALTestGUI')
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+fh = logging.FileHandler(guiLogPath)
+fh.setLevel(logging.DEBUG)
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(logging.ERROR)
+# create formatter and add it to the handlers
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+# add the handlers to the logger
+logger.addHandler(fh)
+logger.addHandler(ch)
+
+logger.info("Creating new instance of HGCALTestGUI")
 
 # Creates a task of creating the GUIWindow
 def task_GUI(conn, conn_trigger, queue, board_cfg):
@@ -56,7 +80,7 @@ def run(board_cfg):
         
     queue = mp.Queue()
 
-    logging.FileHandler(guiLogPath + "gui.log", mode='a')
+    #logging.FileHandler(guiLogPath + "gui.log", mode='a')
 
     # Turns creating the GUI and creating the SUBClient tasks into processes
     if board_cfg["TestHandler"]["name"] == "Local":
