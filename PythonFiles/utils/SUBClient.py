@@ -19,13 +19,15 @@ class SUBClient():
         # Instantiates variables       
         self.conn = conn
         self.message = ""
-        if board_cfg["TestHandler"]["name"] == "Local":
+        if gui_cfg["TestHandler"]["name"] == "Local":
+            print('Local Pipe')
+            print(local_pipe)
             self.local(conn, queue, gui_cfg, local_pipe)
         else:
             self.SUB_ZMQ(conn, queue, gui_cfg)
 
 
-    def local(conn, queue, gui_cfg, local_pipe):
+    def local(self, conn, queue, gui_cfg, local_pipe):
         try:
             while 1 > 0:
                 # Splits up every message that is received into topic and message

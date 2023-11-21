@@ -82,21 +82,19 @@ def run(board_cfg):
 
     #logging.FileHandler(guiLogPath + "gui.log", mode='a')
 
-    sub_pipe = None
     # Turns creating the GUI and creating the SUBClient tasks into processes
     if board_cfg["TestHandler"]["name"] == "Local":
         # Creates a Pipe to connect SUBClient and LocalClient
         local_pipe, sub_pipe = mp.Pipe()
         process_GUI = mp.Process(target = task_GUI, args=(conn_GUI, conn_trigger_GUI, queue, board_cfg))
         process_Handler = mp.Process(target = task_LocalHandler, args=(board_cfg, conn_trigger_Handler, local_pipe))
+        process_SUBClient = mp.Process(target = task_SUBClient, args = (conn_SUB, queue, board_cfg, sub_pipe))
     elif board_cfg["TestHandler"]["name"] == "SSH":
         process_GUI = mp.Process(target = task_GUI, args=(conn_GUI, conn_trigger_GUI, queue, board_cfg))
         process_Handler = mp.Process(target = task_LocalHandler, args=(board_cfg, conn_trigger_Handler))
+        process_SUBClient = mp.Process(target = task_SUBClient, args = (conn_SUB, queue, board_cfg, None))
     else: 
         process_GUI = mp.Process(target = task_GUI, args=(conn_GUI, None, queue, board_cfg))
-    if sub_pipe:
-        process_SUBClient = mp.Process(target = task_SUBClient, args = (conn_SUB, queue, board_cfg, sub_pipe))
-    else:
         process_SUBClient = mp.Process(target = task_SUBClient, args = (conn_SUB, queue, board_cfg, None))
 
     # Starts the processes

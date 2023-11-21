@@ -68,8 +68,19 @@ class Test():
     def send(self, message):
         if self.conn is None:
             print(message)
+        else:
+            self.conn.send("print ; " + message)
 
         # Other types of connections to be implemented: MP pipes, os pipes
+
+    # Need separate send function for results
+    def send_results(self, results):
+
+        if self.conn is None:
+            print(results)
+        else:
+            self.conn.send("JSON ; " + results)
+    
 
     # Get results as a python dictionary
     def get_results(self):
@@ -77,8 +88,8 @@ class Test():
         return self.results
 
     # Send results via the PUB Server
-    def send_results(self):
-        self.send("Test Outcome: " + self.results["result"])
+    #def send_results(self):
+    #    self.send("Test Outcome: " + self.results["result"])
 
     # Loading configuration needed by test function, needs to be a yaml file
     # Returns dictionary object that should be taken as an argument in test function

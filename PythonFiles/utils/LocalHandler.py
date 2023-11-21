@@ -66,25 +66,26 @@ class LocalHandler:
             while 1 > 0:
                 print("Ready for next request")
                 prints = conn_pub.recv()
+                print(prints)
                 logging.info("Print statement received.")
                 logging.info("Testing if print statement is 'Done.'")
                 if prints == "Done.":
                     logging.info("String variable prints = 'Done.'")
-                    prints = "print ; " + str(prints)
+                    prints = str(prints)
                     logging.info("'print' topic added to the prints variable.")
                     sub_pipe.send(prints)
                     logging.info("Sent final print statement.")
                     logging.info("Waiting for JSON on Pipe")
                     json = conn_pub.recv()
                     logging.info("JSON receieved.")
-                    json = "JSON ; " + str(json)
+                    json = str(json)
                     logging.info("JSON topic added to json string")
                     sub_pipe.send(str(json))
                     logging.info("JSON sent.")
                     # Breaks the loop once it sends the JSON so the server will shut down
                     #break
                 else:
-                    prints = "print ; " + prints
+                    prints = prints
                     logging.info(prints)
                     logging.info("'print' topic added to prints variable.")
                     sub_pipe.send(prints)
