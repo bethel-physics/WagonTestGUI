@@ -78,7 +78,7 @@ PhysicalTest:
 Test:
   - TestClass: TestXPWR
     TestPath: /home/test_server/test_code/engine_tests
-    TestScript: engine_test_suite.py
+    TestScript: test_startup.py
     desc_long: Measure using the tester, and should find approximately 1.2V.
     desc_short: Check the the X_PWR voltage is correct.
     name: X_PWR
@@ -171,7 +171,7 @@ Test:
     name: Elink quality
     required: 1
 
-  - TestClass: TestEClock
+  - TestClass: TestEClockRates
     TestPath: /home/test_server/test_code/engine_tests
     TestScript: test_links.py
     desc_long: Check that all EClocks are running at 320MHz.
