@@ -5,10 +5,15 @@
 
 # Need to make the log file path before any imports
 import os
-guiLogPath = "/home/{}/GUILogs/".format(os.getlogin())
+from pathlib import Path
+from PythonFiles.utils.helper import get_logging_path
 
-if not os.path.exists(guiLogPath):
-    os.makedirs(guiLogPath)
+guiLogPath = "{}".format(get_logging_path())
+guiLogDir = "/".join(guiLogPath.split("/")[:-1])
+print("Writing log file to {}".format(guiLogPath))
+
+if not os.path.exists(guiLogDir):
+    os.makedirs(guiLogDir)
 
 # Importing necessary modules
 import multiprocessing as mp
@@ -21,6 +26,26 @@ from PythonFiles.utils.LocalHandler import LocalHandler
 import sys
 import logging
 import yaml
+from pathlib import Path
+
+# create logger with 'HGCALTestGUI'
+logger = logging.getLogger('HGCALTestGUI')
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+fh = logging.FileHandler(guiLogPath)
+fh.setLevel(logging.DEBUG)
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(logging.ERROR)
+# create formatter and add it to the handlers
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+# add the handlers to the logger
+logger.addHandler(fh)
+logger.addHandler(ch)
+
+logger.info("Creating new instance of HGCALTestGUI")
 
 # Creates a task of creating the GUIWindow
 def task_GUI(conn, conn_trigger, queue, board_cfg):
@@ -55,7 +80,7 @@ def run(board_cfg):
         
     queue = mp.Queue()
 
-    logging.FileHandler(guiLogPath + "gui.log", mode='a')
+    #logging.FileHandler(guiLogPath + "gui.log", mode='a')
 
     sub_pipe = None
     # Turns creating the GUI and creating the SUBClient tasks into processes
@@ -157,7 +182,17 @@ if __name__ == "__main__":
         "cmsfactory4.cmsfactorynet",
     ]
 
-    if config_path is not None:
+    if any((node in x for x in wagon_GUI_computers)):
+        board_cfg = import_yaml(Path(__file__).parent / "Configs/Wagon_cfg.yaml")
+
+        run(board_cfg)
+
+    elif any((node in x for x in wagon_GUI_computers)):
+        board_cfg = import_yaml(Path(__file__).parent / "Configs/Engine_cfg.yaml")
+
+        run(board_cfg)
+
+    elif config_path is not None:
         board_cfg = import_yaml(config_path)
 
         run(board_cfg)

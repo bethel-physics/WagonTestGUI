@@ -3,8 +3,10 @@ import zmq, logging
 import PythonFiles
 import os
 
-FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.INFO)
+logger = logging.getLogger('HGCALTestGUI.PythonFiles.utils.SUBClient')
+
+#FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+#logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.INFO)
 
 
 # Creating a class for the SUBSCRIBE socket-type Client
@@ -13,7 +15,7 @@ class SUBClient():
     def __init__(self, conn, queue, gui_cfg, local_pipe):
         with open("{}/utils/server_ip.txt".format(PythonFiles.__path__[0]), "r") as openfile:
             grabbed_ip = openfile.read()[:-1]
-        logging.info("SUBClient has started") 
+        logger.info("SUBClient has started") 
         # Instantiates variables       
         self.conn = conn
         self.message = ""
@@ -111,7 +113,7 @@ class SUBClient():
                     print(self.topic, self.message)
                 except Exception as e:
                     print("\nThere was an error trying to get the topic and/or message from the socket\n")
-                    logging.info("SUBClient: There was an error trying to get the topic and/or message from the socket")
+                    logger.info("SUBClient: There was an error trying to get the topic and/or message from the socket")
                                      
 
                 poller = zmq.Poller()
@@ -121,8 +123,8 @@ class SUBClient():
                 #    
                 #    raise Exception("The SUBClient has failed to receive a topic and message")
 
-                logging.debug("The received topic is: %s" % self.topic)
-                logging.debug("The received message is: %s" % self.message)
+                logger.debug("The received topic is: %s" % self.topic)
+                logger.debug("The received message is: %s" % self.message)
 
                 # Tests what topic was received and then does the appropriate code accordingly
                 if self.topic == "print":
@@ -130,25 +132,25 @@ class SUBClient():
                     # Places the message in the queue. the queue.get() is in 
                     # TestInProgressScene's begin_update() method
                     queue.put(self.message)
-                    logging.debug("SUBClient: The print message has been placed into the queue.")
+                    logger.debug("SUBClient: The print message has been placed into the queue.")
 
                 elif self.topic == "JSON":
                     
                     # Places the message in the queue. the queue.get() is in 
                     # TestInProgressScene's begin_update() method
                     queue.put("Results received successfully.")
-                    logging.info("SUBClient: Informed the user that the results have been received.")
+                    logger.info("SUBClient: Informed the user that the results have been received.")
 
                     # Sends the JSON to GUIWindow on the pipe.
                     self.conn.send(self.message)
-                    logging.info("SUBClient: The JSON has been sent to the GUIWindow along the pipe.")
+                    logger.info("SUBClient: The JSON has been sent to the GUIWindow along the pipe.")
 
                 elif self.topic == "LCD":
-                    logging.info("SUBClient: The topic of LCD has been selected. This method is empty")
+                    logger.info("SUBClient: The topic of LCD has been selected. This method is empty")
                     pass
 
                 else:
-                    logging.error("SUBClient: Invalid topic sent. Must be 'print' or 'JSON'.")
+                    logger.error("SUBClient: Invalid topic sent. Must be 'print' or 'JSON'.")
 
                     # Places the message in the queue. the queue.get() is in 
                     # TestInProgressScene's begin_update() method
@@ -156,5 +158,5 @@ class SUBClient():
 
         except Exception as e:
             print("Outer Try: {}".format(e))
-            logging.debug(e)
-            logging.critical("SUBClient: SUBClient has crashed. Please restart the software.")
+            logger.debug(e)
+            logger.critical("SUBClient: SUBClient has crashed. Please restart the software.")
