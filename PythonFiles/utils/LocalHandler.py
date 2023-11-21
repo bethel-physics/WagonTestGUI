@@ -19,7 +19,7 @@ logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), f
 
 class LocalHandler:
 
-    def __init__(self, gui_cfg, conn_trigger):
+    def __init__(self, gui_cfg, conn_trigger, sub_pipe):
 
         conn_test, conn_pub = mp.Pipe()
 
@@ -28,7 +28,7 @@ class LocalHandler:
             print("New PUB proc")
             print("waiting for trigger request")
             request = json.loads(conn_trigger.recv())
-            process_PUB = mp.Process(target = self.task_PUB, args=(conn_pub,))
+            process_PUB = mp.Process(target = self.task_local, args=(conn_pub,sub_pipe))
             process_PUB.start()
 
             if request is not None:
@@ -59,6 +59,42 @@ class LocalHandler:
             process_PUB.terminate()
         except Exception as e:
             print("PUB and test process could not be terminated: {}".format(e))
+
+    def task_local(self, conn_pub, sub_pipe):
+        try:
+            while 1 > 0:
+                print("Ready for next request")
+                prints = conn_pub.recv()
+                logging.info("Print statement received.")
+                logging.info("Testing if print statement is 'Done.'")
+                if prints == "Done.":
+                    logging.info("String variable prints = 'Done.'")
+                    prints = "print ; " + str(prints)
+                    logging.info("'print' topic added to the prints variable.")
+                    sub_pipe.send(prints)
+                    logging.info("Sent final print statement.")
+                    logging.info("Waiting for JSON on Pipe")
+                    json = conn_pub.recv()
+                    logging.info("JSON receieved.")
+                    json = "JSON ; " + str(json)
+                    logging.info("JSON topic added to json string")
+                    sub_pipe.send(str(json))
+                    logging.info("JSON sent.")
+                    # Breaks the loop once it sends the JSON so the server will shut down
+                    #break
+                else:
+                    prints = "print ; " + prints
+                    logging.info(prints)
+                    logging.info("'print' topic added to prints variable.")
+                    sub_pipe.send(prints)
+                    logging.info("Sent print statement.")
+            
+            logging.info("Loop has been broken.")
+        except:
+            logging.critical("Local server has crashed.")
+
+
+
 
     def task_PUB(self, conn_pub):
         # Used to allow CTRL+C keyboard interrupt

@@ -9,7 +9,7 @@ from Test import Test
 # Note the inheritance of the test demo class for full functionality
 class counting(Test):
 
-    def __init__(self, conn, board_sn=-1, tester="Jane Doe", config_path = "./test_configs/counting.yaml"):
+    def __init__(self, conn, board_sn=-1, tester="Jane Doe", config_path = "./Tests/test_configs/counting.yaml"):
 
         # Test metadata for storage
         self.info_dict = {'name': "Count to 10", 'board_sn': board_sn, 'tester': tester}
