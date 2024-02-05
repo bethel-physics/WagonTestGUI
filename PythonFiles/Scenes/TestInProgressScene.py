@@ -162,7 +162,6 @@ class TestInProgressScene(tk.Frame):
                     information_received = True
                     logger.info("TestInProgressScene: Waiting for queue objects...")
                     text = queue.get()
-                    print('Scene: ' + text)
                     ent_console.insert(tk.END, text)
                     ent_console.insert(tk.END, "\n")
                     ent_console.see('end')

@@ -65,7 +65,6 @@ class SSHHandler:
             while 1 > 0:
                 print("Ready for next request")
                 prints = queue.get()
-                print('Handler: ' + prints)
                 logging.info("Print statement received.")
                 logging.info("Testing if print statement is 'Done.'")
                 if prints == "Done.":
@@ -119,7 +118,6 @@ class SSHHandler:
         #iterates over lines as they are received, sends them to task_local 
         for line in iter(proc.stdout.readline, ''):
             
-            #print('SSH Task:' + line)
             conn_test.put(line)
 
 
