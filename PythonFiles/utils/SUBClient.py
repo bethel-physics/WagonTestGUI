@@ -12,33 +12,41 @@ logger = logging.getLogger('HGCALTestGUI.PythonFiles.utils.SUBClient')
 # Creating a class for the SUBSCRIBE socket-type Client
 class SUBClient():
 
-    def __init__(self, conn, queue, gui_cfg, local_pipe):
+    def __init__(self, conn, queue, gui_cfg, q):
         with open("{}/utils/server_ip.txt".format(PythonFiles.__path__[0]), "r") as openfile:
             grabbed_ip = openfile.read()[:-1]
         logger.info("SUBClient has started") 
+        print('INFO:HGCALTestGUI.PythonFiles.utils.SUBClient: SUBClient has started')
         # Instantiates variables       
         self.conn = conn
         self.message = ""
-        if gui_cfg["TestHandler"]["name"] == "Local":
-            print('Local Pipe')
-            print(local_pipe)
-            self.local(conn, queue, gui_cfg, local_pipe)
+        if gui_cfg["TestHandler"]["name"] == "Local" or gui_cfg['TestHandler']['name'] == 'SSH':
+            self.local(conn, queue, gui_cfg, q)
         else:
             self.SUB_ZMQ(conn, queue, gui_cfg)
 
 
-    def local(self, conn, queue, gui_cfg, local_pipe):
+    def local(self, conn, queue, gui_cfg, q):
         try:
             while 1 > 0:
+                #if not queue.empty():
+                #     if queue.get() == 'Stop':
+                #         print('SUBClient: Stop')
+                #         q.put('Stop')
+
                 # Splits up every message that is received into topic and message
-                # the space around the semi-colon is necessary otherwise the topic and messaage
+                # the space around the semi-colon is necessary otherwise the topic and message
                 # will have extra spaces.
+                #signal = q.get()
+                #print('SUBClient: ' + signal)
                 try:
                     print("Waiting")
-                    self.topic, self.message = local_pipe.recv().split(" ; ")
-                    print(self.topic, self.message)
+                    signal = q.get()
+                    print('SUBClient: ' + signal)
+                    self.topic, self.message = signal.split(" ; ")
                 except Exception as e:
                     print("\nThere was an error trying to get the topic and/or message from the socket\n")
+                    print(e)
                     logging.info("SUBClient: There was an error trying to get the topic and/or message from the socket")
                                      
 

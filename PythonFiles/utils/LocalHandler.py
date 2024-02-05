@@ -20,7 +20,7 @@ logger = logging.getLogger('HGCALTestGUI.PythonFiles.utils.LocalHandler')
 
 class LocalHandler:
 
-    def __init__(self, gui_cfg, conn_trigger, sub_pipe):
+    def __init__(self, gui_cfg, conn_trigger, q):
 
         conn_test, conn_pub = mp.Pipe()
 
@@ -29,21 +29,29 @@ class LocalHandler:
             print("New PUB proc")
             print("waiting for trigger request")
             request = json.loads(conn_trigger.recv())
-            process_PUB = mp.Process(target = self.task_local, args=(conn_pub,sub_pipe))
+            process_PUB = mp.Process(target = self.task_local, args=(conn_pub,q))
             process_PUB.start()
 
             if request is not None:
+                #try:
+                #    if self.process_test.is_alive():
+                #        print('Killed previous test process')
+                #        process_test.terminate()
+                #    else:
+                #        print('No previous test running')
+                #except Exception as e:
+                #    print(e)
 
                 desired_test = request["desired_test"]
                 test_info = {"serial": request["serial"], "tester": request["tester"]}
 
                 print("New test proc")
-                process_test = mp.Process(target = self.task_test, args=(conn_test, gui_cfg, desired_test, test_info))
-                process_test.start()
+                self.process_test = mp.Process(target = self.task_test, args=(conn_test, gui_cfg, desired_test, test_info))
+                self.process_test.start()
 
                 # Hold until test finish
                 print("Joining test proc")
-                process_test.join()
+                self.process_test.join()
 
                 print("Terminate PUB proc")
                 process_PUB.terminate()
@@ -61,9 +69,17 @@ class LocalHandler:
         except Exception as e:
             print("PUB and test process could not be terminated: {}".format(e))
 
-    def task_local(self, conn_pub, sub_pipe):
+    def task_local(self, conn_pub, q):
         try:
             while 1 > 0:
+                #insert a statement where it checks to see if test was stopped
+                #if not q.empty():
+                #    if q.get() == 'Stop':
+                #        print('Stop')
+                #        self.process_test.terminate()
+                #    else:
+                #        print('Queue statement is not Stop')
+
                 print("Ready for next request")
                 prints = conn_pub.recv()
                 print(prints)
@@ -73,14 +89,14 @@ class LocalHandler:
                     logging.info("String variable prints = 'Done.'")
                     prints = str(prints)
                     logging.info("'print' topic added to the prints variable.")
-                    sub_pipe.send(prints)
+                    q.put(prints)
                     logging.info("Sent final print statement.")
                     logging.info("Waiting for JSON on Pipe")
                     json = conn_pub.recv()
                     logging.info("JSON receieved.")
                     json = str(json)
                     logging.info("JSON topic added to json string")
-                    sub_pipe.send(str(json))
+                    q.put(str(json))
                     logging.info("JSON sent.")
                     # Breaks the loop once it sends the JSON so the server will shut down
                     #break
@@ -88,9 +104,9 @@ class LocalHandler:
                     prints = prints
                     logging.info(prints)
                     logging.info("'print' topic added to prints variable.")
-                    sub_pipe.send(prints)
+                    q.put(prints)
                     logging.info("Sent print statement.")
-            
+                
             logging.info("Loop has been broken.")
         except:
             logging.critical("Local server has crashed.")
