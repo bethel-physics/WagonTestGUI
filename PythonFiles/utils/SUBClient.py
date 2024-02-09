@@ -29,34 +29,16 @@ class SUBClient():
     def local(self, conn, queue, gui_cfg, q):
         try:
             while 1 > 0:
-                #if not queue.empty():
-                #     if queue.get() == 'Stop':
-                #         print('SUBClient: Stop')
-                #         q.put('Stop')
-
-                # Splits up every message that is received into topic and message
-                # the space around the semi-colon is necessary otherwise the topic and message
-                # will have extra spaces.
-                #signal = q.get()
-                #print('SUBClient: ' + signal)
+                # gets the signal from the Handler and splits it into topic and message
+                # the topic determines what SUBClient will do with the message
                 try:
                     print("Waiting")
                     signal = q.get()
-                    print('SUBClient: ' + signal)
                     self.topic, self.message = signal.split(" ; ")
                 except Exception as e:
                     print("\nThere was an error trying to get the topic and/or message from the socket\n")
                     print(e)
-                    logging.info("SUBClient: There was an error trying to get the topic and/or message from the socket")
-                                     
-
-                #poller = zmq.Poller()
-                #poller.register(listen_socket, zmq.POLLIN)
-                #if not poller.poll(7*1000):
-                #    print("Poller being bad")
-                #    
-                #    raise Exception("The SUBClient has failed to receive a topic and message")
-
+                    logging.info("SUBClient: There was an error trying to get the topic and/or message from the socket") 
                 logging.debug("The received topic is: %s" % self.topic)
                 logging.debug("The received message is: %s" % self.message)
 
@@ -96,10 +78,6 @@ class SUBClient():
             logging.critical("SUBClient: SUBClient has crashed. Please restart the software.")
         
 
-
-
-
-
     # Responsible for listening for ZMQ messages from teststand
     def SUB_ZMQ(self, conn, queue, gui_cfg):
         grabbed_ip = gui_cfg["TestHandler"]["remoteip"]
@@ -128,10 +106,6 @@ class SUBClient():
 
                 poller = zmq.Poller()
                 poller.register(listen_socket, zmq.POLLIN)
-                #if not poller.poll(7*1000):
-                #    print("Poller being bad")
-                #    
-                #    raise Exception("The SUBClient has failed to receive a topic and message")
 
                 logger.debug("The received topic is: %s" % self.topic)
                 logger.debug("The received message is: %s" % self.message)

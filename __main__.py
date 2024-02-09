@@ -18,7 +18,7 @@ if not os.path.exists(guiLogDir):
 # Importing necessary modules
 import multiprocessing as mp
 import socket
-# Imports the GUIWindow
+# Imports the GUIWindow and Handlers
 from PythonFiles.GUIWindow import GUIWindow
 from PythonFiles.utils.SUBClient import SUBClient
 from PythonFiles.update_config import update_config

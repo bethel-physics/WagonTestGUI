@@ -61,6 +61,7 @@ class SSHHandler:
             print("PUB and test process could not be terminated: {}".format(e))
 
     def task_local(self, queue, q):
+        # listens for incoming data and attaches the correct topic before sending it on to SUBClient
         try:
             while 1 > 0:
                 print("Ready for next request")

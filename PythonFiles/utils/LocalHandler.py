@@ -4,7 +4,7 @@ import zmq, sys, os, signal, logging, json
 sys.path.append("{}".format(os.getcwd()))
 sys.path.append("{}/Tests".format(os.getcwd()))
 
-# Class needed for briding the gap between request, running test
+# Class needed for bridging the gap between request, running test
 # and sending results back
 
 # This takes the place of the REPserver and PUBServer which are
@@ -33,14 +33,6 @@ class LocalHandler:
             process_PUB.start()
 
             if request is not None:
-                #try:
-                #    if self.process_test.is_alive():
-                #        print('Killed previous test process')
-                #        process_test.terminate()
-                #    else:
-                #        print('No previous test running')
-                #except Exception as e:
-                #    print(e)
 
                 desired_test = request["desired_test"]
                 test_info = {"serial": request["serial"], "tester": request["tester"]}
@@ -69,39 +61,29 @@ class LocalHandler:
         except Exception as e:
             print("PUB and test process could not be terminated: {}".format(e))
 
-    def task_local(self, conn_pub, q):
+    def task_local(self, queue, q):
+        # listens for incoming data and attaches the correct topic before sending it on to SUBClient
         try:
             while 1 > 0:
-                #insert a statement where it checks to see if test was stopped
-                #if not q.empty():
-                #    if q.get() == 'Stop':
-                #        print('Stop')
-                #        self.process_test.terminate()
-                #    else:
-                #        print('Queue statement is not Stop')
-
                 print("Ready for next request")
-                prints = conn_pub.recv()
-                print(prints)
+                prints = queue.get()
                 logging.info("Print statement received.")
                 logging.info("Testing if print statement is 'Done.'")
                 if prints == "Done.":
                     logging.info("String variable prints = 'Done.'")
-                    prints = str(prints)
+                    prints = 'print ; ' + str(prints)
                     logging.info("'print' topic added to the prints variable.")
                     q.put(prints)
                     logging.info("Sent final print statement.")
                     logging.info("Waiting for JSON on Pipe")
-                    json = conn_pub.recv()
+                    json = queue.get()
                     logging.info("JSON receieved.")
-                    json = str(json)
+                    json = 'JSON ; ' + str(json)
                     logging.info("JSON topic added to json string")
                     q.put(str(json))
                     logging.info("JSON sent.")
-                    # Breaks the loop once it sends the JSON so the server will shut down
-                    #break
                 else:
-                    prints = prints
+                    prints = 'print ; ' + str(prints)
                     logging.info(prints)
                     logging.info("'print' topic added to prints variable.")
                     q.put(prints)
@@ -113,7 +95,19 @@ class LocalHandler:
 
 
 
+    def task_test(self, conn_test, gui_cfg, desired_test, test_info):   
 
+        # Dynamically import test class 
+        test_meta = gui_cfg["Test"][desired_test]
+        # Need to strip .py from test script for import
+        mod = __import__(test_meta["TestScript"][:-3], fromlist=[test_meta["TestClass"]])
+        test_class = getattr(mod, test_meta["TestClass"])
+
+        test_class(conn_test, board_sn=test_info["serial"], tester=test_info["tester"])
+
+
+    # removed in favor of task_local, which functions without a ZMQ server
+##########################################################################
     def task_PUB(self, conn_pub):
         # Used to allow CTRL+C keyboard interrupt
         signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -162,16 +156,5 @@ class LocalHandler:
         # Closes the server once the loop is broken so that there is no hang-up in the code
         #print("PUBServer Closing")    
         #pub_socket.close()
-
-
-    def task_test(self, conn_test, gui_cfg, desired_test, test_info):   
-
-        # Dynamically import test class 
-        test_meta = gui_cfg["Test"][desired_test]
-        # Need to strip .py from test script for import
-        mod = __import__(test_meta["TestScript"][:-3], fromlist=[test_meta["TestClass"]])
-        test_class = getattr(mod, test_meta["TestClass"])
-
-        test_class(conn_test, board_sn=test_info["serial"], tester=test_info["tester"])
-
+##########################################################################
 
