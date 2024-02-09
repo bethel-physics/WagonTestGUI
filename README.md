@@ -23,18 +23,52 @@ You can then open a pull request (PR) by going to the Github repo and then we ca
 
 To run the program:
 
-Open files in VS Code (or any application that runs Python) and run the following commands in the terminal:
+You will need to run "python REPServer.py" on the appropriate machine after pulling the server code from REPSERVER GITHUB REPO LINK HERE.
+
+Note:
+
+
+You may need to update the ip address the sockets connect to in the following files:
+
+```
+REPServer.py
+PUBServer.py
+SUBClient.py
+REQClient.py
 
 ``` 
-python -m venv virtenv 
+Be sure to update REPServer.py and PUBServer.py on the testing station and SUBClient.py and REQClient.py on the computer running the GUI
 
-virtenv/Scripts/activate
+You will also need to install and set up the database that you will be using at DATABASE GITHUB REPO LINK HERE
 
+This program is built to be compatible with a Zebra (MODEL NUMBER GOES HERE) Scanner. Please connect it to the computer and do any required setup before running the program. 
+
+With those set up and running, open these files in VS Code (or any application that runs Python) and run the following commands in the terminal:
+
+```
 pip install -r requests.txt
 
-python ./MainFunction.py
-```
+./MainFunction.py
 
+```
+## Using the program
+
+When the GUI loads in there will be a loading screen, this will change to the login scene when the GUI is loaded.
+
+The login scene will require you to choose a user to continue into the program further. If you wish to add a new user, you may click the "Add User" button. However, this will require admin privileges within the database.
+
+The scan scene will require a board serial number to be scanned to progress forward. Simply scan the QR code on the board and then hit the "Submit" button. If you scan the wrong QR Code, you may push the "Rescan" button to scan another QR code.
+ 
+Most scenes in the GUI will contain the "Change Boards" and "Logout" buttons. This will allow you to return to scan scene and scan a new board in or return to login scene to choose a new user respectively.
+
+When using the GUI, the sidebar will allow you to navigate to any frame that is not greyed out simply by click on the respective named button. If a test has been completed, it cannot be selected from the navigator, but instead requires the user to use the respective "Retest" button found on the test summary scene.
+
+While a test is in progress, the GUI will disable sidebar navigation and prevent you from leaving the GUI. This can be overriden using CTRL + C, but it will not halt the test. That would require a similar override on the test station's computer.
+
+The test summary scene contains a "More Info" button. This button will display the information found in the "data" portion of the test results in the python dictionary. This information is also viewable from the website. It also contain's a "Next Test" button. This functions identically to the "Change Boards" button found on other scenes.
+
+To access the website, you simply need to type "" into the web browser of your choice (CHECK IF THIS NEEDS TO BE ON A CERTAIN COMPUTER)
+ 
 
 ## Goals for this Framework:
 

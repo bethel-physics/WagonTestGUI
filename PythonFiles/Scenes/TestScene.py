@@ -2,37 +2,50 @@
 
 # Importing Necessary Modules
 import tkinter as tk
+from tkinter import messagebox
 import tkinter.font as font
+import logging
+logging.getLogger('PIL').setLevel(logging.WARNING)
+import PythonFiles
+import os
 
 # Importing Necessary Files
 from PythonFiles.utils.REQClient import REQClient
 
 #################################################################################
 
+logger = logging.getLogger('HGCALTestGUI.PythonFiles.Scenes.TestScene')
+#FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
+#logging.basicConfig(filename="/home/{}/GUILogs/gui.log".format(os.getlogin()), filemode = 'a', format=FORMAT, level=logging.DEBUG)
 
 # Creating class for the window
 class TestScene(tk.Frame):
 
     #################################################
 
-    def __init__(self, parent, master_frame, data_holder, test_name, queue):
-        super().__init__(master_frame, width=850, height=500)
+    def __init__(self, parent, master_frame, data_holder, test_name, test_description_short, test_description_long, queue, conn_trigger, test_idx):
+        super().__init__(master_frame, width=870, height=500, padx = 5, pady = 5)
         self.queue = queue
+        self.conn_trigger = conn_trigger
         self.test_name = test_name
+        self.test_description_short = test_description_short
+        self.test_description_long = test_description_long
         self.data_holder = data_holder
+        self.test_idx = test_idx
+        #print("Making test scene with index".format(self.test_idx))
         
         self.update_frame(parent)
 
     #################################################
 
     def update_frame(self, parent):
-
+        logger.debug("ParentTestClass: A test frame has been updated.")
         # Creates a font to be more easily referenced later in the code
         font_scene = ('Arial', 15)
 
         # Create a centralized window for information
-        frm_window = tk.Frame(self, width = 850, height = 500)
-        frm_window.grid(column=1, row=1, padx = 235, pady = 109)
+        frm_window = tk.Frame(self, width=870, height = 480)
+        frm_window.grid(column=1, row=0, padx = 223, pady = 100)
 
         # Create a label for the tester's name
         lbl_tester = tk.Label(
@@ -47,7 +60,7 @@ class TestScene(tk.Frame):
             frm_window, 
             font = font_scene
             )
-        ent_tester.insert(0, self.data_holder.user_ID)
+        ent_tester.insert(0, self.data_holder.data_dict['user_ID'])
         ent_tester.pack(side = 'top')
         ent_tester.config(state = "disabled")
 
@@ -64,7 +77,7 @@ class TestScene(tk.Frame):
             frm_window, 
             font = font_scene
             )
-        ent_snum.insert(0, self.data_holder.current_serial_ID)
+        ent_snum.insert(0, self.data_holder.data_dict['current_serial_ID'])
         ent_snum.pack(side = 'top')
         ent_snum.config(state = "disabled")
 
@@ -94,6 +107,26 @@ class TestScene(tk.Frame):
             )
         lbl_confirm.pack(side = 'top')
 
+        self.lbl_desc_short = tk.Label(
+            frm_window,
+            text = self.test_description_short,
+            wraplength = 500,
+            justify="left",
+            font = font_scene
+            )
+
+        self.lbl_desc_short.pack(side = 'top')
+
+        self.lbl_desc = tk.Label(
+            frm_window,
+            text = self.test_description_long,
+            wraplength = 500,
+            justify="left",
+            font = font_scene
+            )
+
+        self.lbl_desc.pack(side = 'top')
+
         # Create a button for confirming test
         btn_confirm = tk.Button(
             frm_window, 
@@ -104,9 +137,21 @@ class TestScene(tk.Frame):
         btn_confirm.pack(side = 'top')
         btn_confirm['font'] = font.Font(family = 'Arial', size = 13)
 
+        if (self.test_idx == 0):
+
+            # Create a button for confirming test
+            run_all_btn = tk.Button(
+                frm_window, 
+                text = "Run All Tests", 
+                relief = tk.RAISED, 
+                command = lambda:self.run_all_action(parent)
+                )
+            run_all_btn.pack(pady = 20)
+            run_all_btn['font'] = font.Font(family = 'Arial', size = 13)
+
         # Create frame for logout button
         frm_logout = tk.Frame(self)
-        frm_logout.grid(column = 2, row = 2, sticky = 'ne')
+        frm_logout.grid(column = 2, row = 1, padx = 5, sticky = 'e')
 
         # Create a logout button
         btn_logout = tk.Button(
@@ -114,11 +159,11 @@ class TestScene(tk.Frame):
             text = "Logout", 
             relief = tk.RAISED, 
             command = lambda: self.btn_logout_action(parent))
-        btn_logout.pack(anchor = 'se')
+        btn_logout.pack(anchor = 'center')
 
         # Create a frame for the back button
         frm_back = tk.Frame(self)
-        frm_back.grid(column = 2, row = 0, sticky = 'ne')
+        frm_back.grid(column = 2, row = 0, sticky = 'n', padx = 5)
 
         # Create a rescan button
         btn_rescan = tk.Button(
@@ -126,39 +171,61 @@ class TestScene(tk.Frame):
             text = "Change Boards", 
             relief = tk.RAISED, 
             command = lambda: self.btn_rescan_action(parent))
-        btn_rescan.pack(anchor = 'ne')
+        btn_rescan.pack(anchor = 'n')
 
-
+        # Creating the help button
+        btn_help = tk.Button(
+            frm_back,
+            relief = tk.RAISED,
+            text = "Help",
+            command = lambda: self.help_action(parent)
+        )
+        btn_help.pack(anchor = 's', padx = 10, pady = 10)
         
 
         self.grid_propagate(0)
+       
+
+    #################################################
+
+    def help_action(self, _parent):
+        _parent.help_popup(self)
+ 
+
+    def run_all_action(self, _parent):
+       
+        _parent.run_all_tests(self.test_idx) 
         
+
+    
+
     #################################################
 
     # Rescan button takes the user back to scanning in a new board
     def btn_rescan_action(self, _parent):
-        _parent.set_frame_scan_frame()
+        _parent.reset_board()
     
     #################################################
 
     # Confirm button action takes the user to the test in progress scene
     def btn_confirm_action(self, _parent):
-        # # # # # # # # # # # # # # # # # # # # # # # # # # #
-        #   ++ GOAL CODE ++                                 #
-        # def confirm():                                    #
-        #       set_frame_TIPS()                            #
-        #       Runs_Test()   # Might include multithread   #
-        #       Get_Results()                               #
-        #       Update_Dataholder()                         #
-        #       Go_To_Next_Test()                           #
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-        # _parent.set_frame_test_in_progress(self.queue)
-        pass
+        self.gui_cfg = self.data_holder.getGUIcfg()
+      
+        #try:
+        test_client = REQClient(self.gui_cfg, 'test{}'.format(self.test_idx), self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'], self.conn_trigger)
+        #except Exception as e:
+        #    messagebox.showerror('Exception', e)
 
+        #print("Confirm button sending test{}".format(self.test_idx))
+        _parent.set_frame_test_in_progress(self.queue)
+        
+
+    
     #################################################
 
     # functionality for the logout button
     def btn_logout_action(self, _parent):
+        logger.info("TestScene: Successfully logged out from the TestScene.")
         _parent.set_frame_login_frame()
 
     #################################################
@@ -168,32 +235,30 @@ class TestScene(tk.Frame):
 
 
 class Test1Scene(TestScene):
+    
+    logger.info("Test1Scene: Frame has successfully been created.")
+
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
 
-        self.data_holder.test1_completed = True
-        self.data_holder.test1_pass = True
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_1_client = REQClient('test1', self.data_holder.current_serial_ID, self.data_holder.user_ID)
+        test_1_client = REQClient('test1', self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
         _parent.set_frame_test_in_progress(self.queue)
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
 
-        
 #################################################################################
 
 
 class Test2Scene(TestScene):
+
+    logger.info("Test2Scene: Frame has successfully been created.")
+
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
-        self.data_holder.test2_completed = True
-        self.data_holder.test2_pass = False
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_2_client = REQClient('test2', self.data_holder.current_serial_ID, self.data_holder.user_ID)
+        test_2_client = REQClient('test2', self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
         _parent.set_frame_test_in_progress(self.queue)
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
-        
         
 
 
@@ -201,31 +266,32 @@ class Test2Scene(TestScene):
 
 
 class Test3Scene(TestScene):
+
+    logger.info("Test3Scene: Frame has successfully been created.")
+
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
 
-        self.data_holder.test3_completed = True
-        self.data_holder.test3_pass = True
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_3_client = REQClient('test3', self.data_holder.current_serial_ID, self.data_holder.user_ID)
+        test_3_client = REQClient('test3', self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
         _parent.set_frame_test_in_progress(self.queue)
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
 
 
 #################################################################################
 
 
 class Test4Scene(TestScene):
+
+    logger.info("Test4Scene: Frame has successfully been created.")
+
     # Override to add specific functionality
     def btn_confirm_action(self, _parent):
 
-        self.data_holder.test4_completed = True
-        self.data_holder.test4_pass = True
         self.data_holder.print()
         super().btn_confirm_action(_parent)
-        test_4_client = REQClient('test4', self.data_holder.current_serial_ID, self.data_holder.user_ID)
+        test_4_client = REQClient('test4', self.data_holder.data_dict['current_serial_ID'], self.data_holder.data_dict['user_ID'])
         _parent.set_frame_test_in_progress(self.queue)
-         #TODO EDIT THIS WITH ACTUAL TEST DATA
 
 #################################################################################
+
